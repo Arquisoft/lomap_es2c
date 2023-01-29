@@ -1,6 +1,6 @@
 # LoMap es2C
 
-[![Actions Status](https://github.com/arquisoft/lomap_es2c/workflows/CI%20for%20LOMAP_ES"C/badge.svg)](https://github.com/arquisoft/lomap_es2c/actions)
+[![CI for LOMAP ES2C](https://github.com/Arquisoft/lomap_es2c/actions/workflows/lomap_es2c.yml/badge.svg)](https://github.com/Arquisoft/lomap_es2c/actions/workflows/lomap_es2c.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_es2c&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_0)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_lomap_0&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_lomap_es2c)
 
