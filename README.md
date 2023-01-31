@@ -256,5 +256,10 @@ After the actions process is finished, we can access the application using the I
 
 ![image](https://user-images.githubusercontent.com/10683040/155297402-41c09d54-8160-4832-be04-21951d18bc28.png)
 
-
+Miembros del equipo:
+· Abel Busto Dopazo UO284262
+· Juan Hermosa Casaprima UO276839
+· Juan Esteban Perilla Torres UO298891
+· Paula Suárez Prieto UO269745
+· Adrián Fernández Álvarez UO282154
 
