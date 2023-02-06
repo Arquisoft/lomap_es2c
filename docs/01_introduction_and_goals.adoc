@@ -10,32 +10,34 @@ Describes the relevant requirements and the driving forces that software archite
 * relevant stakeholders and their expectations
 ****
 
+LoMap es un aplicación solicitada por el ayuntamiento de Bruselas. Esta se encargará de generar mapas personalizados para cualquier ciudadano que desee utilizarla. En este mapa personalizado se pueden almacenar sitios favoritos (de multitud de categorías), reseñas y se puede generar una red de amigos para tener acceso a sus sitios y reseñas.
+
 === Requirements Overview
 
 [role="arc42help"]
 ****
-.Contents
-Short description of the functional requirements, driving forces, extract (or abstract)
-of requirements. Link to (hopefully existing) requirements documents
-(with version number and information where to find it).
 
-.Motivation
-From the point of view of the end users a system is created or modified to
-improve support of a business activity and/or improve the quality.
+* Varias categorías de lugares.
+* Interfaz tipo mapa.
+* Se pueden crer reseñas y comentarios sobre tus lugares.
+* Existe una red de amigos para compartir reseñas, comentarios y lugares.
+* Existirán los filtros para poder visualizar la información deseada en cada momento.
 
-.Form
-Short textual description, probably in tabular use-case format.
-If requirements documents exist this overview should refer to these documents.
-
-Keep these excerpts as short as possible. Balance readability of this document with potential redundancy w.r.t to requirements documents.
 ****
 
 === Quality Goals
 
 [role="arc42help"]
 ****
-.Contents
-The top three (max five) quality goals for the architecture whose fulfillment is of highest importance to the major stakeholders. We really mean quality goals for the architecture. Don't confuse them with project goals. They are not necessarily identical.
+Principales objetivos de calidad para satisfacer las necesidades de los stakeholders.
+
+[options="header",cols="1,2"]
+|===
+|Objetivo|Motivación
+|Privacidad|La privacidad para LoMap es de vital importancia debido a que los datos de los usuarios no deben ser accesibles por terceros no deseados. La información se almacenara en los Pods de cada usuario y la información almacenada en servidores comunes deberá ser minimizada y justificada.
+|Flexibilidad|LoMap debe ser una aplicación flexible que permita su uso en otros contextos geográficos alejados de la ciudad de Bruselas.
+|Mantenibilidad|El código de LoMap debe seguir lso estándares de diseño adecuados para generar una aplicación mantenible en el futuro.
+|===
 
 .Motivation
 You should know the quality goals of your most important stakeholders, since they will influence fundamental architectural decisions. Make sure to be very concrete about these qualities, avoid buzzwords.
