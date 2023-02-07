@@ -12,6 +12,7 @@ LoMap es un aplicación solicitada por el ayuntamiento de Bruselas. Esta se enca
 ****
 
 Requisitos prioritarios:
+
 * Varias categorías de lugares.
 * Interfaz tipo mapa.
 * Se pueden crer reseñas y comentarios sobre tus lugares.
@@ -19,6 +20,7 @@ Requisitos prioritarios:
 * Existirán los filtros para poder visualizar la información deseada en cada momento.
 
 Requisitos de segundo nivel:
+
 * Incorporar el concepto de ruta que unirá varios lugares.
 * Los establecimientos podrán crear pods de su negocio para interactuar con los usuarios.
 * Poder comparar mapas, aplicando filtros a las comparaciones.
