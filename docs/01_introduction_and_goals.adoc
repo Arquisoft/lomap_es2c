@@ -3,7 +3,9 @@
 
 [role="arc42help"]
 ****
+
 LoMap es un aplicación solicitada por el ayuntamiento de Bruselas. Esta se encargará de generar mapas personalizados para cualquier ciudadano que desee utilizarla. En este mapa personalizado se pueden almacenar sitios favoritos (de multitud de categorías), reseñas y se puede generar una red de amigos para tener acceso a sus sitios y reseñas.
+
 ****
 
 === Requisitos funcionales
@@ -37,6 +39,7 @@ Requisitos de segundo nivel:
 
 [role="arc42help"]
 ****
+
 Principales objetivos de calidad para satisfacer los intereses de los stakeholders y las necesidades de los usuarios.
 
 [options="header",cols="1,2"]
@@ -56,6 +59,7 @@ Principales objetivos de calidad para satisfacer los intereses de los stakeholde
 
 [role="arc42help"]
 ****
+
 [options="header",cols="1,2"]
 |===
 |
@@ -76,6 +80,7 @@ These stakeholders determine the extent and the level of detail of your work and
 
 .Form
 Table with role names, person names, and their expectations with respect to the architecture and its documentation.
+
 ****
 
 [options="header",cols="1,2,2"]
