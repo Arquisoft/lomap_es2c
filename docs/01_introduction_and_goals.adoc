@@ -47,10 +47,10 @@ Principales objetivos de calidad para satisfacer los intereses de los stakeholde
 |Objetivo|Motivación
 |Privacidad|La privacidad para LoMap es de vital importancia debido a que los datos de los usuarios no deben ser accesibles por terceros no deseados. La información se almacenara en los Pods de cada usuario y la información almacenada en servidores comunes deberá ser minimizada y justificada.
 |Flexibilidad|LoMap debe ser una aplicación flexible que permita su uso en otros contextos geográficos alejados de la ciudad de Bruselas.
-|Mantenibilidad|El código de LoMap debe seguir lso estándares de diseño adecuados para generar una aplicación mantenible en el futuro.
+|Mantenibilidad|El código de LoMap debe seguir los estándares de diseño adecuados para generar una aplicación mantenible en el futuro.
 |Escalabilidad|LoMap debe ser una aplicación implementada con la intención de crecer y abarcar más funcionalidades. El código escrito debe facilitar esta dinámica.
 |Accesibilidad|Al ser un producto dirigido a un público general que no necesariamente debe ser habil con la informatica nuestra aplicación deberá cumplir los estándares de accesibilidad.
-|Usabilidad|La aplicación debe ser fácil de usar y rápida de entender.
+|Usabilidad|La aplicación debe tener una curva de aprendizaje empinada. El tiempo de adaptación a la aplicación debe ser menor que el tiempo de uso medio de la misma en cada sesión de uso (una hora aproximadamente).
 |===
 
 ****
