@@ -49,8 +49,7 @@ Principales objetivos de calidad para satisfacer los intereses de los stakeholde
 |Flexibilidad|LoMap debe ser una aplicación flexible que permita su uso en otros contextos geográficos alejados de la ciudad de Bruselas.
 |Mantenibilidad|El código de LoMap debe seguir los estándares de diseño adecuados para generar una aplicación mantenible en el futuro.
 |Escalabilidad|LoMap debe ser una aplicación implementada con la intención de crecer y abarcar más funcionalidades. El código escrito debe facilitar esta dinámica.
-|Accesibilidad|Al ser un producto dirigido a un público general que no necesariamente debe ser habil con la informatica nuestra aplicación deberá cumplir los estándares de accesibilidad.
-|Usabilidad|La aplicación debe tener una curva de aprendizaje empinada. El tiempo de adaptación a la aplicación debe ser menor que el tiempo de uso medio de la misma en cada sesión de uso (una hora aproximadamente).
+|Accesibilidad|Al ser un producto dirigido a un público general por lo que nuestra aplicación deberá cumplir los estándares de accesibilidad.
 |===
 
 ****
@@ -62,30 +61,13 @@ Principales objetivos de calidad para satisfacer los intereses de los stakeholde
 
 [options="header",cols="1,2"]
 |===
-|
+|Rol/Nombre|Expectativas
+|Ayuntamiento de Bruselas|Entidad solicitante de la aplicación que busca ofrecer un servicio de calidad a sus habitantes. Requiere que se cumplan los objetivos de calidad.
+|Ciudadanos de Bruselas|Quieren que la experiencia de uso de la aplicación al ser presentada por su ayuntamiento sea agradable, sencilla y aporte valor.
+|Futuros usuarios|Necesitan que la solución sea genérica y escalable.
 |===
-.Contents
-Explicit overview of stakeholders of the system, i.e. all person, roles or organizations that
-
-* should know the architecture
-* have to be convinced of the architecture
-* have to work with the architecture or with code
-* need the documentation of the architecture for their work
-* have to come up with decisions about the system or its development
-
-.Motivation
-You should know all parties involved in development of the system or affected by the system.
-Otherwise, you may get nasty surprises later in the development process.
-These stakeholders determine the extent and the level of detail of your work and its results.
-
-.Form
-Table with role names, person names, and their expectations with respect to the architecture and its documentation.
 
 ****
 
 [options="header",cols="1,2,2"]
-|===
-|Role/Name|Contact|Expectations
-| _<Role-1>_ | _<Contact-1>_ | _<Expectation-1>_
-| _<Role-2>_ | _<Contact-2>_ | _<Expectation-2>_
-|===
+
