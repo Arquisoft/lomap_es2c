@@ -1,75 +1,73 @@
 [[section-introduction-and-goals]]
-== Introduction and Goals
+== Introducción a la aplicación
 
 [role="arc42help"]
 ****
-Describes the relevant requirements and the driving forces that software architects and development team must consider. These include
 
-* underlying business goals, essential features and functional requirements for the system
-* quality goals for the architecture
-* relevant stakeholders and their expectations
+LoMap es un aplicación solicitada por el ayuntamiento de Bruselas. Esta se encargará de generar mapas personalizados para cualquier ciudadano que desee utilizarla. En este mapa personalizado se pueden almacenar sitios favoritos (de multitud de categorías), reseñas y se puede generar una red de amigos para tener acceso a sus sitios y reseñas.
+
 ****
 
-=== Requirements Overview
+=== Requisitos funcionales
 
 [role="arc42help"]
 ****
-.Contents
-Short description of the functional requirements, driving forces, extract (or abstract)
-of requirements. Link to (hopefully existing) requirements documents
-(with version number and information where to find it).
 
-.Motivation
-From the point of view of the end users a system is created or modified to
-improve support of a business activity and/or improve the quality.
+Requisitos prioritarios:
 
-.Form
-Short textual description, probably in tabular use-case format.
-If requirements documents exist this overview should refer to these documents.
+* Varias categorías de lugares.
+* Interfaz tipo mapa.
+* Se pueden crer reseñas y comentarios sobre tus lugares.
+* Existe una red de amigos para compartir reseñas, comentarios y lugares.
+* Existirán los filtros para poder visualizar la información deseada en cada momento.
 
-Keep these excerpts as short as possible. Balance readability of this document with potential redundancy w.r.t to requirements documents.
+Requisitos de segundo nivel:
+
+* Incorporar el concepto de ruta que unirá varios lugares.
+* Los establecimientos podrán crear pods de su negocio para interactuar con los usuarios.
+* Poder comparar mapas, aplicando filtros a las comparaciones.
+* Generar boletines de noticias personalizados en función de los lugares favoritos del usuario.
+* Introducir la gamificacón (permitir descubrir lugares, almacenar información sobre ellos,etc)
+* Incorporar los mapas compartidos entre varios usuarios
+* Incluir roles dentro de la aplicación 
+* Los dueños de negocios podrán crear sus mapas con lugares recomendados en las inmediaciones de su negocio.
+* Conectar con el libro de direcciones para mostrar información recomendada.
+
 ****
 
-=== Quality Goals
+=== Objetivos de calidad
 
 [role="arc42help"]
 ****
-.Contents
-The top three (max five) quality goals for the architecture whose fulfillment is of highest importance to the major stakeholders. We really mean quality goals for the architecture. Don't confuse them with project goals. They are not necessarily identical.
 
-.Motivation
-You should know the quality goals of your most important stakeholders, since they will influence fundamental architectural decisions. Make sure to be very concrete about these qualities, avoid buzzwords.
-If you as an architect do not know how the quality of your work will be judged …
+Principales objetivos de calidad para satisfacer los intereses de los stakeholders y las necesidades de los usuarios.
 
-.Form
-A table with quality goals and concrete scenarios, ordered by priorities
+[options="header",cols="1,2"]
+|===
+|Objetivo|Motivación
+|Privacidad|La privacidad para LoMap es de vital importancia debido a que los datos de los usuarios no deben ser accesibles por terceros no deseados. La información se almacenara en los Pods de cada usuario y la información almacenada en servidores comunes deberá ser minimizada y justificada.
+|Flexibilidad|LoMap debe ser una aplicación flexible que permita su uso en otros contextos geográficos alejados de la ciudad de Bruselas.
+|Mantenibilidad|El código de LoMap debe seguir los estándares de diseño adecuados para generar una aplicación mantenible en el futuro.
+|Escalabilidad|LoMap debe ser una aplicación implementada con la intención de crecer y abarcar más funcionalidades. El código escrito debe facilitar esta dinámica.
+|Accesibilidad|Al ser un producto dirigido a un público general por lo que nuestra aplicación deberá cumplir los estándares de accesibilidad.
+|===
+
 ****
 
-=== Stakeholders
+=== Partes interesadas
 
 [role="arc42help"]
 ****
-.Contents
-Explicit overview of stakeholders of the system, i.e. all person, roles or organizations that
 
-* should know the architecture
-* have to be convinced of the architecture
-* have to work with the architecture or with code
-* need the documentation of the architecture for their work
-* have to come up with decisions about the system or its development
+[options="header",cols="1,2"]
+|===
+|Rol/Nombre|Expectativas
+|Ayuntamiento de Bruselas|Entidad solicitante de la aplicación que busca ofrecer un servicio de calidad a sus habitantes. Requiere que se cumplan los objetivos de calidad.
+|Ciudadanos de Bruselas|Quieren que la experiencia de uso de la aplicación al ser presentada por su ayuntamiento sea agradable, sencilla y aporte valor.
+|Futuros usuarios|Necesitan que la solución sea genérica y escalable.
+|===
 
-.Motivation
-You should know all parties involved in development of the system or affected by the system.
-Otherwise, you may get nasty surprises later in the development process.
-These stakeholders determine the extent and the level of detail of your work and its results.
-
-.Form
-Table with role names, person names, and their expectations with respect to the architecture and its documentation.
 ****
 
 [options="header",cols="1,2,2"]
-|===
-|Role/Name|Contact|Expectations
-| _<Role-1>_ | _<Contact-1>_ | _<Expectation-1>_
-| _<Role-2>_ | _<Contact-2>_ | _<Expectation-2>_
-|===
+
