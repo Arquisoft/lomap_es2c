@@ -15,13 +15,18 @@ The domain interfaces and technical interfaces to communication partners are amo
 
 .Form
 Various options:
-
-image:/docs/images/UmlContextDiagram.png["Example UML Diagram"]
-
 * Context diagrams
 * Lists of communication partners and their interfaces.
 ****
 
+image:/docs/images/UmlContextDiagram.png["Example UML Diagram"]
+
+[options="header",cols="1,2,2"]
+|===
+|Role/Name|Contact|Expectations
+| _<Role-1>_ | _<Contact-1>_ | _<Expectation-1>_
+| _<Role-2>_ | _<Contact-2>_ | _<Expectation-2>_
+|===
 
 === Business Context
 
