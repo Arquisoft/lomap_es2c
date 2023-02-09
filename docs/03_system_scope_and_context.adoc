@@ -23,9 +23,13 @@ image:/docs/images/UmlContextDiagram.png["Example UML Diagram"]
 
 [options="header",cols="1,2,2"]
 |===
-|Role/Name|Contact|Expectations
-| _<Role-1>_ | _<Contact-1>_ | _<Expectation-1>_
-| _<Role-2>_ | _<Contact-2>_ | _<Expectation-2>_
+|Entidad|Entrada|Salida
+|User|Recibe el feedback proporcionado por la WebApp.|Crea y guarda en el POD su información personal.
+|POD|Recibe peticiones para recuperar información en la WebApp y de guardar información del usuario.|Proporciona la información guardada por el usuario a la aplicación.
+|WebApp|Recibe la información solicitada al POD y la API, y la interacción del usuario.|Guarda y actualiza información en el POD, además de mostrar el mapa al usuario a través de la interfaz.
+|Proveedor de mapas|Solicitud de la aplicación para obtener el mapa.|Información necesaria para mostrar el mapa.
+|RestApi|Hace consultas a la base de datos solicitadas por la aplicación|Recoge la información de la base de datos y se la envía a la aplicación.
+|Database|Hay información global que no se guardará en un POD y, por tanto se almacenará aquí|Responde a las peticiones realizadas por la RestApi.
 |===
 
 === Business Context
