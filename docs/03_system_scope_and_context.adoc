@@ -16,7 +16,7 @@ The domain interfaces and technical interfaces to communication partners are amo
 .Form
 Various options:
 
-image:UmlContextDiagram.png["Example UML Diagram"]
+image:/docs/images/UmlContextDiagram.png["Example UML Diagram"]
 
 * Context diagrams
 * Lists of communication partners and their interfaces.
