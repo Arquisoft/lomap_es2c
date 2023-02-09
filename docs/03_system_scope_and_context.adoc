@@ -18,28 +18,15 @@ image:/docs/images/UmlContextDiagram.png["Example UML Diagram"]
 ****
 
 
-
-
-
-
 === Technical Context
-
 [role="arc42help"]
 ****
-.Contents
-Technical interfaces (channels and transmission media) linking your system to its environment. In addition a mapping of domain specific input/output to the channels, i.e. an explanation with I/O uses which channel.
-
-.Motivation
-Many stakeholders make architectural decision based on the technical interfaces between the system and its context. Especially infrastructure or hardware designers decide these technical interfaces.
-
-.Form
-E.g. UML deployment diagram describing channels to neighboring systems,
-together with a mapping table showing the relationships between channels and input/output.
-
+Usaremos las siguientes tecnologías:
+[options="header",cols="1,2"]
+|===
+|Tecnología|Descripción
+|TypeScript|Lenguaje utilizado para realizar la aplicación.
+|React|Biblioteca utilizada para crear interfaces de usuario en una sola página.
+|SOLID|Arquitectura para almacenar la información privada de los usuarios de manera descentralizada.
+|===
 ****
-
-**<Diagram or Table>**
-
-**<optionally: Explanation of technical interfaces>**
-
-**<Mapping Input/Output to Channels>**
