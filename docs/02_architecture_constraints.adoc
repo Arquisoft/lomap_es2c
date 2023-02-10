@@ -4,16 +4,11 @@
 
 [role="arc42help"]
 ****
-.Contents
-Any requirement that constrains software architects in their freedom of design and implementation decisions or decision about the development process. These constraints sometimes go beyond individual systems and are valid for whole organizations and companies.
 
-.Motivation
-Architects should know exactly where they are free in their design decisions and where they must adhere to constraints.
-Constraints must always be dealt with; they may be negotiable, though.
-
-.Form
-Simple tables of constraints with explanations.
-If needed you can subdivide them into
-technical constraints, organizational and political constraints and
-conventions (e.g. programming or versioning guidelines, documentation or naming conventions)
-****
+[options="header",cols="1,2"]
+|===
+|Tipo de restrición|Explicación
+| Restricción temporal | Tenemos aproximadamente un cuatrimestre para tener una versión de lanzamiento de la aplicación.
+| Restricción de alcance|  Esta app debe cumplir como mínimo con diferentes funciones como guardar lugares; asociar puntuaciones, comentarios y/o fotos a los lugares; visualizarlos en un mapa; informarse sobre estos; filtrar las ubicaciones.
+| Restricción de modelo| La información sobre los lugares de cada usuario se debe guardar en su pod personal. Se debe respetar la privacidad de cada usuario en la medida de lo posible.
+|===
