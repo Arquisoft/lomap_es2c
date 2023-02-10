@@ -4,7 +4,7 @@
 === Business Context
 [role="arc42help"]
 ****
-image:/docs/images/UmlContextDiagram.png["Example UML Diagram"]
+image:/docs/images/3_Diagrama_Contexto.png["Context Diagram"]
 [options="header",cols="1,2,2"]
 |===
 |Entidad|Entrada|Salida
