@@ -24,3 +24,34 @@ Various options:
 * more detailed in form of separate sections per decision
 * ADR (architecture decision record) for every important decision
 ****
+
+En la siguiente tabla, ordenadas por prioridad, se encuentran las decisiones arquitectónicas adoptadas en nuestro proyecto.
+
+[options="header",cols="1,2,2,2"]
+|===
+|Architectural decision
+|Advantages
+|Disadvantages
+|Link to the ADR
+
+| *TypeScript*
+| Permite la utilización de tipos estáticos, lo que nos llevará a cometer menos errores y a comprender de forma más sencilla el código realizado por los otros miembros del equipo.
+| Ninguno ha utilizado este lenguaje, debemos familiarizarnos con él.
+| https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-01-elecci%C3%B3n-del-lenguaje-de-programaci%C3%B3n[DA-01]
+
+| *React*
+| Biblioteca muy popular, utilizada por grandes empresas como Facebook, lo que hace atractivo su uso. Además, dispone de mucha documentación.
+| Al igual que con TypeScript, no hemos utilizado con anterioridad esta biblioteca.
+| https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-03-elecci%C3%B3n-de-la-biblioteca-para-crear-la-interfaz-de-usuario[DA-03]
+
+| *NodeJS*
+| Dispone de muchas dependencias que facilitan el desarrollo del proyecto. Es un framework muy utilizado, por lo que dispone de una extensa documentación.
+| Es necesario aprender como utilizar el framework con sus distintas dependencias.
+| https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-04-elecci%C3%B3n-del-entorno-de-ejecuci%C3%B3n[DA-04]
+
+| *MongoDB*
+| Sistema de base de datos NoSQL orientadas a documentos, lo que hace sencillo su uso. Es fácil de integrar en el proyecto.
+| No soporta transacciones complejas.
+| https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-02-elecci%C3%B3n-de-la-base-de-datos[DA-02]
+
+|===
