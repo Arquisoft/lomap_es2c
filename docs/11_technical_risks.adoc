@@ -21,8 +21,8 @@ List of risks and/or technical debts, probably including suggested measures to m
 [options="header",cols="1,2,2"]
 |===
 |Concepto|Explicación|Medidas a tomar
-|Trabajo en grupo|Al ser un equipo que carece de experiencia trabajando juntos la coordinación, comunicación y entendimiento son temas complejos y que requieren esfuerzo|Trataremos de esforzarnos para poder desarrollar el proyecto con normalidad. La idea del grupò es ayudarnos entre nosotros y no dificultar el trabajo de los compañeros.
-|Tiempo limitado|Para desarrollar esta aplicación gozamos de un tiempo limitado, no solo por el alcance de la propia asignatura si no por la simultaneidad con otros proyectos de otras asignaturas|La planificación del trabajo es imprescindible y si la logramos el resultado mejorará enormemente.
+|Trabajo en grupo|Al ser un equipo que carece de experiencia trabajando juntos la coordinación, comunicación y entendimiento son temas complejos y que requieren esfuerzo|Trataremos de esforzarnos para poder desarrollar el proyecto con normalidad. La idea del grupo es ayudarnos entre nosotros y no dificultar el trabajo de los compañeros.
+|Tiempo limitado|Para desarrollar esta aplicación disponemos de un tiempo limitado, no solo por el alcance de la propia asignatura si no por la simultaneidad con otros proyectos de otras asignaturas|La planificación del trabajo es imprescindible y si la logramos el resultado mejorará enormemente.
 |Herramientas de trabajo nuevas|Como grupo carecemos de experiencia y conocimiento a cerca de las herramientas y los entornos de trabajo con los que realizará el proyecto|Al ser las herramientas más recomendadas para un proyecto como el nuestro debemos investigar, aprender y familiarizarnos con el uso de las mismas.
 |Desconocimiento sobre los POD y SOLID|La arquitectura SOLID basada en los POD es algo completamente nuevo para nosotros. Tanto el concepto como la forma de utilizarlas es algo que desconocemos y supone un obstáculo|Tanto SOLID como los POD son extrictamente necesarios para lo que buscamos por lo que al igual que en el caso anterior es necesario investigar y aprender al respecto de estas herramientas.
 |===
