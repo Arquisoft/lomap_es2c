@@ -3,7 +3,7 @@
 
 === Whitebox Overall System
 
-image:scope&context.png["WhiteBox of the Overall System"]
+image:05_Scope_Context.png["WhiteBox of the Overall System"]
 
 Motivation::
 La aplicación LoMap es un sistema en el cual los usuarios disponen de mapas personalizados sobre lugares y negocios locales de la ciudad.
@@ -21,7 +21,7 @@ Contained Building Blocks::
 
 
 === Level 2
-image:3_Diagrama_Contexto.png["Level 2"]
+image:03_Context_Diagram.png["Level 2"]
 
 Motivation::
 Profundiza en como está construido internamente el servicio LoMap. Mostrando la diferenciacion entre la interfaz, que corresponde a la WebApp, el modelo de negocio que corresponde a la RestApi, y el almacenamiento general de información que corresponde a la base de datos.
@@ -39,7 +39,7 @@ En este apartado describimos los bloques del nuevo nivel, y por tanto, no inclui
 
 
 === Level 3
-image:lvl3.png["Level 3"]
+image:05_Level_3.png["Level 3"]
 
 Motivation::
 Profundiza en como está construido internamente la WebApp, que es la parte con la que interactúa el usuario. Se divide en los distintos componentes que conforman las acciones que puede realizar el usuario.
