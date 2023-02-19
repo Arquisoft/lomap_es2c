@@ -38,49 +38,23 @@ when your infrastructure is more complex.
 
 [role="arc42help"]
 ****
-Describe (usually in a combination of diagrams, tables, and text):
 
-*  the distribution of your system to multiple locations, environments, computers, processors, .. as well as the physical connections between them
-*  important justification or motivation for this deployment structure
-* Quality and/or performance features of the infrastructure
-*  the mapping of software artifacts to elements of the infrastructure
 
-For multiple environments or alternative deployments please copy that section of arc42 for all relevant environments.
-****
+ .Motivation
+En el entorno de testing la app se ejecutará en los ordenadores de la universidad y en los ordenadores personales de los desarrolladores de la aplicación. Sin embargo en el entorno de lanzamiento el objetivo es que cualquier ciudadano en bruselas pueda ejecutar la aplicación desde su propio dispositivo.
 
-_**<Overview Diagram>**_
-
-Motivation::
-
-_<explanation in text form>_
 
 Quality and/or Performance Features::
 
-_<explanation in text form>_
+El rendimiento de la aplicación dependerá de el nivel de privacidad que queramos tener de forma que a más privacidad habrá menor rendimiento por el tiempo de respuesta de los PODS.
 
-Mapping of Building Blocks to Infrastructure::
-_<description of the mapping>_
+.Mapping of building blocks to infrastructure
+
+Nuestra infraestructura estará formada por los siguientes elementos:
+PODS: Se utilizarán para guardar datos privados.
+Servidor: Contendrá una base de datos con información de la app.
+WebApp: Mostrará la interfaz al usuario.
+RestApi: Será el encargado de la lógica de negocio.
 
 
-=== Infrastructure Level 2
 
-[role="arc42help"]
-****
-Here you can include the internal structure of (some) infrastructure elements from level 1.
-
-Please copy the structure from level 1 for each selected element.
-****
-
-==== _<Infrastructure Element 1>_
-
-_<diagram + explanation>_
-
-==== _<Infrastructure Element 2>_
-
-_<diagram + explanation>_
-
-...
-
-==== _<Infrastructure Element n>_
-
-_<diagram + explanation>_
