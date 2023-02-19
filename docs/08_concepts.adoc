@@ -52,16 +52,22 @@ image:08-Crosscutting-Concepts-Structure-EN.png["Possible topics for crosscuttin
 
 === Domain model
 
-image:UmlDiagram.png["Example UML Diagram"]
+image:08_Domain_Model.png["Application domain model"]
 
 
 
-=== _<Concept 2>_
+=== Security
 
-_<explanation>_
+La _seguridad_ es el objetivo principal de la aplicación. La app está basada en SOLID, lo que hace que los usuarios tengan el control de su información personal gestionándola ellos mismos a través de su propio POD. Los usuarios se registrarán en la aplicación eligiendo un usuario y contraseña, la cual será encriptada para velar por la seguridad del usuario en todo momento.
 
-...
 
-=== _<Concept n>_
+=== Usabilidad
 
-_<explanation>_
+Para la interfaz de usuario usaremos React junto con TypeScript. React facilita la creación de una interfaz de usuario interactiva la cual, además, queremos que sea lo más amigable posible con el fin de llegar a un mayor público y que la aplicación sea usada por muchos y distintos usuarios.
+
+
+=== Escalabilidad y mantenimiento
+Con el fin de que nuestra aplicación sea fácilmente _escalable_ y _mantenible_ se seguirán unos estándares de código. Se busca crear un código limpio, documentado y que siga unos patrones para facilitar su comprensión, el arreglo de bugs y añadir nuevas funcionalidades en un futuro.
+
+=== Internacionalización
+La aplicación ha sido encargada por el ayuntamiento de Bruselas pero con vista a que además de los ciudadanos la utilicen turistas y en un futuro se use en otras ciudades, por ello la aplicación se desarrollará en inglés.
