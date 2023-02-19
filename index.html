@@ -481,8 +481,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#section-concepts">8. Cross-cutting Concepts</a>
 <ul class="sectlevel2">
 <li><a href="#_domain_model">8.1. Domain model</a></li>
-<li><a href="#_concept_2">8.2. <em>&lt;Concept 2&gt;</em></a></li>
-<li><a href="#_concept_n">8.3. <em>&lt;Concept n&gt;</em></a></li>
+<li><a href="#_security">8.2. Security</a></li>
+<li><a href="#_usabilidad">8.3. Usabilidad</a></li>
+<li><a href="#_escalabilidad_y_mantenimiento">8.4. Escalabilidad y mantenimiento</a></li>
+<li><a href="#_internacionalización">8.5. Internacionalización</a></li>
 </ul>
 </li>
 <li><a href="#section-design-decisions">9. Design Decisions</a></li>
@@ -492,7 +494,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_quality_scenarios">10.2. Quality Scenarios</a></li>
 </ul>
 </li>
-<li><a href="#section-technical-risks">11. Risks and Technical Debts</a></li>
+<li><a href="#section-technical-risks">11. Risks and Technical Debts</a>
+<ul class="sectlevel2">
+<li><a href="#_risks">11.1. Risks</a></li>
+<li><a href="#_technical_debts">11.2. Technical Debts</a></li>
+</ul>
+</li>
 <li><a href="#section-glossary">12. Glossary</a></li>
 </ul>
 </div>
@@ -684,16 +691,20 @@ If you as an architect do not know how the quality of your work will be judged �
 <td class="tableblock halign-left valign-top"><p class="tableblock">LoMap debe ser una aplicación flexible que permita su uso en otros contextos geográficos alejados de la ciudad de Bruselas.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accesibilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Al ser un producto dirigido a un público general nuestra aplicación deberá cumplir los estándares de accesibilidad.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usabilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cualquier usuario no familiarizado con las aplicaciones y la tecnología deberá poder usar la aplicación. Se cumplirán las recomendaciones de usabilidad que nos brindan los organismos de estandarización.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Mantenibilidad</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">El código de LoMap debe seguir los estándares de diseño adecuados para generar una aplicación mantenible en el futuro.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Escalabilidad</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LoMap debe ser una aplicación implementada con la intención de crecer y abarcar más funcionalidades. El código escrito debe facilitar esta dinámica.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Accesibilidad</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Al ser un producto dirigido a un público general por lo que nuestra aplicación deberá cumplir los estándares de accesibilidad.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1656,22 +1667,31 @@ on this list.</p>
 <div class="sect2">
 <h3 id="_domain_model">8.1. Domain model</h3>
 <div class="paragraph">
-<p><span class="image"><img src="./images/UmlDiagram.png" alt="Example UML Diagram"></span></p>
+<p><span class="image"><img src="./images/08_Domain_Model.png" alt="Application domain model"></span></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_concept_2">8.2. <em>&lt;Concept 2&gt;</em></h3>
+<h3 id="_security">8.2. Security</h3>
 <div class="paragraph">
-<p><em>&lt;explanation&gt;</em></p>
-</div>
-<div class="paragraph">
-<p>&#8230;&#8203;</p>
+<p>La <em>seguridad</em> es el objetivo principal de la aplicación. La app está basada en SOLID, lo que hace que los usuarios tengan el control de su información personal gestionándola ellos mismos a través de su propio POD. Los usuarios se registrarán en la aplicación eligiendo un usuario y contraseña, la cual será encriptada para velar por la seguridad del usuario en todo momento.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_concept_n">8.3. <em>&lt;Concept n&gt;</em></h3>
+<h3 id="_usabilidad">8.3. Usabilidad</h3>
 <div class="paragraph">
-<p><em>&lt;explanation&gt;</em></p>
+<p>Para la interfaz de usuario usaremos React junto con TypeScript. React facilita la creación de una interfaz de usuario interactiva la cual, además, queremos que sea lo más amigable posible con el fin de llegar a un mayor público y que la aplicación sea usada por muchos y distintos usuarios.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_escalabilidad_y_mantenimiento">8.4. Escalabilidad y mantenimiento</h3>
+<div class="paragraph">
+<p>Con el fin de que nuestra aplicación sea fácilmente <em>escalable</em> y <em>mantenible</em> se seguirán unos estándares de código. Se busca crear un código limpio, documentado y que siga unos patrones para facilitar su comprensión, el arreglo de bugs y añadir nuevas funcionalidades en un futuro.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_internacionalización">8.5. Internacionalización</h3>
+<div class="paragraph">
+<p>La aplicación ha sido encargada por el ayuntamiento de Bruselas pero con vista a que además de los ciudadanos la utilicen turistas y en un futuro se use en otras ciudades, por ello la aplicación se desarrollará en inglés.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1718,6 +1738,51 @@ here in this central section or whether you better document it locally
 </div>
 </div>
 </div>
+<div class="paragraph">
+<p>En la siguiente tabla, ordenadas por prioridad, se encuentran las decisiones arquitectónicas adoptadas en nuestro proyecto.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 28.5714%;">
+<col style="width: 28.5714%;">
+<col style="width: 28.5715%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Architectural decision</th>
+<th class="tableblock halign-left valign-top">Advantages</th>
+<th class="tableblock halign-left valign-top">Disadvantages</th>
+<th class="tableblock halign-left valign-top">Link to the ADR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>TypeScript</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permite la utilización de tipos estáticos, lo que nos llevará a cometer menos errores y a comprender de forma más sencilla el código realizado por los otros miembros del equipo.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ninguno ha utilizado este lenguaje, debemos familiarizarnos con él.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-01-elecci%C3%B3n-del-lenguaje-de-programaci%C3%B3n">DA-01</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>React</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Biblioteca muy popular, utilizada por grandes empresas como Facebook, lo que hace atractivo su uso. Además, dispone de mucha documentación.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Al igual que con TypeScript, no hemos utilizado con anterioridad esta biblioteca.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-03-elecci%C3%B3n-de-la-biblioteca-para-crear-la-interfaz-de-usuario">DA-03</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>NodeJS</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dispone de muchas dependencias que facilitan el desarrollo del proyecto. Es un framework muy utilizado, por lo que dispone de una extensa documentación.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Es necesario aprender como utilizar el framework con sus distintas dependencias.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-04-elecci%C3%B3n-del-entorno-de-ejecuci%C3%B3n">DA-04</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MongoDB</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sistema de base de datos NoSQL orientadas a documentos, lo que hace sencillo su uso. Es fácil de integrar en el proyecto.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No soporta transacciones complejas.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-02-elecci%C3%B3n-de-la-base-de-datos">DA-02</a></p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1773,6 +1838,9 @@ concrete and measurable.</p>
 </div>
 </div>
 </div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/10_goalsTree.png" alt="Quality Tree"></span></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_quality_scenarios">10.2. Quality Scenarios</h3>
@@ -1814,6 +1882,47 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Escenario</th>
+<th class="tableblock halign-left valign-top">Quality Goal Related</th>
+<th class="tableblock halign-left valign-top">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un usuario quiere cambiar la localización de su POD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Privacidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El usuario tiene que ser libre de ubicar sus datos donde quiera. La aplicación debe permitirle actualizar la referencia a su POD. Esto permite a cada usuario guardar sus datos donde y como quiera.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Otro ayuntamiento quiere incorporar la aplicación en su ciudad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flexibilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nuestra aplicación debe tener una implementación adecuada. Debe usar los patrones y arquitecturas de diseño necesarias para que sea fácil modificar la aplicación para su uso en otra localización</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Se necesita añadir más funcionalidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Escalabilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La aplicación esta recién creada. La funcionalidad solicitada actual no tiene porque ser la final. Debemos desarrollar un software escalable y preparado para añadir más requisitos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Personas con situaciones especiales (daltónicos, ciegos, etc&#8230;&#8203;) quieren usar la aplicación</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accesibilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Debemos de seguir los estándares internacionales de accesibilidad para crear una aplicación que cualquier persona pueda usar. Accesibilidad orientada a las funcionalidades extra (permitir lectura con navegadores de voz, manejo con teclado, etc)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Personas mayores o malas para la informática quieren usar la aplicación</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usabilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La aplicación debe ofrecer una interfaz amigable y sencilla. Tanto la gente mayor como la no habituada a usar aplicaciones deben de poder, si quieren, usarla sin problema. Accesibilidad orientada a la interfaz y sus características.</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1840,7 +1949,52 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_risks">11.1. Risks</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Concepto</th>
+<th class="tableblock halign-left valign-top">Explicación</th>
+<th class="tableblock halign-left valign-top">Medidas a tomar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trabajo en grupo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Al ser un equipo que carece de experiencia trabajando juntos la coordinación, comunicación y entendimiento son temas complejos y que requieren esfuerzo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trataremos de esforzarnos para poder desarrollar el proyecto con normalidad. La idea del grupo es ayudarnos entre nosotros y no dificultar el trabajo de los compañeros.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tiempo limitado</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Para desarrollar esta aplicación disponemos de un tiempo limitado, no solo por el alcance de la propia asignatura si no por la simultaneidad con otros proyectos de otras asignaturas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La planificación del trabajo es imprescindible y si la logramos el resultado mejorará enormemente.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Herramientas de trabajo nuevas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Como grupo carecemos de experiencia y conocimiento a cerca de las herramientas y los entornos de trabajo con los que realizará el proyecto</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Al ser las herramientas más recomendadas para un proyecto como el nuestro debemos investigar, aprender y familiarizarnos con el uso de las mismas.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Desconocimiento sobre los POD y SOLID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La arquitectura SOLID basada en los POD es algo completamente nuevo para nosotros. Tanto el concepto como la forma de utilizarlas es algo que desconocemos y supone un obstáculo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tanto SOLID como los POD son extrictamente necesarios para lo que buscamos por lo que al igual que en el caso anterior es necesario investigar y aprender al respecto de estas herramientas.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_technical_debts">11.2. Technical Debts</h3>
+<div class="paragraph">
+<p>Al comienzo del proyecto es difícil especificar alguna duda técnica. No conocemos de antemano cuál será el resultado y final y que herramientas o tecnologías vamos a utilizar finalmente. Guiados por la intención de desarrollar el proyecto con las utilidades ya mencionadas la única duda en este punto es la dependencia de nuestra aplicación con servicios externos a nosotros (APIs) y de imposible control por nuestra parte.</p>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1880,23 +2034,57 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Term</th>
+<th class="tableblock halign-left valign-top">Translation</th>
 <th class="tableblock halign-left valign-top">Definition</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;Term-1&gt;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;definition-1&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">POD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">POD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Almacen personal de información que reside en la nube, dejando a decisión del dueño de dicho POD donde.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;Term-2&gt;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;definition-2&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SOLID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SOLID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Metodología de desarrollo web basada en los beneficios de los POD. Principalmente la privacidad.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">React</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">React</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería que permite el uso de interfaces gráficas de forma sencilla.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TypeScript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TypeScript</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lenguaje base del proyecto en el que se va a desarrollar el mismo.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quality Goal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Objetivo de calidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Característica propia de la aplicación que se busca intencionadamente ya que brinda ciertos beneficios.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Decentralized information</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Información descentralizada</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Base del sistema de POD que aumenta la privacidad de los usuarios y disminuye la carga del servidor.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Graphical user interface</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interfaz gráfica de usuario</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Diseño gráfico de la aplicación con el que interactua el usuario para manejar la aplicación.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API (Application program interface)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API (Interfaz de programación de aplicación)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Servicio externo que se utiliza para que brinde ciertas funcionalidades y evitar su desarrollo.</p></td>
 </tr>
 </tbody>
 </table>
