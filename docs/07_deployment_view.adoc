@@ -46,7 +46,7 @@ En el entorno de testing la app se ejecutará en los ordenadores de la universid
 
 Quality and/or Performance Features::
 
-El rendimiento de la aplicación dependerá de el nivel de privacidad que queramos tener de forma que a más privacidad habrá menor rendimiento por el tiempo de respuesta de los PODS.
+El rendimiento de la aplicación dependerá de el nivel de privacidad que queramos tener de forma que a más privacidad, habrá menor rendimiento, debido al tiempo de respuesta de los PODS, que es la estructura que nos aporta mayor grado de privacidad.
 
 .Mapping of building blocks to infrastructure
 
