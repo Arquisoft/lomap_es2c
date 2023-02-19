@@ -456,7 +456,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_technical_context">3.2. Technical Context</a></li>
 </ul>
 </li>
-<li><a href="#section-solution-strategy">4. Solution Strategy</a></li>
+<li><a href="#section-solution-strategy">4. Solution Strategy</a>
+<ul class="sectlevel2">
+<li><a href="#_decisiones_tecnológicas">4.1. Decisiones tecnológicas</a></li>
+<li><a href="#_descomposición_de_alto_nivel">4.2. Descomposición de Alto Nivel</a></li>
+<li><a href="#_decisiones_para_alcanzar_los_criterios_de_calidad">4.3. Decisiones para alcanzar los criterios de calidad</a></li>
+<li><a href="#_decisiones_organizativas">4.4. Decisiones organizativas</a></li>
+</ul>
+</li>
 <li><a href="#section-building-block-view">5. Building Block View</a>
 <ul class="sectlevel2">
 <li><a href="#_whitebox_overall_system">5.1. Whitebox Overall System</a></li>
@@ -480,8 +487,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#section-concepts">8. Cross-cutting Concepts</a>
 <ul class="sectlevel2">
-<li><a href="#_domain_model">8.1. Domain model</a></li>
-<li><a href="#_security">8.2. Security</a></li>
+<li><a href="#_modelo_de_dominio">8.1. Modelo de dominio</a></li>
+<li><a href="#_seguridad">8.2. Seguridad</a></li>
 <li><a href="#_usabilidad">8.3. Usabilidad</a></li>
 <li><a href="#_escalabilidad_y_mantenimiento">8.4. Escalabilidad y mantenimiento</a></li>
 <li><a href="#_internacionalización">8.5. Internacionalización</a></li>
@@ -887,7 +894,7 @@ The title of the table is the name of your system, the three columns contain the
 </div>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="./images/3_Diagrama_Contexto.png" alt="Context Diagram"></span></p>
+<p><span class="image"><img src="./images/03_Context_Diagram.png" alt="Context Diagram"></span></p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1028,120 +1035,79 @@ Refer to details in the following sections.</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_decisiones_tecnológicas">4.1. Decisiones tecnológicas</h3>
+<div class="paragraph">
+<p>Como lenguaje de programación y fundamento de la aplicación hemos decidido utilizar TypeScript en contra parte de JavaScript, ya que el tipado estático de TypeScript nos facilitará entender el código creado por el resto del equipo. Además usaremos las siguientes tecnologías:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MongoDB: Base de datos NoSQL sencilla de gestionar. Y con la capacidad de desplegar en la nube gracias a MongoDB Atlas.</p>
+</li>
+<li>
+<p>React: Biblioteca de JavaScript utilizada para crear la interfaz de la aplicación.</p>
+</li>
+<li>
+<p>NodeJS: Permite la ejecución de JavaScript del lado del servidor, además de hacer la web fácilmente escalable.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_descomposición_de_alto_nivel">4.2. Descomposición de Alto Nivel</h3>
+<div class="sect3">
+<h4 id="_patrón_de_arquitectura">4.2.1. Patrón de arquitectura</h4>
+<div class="paragraph">
+<p>Utilizamos uno de los patrones de arquitectura más comunes hoy en día, que es el patrón modelo vista controlador (MVC). Permite originalmente desacoplar la interfaz de usuario, la lógica de control y el modelo de datos. Al MVC añadiremos una separación entre el dominio de la aplicación y la persistencia, ya que es más oportuno para esta aplicación.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_decisiones_para_alcanzar_los_criterios_de_calidad">4.3. Decisiones para alcanzar los criterios de calidad</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Privacidad: Utilizaremos los PODs para mantener descentralizada la información privada de cada usuario, intentado guardar en la base de datos centralizada únicamente la información imprescindible.</p>
+</li>
+<li>
+<p>Flexibilidad: Aunque el contrato de crear LoMap procede del ayuntamiento de Bruselas, generalizaremos el sistema para que pueda ser utilizado en cualquier otra ciudad.</p>
+</li>
+<li>
+<p>Usabilidad: Para que cualquier persona sea capaz de utilizar de forma sencilla y cómoda la aplicación nos basaremos en las normas de los institutos de estandarización para la usabilidad en la web.</p>
+</li>
+<li>
+<p>Mantenibilidad: Para conseguir una mantenibilidad adecuada nos basaremos en la arquitectura MVC y añadiremos algún otro patrón de diseño si es necesario, con el fin de que sea mantenible en el futuro.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_decisiones_organizativas">4.4. Decisiones organizativas</h3>
+<div class="paragraph">
+<p>La principal manera de comunicación del equipo será GitHub, por medio de la creación de Issues y el uso de Kanban, para organizar el trabajo y asignar los desarrolladores encargados de realizar las diferentes características. También hemos creado una rama por cada desarrollador con la intención de que cuando alguien ha terminado una funcionalidad se realice una pull request y el resto del equipo revise el código hasta dar su visto bueno y tener centralizado el desarrollo en una única rama.</p>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="section-building-block-view">5. Building Block View</h2>
 <div class="sectionbody">
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<div class="title">Content</div>
-<p>The building block view shows the static decomposition of the system into building blocks (modules, components, subsystems, classes,
-interfaces, packages, libraries, frameworks, layers, partitions, tiers, functions, macros, operations,
-datas structures, &#8230;&#8203;) as well as their dependencies (relationships, associations, &#8230;&#8203;)</p>
-</div>
-<div class="paragraph">
-<p>This view is mandatory for every architecture documentation.
-In analogy to a house this is the <em>floor plan</em>.</p>
-</div>
-<div class="paragraph">
-<div class="title">Motivation</div>
-<p>Maintain an overview of your source code by making its structure understandable through
-abstraction.</p>
-</div>
-<div class="paragraph">
-<p>This allows you to communicate with your stakeholder on an abstract level without disclosing implementation details.</p>
-</div>
-<div class="paragraph">
-<div class="title">Form</div>
-<p>The building block view is a hierarchical collection of black boxes and white boxes
-(see figure below) and their descriptions.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/05_building_blocks-EN.png" alt="Hierarchy of building blocks"></span></p>
-</div>
-<div class="paragraph">
-<p><strong>Level 1</strong> is the white box description of the overall system together with black
-box descriptions of all contained building blocks.</p>
-</div>
-<div class="paragraph">
-<p><strong>Level 2</strong> zooms into some building blocks of level 1.
-Thus it contains the white box description of selected building blocks of level 1, together with black box descriptions of their internal building blocks.</p>
-</div>
-<div class="paragraph">
-<p><strong>Level 3</strong> zooms into selected building blocks of level 2, and so on.</p>
-</div>
-</div>
-</div>
 <div class="sect2">
 <h3 id="_whitebox_overall_system">5.1. Whitebox Overall System</h3>
-<div class="sidebarblock arc42help">
-<div class="content">
 <div class="paragraph">
-<p>Here you describe the decomposition of the overall system using the following white box template. It contains</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>an overview diagram</p>
-</li>
-<li>
-<p>a motivation for the decomposition</p>
-</li>
-<li>
-<p>black box descriptions of the contained building blocks. For these we offer you alternatives:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>use <em>one</em> table for a short and pragmatic overview of all contained building blocks and their interfaces</p>
-</li>
-<li>
-<p>use a list of black box descriptions of the building blocks according to the black box template (see below).
-Depending on your choice of tool this list could be sub-chapters (in text files), sub-pages (in a Wiki) or nested elements (in a modeling tool).</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>(optional:) important interfaces, that are not explained in the black box templates of a building block, but are very important for understanding the white box.
-Since there are so many ways to specify interfaces why do not provide a specific template for them.
- In the worst case you have to specify and describe syntax, semantics, protocols, error handling,
- restrictions, versions, qualities, necessary compatibilities and many things more.
-In the best case you will get away with examples or simple signatures.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p><em><strong>&lt;Overview Diagram&gt;</strong></em></p>
+<p><span class="image"><img src="./images/05_Scope_Context.png" alt="WhiteBox of the Overall System"></span></p>
 </div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Motivation</dt>
 <dd>
-<p><em>&lt;text explanation&gt;</em></p>
+<p>La aplicación LoMap es un sistema en el cual los usuarios disponen de mapas personalizados sobre lugares y negocios locales de la ciudad.
+Toda la información privada del usuario se guarda en su propio POD.</p>
 </dd>
 <dt class="hdlist1">Contained Building Blocks</dt>
-<dd>
-<p><em>&lt;Description of contained building block (black boxes)&gt;</em></p>
-</dd>
-<dt class="hdlist1">Important Interfaces</dt>
-<dd>
-<p><em>&lt;Description of important interfaces&gt;</em></p>
-</dd>
 </dl>
-</div>
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<p>Insert your explanations of black boxes from level 1:</p>
-</div>
-<div class="paragraph">
-<p>If you use tabular form you will only describe your black boxes with name and
-responsibility according to the following schema:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1156,177 +1122,116 @@ responsibility according to the following schema:</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;black box 1&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"> <em>&lt;Text&gt;</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> Cliente de la aplicación</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;black box 2&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"> <em>&lt;Text&gt;</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LoMap</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> Es el sistema en sí, sobre el cual interactuan los usuarios.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">POD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Almacena la información personal de un usuario. Cada usuario tiene su propio POD.</p></td>
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p>If you use a list of black box descriptions then you fill in a separate black box template for every important building block .
-Its headline is the name of the black box.</p>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_black_box_1">5.1.1. &lt;Name black box 1&gt;</h4>
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<p>Here you describe &lt;black box 1&gt;
-according the the following black box template:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Purpose/Responsibility</p>
-</li>
-<li>
-<p>Interface(s), when they are not extracted as separate paragraphs. This interfaces may include qualities and performance characteristics.</p>
-</li>
-<li>
-<p>(Optional) Quality-/Performance characteristics of the black box, e.g.availability, run time behavior, &#8230;&#8203;.</p>
-</li>
-<li>
-<p>(Optional) directory/file location</p>
-</li>
-<li>
-<p>(Optional) Fulfilled requirements (if you need traceability to requirements).</p>
-</li>
-<li>
-<p>(Optional) Open issues/problems/risks</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p><em>&lt;Purpose/Responsibility&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;Interface(s)&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;(Optional) Quality/Performance Characteristics&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;(Optional) Directory/File Location&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;(Optional) Fulfilled Requirements&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;(optional) Open Issues/Problems/Risks&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_black_box_2">5.1.2. &lt;Name black box 2&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;black box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_black_box_n">5.1.3. &lt;Name black box n&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;black box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_interface_1">5.1.4. &lt;Name interface 1&gt;</h4>
-<div class="paragraph">
-<p>&#8230;&#8203;</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_interface_m">5.1.5. &lt;Name interface m&gt;</h4>
-
-</div>
 </div>
 <div class="sect2">
 <h3 id="_level_2">5.2. Level 2</h3>
-<div class="sidebarblock arc42help">
-<div class="content">
 <div class="paragraph">
-<p>Here you can specify the inner structure of (some) building blocks from level 1 as white boxes.</p>
+<p><span class="image"><img src="./images/03_Context_Diagram.png" alt="Level 2"></span></p>
 </div>
-<div class="paragraph">
-<p>You have to decide which building blocks of your system are important enough to justify such a detailed description.
-Please prefer relevance over completeness. Specify important, surprising, risky, complex or volatile building blocks.
-Leave out normal, simple, boring or standardized parts of your system</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Motivation</dt>
+<dd>
+<p>Profundiza en como está construido internamente el servicio LoMap. Mostrando la diferenciacion entre la interfaz, que corresponde a la WebApp, el modelo de negocio que corresponde a la RestApi, y el almacenamiento general de información que corresponde a la base de datos.</p>
+</dd>
+<dt class="hdlist1">Contained Building Blocks</dt>
+<dd>
+<p>En este apartado describimos los bloques del nuevo nivel, y por tanto, no incluimos el usuario, LoMap en general y los PODs.</p>
+</dd>
+</dl>
 </div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_1">5.2.1. White Box <em>&lt;building block 1&gt;</em></h4>
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<p>&#8230;&#8203;describes the internal structure of <em>building block 1</em>.</p>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_2">5.2.2. White Box <em>&lt;building block 2&gt;</em></h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-<div class="paragraph">
-<p>&#8230;&#8203;</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_m">5.2.3. White Box <em>&lt;building block m&gt;</em></h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Name</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Responsibility</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WebApp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> Es la interfaz del sistema, a través de la cual el usuario interactuará para hacer todas sus peticiones.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RestApi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> Se encarga de procesar las solicitudes de la interfaz y hacer las peticiones de información a la base de datos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Database</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Guarda solo información pública y visible por todos los usuarios, nunca información privada.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_level_3">5.3. Level 3</h3>
-<div class="sidebarblock arc42help">
-<div class="content">
 <div class="paragraph">
-<p>Here you can specify the inner structure of (some) building blocks from level 2 as white boxes.</p>
+<p><span class="image"><img src="./images/05_Level_3.png" alt="Level 3"></span></p>
 </div>
-<div class="paragraph">
-<p>When you need more detailed levels of your architecture please copy this
-part of arc42 for additional levels.</p>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Motivation</dt>
+<dd>
+<p>Profundiza en como está construido internamente la WebApp, que es la parte con la que interactúa el usuario. Se divide en los distintos componentes que conforman las acciones que puede realizar el usuario.</p>
+</dd>
+<dt class="hdlist1">Contained Building Blocks</dt>
+<dd>
+<p>En este apartado describimos los bloques del nuevo nivel, y por tanto, no incluimos los explicados en los otros niveles.</p>
+</dd>
+</dl>
 </div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_x_1">5.3.1. White Box &lt;_building block x.1_&gt;</h4>
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<p>Specifies the internal structure of <em>building block x.1</em>.</p>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_x_2">5.3.2. White Box &lt;_building block x.2_&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_y_1">5.3.3. White Box &lt;_building block y.1_&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Name</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Responsibility</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Home</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> Página principal de la aplicación que se muestra nada mas entrar.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Registro</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> Permite registrarte en la aplicación así como crear tu propio POD.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Inicio sesión</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Si el usuario ya ha creado una cuenta, permite iniciar sesión en la misma.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Filtrar sitios</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permite al usuario mostrar las localizaciones que ha guardado aplicando diversos filtros.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Añadir sitio</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permite al usuario añadir a favoritos un establecimiento, añadiendolo también a su POD.</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
-</div>
 </div>
 </div>
 </div>
@@ -1665,13 +1570,13 @@ on this list.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_domain_model">8.1. Domain model</h3>
+<h3 id="_modelo_de_dominio">8.1. Modelo de dominio</h3>
 <div class="paragraph">
 <p><span class="image"><img src="./images/08_Domain_Model.png" alt="Application domain model"></span></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_security">8.2. Security</h3>
+<h3 id="_seguridad">8.2. Seguridad</h3>
 <div class="paragraph">
 <p>La <em>seguridad</em> es el objetivo principal de la aplicación. La app está basada en SOLID, lo que hace que los usuarios tengan el control de su información personal gestionándola ellos mismos a través de su propio POD. Los usuarios se registrarán en la aplicación eligiendo un usuario y contraseña, la cual será encriptada para velar por la seguridad del usuario en todo momento.</p>
 </div>
@@ -1839,7 +1744,7 @@ concrete and measurable.</p>
 </div>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="./images/10-goalsTree.png" alt="Quality Tree"></span></p>
+<p><span class="image"><img src="./images/10_Goals_Tree.png" alt="Quality Tree"></span></p>
 </div>
 </div>
 <div class="sect2">
