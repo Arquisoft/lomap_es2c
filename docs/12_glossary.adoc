@@ -23,9 +23,15 @@ Potentially more columns in case you need translations.
 
 ****
 
-[options="header"]
+[options="header",cols="1,1,3"]
 |===
-| Term         | Definition
-| <Term-1>     | <definition-1>
-| <Term-2>     | <definition-2>
+|Term|Translation|Definition
+|POD|POD|Almacen personal de información que reside en la nube, dejando a decisión del dueño de dicho POD donde. 
+|SOLID|SOLID|Metodología de desarrollo web basada en los beneficios de los POD. Principalmente la privacidad.
+|React|React|Librería que permite el uso de interfaces gráficas de forma sencilla.
+|TypeScript|TypeScript|Lenguaje base del proyecto en el que se va a desarrollar el mismo.
+|Quality Goal|Objetivo de calidad|Característica propia de la aplicación que se busca intencionadamente ya que brinda ciertos beneficios.
+|Decentralized information|Información descentralizada|Base del sistema de POD que aumenta la privacidad de los usuarios y disminuye la carga del servidor.
+|Graphical user interface|Interfaz gráfica de usuario|Diseño gráfico de la aplicación con el que interactua el usuario para manejar la aplicación.
+|API (Application program interface)|API (Interfaz de programación de aplicación)|Servicio externo que se utiliza para que brinde ciertas funcionalidades y evitar su desarrollo.
 |===
