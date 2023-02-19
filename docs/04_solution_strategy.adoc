@@ -1,7 +1,6 @@
 [[section-solution-strategy]]
 == Solution Strategy
 
-
 [role="arc42help"]
 ****
 .Contents
@@ -22,3 +21,31 @@ Motivate what you have decided and why you decided that way,
 based upon your problem statement, the quality goals and key constraints.
 Refer to details in the following sections.
 ****
+
+=== Decisiones tecnológicas
+
+Como lenguaje de programación y fundamento de la aplicación hemos decidido utilizar TypeScript en contra parte de JavaScript, ya que el tipado estático de TypeScript nos facilitará entender el código creado por el resto del equipo. Además usaremos las siguientes tecnologías:
+
+* MongoDB: Base de datos NoSQL sencilla de gestionar. Y con la capacidad de desplegar en la nube gracias a MongoDB Atlas.
+* React: Biblioteca de JavaScript utilizada para crear la interfaz de la aplicación.
+* NodeJS: Permite la ejecución de JavaScript del lado del servidor, además de hacer la web fácilmente escalable.
+
+
+=== Descomposición de Alto Nivel
+==== Patrón de arquitectura
+
+Utilizamos uno de los patrones de arquitectura más comunes hoy en día, que es el patrón modelo vista controlador (MVC). Permite originalmente desacoplar la interfaz de usuario, la lógica de control y el modelo de datos. Al MVC añadiremos una separación entre el dominio de la aplicación y la persistencia, ya que es más oportuno para esta aplicación.
+
+
+=== Decisiones para alcanzar los criterios de calidad
+
+* Privacidad: Utilizaremos los PODs para mantener descentralizada la información privada de cada usuario, intentado guardar en la base de datos centralizada únicamente la información imprescindible.
+* Flexibilidad: Aunque el contrato de crear LoMap procede del ayuntamiento de Bruselas, generalizaremos el sistema para que pueda ser utilizado en cualquier otra ciudad.
+* Usabilidad: Para que cualquier persona sea capaz de utilizar de forma sencilla y cómoda la aplicación nos basaremos en las normas de los institutos de estandarización para la usabilidad en la web.
+* Mantenibilidad: Para conseguir una mantenibilidad adecuada nos basaremos en la arquitectura MVC y añadiremos algún otro patrón de diseño si es necesario, con el fin de que sea mantenible en el futuro.
+
+
+=== Decisiones organizativas
+
+La principal manera de comunicación del equipo será GitHub, por medio de la creación de Issues y el uso de Kanban, para organizar el trabajo y asignar los desarrolladores encargados de realizar las diferentes características. También hemos creado una rama por cada desarrollador con la intención de que cuando alguien ha terminado una funcionalidad se realice una pull request y el resto del equipo revise el código hasta dar su visto bueno y tener centralizado el desarrollo en una única rama.
+
