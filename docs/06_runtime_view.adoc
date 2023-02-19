@@ -30,7 +30,8 @@ There are many notations for describing scenarios, e.g.
 
 ****
 
-=== <Edit web ID>
+=== Edit web ID
+Cuando un usuario quiere cambiar el Web ID:
 
 [plantuml,"Sequence diagram",png]
 ----
@@ -56,7 +57,8 @@ LoMap -> User: Show confirm dialog
 
 ...User log out as shown......
 ----
-=== <Login and Logout>
+=== Login and Logout
+El proceso de login y logout para poder ser reconocido por la applicación:
 [plantuml,"Log in - log out sequence diagram",png]
 ----
 header Runtime View
@@ -75,7 +77,8 @@ User -> LoMap: Log out from apllication
 LoMap --> User: Show exit dialog and closes user session
 ----
 
-===<User Sign Up>
+=== User Sign Up
+El proceso de crear un nuevo usuario para poder hacer log in
 [plantuml,"Register sequence diagram",png]
 ----
 header Runtime View
@@ -96,7 +99,8 @@ LoMap <-- DataBase: Confirm credentials addition
 User <- LoMap: Show confirm dialog to User
 ----
 
-===<Place adding>
+=== Place adding
+El proceso de añadir un lugar al mapa:
 [plantuml,"Add favorite place sequence diagram",png]
 ----
 header Runtime View
