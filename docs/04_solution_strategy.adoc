@@ -22,3 +22,35 @@ Motivate what you have decided and why you decided that way,
 based upon your problem statement, the quality goals and key constraints.
 Refer to details in the following sections.
 ****
+
+=== Decisiones tecnológicas
+[role="arc42help"]
+****
+Como lenguaje de programación y fundamento de la aplicación hemos decidido utilizar TypeScript en contra parte de JavaScript, ya que el tipado estático de TypeScript nos facilitará entender el código creado por el resto del equipo. Además usaremos las siguientes tecnologías:
+
+* MongoDB: Base de datos NoSQL sencilla de gestionar. Y con la capacidad de desplegar en la nube gracias a MongoDB Atlas.
+* React: Biblioteca de JavaScript utilizada para crear la interfaz de la aplicación.
+* NodeJS: Permite la ejecución de JavaScript del lado del servidor, además de hacer la web fácilmente escalable.
+****
+
+=== Descomposición de Alto Nivel
+==== Patrón de arquitectura
+[role="arc42help"]
+****
+Utilizamos uno de los patrones de arquitectura más comunes hoy en día, que es el patrón modelo-vista-controlador (MVC). Permite desacoplar la interfaz de la web, del modelo de negocio y el almacenamiento de información.
+****
+
+=== Decisiones para alcanzar los criterios de calidad
+[role="arc42help"]
+****
+* Privacidad: Utilizaremos los PODs para mantener descentralizada la información privada de cada usuario, intentado guardar en una base de datos central únicamente información pública como podría ser una reseña a un establecimiento.
+* Flexibilidad: Aunque el contrato de crear LoMap procede del ayuntamiento de Bruselas, generalizaremos el sistema para que pueda ser utilizado en cualquier otra ciudad.
+* Usabilidad: Para que cualquier persona sea capaz de utilizar de forma sencilla y cómoda la web nos basaremos en las normas de los institutos de estandarización para la usabilidad en la web.
+* Mantenibilidad: Para conseguir una mantenibilidad adecuada nos basaremos en el patrón MVC y añadiremos algún otro patrón de diseño si es necesario, con el fin de que se mantenible en el futuro.
+****
+
+=== Decisiones organizativas
+[role="arc42help"]
+****
+La principal manera de comunicación del equipo será Github, por medio de la creación de Issues, mezclado con el uso de Kanban, para organizar el trabajo y asignar los desarrolladores encargados de realizar las diferentes características. También hemos creado una rama por cada desarrollador con la intención de cuando alguien ha terminado una funcionalidad se realice una pull request y el resto del equipo revise el código hasta dar su visto bueno y tener centralizado el desarrollo en una única rama.
+****
