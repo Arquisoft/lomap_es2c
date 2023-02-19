@@ -1,6 +1,6 @@
 [[section-runtime-view]]
 == Runtime View
-
+Por el momento el contenido de este apartado no es muy extenso debido a la pronta etapa rn la que se encuentra em proyecto, a medida que se vaya avanzando este documento se irá actualizando y enriqueciendo.
 
 [role="arc42help"]
 ****
