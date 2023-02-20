@@ -57,6 +57,7 @@ Estas dependencias externas provocan que el rendimiento y disponibilidad de nues
 .Mapping of building blocks to infrastructure
 
 Nuestra infraestructura estará formada por los siguientes elementos:
+
 * PODs: Almacen individual de información, garantiza la privacidad del usuario.
 * Servidor: Contenedor de nuestra aplicación para despliegue. Todavía sin concretar.
 * WebApp: Front-end de nuestra aplicación.
