@@ -1,7 +1,5 @@
 [[section-runtime-view]]
 == Runtime View
-Por el momento el contenido de este apartado no es muy extenso debido a la pronta etapa rn la que se encuentra em proyecto, a medida que se vaya avanzando este documento se irá actualizando y enriqueciendo.
-
 [role="arc42help"]
 ****
 .Contents
@@ -30,8 +28,52 @@ There are many notations for describing scenarios, e.g.
 
 ****
 
+Por el momento el contenido de este apartado no es muy extenso debido a la pronta etapa rn la que se encuentra em proyecto, a medida que se vaya avanzando este documento se irá actualizando y enriqueciendo.
+
+=== User Sign Up
+Proceso de crear un nuevo usuario
+[plantuml,"Register sequence diagram",png]
+----
+header Runtime View
+title User Registration
+Actor User
+Participant LoMap
+Database DataBase as "DataBase" 
+
+User -> LoMap: Sing up as a new user
+User <-- LoMap: Ask user for his WebID
+User --> LoMap: Bring his WebID
+LoMap --> LoMap: Verify WebID
+
+...LoMap wait till get POD permissions......
+
+LoMap -> DataBase: Add user credentials
+LoMap <-- DataBase: Confirm credentials addition
+User <- LoMap: Show confirm dialog to User
+----
+
+=== Login and Logout
+El proceso de login y logout:
+[plantuml,"Log in - log out sequence diagram",png]
+----
+header Runtime View
+title Log in - Log out
+Actor User
+Participant LoMap
+Database DataBase as "DataBase" 
+
+User -> LoMap: Log in with his credentials
+LoMap -> DataBase: Check user credentials
+LoMap <-- DataBase: Confirm credentials
+
+...User interacts with the apllication......
+
+User -> LoMap: Log out from apllication
+LoMap --> User: Show exit dialog and closes user session
+----
+
 === Edit web ID
-Cuando un usuario quiere cambiar el Web ID:
+Un usuario quiere cambiar su Web ID:
 
 [plantuml,"Sequence diagram",png]
 ----
@@ -57,50 +99,9 @@ LoMap -> User: Show confirm dialog
 
 ...User log out as shown......
 ----
-=== Login and Logout
-El proceso de login y logout para poder ser reconocido por la applicación:
-[plantuml,"Log in - log out sequence diagram",png]
-----
-header Runtime View
-title Log in - Log out
-Actor User
-Participant LoMap
-Database DataBase as "DataBase" 
-
-User -> LoMap: Log in with his credentials
-LoMap -> DataBase: Check user credentials
-LoMap <-- DataBase: Confirm credentials
-
-...User interacts with the apllication......
-
-User -> LoMap: Log out from apllication
-LoMap --> User: Show exit dialog and closes user session
-----
-
-=== User Sign Up
-El proceso de crear un nuevo usuario para poder hacer log in
-[plantuml,"Register sequence diagram",png]
-----
-header Runtime View
-title User Registration
-Actor User
-Participant LoMap
-Database DataBase as "DataBase" 
-
-User -> LoMap: Sing up as a new user
-User <-- LoMap: Ask user for his WebID
-User --> LoMap: Bring his WebID
-LoMap --> LoMap: Verify WebID
-
-...LoMap wait till get POD permissions......
-
-LoMap -> DataBase: Add user credentials
-LoMap <-- DataBase: Confirm credentials addition
-User <- LoMap: Show confirm dialog to User
-----
 
 === Place adding
-El proceso de añadir un lugar al mapa:
+Proceso de añadir un lugar al mapa:
 [plantuml,"Add favorite place sequence diagram",png]
 ----
 header Runtime View
