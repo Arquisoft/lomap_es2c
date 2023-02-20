@@ -473,16 +473,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#section-runtime-view">6. Runtime View</a>
 <ul class="sectlevel2">
-<li><a href="#_runtime_scenario_1">6.1. &lt;Runtime Scenario 1&gt;</a></li>
-<li><a href="#_runtime_scenario_2">6.2. &lt;Runtime Scenario 2&gt;</a></li>
-<li><a href="#">6.3. &#8230;&#8203;</a></li>
-<li><a href="#_runtime_scenario_n">6.4. &lt;Runtime Scenario n&gt;</a></li>
+<li><a href="#_user_sign_up">6.1. User Sign Up</a></li>
+<li><a href="#_login_and_logout">6.2. Login and Logout</a></li>
+<li><a href="#_edit_web_id">6.3. Edit web ID</a></li>
+<li><a href="#_place_adding">6.4. Place adding</a></li>
 </ul>
 </li>
 <li><a href="#section-deployment-view">7. Deployment View</a>
 <ul class="sectlevel2">
 <li><a href="#_infrastructure_level_1">7.1. Infrastructure Level 1</a></li>
-<li><a href="#_infrastructure_level_2">7.2. Infrastructure Level 2</a></li>
 </ul>
 </li>
 <li><a href="#section-concepts">8. Cross-cutting Concepts</a>
@@ -1296,38 +1295,52 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_runtime_scenario_1">6.1. &lt;Runtime Scenario 1&gt;</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><em>&lt;insert runtime diagram or textual description of the scenario&gt;</em></p>
-</li>
-<li>
-<p><em>&lt;insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.&gt;</em></p>
-</li>
-</ul>
-</div>
 <div class="paragraph">
-<p>It is possible to use a sequence diagram:</p>
+<p>Por el momento el contenido de este apartado no es muy extenso debido a la pronta etapa rn la que se encuentra em proyecto, a medida que se vaya avanzando este documento se irá actualizando y enriqueciendo.</p>
+</div>
+<div class="sect2">
+<h3 id="_user_sign_up">6.1. User Sign Up</h3>
+<div class="paragraph">
+<p>Proceso de crear un nuevo usuario</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Sequence%20diagram.png" alt="Sequence diagram" width="332" height="343">
+<img src="./images/Register%20sequence%20diagram.png" alt="Register sequence diagram" width="437" height="511">
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_2">6.2. &lt;Runtime Scenario 2&gt;</h3>
-
+<h3 id="_login_and_logout">6.2. Login and Logout</h3>
+<div class="paragraph">
+<p>El proceso de login y logout:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/Log%20in%20-%20log%20out%20sequence%20diagram.png" alt="Log in   log out sequence diagram" width="488" height="438">
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="">6.3. &#8230;&#8203;</h3>
-
+<h3 id="_edit_web_id">6.3. Edit web ID</h3>
+<div class="paragraph">
+<p>Un usuario quiere cambiar su Web ID:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/Sequence%20diagram.png" alt="Sequence diagram" width="391" height="595">
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_runtime_scenario_n">6.4. &lt;Runtime Scenario n&gt;</h3>
+<h3 id="_place_adding">6.4. Place adding</h3>
+<div class="paragraph">
+<p>Proceso de añadir un lugar al mapa:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/Add%20favorite%20place%20sequence%20diagram.png" alt="Add favorite place sequence diagram" width="390" height="510">
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1414,59 +1427,26 @@ when your infrastructure is more complex.</p>
 </div>
 </div>
 <div class="paragraph">
-<p><em><strong>&lt;Overview Diagram&gt;</strong></em></p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Motivation</dt>
-<dd>
-<p><em>&lt;explanation in text form&gt;</em></p>
-</dd>
-<dt class="hdlist1">Quality and/or Performance Features</dt>
-<dd>
-<p><em>&lt;explanation in text form&gt;</em></p>
-</dd>
-<dt class="hdlist1">Mapping of Building Blocks to Infrastructure</dt>
-<dd>
-<p><em>&lt;description of the mapping&gt;</em></p>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_infrastructure_level_2">7.2. Infrastructure Level 2</h3>
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<p>Here you can include the internal structure of (some) infrastructure elements from level 1.</p>
+<div class="title">Motivation</div>
+<p>En el entorno de testing la app se ejecutará en los ordenadores de los desarrolladores de la aplicación.
+En este punto del desarrollo de la aplicación no es posible especificar cuál será la estructura de lanzamiento.
+Más adelante en el desarrollo del proyecto de completará la documentación para representar de forma fiel como se desplegará la aplicación.</p>
 </div>
 <div class="paragraph">
-<p>Please copy the structure from level 1 for each selected element.</p>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_infrastructure_element_1">7.2.1. <em>&lt;Infrastructure Element 1&gt;</em></h4>
-<div class="paragraph">
-<p><em>&lt;diagram + explanation&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_infrastructure_element_2">7.2.2. <em>&lt;Infrastructure Element 2&gt;</em></h4>
-<div class="paragraph">
-<p><em>&lt;diagram + explanation&gt;</em></p>
+<div class="title">Quality and/or Performance Features</div>
+<p>La predicción es que nuestra aplicación va a tener dependencias con numerosas APIs. Tanto la API que usemos para el servicio de mapas como la usada para manejar los PODs no depende de nosotros.
+Estas dependencias externas provocan que el rendimiento y disponibilidad de nuestra aplicación se vea condicionada por estos servicios. En una etapa más madura del desarrollo se medirán tiempos de espera para poder concretar el rendimiento medio de la aplicación.</p>
 </div>
 <div class="paragraph">
-<p>&#8230;&#8203;</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_infrastructure_element_n">7.2.3. <em>&lt;Infrastructure Element n&gt;</em></h4>
-<div class="paragraph">
-<p><em>&lt;diagram + explanation&gt;</em></p>
+<div class="title">Mapping of building blocks to infrastructure</div>
+<p>Nuestra infraestructura estará formada por los siguientes elementos:
+* PODs: Almacen individual de información, garantiza la privacidad del usuario.
+* Servidor: Contenedor de nuestra aplicación para despliegue. Todavía sin concretar.
+* WebApp: Front-end de nuestra aplicación.
+* RestApi: Back-end de nuestra aplicación.
+* MongoDB: En este punto, base de datos elegida para la aplicación. Con el uso de MongoDB Atlas para su despliegue.</p>
 </div>
 <div style="page-break-after: always;"></div>
-</div>
 </div>
 </div>
 </div>
