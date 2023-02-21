@@ -1,7 +1,5 @@
 [[section-runtime-view]]
 == Runtime View
-
-
 [role="arc42help"]
 ****
 .Contents
@@ -30,28 +28,104 @@ There are many notations for describing scenarios, e.g.
 
 ****
 
-=== <Runtime Scenario 1>
+Por el momento el contenido de este apartado no es muy extenso debido a la pronta etapa rn la que se encuentra em proyecto, a medida que se vaya avanzando este documento se irá actualizando y enriqueciendo.
 
+=== First level of detail
 
-* _<insert runtime diagram or textual description of the scenario>_
-* _<insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.>_
+==== User Sign Up
+Proceso de crear un nuevo usuario
+[plantuml,"Register sequence diagram",png]
+----
+header Runtime View
+title User Registration
+Actor User
+Participant LoMap
+Participant POD as "User's POD"
+Database DataBase as "DataBase" 
 
-It is possible to use a sequence diagram:
+User -> LoMap: Sing up as a new user filling the form
+User <-- LoMap: Ask user for his WebID
+User -> LoMap: Provide his WebID
+LoMap -> POD: Verify WebID
+LoMap <-- POD: Gives LoMap permissions
+
+LoMap -> DataBase: Add user credentials
+LoMap <-- DataBase: Confirm credentials addition
+User <-- LoMap: Show confirm dialog to User
+----
+
+==== Login and Logout
+El proceso de login y logout:
+[plantuml,"Log in - log out sequence diagram",png]
+----
+header Runtime View
+title Log in - Log out
+Actor User
+Participant LoMap
+Participant POD as "User's POD"
+Database DataBase as "DataBase" 
+
+User -> LoMap: Log in with his credentials
+LoMap -> DataBase: Check user credentials
+LoMap <-- DataBase: Confirm credentials
+LoMap -> POD: Check POD availability
+POD --> LoMap: Confirm POD availability
+
+...User interacts with the apllication......
+
+User -> LoMap: Log out from apllication
+LoMap --> User: Show exit dialog and closes user session
+----
+
+==== Edit web ID
+Un usuario quiere cambiar su Web ID:
 
 [plantuml,"Sequence diagram",png]
 ----
-actor Alice
-actor Bob
-database Pod as "Bob's Pod"
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
-Alice  --> Pod: Store route
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+header Runtime View
+title WebID change
+Actor User
+Participant LoMap
+Participant POD as "User's POD"
+Database DataBase as "DataBase" 
+
+...User log in as shown......
+
+User -> LoMap: Asks for WebID change
+User <-- LoMap: Show edit menu to User
+User -> LoMap: Provide the new WebID
+LoMap -> POD: Verify WebID
+LoMap <-- POD: Gives LoMap permissions
+
+LoMap -> DataBase: Update user credentials
+LoMap <-- DataBase: Confirm credentials
+
+LoMap --> User: Show confirm dialog
+
+...User log out as shown......
 ----
-=== <Runtime Scenario 2>
 
-=== ...
+==== Place adding
+Proceso de añadir un lugar al mapa:
+[plantuml,"Add favorite place sequence diagram",png]
+----
+header Runtime View
+title Add favorite place
+Actor User
+Participant LoMap
+Database DataBase as "User's POD" 
 
-=== <Runtime Scenario n>
+...User log in as shown......
+
+User -> LoMap: Wanna add a place
+User <-- LoMap: Show favorite places form
+User -> LoMap: Provide the info
+
+LoMap -> DataBase: Add new user data
+LoMap <-- DataBase: Confirm data addition
+
+LoMap --> User: Show confirm dialog
+
+...User log out as shown......
+
+----
