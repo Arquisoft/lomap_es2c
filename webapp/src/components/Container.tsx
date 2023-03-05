@@ -14,22 +14,26 @@ import { Paper, StyledComponentProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from './Header';
 import Login from '../../src/views/login';
+import Signup from '../../src/views/signup';
 import { Footer } from './Footer';
+import { Sign } from 'crypto';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
-    'background-color': '#388e3c',
-    'background-image': 'url("../nobgLogo.png")',
+    backgroundImage: 'url("../background.png")',
+    backgroundPosition: 'center',
+    backgroundSize:'95%',
+    backgroundRepeat:'no-repeat',
     display: 'flex',
-    'flex-direction': 'column',
+    flexDirection: 'column',
 })
 
 const MyPaper = styled(Paper)({
-    'background-color': 'rgba(255, 0, 0, 0.0)',
+    backgroundColor: 'rgba(255, 0, 0, 0.0)',
 })
 
 const MyPaper2 = styled(Paper)({
-    'background-color': 'rgba(255, 0, 0, 0.0)',
+    backgroundColor: 'rgba(255, 0, 0, 0.0)',
 })
 //#endregion
 
@@ -39,7 +43,7 @@ export default function container() {
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header /></MyPaper>
-            <Login />
+            <Login/>
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

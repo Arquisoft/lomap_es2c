@@ -22,11 +22,11 @@ import { NoLogedMenu } from './NoLogedMenu';
 const ButtonGENERIC = styled(Button)({
     padding: '1.5em 5em 1.5em',
     color: 'white',
-    'justify-self': 'right',
+    justifySelf: 'right',
     font: '1em Calibri',
     '&:hover': {
         outline: 'none',
-        'background-color': '#1f4a21',
+        backgroundColor: '#1f4a21',
     },
 });
 
@@ -37,13 +37,13 @@ const ButtonHOME = styled(Button)({
     font: '1em Calibri',
     '&:focus': {
         outline: 'none',
-        'box-shadow': 'none',
+        boxShadow: 'none',
     },
     '&:hover': {
-        'background-color': '#81c784',
+        backgroundColor: '#81c784',
     },
     '&:active': {
-        'background-color': '#81c784',
+        backgroundColor: '#81c784',
     },
 });
 
@@ -51,7 +51,7 @@ const BoxNAV = styled(Box)({
     margin: '0em 0em 0em',
     flexGrow: 1,
     display: 'flex',
-    'justify-content': 'right',
+    justifyContent: 'right',
 });
 
 const MyBar = styled(AppBar)({
