@@ -9,7 +9,6 @@ import "../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 
-//#region  DEFINICION DE COMPONENTES STYLED
 const BoxProfile = styled(Box)({
     padding: '0em 1em 0em',
 })

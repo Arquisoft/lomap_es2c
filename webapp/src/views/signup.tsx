@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
 import SForm from '../components/SesionForm';
@@ -40,7 +39,7 @@ const CSSButton = styled(Button)({
     },
 });
 const CSSTextField = styled(TextField)({
-    marginBottom:'0.8em',
+    marginBottom: '0.8em',
     '& label.Mui-focused': {
         color: '#1f4a21',
     },
@@ -62,7 +61,7 @@ const CSSTextField = styled(TextField)({
 
 //#endregion
 
-export default function Login() {
+export default function Signup() {
 
     //#region HOOKS
 
@@ -79,10 +78,10 @@ export default function Login() {
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
-    const showLogin= () => {
+    const showLogin = () => {
         //Cambiar del Signup a Login component
         //let navigate = useNavigate();
-       // navigate("/login");
+        // navigate("/login");
     }
 
     //#endregion
