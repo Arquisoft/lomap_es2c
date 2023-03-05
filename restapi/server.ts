@@ -7,6 +7,8 @@ import api from "./api";
 const app: Application = express();
 const port: number = 5000;
 
+require('./database');
+
 const metricsMiddleware:RequestHandler = promBundle({includeMethod: true});
 app.use(metricsMiddleware);
 
