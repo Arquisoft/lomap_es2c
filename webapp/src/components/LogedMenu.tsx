@@ -20,7 +20,7 @@ const BoxProfile = styled(Box)({
 
 
 const MyMenu = styled(Menu)({
-    'margin-top': '3em',
+    marginTop: '3em',
 })
 
 //#endregion
