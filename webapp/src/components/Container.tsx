@@ -17,15 +17,17 @@ import Login from '../../src/views/login';
 import Signup from '../../src/views/signup';
 import { Footer } from './Footer';
 import { Sign } from 'crypto';
+import { HomePage } from './HomeContainer';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
     backgroundImage: 'url("../background.png")',
     backgroundPosition: 'center',
-    backgroundSize:'95%',
-    backgroundRepeat:'no-repeat',
+    backgroundSize: '95%',
+    backgroundRepeat: 'no-repeat',
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: '#17261E',
 })
 
 const MyPaper = styled(Paper)({
@@ -43,7 +45,7 @@ export default function container() {
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header /></MyPaper>
-            <Login/>
+            <HomePage />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion
