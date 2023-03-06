@@ -1,54 +1,24 @@
-import { model, Schema} from 'mongoose'
 
-const placeSchema = new Schema(
-    {
-        name: {
-            type: String,
-            required: true
-        },
-        street: {
-            type: String,
-            required: true
-        },
-        postalcode: {
-            type: Number,
-            required: true
-        },
-        city: {
-            type: String,
-            required: true
-        },
-        country: {
-            type: String,
-            required: true
-        },
-        coordinates: {
-            type: String,
-            required: true
-        },
-        review: {
-            type: String,
-            required: true
-        },
-        score: {
-            type: Number,
-            required: true
-        },
-        images: {
-            type: String,
-            required: true
-        }
+class Place {
+    name: String
+    street: String
+    postalcode: String
+    city: String
+    country: String
+    coordinates: String
+    review: String
+    score: String
+    image: String
 
+    constructor(name: String, street: String, postalcode: String, city: String, country: String, coordinates: String, review: String, score: String, image: String) {
+        this.name = name
+        this.street = street
+        this.postalcode = postalcode
+        this.city = city
+        this.country = country
+        this.review = review
+        this.coordinates = coordinates
+        this.score = score
+        this.image = image
     }
-)
-
-placeSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        delete returnedObject._id
-        delete returnedObject.__v
-    }
-})
-
-const Place = model("Place", placeSchema);
-
-export default Place;
+}

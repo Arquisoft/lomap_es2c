@@ -1,31 +1,11 @@
-import { model, Schema} from 'mongoose'
+class User {
+    username: String
+    password: String
+    webID: String
 
-const userSchema = new Schema(
-    {
-        username: {
-            type: String,
-            required: true,
-            unique: true
-        },
-        webID: {
-            type: String,
-            required: true
-        },
-        password: {
-            type:String,
-            required: true
-        }
-
+    constructor(username: String, password: String, webid: String) {
+        this.username = username
+        this.password = password
+        this.webID = webid
     }
-)
-
-userSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        delete returnedObject._id
-        delete returnedObject.__v
-    }
-})
-
-const User = model("User", userSchema);
-
-export default User;
+}

@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import User from '../entities/User';
+import mongoose from 'mongoose'
+import User from '../entities/UserSchema'
 
-const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
 
 mongoose.connect(uri)
 .then(() =>{
