@@ -1,5 +1,4 @@
-import User from "../persistence/UserSchema";
-let hola=require("./User");
+import UserSchema from "../entities/UserSchema"
 
 interface SesionManager {
 	cerrarSesion: () => boolean;
@@ -11,13 +10,8 @@ interface SesionManager {
 class UserSesionManager implements SesionManager{
 	userInSession: User | null;
 
-	//This is not a restapi as it mantains state but it is here for
-	//simplicity. A database should be used instead.
-	users: Array<User> = [];
-
 	constructor(){
 		this.userInSession = null;
-		this.users = [];
 	}
 
 	cerrarSesion(){
@@ -27,28 +21,35 @@ class UserSesionManager implements SesionManager{
 
 	registrarse(usuario: User){
 		this.userInSession = usuario;
-		this.users.push(usuario);
+
+		const usuarioSchema = new UserSchema({
+			username: usuario.username,
+			webID: usuario.webID,
+			password: usuario.password
+		});
+
+		usuarioSchema.save();
         return usuario;
     }
 	
 	usuarioEnSesion(){
 		let user : User | null = null;
 		if(this.userInSession != null){
-			user = {username:this.userInSession?.username, password:this.userInSession?.password, webid:this.userInSession?.webid, img:this.userInSession?.img};
+			user = {username:this.userInSession?.username, password:this.userInSession?.password, webID:this.userInSession?.webID};
 		}
         return user;
     }
     
 	iniciarSesion(user : User) {
-		this.users.forEach(element => {  
-			if(element.username == user.username
-			  && element.password == user.password){
-				console.log(user.username)
-				this.userInSession = user;
-				
-				return element;
-			}
+		let usuarioEncontrado = UserSchema.findOne({
+			username: user.username,
+			password: user.password
 		});
+
+		if(user != null){
+			this.userInSession = usuarioEncontrado
+			return user;
+		}
 
 		console.log("Usuario no encontrado");
 		return user
