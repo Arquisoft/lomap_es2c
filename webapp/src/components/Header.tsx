@@ -14,7 +14,7 @@ import "../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useState } from 'react';
-import { Factory, User } from '../domain/facade';
+import { FactoryLoMap, User } from '../domain/facade';
 import { LogedMenu } from './LogedMenu';
 import { NoLogedMenu } from './NoLogedMenu';
 
@@ -82,16 +82,6 @@ export function Header() {
                         <img id="imgLogo" src="../nobgLogo.png"></img>
                     </ButtonHOME>
                     <BoxNAV>
-                        <ButtonGENERIC
-                            key={uuid()}
-                        >
-                            LOGIN
-                        </ButtonGENERIC>
-                        <ButtonGENERIC
-                            key={uuid()}
-                        >
-                            SING UP
-                        </ButtonGENERIC>
                     </BoxNAV>
                     <NoLogedMenu />
                 </Toolbar>

@@ -4,11 +4,11 @@ import './App.css';
 
 function App(): JSX.Element {
 
-  return (
-    <>
-      <Container/>
-    </>
-  );
+    return (
+        <>
+            <Container />
+        </>
+    );
 }
 
 export default App;

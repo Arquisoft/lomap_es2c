@@ -78,13 +78,18 @@ const ImgBox = styled(Box)({
     textAlign: 'center',
     paddingTop: '0.85em',
 })
+
+const MainBox = styled(Box)({
+    display: 'flex',
+    justifyContent: 'center',
+})
 //#endregion
 
 export function HomePage() {
     return (
 
         //#region COMPONENTE
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <MainBox>
             <HomeContainer>
                 <TextBox>
                     <img src="../logoCompleto.png"></img>
@@ -102,7 +107,7 @@ export function HomePage() {
                     <p>Conoce Bruselas de la mano de tus amigos</p>
                 </ImgBox>
             </HomeContainer >
-        </Box>
+        </MainBox>
         //#endregion
 
     )

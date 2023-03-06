@@ -28,6 +28,9 @@ const MyContainer = styled(Container)({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#17261E',
+    minHeight: '100vh',
+    alignContent: 'center',
+    justifyContent: 'space-between',
 })
 
 const MyPaper = styled(Paper)({
@@ -45,7 +48,7 @@ export default function container() {
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header /></MyPaper>
-            <HomePage />
+            <Login />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

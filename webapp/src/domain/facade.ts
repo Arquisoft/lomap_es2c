@@ -1,5 +1,5 @@
 
-export { Place, UserSesionManager, Factory };
+export { Place, UserSesionManager, FactoryLoMap };
 export type { User };
 
 //TODOS LOS BOOLEAN QUE DEVUELVEN LOS MÉTODOS SON ÚNICAMENTE PARA NOTIFICAR EL RESULTADO DE LA OPERACION
@@ -46,11 +46,14 @@ interface User {
     img: String
 }
 
-class Factory {
-    static getSesionManager: () => UserSesionManager;
+class FactoryLoMap {
     static getMapManager: () => MapManager;
     static getUserManager: () => UserManager;
     static getFriendManager: () => FriendManager;
+
+    static getSesionManager(): UserSesionManager {
+        return new UserSesionManager();
+    }
 }
 //#endregion
 

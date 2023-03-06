@@ -7,7 +7,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, Factory } from '../domain/facade';
+import { User, FactoryLoMap } from '../domain/facade';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -72,7 +72,8 @@ export default function Login() {
     console.log(errors);
 
     const tryLogin = (user: User) => {
-        Factory.getSesionManager().iniciarSesion(user);
+        FactoryLoMap.getSesionManager().iniciarSesion(user);
+
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
