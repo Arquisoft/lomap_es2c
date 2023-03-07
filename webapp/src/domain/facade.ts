@@ -59,12 +59,15 @@ class FactoryLoMap {
 
 //#region CLASES DE EJEMPLO PARA FUNCIONAR
 class UserSesionManager implements SesionManager {
-    cerrarSesion: () => boolean;
     registrarse: (usuario: User) => User;
     usuarioEnSesion: () => User;
     iniciarSesion(user: User) {
         console.log(user.username)
         return user
+    }
+    cerrarSesion() {
+        console.log("Logout")
+        return true
     }
 
 }

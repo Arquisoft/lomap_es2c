@@ -13,8 +13,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { Paper, StyledComponentProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from './Header';
-import Login from '../../src/views/login';
-import Signup from '../../src/views/signup';
+import Login from './userIdentification/login';
+import Signup from './userIdentification/signup';
 import { Footer } from './Footer';
 import { Sign } from 'crypto';
 import { HomePage } from './HomeContainer';
@@ -48,7 +48,7 @@ export default function container() {
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header /></MyPaper>
-            <Login />
+            <Signup />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

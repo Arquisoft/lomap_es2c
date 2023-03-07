@@ -15,8 +15,7 @@ import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useState } from 'react';
 import { FactoryLoMap, User } from '../domain/facade';
-import { LogedMenu } from './LogedMenu';
-import { NoLogedMenu } from './NoLogedMenu';
+import { ProfileMenu } from './profileMenus/ProfileMenu';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const ButtonGENERIC = styled(Button)({
@@ -83,7 +82,7 @@ export function Header() {
                     </ButtonHOME>
                     <BoxNAV>
                     </BoxNAV>
-                    <NoLogedMenu />
+                    <ProfileMenu />
                 </Toolbar>
             </Container>
         </MyBar>

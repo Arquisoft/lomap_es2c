@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../components/SesionForm';
+import SForm from '../SesionForm';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, FactoryLoMap } from '../domain/facade';
+import { User, FactoryLoMap } from '../../domain/facade';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
