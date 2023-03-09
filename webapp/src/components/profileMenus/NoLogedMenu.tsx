@@ -24,11 +24,13 @@ export function NoLogedMenu(props: { changeLoged: (isLoged: boolean) => void }) 
 
     //#region METODOS DE CLASE
     const showLogin = () => {
+        closeUserMenu();
         props.changeLoged(true);
         //Redirect login view
     }
 
     const showSignUp = () => {
+        closeUserMenu();
         //Redirect singup view
     }
 

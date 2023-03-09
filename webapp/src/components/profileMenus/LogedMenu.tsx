@@ -28,17 +28,20 @@ function LogedMenu(props: { changeLoged: (isLoged: boolean) => void }) {
     //#region METODOS DE CLASE
 
     const getProfile = () => {
+        closeUserMenu();
         var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Rellenar formulario read only 
     }
 
     const editProfile = () => {
+        closeUserMenu();
         var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Mostrar formulario editable con autogeneración de objeto User
         //Redirigir a editar usuario, a su vez llamara a Factory.getUserManager().modificarPerfil(User)
     }
 
     const goLogout = () => {
+        closeUserMenu();
         var state = FactoryLoMap.getSesionManager().cerrarSesion();
         props.changeLoged(false);
         //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
