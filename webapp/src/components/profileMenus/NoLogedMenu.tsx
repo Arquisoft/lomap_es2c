@@ -5,44 +5,40 @@ import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import Swal from "sweetalert2"
-import "../App.css";
+import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import { useState } from 'react';
-import { Factory } from '../domain/facade';
-
-//#region DEFINICION DE COMPONENTES STYLED
+import { Navigate, useNavigate } from 'react-router-dom';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const BoxProfile = styled(Box)({
     padding: '0em 1em 0em',
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: '2em'
 })
 
 
 const MyMenu = styled(Menu)({
     marginTop: '3em',
 })
-
 //#endregion
 
-export function LogedMenu() {
+export function NoLogedMenu() {
+
+    const navigate = useNavigate();
 
     //#region METODOS DE CLASE
-
-    const getProfile = () => {
-        var user = Factory.getSesionManager().usuarioEnSesion()
-        //Rellenar formulario read only 
+    const showLogin = () => {
+        closeUserMenu();
+        navigate("/login")
+        //Redirect login view
     }
 
-    const editProfile = () => {
-        var user = Factory.getSesionManager().usuarioEnSesion()
-        //Mostrar formulario editable con autogeneración de objeto User
-        //Redirigir a editar usuario, a su vez llamara a Factory.getUserManager().modificarPerfil(User)
-    }
-
-    const goLogout = () => {
-        var state = Factory.getSesionManager().cerrarSesion()
-        //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
+    const showSignUp = () => {
+        closeUserMenu();
+        navigate("/signup")
+        //Redirect singup view
     }
 
     const closeUserMenu = () => {
@@ -52,14 +48,10 @@ export function LogedMenu() {
     const openUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
-
     //#endregion
 
     //#region HOOKS
-
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const [url, setUrl] = useState("../userTest.jfif");
-
     //#endregion
 
     return (
@@ -68,7 +60,7 @@ export function LogedMenu() {
         <BoxProfile>
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
-                    <Avatar alt="Remy Sharp" src={url} />
+                    <Avatar src="/broken-image.jpg" />
                 </IconButton>
             </Tooltip>
             <MyMenu
@@ -86,18 +78,15 @@ export function LogedMenu() {
                 open={Boolean(anchorElUser)}
                 onClose={closeUserMenu}
             >
-                <MenuItem key={uuid()} onClick={getProfile}>
-                    Profile
+                <MenuItem key={uuid()} onClick={showSignUp}>
+                    Sing Up
                 </MenuItem>
-                <MenuItem key={uuid()} onClick={editProfile}>
-                    Edit profile
-                </MenuItem>
-                <MenuItem key={uuid()} onClick={goLogout}>
-                    Logout
+                <MenuItem key={uuid()} onClick={showLogin}>
+                    Login
                 </MenuItem>
             </MyMenu>
         </BoxProfile>
-        //#endregion 
+        //#endregion
 
     )
 }

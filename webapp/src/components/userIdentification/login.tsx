@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../components/SesionForm';
+import SForm from './SesionForm';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, Factory } from '../domain/facade';
+import { User, FactoryLoMap } from '../../domain/facade';
+import { useNavigate } from 'react-router-dom';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -59,10 +60,10 @@ const CSSTextField = styled(TextField)({
 
 //#endregion
 
-export default function Login() {
+export function Login() {
 
     //#region HOOKS
-
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
     //#endregion
@@ -72,15 +73,18 @@ export default function Login() {
     console.log(errors);
 
     const tryLogin = (user: User) => {
-        Factory.getSesionManager().iniciarSesion(user);
+        FactoryLoMap.getSesionManager().iniciarSesion(user);
+        if (true) {
+            navigate("/home");
+        }
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
 
-    const showSingup = () => {
+    const showSignup = () => {
         //Cambiar del Login a Singup component
-        //let navigate = useNavigate();
-        //navigate("/signup");
+        navigate("/signup");
+        return
     }
 
     //#endregion
@@ -129,8 +133,7 @@ export default function Login() {
             <Typography variant="body1" align="left">
                 {'¿Eres nuevo? '}
                 <Link
-                    href="./signup.tsx"
-                    //onClick={showSingup}
+                    onClick={showSignup}
                     align="left"
                     underline="always"
                 >

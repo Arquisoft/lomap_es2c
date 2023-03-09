@@ -13,8 +13,6 @@ import MenuItem from '@mui/material/MenuItem';
 import { Paper, StyledComponentProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from './Header';
-import Login from '../views/login';
-import Signup from '../views/signup';
 import { Footer } from './Footer';
 import { Sign } from 'crypto';
 
@@ -78,13 +76,18 @@ const ImgBox = styled(Box)({
     textAlign: 'center',
     paddingTop: '0.85em',
 })
+
+const MainBox = styled(Box)({
+    display: 'flex',
+    justifyContent: 'center',
+})
 //#endregion
 
 export function HomePage() {
     return (
 
         //#region COMPONENTE
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <MainBox>
             <HomeContainer>
                 <TextBox>
                     <img src="../logoCompleto.png"></img>
@@ -102,7 +105,7 @@ export function HomePage() {
                     <p>Conoce Bruselas de la mano de tus amigos</p>
                 </ImgBox>
             </HomeContainer >
-        </Box>
+        </MainBox>
         //#endregion
 
     )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,12 +12,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Paper, StyledComponentProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Header } from './Header';
-import Login from '../../src/views/login';
-import Signup from '../../src/views/signup';
-import { Footer } from './Footer';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
 import { Sign } from 'crypto';
-import { HomePage } from './HomeContainer';
+import { HomePage } from '../components/HomePage';
+import { Login } from '../components/userIdentification/login';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -27,7 +26,10 @@ const MyContainer = styled(Container)({
     backgroundRepeat: 'no-repeat',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#17261E',
+    backgroundColor: 'white',
+    minHeight: '100vh',
+    alignContent: 'center',
+    justifyContent: 'space-between',
 })
 
 const MyPaper = styled(Paper)({
@@ -39,12 +41,13 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function container() {
+export default function HomeView() {
+
     return (
 
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
-            <MyPaper elevation={1}><Header /></MyPaper>
+            <MyPaper elevation={1}><Header logged={false} /></MyPaper>
             <HomePage />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>

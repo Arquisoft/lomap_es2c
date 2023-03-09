@@ -14,9 +14,10 @@ import "../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useState } from 'react';
-import { Factory, User } from '../domain/facade';
-import { LogedMenu } from './LogedMenu';
-import { NoLogedMenu } from './NoLogedMenu';
+import { FactoryLoMap, User } from '../domain/facade';
+import LogedMenu from './profileMenus/LogedMenu';
+import { NoLogedMenu } from './profileMenus/NoLogedMenu';
+import { useNavigate } from 'react-router-dom';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const ButtonGENERIC = styled(Button)({
@@ -59,13 +60,24 @@ const MyBar = styled(AppBar)({
 })
 //#endregion
 
-export function Header() {
+export function Header(props: { logged: boolean }) {
+
+    const navigate = useNavigate();
 
     //#region METODOS DE CLASE
 
     const goHome = () => {
         //redirect to main page
     };
+
+    const getMode = () => {
+        if (props.logged) {
+            return (<LogedMenu />)
+        }
+        else {
+            return (<NoLogedMenu />)
+        }
+    }
 
     //#endregion
 
@@ -82,18 +94,8 @@ export function Header() {
                         <img id="imgLogo" src="../nobgLogo.png"></img>
                     </ButtonHOME>
                     <BoxNAV>
-                        <ButtonGENERIC
-                            key={uuid()}
-                        >
-                            LOGIN
-                        </ButtonGENERIC>
-                        <ButtonGENERIC
-                            key={uuid()}
-                        >
-                            SING UP
-                        </ButtonGENERIC>
                     </BoxNAV>
-                    <NoLogedMenu />
+                    {getMode()}
                 </Toolbar>
             </Container>
         </MyBar>
