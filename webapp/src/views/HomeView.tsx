@@ -1,22 +1,10 @@
 import React, { useState } from 'react'
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 import { Paper, StyledComponentProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Header } from '../components/Header';
-import { Footer } from '../components/Footer';
-import { Sign } from 'crypto';
-import { HomePage } from '../components/HomePage';
-import { Login } from '../components/userIdentification/login';
+import { Header } from '../components/mainComponents/Header';
+import { Footer } from '../components/mainComponents/Footer';
+import { HomePage } from '../components/mainComponents/HomePage';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
