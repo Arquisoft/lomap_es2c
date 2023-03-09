@@ -2,7 +2,7 @@ import * as React from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Paper from './Paper';
-import logo from '../logoCompleto.png';
+import logo from '../../logoCompleto.png';
 import { styled } from '@mui/material/styles';
 
 const LogoBox = styled(Box)({

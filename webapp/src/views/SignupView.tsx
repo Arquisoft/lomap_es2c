@@ -1,23 +1,10 @@
-import React from 'react'
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
+import React, { useState } from 'react'
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 import { Paper, StyledComponentProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Header } from './Header';
-import Login from './userIdentification/login';
-import Signup from './userIdentification/signup';
-import { Footer } from './Footer';
-import { Sign } from 'crypto';
-import { HomePage } from './HomeContainer';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
+import { Signup } from '../components/userIdentification/signup';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -27,7 +14,7 @@ const MyContainer = styled(Container)({
     backgroundRepeat: 'no-repeat',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#17261E',
+    backgroundColor: 'white',
     minHeight: '100vh',
     alignContent: 'center',
     justifyContent: 'space-between',
@@ -42,12 +29,13 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function container() {
+export default function SignupView() {
+
     return (
 
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
-            <MyPaper elevation={1}><Header /></MyPaper>
+            <MyPaper elevation={1}><Header logged={false} /></MyPaper>
             <Signup />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>

@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../../components/SesionForm';
+import SForm from './SesionForm';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { User, FactoryLoMap } from '../../domain/facade';
+import { useNavigate } from 'react-router-dom';
 
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -61,27 +62,29 @@ const CSSTextField = styled(TextField)({
 
 //#endregion
 
-export default function Signup() {
+export function Signup() {
 
     //#region HOOKS
-
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<User> = data => trySignUp(data);
+    const onSubmit: SubmitHandler<User> = data => trySignup(data);
     console.log(errors);
 
-    const trySignUp = (user: User) => {
+    const trySignup = (user: User) => {
         FactoryLoMap.getSesionManager().registrarse(user);
+        if (true) {
+            navigate("/login");
+        }
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
     const showLogin = () => {
         //Cambiar del Signup a Login component
-        //let navigate = useNavigate();
-        // navigate("/login");
+        navigate("/login");
     }
 
     //#endregion

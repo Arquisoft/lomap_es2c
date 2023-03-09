@@ -9,11 +9,15 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { FactoryLoMap } from '../../domain/facade';
+import { useNavigate } from 'react-router-dom';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
 const BoxProfile = styled(Box)({
     padding: '0em 1em 0em',
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: '2em'
 })
 
 
@@ -23,7 +27,7 @@ const MyMenu = styled(Menu)({
 
 //#endregion
 
-function LogedMenu(props: { changeLoged: (isLoged: boolean) => void }) {
+function LogedMenu() {
 
     //#region METODOS DE CLASE
 
@@ -43,7 +47,7 @@ function LogedMenu(props: { changeLoged: (isLoged: boolean) => void }) {
     const goLogout = () => {
         closeUserMenu();
         var state = FactoryLoMap.getSesionManager().cerrarSesion();
-        props.changeLoged(false);
+        navigate("/");
         //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
     }
 
@@ -58,7 +62,7 @@ function LogedMenu(props: { changeLoged: (isLoged: boolean) => void }) {
     //#endregion
 
     //#region HOOKS
-
+    const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
     const [url, setUrl] = useState("../testUser.jfif");
 
@@ -68,6 +72,7 @@ function LogedMenu(props: { changeLoged: (isLoged: boolean) => void }) {
 
         //#region COMPONENTE
         <BoxProfile>
+            <b><p>Has iniciado sesión</p></b>
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />

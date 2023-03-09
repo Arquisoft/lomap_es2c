@@ -59,7 +59,6 @@ class FactoryLoMap {
 
 //#region CLASES DE EJEMPLO PARA FUNCIONAR
 class UserSesionManager implements SesionManager {
-    registrarse: (usuario: User) => User;
     usuarioEnSesion: () => User;
     iniciarSesion(user: User) {
         console.log(user.username)
@@ -69,7 +68,10 @@ class UserSesionManager implements SesionManager {
         console.log("Logout")
         return true
     }
-
+    registrarse(user: User) {
+        console.log("Registro")
+        return user;
+    }
 }
 class FriendRequest { }
 class Group { }

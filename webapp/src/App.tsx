@@ -1,13 +1,22 @@
 
-import Container from './components/Container';
+import LoginView from './views/LoginView';
 import './App.css';
+import SignupView from './views/SignupView';
+import HomeView from './views/HomeView';
+import LoggedView from './views/LoggedView';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App(): JSX.Element {
 
     return (
-        <>
-            <Container />
-        </>
+        <BrowserRouter>
+            <Routes>
+                <Route path='/' element={<HomeView />} />
+                <Route path='/home' element={<LoggedView />} />
+                <Route path='/login' element={<LoginView />} />
+                <Route path='/signup' element={<SignupView />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 
