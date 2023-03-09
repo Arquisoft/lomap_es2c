@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../components/SesionForm';
+import SForm from './SesionForm';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, Factory } from '../domain/facade';
+import { User, FactoryLoMap } from '../../domain/facade';
 import { useNavigate } from 'react-router-dom';
+
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -39,6 +40,7 @@ const CSSButton = styled(Button)({
     },
 });
 const CSSTextField = styled(TextField)({
+    marginBottom: '0.8em',
     '& label.Mui-focused': {
         color: '#1f4a21',
     },
@@ -60,28 +62,29 @@ const CSSTextField = styled(TextField)({
 
 //#endregion
 
-export default function Login() {
+export function Signup() {
 
     //#region HOOKS
-
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<User> = data => tryLogin(data);
+    const onSubmit: SubmitHandler<User> = data => trySignup(data);
     console.log(errors);
 
-    const tryLogin = (user: User) => {
-        Factory.getSesionManager().iniciarSesion(user);
+    const trySignup = (user: User) => {
+        FactoryLoMap.getSesionManager().registrarse(user);
+        if (true) {
+            navigate("/login");
+        }
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
-    
-    const showSingup = () => {
-        //Cambiar del Login a Singup component
-        //let navigate = useNavigate();
-        //navigate("/signup");
+    const showLogin = () => {
+        //Cambiar del Signup a Login component
+        navigate("/login");
     }
 
     //#endregion
@@ -93,12 +96,11 @@ export default function Login() {
 
             <CSSTypography variant="h4" align="center"
                 sx={{ mt: "0.5em" }}>
-                Inicia sesión
+                Crear cuenta
             </CSSTypography>
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
                 <CSSTextField
-                    sx={{ mb: "0.5em" }}
                     id="outlined-required"
                     label="Nombre de usuario"
                     placeholder="Nombre de usuario"
@@ -107,8 +109,25 @@ export default function Login() {
                 />
 
                 <CSSTextField
+                    id="outlined-required"
+                    label="WebID"
+                    placeholder="WebID"
+                    fullWidth
+                    {...register("webid", { required: true, max: 20, min: 6, maxLength: 12 })}
+                />
+
+                <CSSTextField
                     id="outlined-password-input"
                     label="Contraseña"
+                    type="password"
+                    autoComplete="current-password"
+                    fullWidth
+                    {...register("password", { required: true, maxLength: 100 })}
+                />
+
+                <CSSTextField
+                    id="outlined-password-input"
+                    label="Repite la contraseña"
                     type="password"
                     autoComplete="current-password"
                     fullWidth
@@ -122,20 +141,19 @@ export default function Login() {
                     size="large"
                     fullWidth
                 >
-                    Iniciar sesión
+                    Crear cuenta
                 </CSSButton>
 
             </Box>
 
             <Typography variant="body1" align="left">
-                {'¿Eres nuevo? '}
+                {'¿Ya tienes cuenta? '}
                 <Link
-                    href="./signup.tsx"
-                    //onClick={showSingup}
+                    onClick={showLogin}
                     align="left"
                     underline="always"
                 >
-                    Regístrate
+                    Inicia sesión
                 </Link>
             </Typography>
 

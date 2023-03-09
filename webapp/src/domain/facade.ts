@@ -1,5 +1,5 @@
 
-export { Place, UserSesionManager, Factory };
+export { Place, UserSesionManager, FactoryLoMap };
 export type { User };
 
 //TODOS LOS BOOLEAN QUE DEVUELVEN LOS MÉTODOS SON ÚNICAMENTE PARA NOTIFICAR EL RESULTADO DE LA OPERACION
@@ -46,24 +46,32 @@ interface User {
     img: String
 }
 
-class Factory {
-    static getSesionManager: () => UserSesionManager;
+class FactoryLoMap {
     static getMapManager: () => MapManager;
     static getUserManager: () => UserManager;
     static getFriendManager: () => FriendManager;
+
+    static getSesionManager(): UserSesionManager {
+        return new UserSesionManager();
+    }
 }
 //#endregion
 
 //#region CLASES DE EJEMPLO PARA FUNCIONAR
 class UserSesionManager implements SesionManager {
-    cerrarSesion: () => boolean;
-    registrarse: (usuario: User) => User;
     usuarioEnSesion: () => User;
     iniciarSesion(user: User) {
         console.log(user.username)
         return user
     }
-
+    cerrarSesion() {
+        console.log("Logout")
+        return true
+    }
+    registrarse(user: User) {
+        console.log("Registro")
+        return user;
+    }
 }
 class FriendRequest { }
 class Group { }

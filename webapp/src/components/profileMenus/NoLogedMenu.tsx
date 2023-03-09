@@ -5,13 +5,17 @@ import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import "../App.css";
+import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
+import { Navigate, useNavigate } from 'react-router-dom';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-//#region  DEFINICION DE COMPONENTES STYLED
 const BoxProfile = styled(Box)({
     padding: '0em 1em 0em',
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: '2em'
 })
 
 
@@ -22,12 +26,18 @@ const MyMenu = styled(Menu)({
 
 export function NoLogedMenu() {
 
+    const navigate = useNavigate();
+
     //#region METODOS DE CLASE
     const showLogin = () => {
+        closeUserMenu();
+        navigate("/login")
         //Redirect login view
     }
 
     const showSignUp = () => {
+        closeUserMenu();
+        navigate("/signup")
         //Redirect singup view
     }
 
@@ -50,7 +60,7 @@ export function NoLogedMenu() {
         <BoxProfile>
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
-                    <Avatar alt="Remy Sharp" src={"../logo192.png"} />
+                    <Avatar src="/broken-image.jpg" />
                 </IconButton>
             </Tooltip>
             <MyMenu
