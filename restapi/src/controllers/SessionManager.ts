@@ -8,19 +8,21 @@ interface SesionManager {
 }
 
 class UserSesionManager implements SesionManager{
-	userInSession: User | null;
+	// userInSession: User | null;
 
 	constructor(){
-		this.userInSession = null;
+		// this.userInSession = null;
 	}
 
 	cerrarSesion(){
-		this.userInSession = null;
+		// this.userInSession = null;
+		sessionStorage.removeItem('userInSession')
         return true;
     }
 
 	registrarse(usuario: User){
-		this.userInSession = usuario;
+		// this.userInSession = usuario;
+		sessionStorage.setItem('userInSession', JSON.stringify(usuario));
 
 		const usuarioSchema = new UserSchema({
 			username: usuario.username,
@@ -33,11 +35,11 @@ class UserSesionManager implements SesionManager{
     }
 	
 	usuarioEnSesion(){
-		let user : User | null = null;
-		if(this.userInSession != null){
-			user = {username:this.userInSession?.username, password:this.userInSession?.password, webID:this.userInSession?.webID};
-		}
-        return user;
+		// let user : User | null = null;
+		// if(this.userInSession != null){
+		// 	user = {username:this.userInSession?.username, password:this.userInSession?.password, webID:this.userInSession?.webID};
+		// }
+		return JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
     }
     
 	iniciarSesion(user : User) {
@@ -47,7 +49,8 @@ class UserSesionManager implements SesionManager{
 		});
 
 		if(user != null){
-			this.userInSession = usuarioEncontrado
+			// this.userInSession = usuarioEncontrado
+			sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
 			return user;
 		}
 
