@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import Container from '@mui/material/Container';
 import { Paper, StyledComponentProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Header } from '../components/Header';
-import { Footer } from '../components/Footer';
-import { HomePage } from '../components/HomePage';
+import { Header } from '../components/mainComponents/Header';
+import { Footer } from '../components/mainComponents/Footer';
+import { HomePage } from '../components/mainComponents/HomePage';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
