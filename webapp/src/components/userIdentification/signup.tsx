@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { User, FactoryLoMap } from '../../domain/facade';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Swal from 'sweetalert2';
 
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -68,6 +70,9 @@ export function Signup() {
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
+    const [confirmPass, setConfirmPass] = useState('')
+    const [pass, setPass] = useState('')
+
     //#endregion
 
     //#region METODOS DE CLASE
@@ -75,10 +80,50 @@ export function Signup() {
     console.log(errors);
 
     const trySignup = (user: User) => {
-        FactoryLoMap.getSesionManager().registrarse(user);
-        if (true) {
-            navigate("/login");
+
+        
+        if(checkFields(user.username, user.webid, user.password)){
+            console.log("pasa1")
+            if(checkPasswords()){
+                console.log("pasa")
+                FactoryLoMap.getSesionManager().registrarse(user)  
+
+                if(true){
+                    Swal.fire({
+                        title: 'Cuenta creada',
+                        text: "¡Su cuenta ha sido creada con éxito!",
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#81c784',
+                        confirmButtonText: 'Inicia sesión',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            showLogin()
+                        }
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No se ha podido crear su cuenta.',
+                        confirmButtonColor: '#81c784',
+                    }).then((result) => {
+                        return
+                    })
+                }
+            } else {
+                console.log("no")
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Las contraseñas no coinciden',
+                    confirmButtonColor: '#81c784',
+                }).then((result) => {
+                    return
+                })
+            }
         }
+
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
@@ -87,6 +132,21 @@ export function Signup() {
         navigate("/login");
     }
 
+    const checkPasswords = () => {
+        return confirmPass === pass
+    }
+
+    const checkFields = (username: String, webid:String, password: String) => {
+        if(username.length==0)
+            return false
+        else if(webid.length==0)
+            return false
+        else if(password.length==0)
+            return false
+        else 
+            return true
+    }
+   
     //#endregion
 
     return (
@@ -101,37 +161,42 @@ export function Signup() {
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
                 <CSSTextField
-                    id="outlined-required"
+                    id="usernameSU"
                     label="Nombre de usuario"
                     placeholder="Nombre de usuario"
                     fullWidth
                     {...register("username", { required: true, max: 20, min: 6, maxLength: 12 })}
+                    helperText={errors.username ? 'Debe introducir un nombre de usuario de entre 6 y 12 caracteres' : ''}
                 />
 
                 <CSSTextField
-                    id="outlined-required"
+                    id="webidSU"
                     label="WebID"
                     placeholder="WebID"
                     fullWidth
-                    {...register("webid", { required: true, max: 20, min: 6, maxLength: 12 })}
+                    {...register("webid", { required: true, min: 6, maxLength: 100 })}
+                    helperText={errors.webid ? 'Debe introducir un WebID válido' : ''}
                 />
 
                 <CSSTextField
-                    id="outlined-password-input"
+                    id="passwordSU"
                     label="Contraseña"
                     type="password"
                     autoComplete="current-password"
                     fullWidth
-                    {...register("password", { required: true, maxLength: 100 })}
+                    {...register("password", { required: true, minLength:8, maxLength: 24 })}
+                    onChange = {(e: any) => setPass(e.target.value)}
+                    helperText={errors.password ? 'Debe introducir una contraseña con una longitud mínima de 8 caracteres' : ''}
                 />
 
                 <CSSTextField
-                    id="outlined-password-input"
+                    id="confirmPasswordSU"
                     label="Repite la contraseña"
                     type="password"
-                    autoComplete="current-password"
                     fullWidth
-                    {...register("password", { required: true, maxLength: 100 })}
+                    autoComplete="current-password"
+                    onChange = {(e: any) => setConfirmPass(e.target.value)}
+                
                 />
 
                 <CSSButton

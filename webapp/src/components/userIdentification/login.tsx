@@ -70,7 +70,6 @@ export function Login() {
 
     //#region METODOS DE CLASE
     const onSubmit: SubmitHandler<User> = data => tryLogin(data);
-    console.log(errors);
 
     const tryLogin = (user: User) => {
         FactoryLoMap.getSesionManager().iniciarSesion(user);
@@ -106,16 +105,19 @@ export function Login() {
                     label="Nombre de usuario"
                     placeholder="Nombre de usuario"
                     fullWidth
-                    {...register("username", { required: true, max: 20, min: 6, maxLength: 12 })}
-                />
+                    {...register("username", { required: true, maxLength: 30 })}
+                    helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
 
+                />
+                
                 <CSSTextField
                     id="outlined-password-input"
                     label="Contraseña"
                     type="password"
                     autoComplete="current-password"
                     fullWidth
-                    {...register("password", { required: true, maxLength: 100 })}
+                    {...register("password", { required: true, maxLength: 30 })}
+                    helperText={errors.username ? 'Debe introducir una contraseña' : ''}
                 />
 
                 <CSSButton
