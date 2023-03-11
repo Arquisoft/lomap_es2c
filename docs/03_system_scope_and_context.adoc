@@ -1,7 +1,6 @@
 [[section-system-scope-and-context]]
 == System Scope and Context
 
-
 [role="arc42help"]
 ****
 .Contents
@@ -19,7 +18,6 @@ Various options:
 * Context diagrams
 * Lists of communication partners and their interfaces.
 ****
-
 
 === Business Context
 
@@ -39,9 +37,17 @@ Alternatively (or additionally) you can use a table.
 The title of the table is the name of your system, the three columns contain the name of the communication partner, the inputs, and the outputs.
 ****
 
-**<Diagram or Table>**
-
-**<optionally: Explanation of external domain interfaces>**
+image:03_Context_Diagram.png["Context Diagram"]
+[options="header",cols="1,2,2"]
+|===
+|Entidad|Entrada|Salida
+|User|Recibe el feedback proporcionado por la WebApp.|Crea y guarda en el POD su información personal.
+|POD|Recibe peticiones para recuperar información en la WebApp y de guardar información del usuario.|Proporciona la información guardada por el usuario a la aplicación.
+|WebApp|Recibe la información solicitada al POD y la API, y la interacción del usuario.|Guarda y actualiza información en el POD, además de mostrar el mapa al usuario a través de la interfaz.
+|Proveedor de mapas|Solicitud de la aplicación para obtener el mapa.|Información necesaria para mostrar el mapa.
+|RestApi|Hace consultas a la base de datos solicitadas por la aplicación|Recoge la información de la base de datos y se la envía a la aplicación.
+|Database|Hay información global que no se guardará en un POD y, por tanto se almacenará aquí|Responde a las peticiones realizadas por la RestApi.
+|===
 
 === Technical Context
 
@@ -56,11 +62,13 @@ Many stakeholders make architectural decision based on the technical interfaces 
 .Form
 E.g. UML deployment diagram describing channels to neighboring systems,
 together with a mapping table showing the relationships between channels and input/output.
-
 ****
 
-**<Diagram or Table>**
-
-**<optionally: Explanation of technical interfaces>**
-
-**<Mapping Input/Output to Channels>**
+Usaremos las siguientes tecnologías:
+[options="header",cols="1,2"]
+|===
+|Tecnología|Descripción
+|TypeScript|Lenguaje utilizado para realizar la aplicación.
+|React|Biblioteca utilizada para crear interfaces de usuario en una sola página.
+|SOLID|Arquitectura para almacenar la información privada de los usuarios de manera descentralizada.
+|===

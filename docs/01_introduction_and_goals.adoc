@@ -10,6 +10,8 @@ Describes the relevant requirements and the driving forces that software archite
 * relevant stakeholders and their expectations
 ****
 
+LoMap es un aplicación solicitada por el ayuntamiento de Bruselas. Esta se encargará de generar mapas personalizados para cualquier ciudadano que desee utilizarla. En este mapa personalizado se pueden almacenar sitios favoritos (de multitud de categorías), reseñas y se puede generar una red de amigos para tener acceso a sus sitios y reseñas.
+
 === Requirements Overview
 
 [role="arc42help"]
@@ -30,6 +32,26 @@ If requirements documents exist this overview should refer to these documents.
 Keep these excerpts as short as possible. Balance readability of this document with potential redundancy w.r.t to requirements documents.
 ****
 
+Requisitos prioritarios:
+
+* Varias categorías de lugares.
+* Interfaz tipo mapa.
+* Se pueden crer reseñas y comentarios sobre tus lugares.
+* Existe una red de amigos para compartir reseñas, comentarios y lugares.
+* Existirán los filtros para poder visualizar la información deseada en cada momento.
+
+Requisitos de segundo nivel:
+
+* Incorporar el concepto de ruta que unirá varios lugares.
+* Los establecimientos podrán crear pods de su negocio para interactuar con los usuarios.
+* Poder comparar mapas, aplicando filtros a las comparaciones.
+* Generar boletines de noticias personalizados en función de los lugares favoritos del usuario.
+* Introducir la gamificacón (permitir descubrir lugares, almacenar información sobre ellos,etc)
+* Incorporar los mapas compartidos entre varios usuarios
+* Incluir roles dentro de la aplicación 
+* Los dueños de negocios podrán crear sus mapas con lugares recomendados en las inmediaciones de su negocio.
+* Conectar con el libro de direcciones para mostrar información recomendada.
+
 === Quality Goals
 
 [role="arc42help"]
@@ -44,6 +66,19 @@ If you as an architect do not know how the quality of your work will be judged �
 .Form
 A table with quality goals and concrete scenarios, ordered by priorities
 ****
+
+Principales objetivos de calidad para satisfacer los intereses de los stakeholders y las necesidades de los usuarios.
+
+[options="header",cols="1,2"]
+|===
+|Objetivo|Motivación
+|Privacidad|La privacidad para LoMap es de vital importancia debido a que los datos de los usuarios no deben ser accesibles por terceros no deseados. La información se almacenara en los Pods de cada usuario y la información almacenada en servidores comunes deberá ser minimizada y justificada.
+|Flexibilidad|LoMap debe ser una aplicación flexible que permita su uso en otros contextos geográficos alejados de la ciudad de Bruselas.
+|Accesibilidad|Al ser un producto dirigido a un público general nuestra aplicación deberá cumplir los estándares de accesibilidad.
+|Usabilidad|Cualquier usuario no familiarizado con las aplicaciones y la tecnología deberá poder usar la aplicación. Se cumplirán las recomendaciones de usabilidad que nos brindan los organismos de estandarización.
+|Mantenibilidad|El código de LoMap debe seguir los estándares de diseño adecuados para generar una aplicación mantenible en el futuro.
+|Escalabilidad|LoMap debe ser una aplicación implementada con la intención de crecer y abarcar más funcionalidades. El código escrito debe facilitar esta dinámica.
+|===
 
 === Stakeholders
 
@@ -67,9 +102,11 @@ These stakeholders determine the extent and the level of detail of your work and
 Table with role names, person names, and their expectations with respect to the architecture and its documentation.
 ****
 
-[options="header",cols="1,2,2"]
+[options="header",cols="1,2"]
 |===
-|Role/Name|Contact|Expectations
-| _<Role-1>_ | _<Contact-1>_ | _<Expectation-1>_
-| _<Role-2>_ | _<Contact-2>_ | _<Expectation-2>_
+|Rol/Nombre|Expectativas
+|Ayuntamiento de Bruselas|Entidad solicitante de la aplicación que busca ofrecer un servicio de calidad a sus habitantes. Requiere que se cumplan los objetivos de calidad.
+|Ciudadanos de Bruselas|Quieren que la experiencia de uso de la aplicación al ser presentada por su ayuntamiento sea agradable, sencilla y aporte valor.
+|Futuros usuarios|Necesitan que la solución sea genérica y escalable.
 |===
+
