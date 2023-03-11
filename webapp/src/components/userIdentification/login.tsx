@@ -7,8 +7,8 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, FactoryLoMap } from '../../domain/facade';
 import { useNavigate } from 'react-router-dom';
+import { FactoryLoMap, UserInt } from 'restapi/src/facade';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -64,14 +64,14 @@ export function Login() {
 
     //#region HOOKS
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm<User>();
+    const { register, handleSubmit, formState: { errors } } = useForm<UserInt>();
 
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<User> = data => tryLogin(data);
+    const onSubmit: SubmitHandler<UserInt> = data => tryLogin(data);
 
-    const tryLogin = (user: User) => {
+    const tryLogin = (user: UserInt) => {
         FactoryLoMap.getSesionManager().iniciarSesion(user);
         if (true) {
             navigate("/home");
@@ -109,7 +109,7 @@ export function Login() {
                     helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
 
                 />
-                
+
                 <CSSTextField
                     id="outlined-password-input"
                     label="Contraseña"

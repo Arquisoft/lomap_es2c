@@ -8,8 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import { FactoryLoMap } from '../../domain/facade';
 import { useNavigate } from 'react-router-dom';
+import { FactoryLoMap } from 'restapi/src/facade';
 
 //#region DEFINICION DE COMPONENTES STYLED
 

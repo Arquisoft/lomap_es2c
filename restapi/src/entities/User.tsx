@@ -1,4 +1,7 @@
-class User {
+import { UserInt } from '../facade'
+export { User }
+
+class User implements UserInt {
     username: String
     password: String
     webID: String

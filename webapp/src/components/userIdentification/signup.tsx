@@ -7,7 +7,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, FactoryLoMap } from '../../domain/facade';
+import { FactoryLoMap, UserInt } from 'restapi/src/facade';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
@@ -68,7 +68,7 @@ export function Signup() {
 
     //#region HOOKS
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm<User>();
+    const { register, handleSubmit, formState: { errors } } = useForm<UserInt>();
 
     const [confirmPass, setConfirmPass] = useState('')
     const [pass, setPass] = useState('')
@@ -76,19 +76,19 @@ export function Signup() {
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<User> = data => trySignup(data);
+    const onSubmit: SubmitHandler<UserInt> = data => trySignup(data);
     console.log(errors);
 
-    const trySignup = (user: User) => {
+    const trySignup = (user: UserInt) => {
 
-        
-        if(checkFields(user.username, user.webid, user.password)){
+
+        if (checkFields(user.username, user.webID, user.password)) {
             console.log("pasa1")
-            if(checkPasswords()){
+            if (checkPasswords()) {
                 console.log("pasa")
-                FactoryLoMap.getSesionManager().registrarse(user)  
+                FactoryLoMap.getSesionManager().registrarse(user)
 
-                if(true){
+                if (true) {
                     Swal.fire({
                         title: 'Cuenta creada',
                         text: "¡Su cuenta ha sido creada con éxito!",
@@ -136,17 +136,17 @@ export function Signup() {
         return confirmPass === pass
     }
 
-    const checkFields = (username: String, webid:String, password: String) => {
-        if(username.length==0)
+    const checkFields = (username: String, webid: String, password: String) => {
+        if (username.length == 0)
             return false
-        else if(webid.length==0)
+        else if (webid.length == 0)
             return false
-        else if(password.length==0)
+        else if (password.length == 0)
             return false
-        else 
+        else
             return true
     }
-   
+
     //#endregion
 
     return (
@@ -174,8 +174,8 @@ export function Signup() {
                     label="WebID"
                     placeholder="WebID"
                     fullWidth
-                    {...register("webid", { required: true, min: 6, maxLength: 100 })}
-                    helperText={errors.webid ? 'Debe introducir un WebID válido' : ''}
+                    {...register("webID", { required: true, min: 6, maxLength: 100 })}
+                    helperText={errors.webID ? 'Debe introducir un WebID válido' : ''}
                 />
 
                 <CSSTextField
@@ -184,8 +184,8 @@ export function Signup() {
                     type="password"
                     autoComplete="current-password"
                     fullWidth
-                    {...register("password", { required: true, minLength:8, maxLength: 24 })}
-                    onChange = {(e: any) => setPass(e.target.value)}
+                    {...register("password", { required: true, minLength: 8, maxLength: 24 })}
+                    onChange={(e: any) => setPass(e.target.value)}
                     helperText={errors.password ? 'Debe introducir una contraseña con una longitud mínima de 8 caracteres' : ''}
                 />
 
@@ -195,8 +195,8 @@ export function Signup() {
                     type="password"
                     fullWidth
                     autoComplete="current-password"
-                    onChange = {(e: any) => setConfirmPass(e.target.value)}
-                
+                    onChange={(e: any) => setConfirmPass(e.target.value)}
+
                 />
 
                 <CSSButton

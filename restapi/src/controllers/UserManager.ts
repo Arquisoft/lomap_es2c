@@ -1,23 +1,26 @@
+import { User } from "../entities/User";
+import type { UserInt } from "../facade";
 
+export type { UserManager };
 //import UserSchema from '../entities/UserSchema'
 interface UserManager {
-    modificarPerfil: (user: User) => Promise<User>;
-    listarDetalles: (user: User) => Promise<User>;
+    modificarPerfil: (user: UserInt) => Promise<UserInt>;
+    listarDetalles: (user: UserInt) => Promise<UserInt>;
 }
 
 
 class UserManagerImpl implements UserManager {
-    public modificarPerfil(user: User) {
+    public modificarPerfil(user: UserInt) {
         return modificarUsuario(user);
 
     }
-    listarDetalles(user: User) {
+    listarDetalles(user: UserInt) {
         return buscarUsuarioPorUsername(user);
     }
 }
 
 
-async function buscarUsuarioPorUsername(u: User) {
+async function buscarUsuarioPorUsername(u: UserInt) {
 
     //const uri = "mongodb+srv://adrianfernandezalvarez02:6StwePBGphR8AJfa@cluster0.bty3mrz.mongodb.net/animales?retryWrites=true&w=majority";
     const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
