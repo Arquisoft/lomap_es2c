@@ -1,3 +1,5 @@
+import { User } from "../facade"
+
 class Friendship {
     sender: User
     receiver: User

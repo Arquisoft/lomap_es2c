@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
-import { FactoryLoMap, UserInt } from 'restapi/src/facade';
 
 //#region DEFINICION DE COMPONENTES STYLED
 

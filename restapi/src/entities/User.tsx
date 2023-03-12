@@ -1,7 +1,7 @@
-import { UserInt } from '../facade'
-export { User }
+import { User } from '../facade'
+export { UserImpl }
 
-class User implements UserInt {
+class UserImpl implements User {
     username: String
     password: String
     webID: String

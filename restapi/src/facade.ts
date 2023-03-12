@@ -2,13 +2,13 @@ import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager } from './controllers/UserManager'
 
 export { FactoryLoMap };
-export type { UserInt, SesionManager };
+export type { User, SesionManager };
 
 interface SesionManager {
     cerrarSesion: () => boolean;
-    iniciarSesion: (usuario: UserInt) => UserInt;
-    registrarse: (usuario: UserInt) => UserInt;
-    usuarioEnSesion: () => UserInt;
+    iniciarSesion: (usuario: User) => User;
+    registrarse: (usuario: User) => User;
+    usuarioEnSesion: () => User;
 }
 
 //TODOS LOS BOOLEAN QUE DEVUELVEN LOS MÉTODOS SON ÚNICAMENTE PARA NOTIFICAR EL RESULTADO DE LA OPERACION
@@ -56,8 +56,9 @@ class Group { }
 class Place { }
 //#endregion
 
-interface UserInt {
+interface User {
     username: String
     password: String
     webID: String
 }
+

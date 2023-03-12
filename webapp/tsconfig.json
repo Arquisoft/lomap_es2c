@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "ES5",
         "lib": [
             "dom",
             "dom.iterable",
@@ -14,7 +14,7 @@
         "strictNullChecks": false,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
-        "module": "esnext",
+        "module": "CommonJS",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,

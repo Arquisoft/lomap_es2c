@@ -7,7 +7,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { FactoryLoMap, UserInt } from 'restapi/src/facade';
+import { FactoryLoMap, UserInt } from '../../../restapi/src/facade';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Swal from 'sweetalert2';

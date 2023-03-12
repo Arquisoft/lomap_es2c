@@ -9,7 +9,7 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { FactoryLoMap } from 'restapi/src/facade';
+import { getUserInSesion } from '../../api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -33,20 +33,20 @@ function LogedMenu() {
 
     const getProfile = () => {
         closeUserMenu();
-        var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
+        //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Rellenar formulario read only 
     }
 
     const editProfile = () => {
         closeUserMenu();
-        var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
+        //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Mostrar formulario editable con autogeneración de objeto User
         //Redirigir a editar usuario, a su vez llamara a Factory.getUserManager().modificarPerfil(User)
     }
 
     const goLogout = () => {
         closeUserMenu();
-        var state = FactoryLoMap.getSesionManager().cerrarSesion();
+        //var state = FactoryLoMap.getSesionManager().cerrarSesion();
         navigate("/");
         //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
     }
@@ -58,6 +58,14 @@ function LogedMenu() {
     const openUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
+
+    const getUsername = () => {
+        let username;
+        getUserInSesion().then(function (user) {
+            username = user.username;
+        })
+        return username;
+    }
 
     //#endregion
 
@@ -72,7 +80,7 @@ function LogedMenu() {
 
         //#region COMPONENTE
         <BoxProfile>
-            <b><p>Has iniciado sesión</p></b>
+            <b><p>Sesión iniciada como {getUsername()}</p></b>
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />

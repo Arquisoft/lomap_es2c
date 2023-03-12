@@ -1,4 +1,5 @@
-export type User = {
-    name:string;
-    email:string;
-  }
+export interface User {
+    username: String
+    password: String
+    webID: String
+}
