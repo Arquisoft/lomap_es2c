@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="generator" content="Asciidoctor 2.0.17">
 <title>LOMAP ES2C</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -84,10 +84,10 @@ code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;
 ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol{margin-left:1.5em}
 ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
 ul.circle{list-style-type:circle}
 ul.disc{list-style-type:disc}
-ul.square{list-style-type:square}
-ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
 ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
 dl dt{margin-bottom:.3125em;font-weight:bold}
 dl dd{margin-bottom:1.25em}
@@ -504,7 +504,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#section-glossary">12. Glossary</a></li>
-<li><a href="#section-appendix-1">13. Interface prototypes</a></li>
+<li><a href="#section-appendix-1">13. Appendix</a>
+<ul class="sectlevel2">
+<li><a href="#_interface_prototypes">13.1. Interface prototypes</a></li>
+<li><a href="#_used_libraries">13.2. Used libraries</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1305,7 +1310,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Register%20sequence%20diagram.png" alt="Register sequence diagram" width="565" height="478">
+<img src="./images/Register%20sequence%20diagram.png" alt="Register sequence diagram" width="567" height="487">
 </div>
 </div>
 </div>
@@ -1316,7 +1321,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Log%20in%20-%20log%20out%20sequence%20diagram.png" alt="Log in   log out sequence diagram" width="582" height="490">
+<img src="./images/Log%20in%20-%20log%20out%20sequence%20diagram.png" alt="Log in   log out sequence diagram" width="584" height="498">
 </div>
 </div>
 </div>
@@ -1327,7 +1332,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Sequence%20diagram.png" alt="Sequence diagram" width="491" height="562">
+<img src="./images/Sequence%20diagram.png" alt="Sequence diagram" width="493" height="570">
 </div>
 </div>
 </div>
@@ -1338,7 +1343,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Add%20favorite%20place%20sequence%20diagram.png" alt="Add favorite place sequence diagram" width="390" height="501">
+<img src="./images/Add%20favorite%20place%20sequence%20diagram.png" alt="Add favorite place sequence diagram" width="390" height="510">
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -1992,8 +1997,10 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-appendix-1">13. Interface prototypes</h2>
+<h2 id="section-appendix-1">13. Appendix</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_interface_prototypes">13.1. Interface prototypes</h3>
 <div class="sidebarblock arc42help">
 <div class="content">
 <div class="paragraph">
@@ -2042,6 +2049,75 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 <div class="title">Edit profile</div>
 <p><span class="image"><img src="./images/appendix_1_edit_profile.png" alt="Edit profile window"></span></p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_used_libraries">13.2. Used libraries</h3>
+<div class="sidebarblock arc42help">
+<div class="content">
+<div class="paragraph">
+<div class="title">Contents</div>
+<p>Used libraries for the final application.</p>
+</div>
+<div class="paragraph">
+<div class="title">Motivation</div>
+<p>The purpose of this section is to give an overview of application dependencies.</p>
+</div>
+<div class="paragraph">
+<div class="title">Form</div>
+<p>A table with columns &lt;Library&gt; and &lt;Definition&gt;.</p>
+</div>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Libraries used for front-end development</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Librería</th>
+<th class="tableblock halign-left valign-top">Explicación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mui</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Facilita la creación de componentes altamente personalizables</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">react-router-dom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería usada para definir las rutas de navegación de la aplicación</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">react-hook-form</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Simplifica la creación de formularios al hacer que la validación de los campos de estos sea sencilla.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sweetalert2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería utilizada para mostrar ventanas emergentes, facilitando al usuario la comprensión de las acciones realizadas</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Libraries used for back-end development</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Librería</th>
+<th class="tableblock halign-left valign-top">Explicación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">moongose</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería que facilita la integración de una base de datos MongoDB y Node.js</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><strong>About arc42</strong></p>
@@ -2065,9 +2141,10 @@ Created by Dr. Peter Hruschka &amp; Dr. Gernot Starke.</p>
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-02-27 17:32:34 +0100
+Last updated 2023-03-03 13:44:19 +0100
 </div>
 </div>
 </body>
