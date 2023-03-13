@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../components/SesionForm';
+import SForm from './SesionForm';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, Factory } from '../domain/facade';
+import { useNavigate } from 'react-router-dom';
+import { User } from '../../shared/shareddtypes';
+import { login } from '../../api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -59,25 +61,30 @@ const CSSTextField = styled(TextField)({
 
 //#endregion
 
-export default function Login() {
+export function Login() {
 
     //#region HOOKS
-
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
     //#endregion
 
     //#region METODOS DE CLASE
     const onSubmit: SubmitHandler<User> = data => tryLogin(data);
-    console.log(errors);
 
     const tryLogin = (user: User) => {
-        Factory.getSesionManager().iniciarSesion(user);
+        login(user).then(function (userApi) {
+            if (userApi != null)
+                navigate("/home");
+        });
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
-    const showSingup = () => {
+
+    const showSignup = () => {
         //Cambiar del Login a Singup component
+        navigate("/signup");
+        return
     }
 
     //#endregion
@@ -99,7 +106,9 @@ export default function Login() {
                     label="Nombre de usuario"
                     placeholder="Nombre de usuario"
                     fullWidth
-                    {...register("username", { required: true, max: 20, min: 6, maxLength: 12 })}
+                    {...register("username", { required: true, maxLength: 30 })}
+                    helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
+
                 />
 
                 <CSSTextField
@@ -108,7 +117,8 @@ export default function Login() {
                     type="password"
                     autoComplete="current-password"
                     fullWidth
-                    {...register("password", { required: true, maxLength: 100 })}
+                    {...register("password", { required: true, maxLength: 30 })}
+                    helperText={errors.username ? 'Debe introducir una contraseña' : ''}
                 />
 
                 <CSSButton
@@ -126,7 +136,7 @@ export default function Login() {
             <Typography variant="body1" align="left">
                 {'¿Eres nuevo? '}
                 <Link
-                    onClick={showSingup}
+                    onClick={showSignup}
                     align="left"
                     underline="always"
                 >

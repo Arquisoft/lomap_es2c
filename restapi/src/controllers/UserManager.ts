@@ -1,4 +1,7 @@
+import { UserImpl } from "../entities/User";
+import type { User } from "../facade";
 
+export type { UserManager };
 //import UserSchema from '../entities/UserSchema'
 interface UserManager {
     modificarPerfil: (user: User) => Promise<User>;
@@ -11,7 +14,7 @@ class UserManagerImpl implements UserManager {
         return modificarUsuario(user);
 
     }
-    listarDetalles(user: User) {
+    public listarDetalles(user: User) {
         return buscarUsuarioPorUsername(user);
     }
 }
@@ -52,7 +55,7 @@ async function buscarUsuarioPorUsername(u: User) {
 
     let b = JSON.parse(resultado);
 
-    return new User(b.username, b.password, b.webid);
+    return new UserImpl(b.username, b.password, b.webid);
 
 }
 function deleteSecondLine(json: string): string {
