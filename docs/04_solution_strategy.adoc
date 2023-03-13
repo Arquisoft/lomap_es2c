@@ -26,7 +26,7 @@ Refer to details in the following sections.
 
 Como lenguaje de programación y fundamento de la aplicación hemos decidido utilizar TypeScript en contra parte de JavaScript, ya que el tipado estático de TypeScript nos facilitará entender el código creado por el resto del equipo. Además usaremos las siguientes tecnologías:
 
-* MongoDB: Base de datos NoSQL sencilla de gestionar. Y con la capacidad de desplegar en la nube gracias a MongoDB Atlas.
+* MongoDB: Base de datos NoSQL sencilla de gestionar. Y con la capacidad de desplegar en la nube gracias a MongoDB Atlas. Usaremos la librería mongoose para facilitar el manejo de la base de datos desde TypeScipt.
 * React: Biblioteca de JavaScript utilizada para crear la interfaz de la aplicación.
 * NodeJS: Permite la ejecución de JavaScript del lado del servidor, además de hacer la web fácilmente escalable.
 

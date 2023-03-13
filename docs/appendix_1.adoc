@@ -1,0 +1,79 @@
+[[section-appendix-1]]
+== Appendix
+
+=== Interface prototypes
+
+
+
+[role="arc42help"]
+****
+.Contents
+Some interface prototypes for the final application
+
+
+.Motivation
+Give a first view of what the application was ment to look like at the begginning of the development
+
+
+.Form
+Images with a identifier title
+
+****
+
+.Sing up
+image:appendix_1_sing_up.png["Sing up window"]
+
+.Log in
+image:appendix_1_log_in.png["Log in window"]
+
+.My places
+image:appendix_1_my_places.png["My places window"]
+
+.Place filter
+image:appendix_1_place_filter.png["Place filter window"]
+
+.Friend menu
+image:appendix_1_friend_menu.png["Friend menu window"]
+
+.Friend's places
+image:appendix_1_friends_places.png["Friend's places window"]
+
+.Friend's place filter
+image:appendix_1_friends_place_filter.png["Friend's place filter window"]
+
+.Edit profile
+image:appendix_1_edit_profile.png["Edit profile window"]
+
+=== Used libraries
+
+[role="arc42help"]
+****
+.Contents
+Used libraries for the final application.
+
+.Motivation
+The purpose of this section is to give an overview of application dependencies.
+
+.Form
+A table with columns <Library> and <Definition>.
+
+****
+
+.Libraries used for front-end development
+
+[options="header",cols="1,2"]
+|===
+|Librería|Explicación
+| Mui | Facilita la creación de componentes altamente personalizables
+| react-router-dom | Librería usada para definir las rutas de navegación de la aplicación
+| react-hook-form | Simplifica la creación de formularios al hacer que la validación de los campos de estos sea sencilla.
+| sweetalert2 | Librería utilizada para mostrar ventanas emergentes, facilitando al usuario la comprensión de las acciones realizadas
+|===
+
+
+.Libraries used for back-end development
+[options="header",cols="1,2"]
+|===
+|Librería|Explicación
+| moongose | Librería que facilita la integración de una base de datos MongoDB y Node.js
+|===

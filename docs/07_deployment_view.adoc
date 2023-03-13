@@ -67,7 +67,4 @@ Nuestra infraestructura estará formada por los siguientes elementos:
 * Servidor: Contenedor de nuestra aplicación para despliegue. Todavía sin concretar.
 * WebApp: Front-end de nuestra aplicación.
 * RestApi: Back-end de nuestra aplicación.
-* MongoDB: En este punto, base de datos elegida para la aplicación. Con el uso de MongoDB Atlas para su despliegue.
-
-
-
+* MongoDB: En este punto, base de datos elegida para la aplicación. Con el uso de MongoDB Atlas para su despliegue y mongoose para su implementación.
