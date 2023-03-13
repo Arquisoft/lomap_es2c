@@ -34,7 +34,23 @@ api.post(
     }
 );
 
-api.get("/user", async (req: Request, res: Response): Promise<Response> => {
-    return res.sendStatus(200).send(fac.FactoryLoMap.getSesionManager().usuarioEnSesion());
+api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Response> => {
+    console.log("hi")
+    let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
+    console.log(user.username)
+    return res.status(200).send(user);
 })
+
+api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
+    let user = req.body.user;
+    console.log(user.username)
+    return res.status(200).send(fac.FactoryLoMap.getSesionManager().registrarse(user));
+})
+
+api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
+    let user = req.body.user;
+    console.log(user.username)
+    return res.status(200).send(fac.FactoryLoMap.getSesionManager().iniciarSesion(user));
+})
+
 export default api;

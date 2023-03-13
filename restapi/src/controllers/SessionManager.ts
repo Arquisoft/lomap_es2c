@@ -1,6 +1,8 @@
-import UserSchema from "../entities/UserSchema"
-import { UserInt, SesionManager } from "../facade";
+import UserSchema from "../entities/UserSchema";
+import { User, SesionManager } from "../facade";
 export { UserSesionManager };
+
+const sessionStorage = require('sessionstorage-for-nodejs')
 
 class UserSesionManager implements SesionManager {
     // userInSession: User | null;
@@ -15,15 +17,19 @@ class UserSesionManager implements SesionManager {
         return true;
     }
 
-    registrarse(usuario: UserInt) {
+    registrarse(usuario: User) {
         // this.userInSession = usuario;
         sessionStorage.setItem('userInSession', JSON.stringify(usuario));
+        console.log("que")
+        console.log(sessionStorage.getItem('userInSession'))
 
         const usuarioSchema = new UserSchema({
             username: usuario.username,
             webID: usuario.webID,
             password: usuario.password
         });
+
+        console.log(usuarioSchema.username)
 
         usuarioSchema.save();
         return usuario;
@@ -34,17 +40,18 @@ class UserSesionManager implements SesionManager {
         // if(this.userInSession != null){
         // 	user = {username:this.userInSession?.username, password:this.userInSession?.password, webID:this.userInSession?.webID};
         // }
-        return JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as UserInt;
+        return JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
     }
 
-    iniciarSesion(user: UserInt) {
-        let usuarioEncontrado = UserSchema.findOne({
+    async iniciarSesion(user: User): Promise<User> {
+        let usuarioEncontrado = await UserSchema.findOne({
             username: user.username,
             password: user.password
         });
 
-        if (user != null) {
+        if (usuarioEncontrado != null) {
             // this.userInSession = usuarioEncontrado
+            console.log(usuarioEncontrado)
             sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
             return user;
         }

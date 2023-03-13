@@ -6,7 +6,7 @@ export type { User, SesionManager };
 
 interface SesionManager {
     cerrarSesion: () => boolean;
-    iniciarSesion: (usuario: User) => User;
+    iniciarSesion: (usuario: User) => Promise<User>;
     registrarse: (usuario: User) => User;
     usuarioEnSesion: () => User;
 }
@@ -15,9 +15,9 @@ interface SesionManager {
 //ES INTERCAMBIABLE POR INT O STRING CON UN CODIGO DEFINIDO
 
 //#region FACADE
-/*
+
 interface MapManager {
-    verMapaDe: (user: UserInt) => Group[];
+    verMapaDe: (user: User) => Group[];
     añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
     crearGrupo: (nombre: Group) => Group;
     eliminarGrupo: (grupo: Group) => boolean;
@@ -28,13 +28,13 @@ interface MapManager {
 }
 
 interface FriendManager {
-    listarAmigos: (user: UserInt) => UserInt[];
-    enviarSolicitud: (de: UserInt, a: UserInt) => FriendRequest;
+    listarAmigos: (user: User) => User[];
+    enviarSolicitud: (de: User, a: User) => FriendRequest;
     aceptarSolicitud: (solicitud: FriendRequest) => FriendRequest;
     rechazarSolicitud: (solicitud: FriendRequest) => FriendRequest;
-    listarSolicitudes: (user: UserInt) => FriendRequest[];
+    listarSolicitudes: (user: User) => FriendRequest[];
 }
-*/
+
 //#endregion
 
 //#region INTERFACES AUXILIARES

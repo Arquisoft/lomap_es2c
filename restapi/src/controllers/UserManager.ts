@@ -1,26 +1,26 @@
-import { User } from "../entities/User";
-import type { UserInt } from "../facade";
+import { UserImpl } from "../entities/User";
+import type { User } from "../facade";
 
 export type { UserManager };
 //import UserSchema from '../entities/UserSchema'
 interface UserManager {
-    modificarPerfil: (user: UserInt) => Promise<UserInt>;
-    listarDetalles: (user: UserInt) => Promise<UserInt>;
+    modificarPerfil: (user: User) => Promise<User>;
+    listarDetalles: (user: User) => Promise<User>;
 }
 
 
 class UserManagerImpl implements UserManager {
-    public modificarPerfil(user: UserInt) {
+    public modificarPerfil(user: User) {
         return modificarUsuario(user);
 
     }
-    listarDetalles(user: UserInt) {
+    public listarDetalles(user: User) {
         return buscarUsuarioPorUsername(user);
     }
 }
 
 
-async function buscarUsuarioPorUsername(u: UserInt) {
+async function buscarUsuarioPorUsername(u: User) {
 
     //const uri = "mongodb+srv://adrianfernandezalvarez02:6StwePBGphR8AJfa@cluster0.bty3mrz.mongodb.net/animales?retryWrites=true&w=majority";
     const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
@@ -55,7 +55,7 @@ async function buscarUsuarioPorUsername(u: UserInt) {
 
     let b = JSON.parse(resultado);
 
-    return new User(b.username, b.password, b.webid);
+    return new UserImpl(b.username, b.password, b.webid);
 
 }
 function deleteSecondLine(json: string): string {

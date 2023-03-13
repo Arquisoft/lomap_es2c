@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
-        "target": "ES5",
+        "target": "es5",
         "lib": [
             "dom",
             "dom.iterable",
-            "esnext",
+            "esnext"
         ],
         "allowJs": true,
         "skipLibCheck": true,
@@ -14,15 +14,14 @@
         "strictNullChecks": false,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
-        "module": "CommonJS",
+        "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react-jsx",
+        "jsx": "react-jsx"
     },
     "include": [
-        "src",
-        "../restapi/src/facade.ts"
+        "src"
     ]
 }

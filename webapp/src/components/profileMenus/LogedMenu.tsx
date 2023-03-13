@@ -9,6 +9,7 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../../shared/shareddtypes';
 import { getUserInSesion } from '../../api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -60,11 +61,9 @@ function LogedMenu() {
     };
 
     const getUsername = () => {
-        let username;
-        getUserInSesion().then(function (user) {
-            username = user.username;
-        })
-        return username;
+        getUserInSesion().then(function (userReq) {
+            setUsername(userReq.username)
+        });
     }
 
     //#endregion
@@ -73,14 +72,14 @@ function LogedMenu() {
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
     const [url, setUrl] = useState("../testUser.jfif");
+    const [username, setUsername] = useState<String>("");
 
     //#endregion
 
     return (
-
         //#region COMPONENTE
         <BoxProfile>
-            <b><p>Sesión iniciada como {getUsername()}</p></b>
+            <b><p>Sesión iniciada como {getUsername()}{username}</p></b>
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />

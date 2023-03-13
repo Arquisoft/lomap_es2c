@@ -7,10 +7,11 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { FactoryLoMap, UserInt } from '../../../restapi/src/facade';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { User } from '../../shared/shareddtypes';
+import { signup } from '../../api/api';
 
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -68,7 +69,7 @@ export function Signup() {
 
     //#region HOOKS
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm<UserInt>();
+    const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
     const [confirmPass, setConfirmPass] = useState('')
     const [pass, setPass] = useState('')
@@ -76,41 +77,43 @@ export function Signup() {
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<UserInt> = data => trySignup(data);
+    const onSubmit: SubmitHandler<User> = data => trySignup(data);
     console.log(errors);
 
-    const trySignup = (user: UserInt) => {
+    const trySignup = (user: User) => {
 
 
         if (checkFields(user.username, user.webID, user.password)) {
             console.log("pasa1")
             if (checkPasswords()) {
                 console.log("pasa")
-                FactoryLoMap.getSesionManager().registrarse(user)
-
-                if (true) {
-                    Swal.fire({
-                        title: 'Cuenta creada',
-                        text: "¡Su cuenta ha sido creada con éxito!",
-                        icon: 'success',
-                        showCancelButton: false,
-                        confirmButtonColor: '#81c784',
-                        confirmButtonText: 'Inicia sesión',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            showLogin()
-                        }
-                    })
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'No se ha podido crear su cuenta.',
-                        confirmButtonColor: '#81c784',
-                    }).then((result) => {
-                        return
-                    })
-                }
+                signup(user).then(function (userApi) {
+                    console.log("si")
+                    console.log(userApi.username)
+                    if (userApi != null) {
+                        Swal.fire({
+                            title: 'Cuenta creada',
+                            text: "¡Su cuenta ha sido creada con éxito!",
+                            icon: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#81c784',
+                            confirmButtonText: 'Inicia sesión',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                showLogin()
+                            }
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se ha podido crear su cuenta.',
+                            confirmButtonColor: '#81c784',
+                        }).then((result) => {
+                            return
+                        })
+                    }
+                });
             } else {
                 console.log("no")
                 Swal.fire({

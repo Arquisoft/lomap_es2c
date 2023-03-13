@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../../shared/shareddtypes';
+import { login } from '../../api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -63,18 +65,18 @@ export function Login() {
 
     //#region HOOKS
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm<UserInt>();
+    const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<UserInt> = data => tryLogin(data);
+    const onSubmit: SubmitHandler<User> = data => tryLogin(data);
 
-    const tryLogin = (user: UserInt) => {
-        FactoryLoMap.getSesionManager().iniciarSesion(user);
-        if (true) {
-            navigate("/home");
-        }
+    const tryLogin = (user: User) => {
+        login(user).then(function (userApi) {
+            if (userApi != null)
+                navigate("/home");
+        });
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
