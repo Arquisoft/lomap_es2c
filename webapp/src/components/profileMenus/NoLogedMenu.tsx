@@ -9,8 +9,8 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { Navigate, useNavigate } from 'react-router-dom';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
+//#region DEFINICION DE COMPONENTES STYLED
 const BoxProfile = styled(Box)({
     padding: '0em 1em 0em',
     display: 'flex',
@@ -58,6 +58,7 @@ export function NoLogedMenu() {
 
         //#region COMPONENTE
         <BoxProfile>
+
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar src="/broken-image.jpg" />

@@ -2,21 +2,13 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import Swal from "sweetalert2"
-import "../App.css";
+import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import { useState } from 'react';
-import { FactoryLoMap, User } from '../domain/facade';
-import LogedMenu from './profileMenus/LogedMenu';
-import { NoLogedMenu } from './profileMenus/NoLogedMenu';
+import LogedMenu from '../profileMenus/LogedMenu';
+import { NoLogedMenu } from '../profileMenus/NoLogedMenu';
 import { useNavigate } from 'react-router-dom';
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -62,7 +54,9 @@ const MyBar = styled(AppBar)({
 
 export function Header(props: { logged: boolean }) {
 
+    //#region HOOKS
     const navigate = useNavigate();
+    //#endregion
 
     //#region METODOS DE CLASE
 
