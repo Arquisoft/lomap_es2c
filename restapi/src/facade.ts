@@ -1,11 +1,21 @@
+import { UserSesionManager } from './controllers/SessionManager'
+import { UserManager } from './controllers/UserManager'
 
-export { Place, UserSesionManager, Factory };
-export type { User };
+export { FactoryLoMap };
+export type { User, SesionManager };
+
+interface SesionManager {
+    cerrarSesion: () => boolean;
+    iniciarSesion: (usuario: User) => Promise<User>;
+    registrarse: (usuario: User) => User;
+    usuarioEnSesion: () => User;
+}
 
 //TODOS LOS BOOLEAN QUE DEVUELVEN LOS MÉTODOS SON ÚNICAMENTE PARA NOTIFICAR EL RESULTADO DE LA OPERACION
 //ES INTERCAMBIABLE POR INT O STRING CON UN CODIGO DEFINIDO
 
 //#region FACADE
+
 interface MapManager {
     verMapaDe: (user: User) => Group[];
     añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
@@ -17,13 +27,6 @@ interface MapManager {
     mostrarGrupo: (grupo: Group) => Place[];
 }
 
-interface SesionManager {
-    cerrarSesion: () => boolean;
-    iniciarSesion: (usuario: User) => User;
-    registrarse: (usuario: User) => User;
-    usuarioEnSesion: (usuario: User) => User;
-}
-
 interface FriendManager {
     listarAmigos: (user: User) => User[];
     enviarSolicitud: (de: User, a: User) => FriendRequest;
@@ -32,40 +35,30 @@ interface FriendManager {
     listarSolicitudes: (user: User) => FriendRequest[];
 }
 
-interface UserManager {
-    modificarPerfil: (user: User) => User;
-    listarDetalles: (user: User) => User;
-}
 //#endregion
 
 //#region INTERFACES AUXILIARES
-interface User {
-    username: String
-    password: String
-    webid: String
-    img: String
-}
 
-class Factory {
-    static getSesionManager: () => UserSesionManager;
-    static getMapManager: () => MapManager;
+class FactoryLoMap {
+    //static getMapManager: () => MapManager;
     static getUserManager: () => UserManager;
-    static getFriendManager: () => FriendManager;
+    //static getFriendManager: () => FriendManager;
+
+    static getSesionManager(): SesionManager {
+        return new UserSesionManager();
+    }
 }
 //#endregion
 
 //#region CLASES DE EJEMPLO PARA FUNCIONAR
-class UserSesionManager implements SesionManager {
-    cerrarSesion: () => boolean;
-    registrarse: (usuario: User) => User;
-    usuarioEnSesion: () => User;
-    iniciarSesion(user: User) {
-        console.log(user.username)
-        return user
-    }
-
-}
 class FriendRequest { }
 class Group { }
 class Place { }
 //#endregion
+
+interface User {
+    username: String
+    password: String
+    webID: String
+}
+
