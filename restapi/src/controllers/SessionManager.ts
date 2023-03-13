@@ -17,7 +17,7 @@ class UserSesionManager implements SesionManager {
         return true;
     }
 
-    registrarse(usuario: User) {
+    async registrarse(usuario: User): Promise<User> {
         // this.userInSession = usuario;
         sessionStorage.setItem('userInSession', JSON.stringify(usuario));
         console.log("que")
@@ -31,7 +31,7 @@ class UserSesionManager implements SesionManager {
 
         console.log(usuarioSchema.username)
 
-        usuarioSchema.save();
+        await usuarioSchema.save();
         return usuario;
     }
 
@@ -48,16 +48,18 @@ class UserSesionManager implements SesionManager {
             username: user.username,
             password: user.password
         });
+        console.log(usuarioEncontrado)
 
         if (usuarioEncontrado != null) {
             // this.userInSession = usuarioEncontrado
-            console.log(usuarioEncontrado)
             sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
-            return user;
+            return usuarioEncontrado;
         }
-
-        console.log("Usuario no encontrado");
-        return user
+        else {
+            sessionStorage.setItem('userInSession', null);
+            console.log("Usuario no encontrado");
+            return null;
+        }
     }
 
 }

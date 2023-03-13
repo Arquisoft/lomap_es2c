@@ -90,7 +90,7 @@ export function Signup() {
                 signup(user).then(function (userApi) {
                     console.log("si")
                     console.log(userApi.username)
-                    if (userApi != null) {
+                    if (true) {
                         Swal.fire({
                             title: 'Cuenta creada',
                             text: "¡Su cuenta ha sido creada con éxito!",

@@ -47,5 +47,10 @@ export async function login(user: User): Promise<User> {
         body: JSON.stringify({ 'user': user })
     });
     //The objects returned by the api are directly convertible to User objects
-    return response.json()
+
+    if (response.status == 505) {
+        //throw new Exception(reponse.json())
+    }
+
+    return response.json();
 }
