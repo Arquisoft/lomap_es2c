@@ -7,10 +7,11 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, FactoryLoMap } from '../../domain/facade';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { User } from '../../shared/shareddtypes';
+import { signup } from '../../api/api';
 
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -81,36 +82,38 @@ export function Signup() {
 
     const trySignup = (user: User) => {
 
-        
-        if(checkFields(user.username, user.webid, user.password)){
-            console.log("pasa1")
-            if(checkPasswords()){
-                console.log("pasa")
-                FactoryLoMap.getSesionManager().registrarse(user)  
 
-                if(true){
-                    Swal.fire({
-                        title: 'Cuenta creada',
-                        text: "¡Su cuenta ha sido creada con éxito!",
-                        icon: 'success',
-                        showCancelButton: false,
-                        confirmButtonColor: '#81c784',
-                        confirmButtonText: 'Inicia sesión',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            showLogin()
-                        }
-                    })
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'No se ha podido crear su cuenta.',
-                        confirmButtonColor: '#81c784',
-                    }).then((result) => {
-                        return
-                    })
-                }
+        if (checkFields(user.username, user.webID, user.password)) {
+            console.log("pasa1")
+            if (checkPasswords()) {
+                console.log("pasa")
+                signup(user).then(function (userApi) {
+                    console.log("si")
+                    console.log(userApi.username)
+                    if (userApi != null) {
+                        Swal.fire({
+                            title: 'Cuenta creada',
+                            text: "¡Su cuenta ha sido creada con éxito!",
+                            icon: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#81c784',
+                            confirmButtonText: 'Inicia sesión',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                showLogin()
+                            }
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se ha podido crear su cuenta.',
+                            confirmButtonColor: '#81c784',
+                        }).then((result) => {
+                            return
+                        })
+                    }
+                });
             } else {
                 console.log("no")
                 Swal.fire({
@@ -136,17 +139,17 @@ export function Signup() {
         return confirmPass === pass
     }
 
-    const checkFields = (username: String, webid:String, password: String) => {
-        if(username.length==0)
+    const checkFields = (username: String, webid: String, password: String) => {
+        if (username.length == 0)
             return false
-        else if(webid.length==0)
+        else if (webid.length == 0)
             return false
-        else if(password.length==0)
+        else if (password.length == 0)
             return false
-        else 
+        else
             return true
     }
-   
+
     //#endregion
 
     return (
@@ -174,8 +177,8 @@ export function Signup() {
                     label="WebID"
                     placeholder="WebID"
                     fullWidth
-                    {...register("webid", { required: true, min: 6, maxLength: 100 })}
-                    helperText={errors.webid ? 'Debe introducir un WebID válido' : ''}
+                    {...register("webID", { required: true, min: 6, maxLength: 100 })}
+                    helperText={errors.webID ? 'Debe introducir un WebID válido' : ''}
                 />
 
                 <CSSTextField
@@ -184,8 +187,8 @@ export function Signup() {
                     type="password"
                     autoComplete="current-password"
                     fullWidth
-                    {...register("password", { required: true, minLength:8, maxLength: 24 })}
-                    onChange = {(e: any) => setPass(e.target.value)}
+                    {...register("password", { required: true, minLength: 8, maxLength: 24 })}
+                    onChange={(e: any) => setPass(e.target.value)}
                     helperText={errors.password ? 'Debe introducir una contraseña con una longitud mínima de 8 caracteres' : ''}
                 />
 
@@ -195,8 +198,8 @@ export function Signup() {
                     type="password"
                     fullWidth
                     autoComplete="current-password"
-                    onChange = {(e: any) => setConfirmPass(e.target.value)}
-                
+                    onChange={(e: any) => setConfirmPass(e.target.value)}
+
                 />
 
                 <CSSButton

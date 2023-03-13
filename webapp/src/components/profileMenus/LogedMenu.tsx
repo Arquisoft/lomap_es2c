@@ -8,8 +8,9 @@ import MenuItem from '@mui/material/MenuItem';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import { FactoryLoMap } from '../../domain/facade';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../../shared/shareddtypes';
+import { getUserInSesion } from '../../api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -33,20 +34,20 @@ function LogedMenu() {
 
     const getProfile = () => {
         closeUserMenu();
-        var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
+        //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Rellenar formulario read only 
     }
 
     const editProfile = () => {
         closeUserMenu();
-        var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
+        //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Mostrar formulario editable con autogeneración de objeto User
         //Redirigir a editar usuario, a su vez llamara a Factory.getUserManager().modificarPerfil(User)
     }
 
     const goLogout = () => {
         closeUserMenu();
-        var state = FactoryLoMap.getSesionManager().cerrarSesion();
+        //var state = FactoryLoMap.getSesionManager().cerrarSesion();
         navigate("/");
         //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
     }
@@ -59,20 +60,26 @@ function LogedMenu() {
         setAnchorElUser(event.currentTarget);
     };
 
+    const getUsername = () => {
+        getUserInSesion().then(function (userReq) {
+            setUsername(userReq.username)
+        });
+    }
+
     //#endregion
 
     //#region HOOKS
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
     const [url, setUrl] = useState("../testUser.jfif");
+    const [username, setUsername] = useState<String>("");
 
     //#endregion
 
     return (
-
         //#region COMPONENTE
         <BoxProfile>
-            <b><p>Has iniciado sesión</p></b>
+            <b><p>Sesión iniciada como {getUsername()}{username}</p></b>
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />

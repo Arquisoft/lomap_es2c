@@ -7,8 +7,9 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { User, FactoryLoMap } from '../../domain/facade';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../../shared/shareddtypes';
+import { login } from '../../api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -72,10 +73,10 @@ export function Login() {
     const onSubmit: SubmitHandler<User> = data => tryLogin(data);
 
     const tryLogin = (user: User) => {
-        FactoryLoMap.getSesionManager().iniciarSesion(user);
-        if (true) {
-            navigate("/home");
-        }
+        login(user).then(function (userApi) {
+            if (userApi != null)
+                navigate("/home");
+        });
         //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
@@ -109,7 +110,7 @@ export function Login() {
                     helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
 
                 />
-                
+
                 <CSSTextField
                     id="outlined-password-input"
                     label="Contraseña"
