@@ -77,6 +77,8 @@ export function Login() {
             if (userApi != null) {
                 navigate("/home");
             }
+        }).catch((e) => {
+            console.log(e.message)
         });
         //Cambiar del NoLoggedMenu a LoggedMenu
     }

@@ -42,7 +42,9 @@ api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Resp
 
 api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
-    return res.status(200).send(fac.FactoryLoMap.getSesionManager().registrarse(user));
+    let userRes = await fac.FactoryLoMap.getSesionManager().registrarse(user);
+    console.log(userRes)
+    return res.status(200).send(userRes);
 })
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
