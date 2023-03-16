@@ -72,22 +72,13 @@ const CSSTextField = styled(TextField)({
 export function Signup() {
 
     //#region HOOKS
-    const schema = yup.object({
-        username: yup.string().matches(/^[A-Za-z][A-Za-z0-9]+$/, "El nombre de usuario debe de empezar por una letra")
-                                .min(6, "El nombre de usuario debe de tener entre 6 y 10 caracteres")
-                                    .max(10, "El nombre de usuario debe de tener entre 6 y 10 caracteres")
-                                        .required("Debe de introducir un nombre de usuario"),
-        webID: yup.string().matches(/^https:\/\/[A-Za-z][A-Za-z0-9]+$/).required(),
-        password: yup.string().matches(/^[A-Za-z0-9]+$/, 'La contraseña no puede contener caracteres especiales')
-                                .min(8, "La contraseña debe de tener una longitud mínima de 8 caracteres")
-                                    .max(24, "La contraseña debe de tener una longitud mínima de 24 caracteres")
-                                        .required("Debe de introducir una contraseña"),
-      }).required();
 
+    const schema = fieldsValidation.signupValidationSchema;
     type UserSchema = yup.InferType<typeof schema>;
 
 
     const navigate = useNavigate();
+    
     const { register, handleSubmit, formState: { errors } } = useForm<UserSchema>({
         resolver: yupResolver(schema)
     });
@@ -108,10 +99,10 @@ export function Signup() {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
                 }).catch((e) => {
-                    failSignup()
+                    fieldsValidation.showError("No se ha podido crear la cuenta", "Ha sucedido un error al crear la cuenta, vuelva a intentarlo más tarde.", Swal.close)
                 })
             } else {
-                failRepeatPassword()
+                fieldsValidation.showError("Las contraseñas no coinciden", "Por favor, revíselas.", Swal.close)
             }
         }
         //Cambiar del NoLoggedMenu a LoggedMenu
@@ -133,29 +124,7 @@ export function Signup() {
         })
     }
 
-    const failRepeatPassword = () => {
-        console.log("no")
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Las contraseñas no coinciden',
-            confirmButtonColor: '#81c784',
-        }).then((result) => {
-            return
-        })
-    }
-
-    const failSignup = () => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se ha podido crear su cuenta.',
-            confirmButtonColor: '#81c784',
-        }).then((result) => {
-            return
-        });
-    }
-
+    
     const showLogin = () => {
         //Cambiar del Signup a Login component
         navigate("/login");
