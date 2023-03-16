@@ -7,7 +7,7 @@ export type { User, SesionManager };
 interface SesionManager {
     cerrarSesion: () => boolean;
     iniciarSesion: (usuario: User) => Promise<User>;
-    registrarse: (usuario: User) => User;
+    registrarse: (usuario: User) => Promise<User>;
     usuarioEnSesion: () => User;
 }
 
