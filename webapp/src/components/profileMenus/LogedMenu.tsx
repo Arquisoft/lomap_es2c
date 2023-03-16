@@ -11,6 +11,7 @@ import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
 import { getUserInSesion } from '../../api/api';
+import Swal from 'sweetalert2';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -34,16 +35,74 @@ function LogedMenu() {
 
     const getProfile = () => {
         closeUserMenu();
+        console.log("enserio?")
         //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Rellenar formulario read only 
     }
 
-    const editProfile = () => {
+    async function showEdit(): Promise<void> {
         closeUserMenu();
-        //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
-        //Mostrar formulario editable con autogeneración de objeto User
-        //Redirigir a editar usuario, a su vez llamara a Factory.getUserManager().modificarPerfil(User)
+        let user = await getUserInSesion();
+        Swal.fire({
+            title: 'Edita tu perfil',
+            html: `<input type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña">
+                    <input type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> `,
+            confirmButtonText: 'Cambiar contraseña',
+            denyButtonText: 'Volver',
+            confirmButtonColor: '#81c784',
+            denyButtonColor: 'grey',
+            showDenyButton: true,
+            focusConfirm: false,
+            preConfirm: () => {
+                let pssw = (Swal.getPopup().querySelector('#password-ep') as HTMLInputElement).value
+                let rpssw = (Swal.getPopup().querySelector('#rpassword-ep') as HTMLInputElement).value
+                return { username: user.username, webID: user.webID, password: user.password }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                editProfile(result.value);
+            } else if (result.isDenied) {
+                showEditNoPss();
+            }
+        })
     }
+
+    const editProfile = (user: User) => {
+
+    }
+
+    async function showEditNoPss(): Promise<void> {
+        closeUserMenu();
+        let user = await getUserInSesion();
+        Swal.fire({
+            title: 'Edita tu perfil',
+            html: `<input type="text" id="name-ep" class="swal2-input" placeholder=` + user.username + `>
+                    <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
+                    <textarea rows="5" id="biografia-ep" class="swal2-input" placeholder="Descripción"></textarea>`,
+            confirmButtonText: 'Editar',
+            denyButtonText: 'Cambiar contraseña',
+            showDenyButton: true,
+            confirmButtonColor: '#81c784',
+            denyButtonColor: 'grey',
+            focusConfirm: false,
+            preConfirm: () => {
+                let name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).value
+                let webid = (Swal.getPopup().querySelector('#webid-ep') as HTMLInputElement).value
+                let descripcion = (Swal.getPopup().querySelector('#biografia-ep') as HTMLInputElement).value
+                if (!name || !webid) {
+                    name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).placeholder
+                }
+                return { username: name, webID: webid, password: user.password }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                editProfile(result.value);
+            } else if (result.isDenied) {
+                showEdit();
+            }
+        })
+    }
+
 
     const goLogout = () => {
         closeUserMenu();
@@ -103,7 +162,7 @@ function LogedMenu() {
                 <MenuItem key={uuid()} onClick={getProfile}>
                     Profile
                 </MenuItem>
-                <MenuItem key={uuid()} onClick={editProfile}>
+                <MenuItem key={uuid()} onClick={showEditNoPss}>
                     Edit profile
                 </MenuItem>
                 <MenuItem key={uuid()} onClick={goLogout}>

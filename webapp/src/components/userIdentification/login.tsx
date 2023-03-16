@@ -73,9 +73,12 @@ export function Login() {
     const onSubmit: SubmitHandler<User> = data => tryLogin(data);
 
     const tryLogin = (user: User) => {
-        login(user).then(function (userApi) {
-            if (userApi != null)
+        login(user).then(function (userApi: User) {
+            if (userApi != null) {
                 navigate("/home");
+            }
+        }).catch((e) => {
+            console.log(e.message)
         });
         //Cambiar del NoLoggedMenu a LoggedMenu
     }

@@ -35,22 +35,26 @@ api.post(
 );
 
 api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Response> => {
-    console.log("hi")
     let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
-    console.log(user.username)
     return res.status(200).send(user);
 })
 
 api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
-    console.log(user.username)
-    return res.status(200).send(fac.FactoryLoMap.getSesionManager().registrarse(user));
+    let userRes = await fac.FactoryLoMap.getSesionManager().registrarse(user);
+    return res.status(200).send(userRes);
 })
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
-    console.log(user.username)
-    return res.status(200).send(fac.FactoryLoMap.getSesionManager().iniciarSesion(user));
+    let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
+    if (userRes != null) {
+        return res.status(200).send(userRes);
+    }
+    else {
+        return res.status(505).send("Error de login")
+    }
+    //IF / ELSES CON CADA POSIBLE ERROR Y EL STATUS ASOCIADO
 })
 
 export default api;

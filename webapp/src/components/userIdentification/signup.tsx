@@ -81,53 +81,59 @@ export function Signup() {
     console.log(errors);
 
     const trySignup = (user: User) => {
-
-
         if (checkFields(user.username, user.webID, user.password)) {
             console.log("pasa1")
             if (checkPasswords()) {
                 console.log("pasa")
-                signup(user).then(function (userApi) {
-                    console.log("si")
-                    console.log(userApi.username)
-                    if (userApi != null) {
-                        Swal.fire({
-                            title: 'Cuenta creada',
-                            text: "¡Su cuenta ha sido creada con éxito!",
-                            icon: 'success',
-                            showCancelButton: false,
-                            confirmButtonColor: '#81c784',
-                            confirmButtonText: 'Inicia sesión',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                showLogin()
-                            }
-                        })
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'No se ha podido crear su cuenta.',
-                            confirmButtonColor: '#81c784',
-                        }).then((result) => {
-                            return
-                        })
-                    }
-                });
-            } else {
-                console.log("no")
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Las contraseñas no coinciden',
-                    confirmButtonColor: '#81c784',
-                }).then((result) => {
-                    return
+                signup(user).then(function (userResponse: User) {
+                    successSignup(userResponse)
+                }).catch((e) => {
+                    failSignup()
                 })
+            } else {
+                failRepeatPassword()
             }
         }
-
         //Cambiar del NoLoggedMenu a LoggedMenu
+    }
+
+    const successSignup = (user: User) => {
+        console.log(user)
+        Swal.fire({
+            title: 'Cuenta creada',
+            text: "¡Cuenta " + user.username + " ha sido creada con éxito!",
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonColor: '#81c784',
+            confirmButtonText: 'Inicia sesión',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                showLogin()
+            }
+        })
+    }
+
+    const failRepeatPassword = () => {
+        console.log("no")
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Las contraseñas no coinciden',
+            confirmButtonColor: '#81c784',
+        }).then((result) => {
+            return
+        })
+    }
+
+    const failSignup = () => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se ha podido crear su cuenta.',
+            confirmButtonColor: '#81c784',
+        }).then((result) => {
+            return
+        });
     }
 
     const showLogin = () => {
