@@ -12,7 +12,9 @@ import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { User } from '../../shared/shareddtypes';
 import { signup } from '../../api/api';
-
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import * as fieldsValidation from '../../utils/fieldsValidation';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -60,7 +62,9 @@ const CSSTextField = styled(TextField)({
         '&.Mui-focused fieldset': {
             borderColor: '#1f4a21',
         },
-    },
+    }, '.MuiFormHelperText-root': {
+        color: 'white !important',
+      }
 });
 
 //#endregion
@@ -68,8 +72,25 @@ const CSSTextField = styled(TextField)({
 export function Signup() {
 
     //#region HOOKS
+    const schema = yup.object({
+        username: yup.string().matches(/^[A-Za-z][A-Za-z0-9]+$/, "El nombre de usuario debe de empezar por una letra")
+                                .min(6, "El nombre de usuario debe de tener entre 6 y 10 caracteres")
+                                    .max(10, "El nombre de usuario debe de tener entre 6 y 10 caracteres")
+                                        .required("Debe de introducir un nombre de usuario"),
+        webID: yup.string().matches(/^https:\/\/[A-Za-z][A-Za-z0-9]+$/).required(),
+        password: yup.string().matches(/^[A-Za-z0-9]+$/, 'La contraseña no puede contener caracteres especiales')
+                                .min(8, "La contraseña debe de tener una longitud mínima de 8 caracteres")
+                                    .max(24, "La contraseña debe de tener una longitud mínima de 24 caracteres")
+                                        .required("Debe de introducir una contraseña"),
+      }).required();
+
+    type UserSchema = yup.InferType<typeof schema>;
+
+
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm<User>();
+    const { register, handleSubmit, formState: { errors } } = useForm<UserSchema>({
+        resolver: yupResolver(schema)
+    });
 
     const [confirmPass, setConfirmPass] = useState('')
     const [pass, setPass] = useState('')
@@ -77,15 +98,14 @@ export function Signup() {
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<User> = data => trySignup(data);
+    const onSubmit: SubmitHandler<UserSchema> = data => trySignup(data);
     console.log(errors);
 
-    const trySignup = (user: User) => {
-        if (checkFields(user.username, user.webID, user.password)) {
-            console.log("pasa1")
-            if (checkPasswords()) {
-                console.log("pasa")
-                signup(user).then(function (userResponse: User) {
+    const trySignup = (user: UserSchema) => {
+        if (user.username && user.webID && user.password) {
+            let newUser: User = {username: user.username, webID: user.webID, password: user.password};
+            if (fieldsValidation.checkPasswords(pass, confirmPass)) {
+                signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
                 }).catch((e) => {
                     failSignup()
@@ -141,21 +161,6 @@ export function Signup() {
         navigate("/login");
     }
 
-    const checkPasswords = () => {
-        return confirmPass === pass
-    }
-
-    const checkFields = (username: String, webid: String, password: String) => {
-        if (username.length == 0)
-            return false
-        else if (webid.length == 0)
-            return false
-        else if (password.length == 0)
-            return false
-        else
-            return true
-    }
-
     //#endregion
 
     return (
@@ -174,8 +179,8 @@ export function Signup() {
                     label="Nombre de usuario"
                     placeholder="Nombre de usuario"
                     fullWidth
-                    {...register("username", { required: true, max: 20, min: 6, maxLength: 12 })}
-                    helperText={errors.username ? 'Debe introducir un nombre de usuario de entre 6 y 12 caracteres' : ''}
+                    {...register("username")}
+                    helperText={errors.username ? errors.username.message : ''}
                 />
 
                 <CSSTextField
@@ -183,7 +188,7 @@ export function Signup() {
                     label="WebID"
                     placeholder="WebID"
                     fullWidth
-                    {...register("webID", { required: true, min: 6, maxLength: 100 })}
+                    {...register("webID")}
                     helperText={errors.webID ? 'Debe introducir un WebID válido' : ''}
                 />
 
@@ -193,9 +198,9 @@ export function Signup() {
                     type="password"
                     autoComplete="current-password"
                     fullWidth
-                    {...register("password", { required: true, minLength: 8, maxLength: 24 })}
+                    {...register("password")}
                     onChange={(e: any) => setPass(e.target.value)}
-                    helperText={errors.password ? 'Debe introducir una contraseña con una longitud mínima de 8 caracteres' : ''}
+                    helperText={errors.password ? errors.password.message : ''}
                 />
 
                 <CSSTextField
@@ -236,3 +241,4 @@ export function Signup() {
 
     );
 }
+
