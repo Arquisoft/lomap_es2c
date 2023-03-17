@@ -42,7 +42,7 @@ body {
     min-width: 100%;
 }
 
-#biografia-ep {
+#biography-ep, #biography-gp {
     height: 7em;
     resize: none;
 }
