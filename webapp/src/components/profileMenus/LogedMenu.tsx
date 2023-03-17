@@ -40,10 +40,29 @@ function LogedMenu() {
     
     //#region METODOS DE CLASE
 
-    const getProfile = () => {
+    const getProfile = async () => {
         closeUserMenu();
-        //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
-        //Rellenar formulario read only 
+        let user = await getUserInSesion();
+        Swal.fire({
+            title: 'Mi perfil',
+            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+                    <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + user.username + `>
+                    <label for="webid-gp" class="swal2-label">WebID: </label>
+                    <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
+                    <label for="biography-gp" class="swal2-label">Biografía: </label>
+                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="Biografía..."></textarea>`,
+            confirmButtonText: 'Editar perfil',
+            confirmButtonColor: '#81c784',
+            focusConfirm: false,
+            imageUrl: url,
+            imageWidth: 'auto',
+            imageHeight: 200,
+            imageAlt: 'Foto de perfil actual',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                showEditNoPss();
+            }
+        })
     }
 
     
@@ -88,7 +107,7 @@ function LogedMenu() {
             focusConfirm: false,
             preConfirm: async () => {
                 let pass = (Swal.getPopup().querySelector('#password-ep') as HTMLInputElement).value
-                console.log(pass)
+            
                 passwordSchema.validate({password:pass}).then(() => {
 
                     let confirmPass = (Swal.getPopup().querySelector('#rpassword-ep') as HTMLInputElement).value
@@ -108,7 +127,7 @@ function LogedMenu() {
                         
                     }
                 }).catch( e => {
-                    console.log("error    " + e)
+                  
                     let errorMessage = (e as string)
                     fieldsValidation.showError("No se ha podido actualizar la contraseña", errorMessage, showEdit);
                 })
@@ -136,8 +155,8 @@ function LogedMenu() {
                     <input type="text" id="name-ep" class="swal2-input" placeholder=` + user.username + `>
                     <label for="webid-ep" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
-                    <label for="biagrafia-ep" class="swal2-label">Descripción: </label>
-                    <textarea rows="5" id="biografia-ep" class="swal2-input" placeholder="Descripción"></textarea>`,
+                    <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
+                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="Biografía..."></textarea>`,
             confirmButtonText: 'Editar',
             denyButtonText: 'Cambiar contraseña',
             showDenyButton: true,
@@ -151,33 +170,29 @@ function LogedMenu() {
             preConfirm: () => {
                 let name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).value
                 let webid = (Swal.getPopup().querySelector('#webid-ep') as HTMLInputElement).value
-                let descripcion = (Swal.getPopup().querySelector('#biografia-ep') as HTMLInputElement).value
+                let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
 
-                if(!name && !webid && !descripcion){
+                if(!name && !webid && !biography){
                     showQuestion();
                 } else{
 
                     if(!name)
                         name = user.username as string;
                     
-                    console.log(webid)
                     if(!webid)
                         webid = user.webID as string;
-                        
-                    console.log("el de verdad --> ", webid)
                     
-                    if(!descripcion)
-                        descripcion = "..."; // Cambiarlo por user.biography
+                    if(!biography)
+                        biography = "..."; // Cambiarlo por user.biography
 
                     editSchema.validate({
                         username: name,
                         webID: webid,
-                        biography: descripcion
+                        biography: biography
                     }).then(() => {
                         user = {username: name, webID: webid, password: user.password }
                         return user;
                     }).catch( e => {
-                        console.log("error    " + e)
                         let errorMessage = (e as string)
                         fieldsValidation.showError("No se ha podido actualizar el perfil", errorMessage, showEditNoPss);
                     })
