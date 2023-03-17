@@ -10,8 +10,11 @@ import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
-import { getUserInSesion } from '../../api/api';
+import { getUserDetails, getUserInSesion } from '../../api/api';
 import Swal from 'sweetalert2';
+import PersonIcon from '@mui/icons-material/Person';
+import EditIcon from '@mui/icons-material/Edit';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -35,7 +38,6 @@ function LogedMenu() {
 
     const getProfile = () => {
         closeUserMenu();
-        console.log("enserio?")
         //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Rellenar formulario read only 
     }
@@ -160,13 +162,13 @@ function LogedMenu() {
                 onClose={closeUserMenu}
             >
                 <MenuItem key={uuid()} onClick={getProfile}>
-                    Profile
+                    <PersonIcon /> Profile
                 </MenuItem>
                 <MenuItem key={uuid()} onClick={showEditNoPss}>
-                    Edit profile
+                    <EditIcon /> Edit profile
                 </MenuItem>
                 <MenuItem key={uuid()} onClick={goLogout}>
-                    Logout
+                    <LogoutIcon /> Logout
                 </MenuItem>
             </MyMenu>
         </BoxProfile>

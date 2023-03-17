@@ -52,6 +52,22 @@ export async function login(user: User): Promise<User> {
         case 200: return response.json();
         default: throw new Error("Unexpected error");
     }
+}
 
+export async function getUserDetails(): Promise<User> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/usermanager/details');
+    //The objects returned by the api are directly convertible to User objects
+    return response.json()
+}
 
+export async function editUserDetails(user: User): Promise<User> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/usermanager/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
+    //The objects returned by the api are directly convertible to User objects
+    return response.json()
 }
