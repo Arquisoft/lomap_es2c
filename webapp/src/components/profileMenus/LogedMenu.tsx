@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
-import { getUserInSesion } from '../../api/api';
+import { getUserDetails, getUserInSesion } from '../../api/api';
 import Swal from 'sweetalert2';
 import * as fieldsValidation from '../../utils/fieldsValidation';
 
@@ -264,13 +264,13 @@ function LogedMenu() {
                 onClose={closeUserMenu}
             >
                 <MenuItem key={uuid()} onClick={getProfile}>
-                    Profile
+                    <PersonIcon /> Profile
                 </MenuItem>
                 <MenuItem key={uuid()} onClick={showEditNoPss}>
-                    Edit profile
+                    <EditIcon /> Edit profile
                 </MenuItem>
                 <MenuItem key={uuid()} onClick={goLogout}>
-                    Logout
+                    <LogoutIcon /> Logout
                 </MenuItem>
             </MyMenu>
         </BoxProfile>
