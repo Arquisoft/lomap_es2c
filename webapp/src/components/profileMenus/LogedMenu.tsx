@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
 import { getUserInSesion } from '../../api/api';
 import Swal from 'sweetalert2';
+import * as fieldsValidation from '../../utils/fieldsValidation';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -31,36 +32,91 @@ const MyMenu = styled(Menu)({
 
 function LogedMenu() {
 
+
+    const passwordSchema = fieldsValidation.passwordValidation;
+
+    const editSchema = fieldsValidation.editProfileValidation;
+
+    
     //#region METODOS DE CLASE
 
     const getProfile = () => {
         closeUserMenu();
-        console.log("enserio?")
         //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
         //Rellenar formulario read only 
+    }
+
+    
+
+    const showQuestion = () => {
+        Swal.fire({
+            title: "Cancelar edición",
+            text: "No se ha realizado ningún cambio. ¿Desea abandonar la edición del perfil?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#81c784',
+            cancelButtonColor: 'grey',
+            confirmButtonText: 'Salir sin editar',
+            cancelButtonText: 'Volver'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.close();
+            } else {
+                showEditNoPss()
+            }
+          })
     }
 
     async function showEdit(): Promise<void> {
         closeUserMenu();
         let user = await getUserInSesion();
         Swal.fire({
-            title: 'Edita tu perfil',
-            html: `<input type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña">
-                    <input type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> `,
+            title: 'Cambiar contraseña',
+            html: `<label for="opassword-ep" class="swal2-label">Contraseña actual: </label>
+                    <input type="password" id="opassword-ep" class="swal2-input" placeholder="Contraseña actual" {...register("password")}>
+                    <label for="password-ep" class="swal2-label">Nueva contraseña: </label>
+                    <input type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
+                    <label for="rpassword-ep" class="swal2-label">Confirmar nueva contraseña: </label>
+                    <input type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
+                    `,
+            
             confirmButtonText: 'Cambiar contraseña',
             denyButtonText: 'Volver',
             confirmButtonColor: '#81c784',
             denyButtonColor: 'grey',
             showDenyButton: true,
             focusConfirm: false,
-            preConfirm: () => {
-                let pssw = (Swal.getPopup().querySelector('#password-ep') as HTMLInputElement).value
-                let rpssw = (Swal.getPopup().querySelector('#rpassword-ep') as HTMLInputElement).value
-                return { username: user.username, webID: user.webID, password: user.password }
+            preConfirm: async () => {
+                let pass = (Swal.getPopup().querySelector('#password-ep') as HTMLInputElement).value
+                console.log(pass)
+                passwordSchema.validate({password:pass}).then(() => {
+
+                    let confirmPass = (Swal.getPopup().querySelector('#rpassword-ep') as HTMLInputElement).value
+
+                    if(fieldsValidation.checkPasswords(pass, confirmPass)){
+                        let oldPassword = (Swal.getPopup().querySelector('#opassword-ep') as HTMLInputElement).value
+                        
+                        if(oldPassword === oldPassword){ // Comprobar con la guardada en la BD
+                            user = { username: user.username, webID: user.webID, password: pass };
+                            return user;
+                        } else {
+                            fieldsValidation.showError("No se ha podido actualizar la contraseña", "Contraseña actual incorrecta", showEdit);
+                        }
+                    }
+                    else {
+                        fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", showEdit);
+                        
+                    }
+                }).catch( e => {
+                    console.log("error    " + e)
+                    let errorMessage = (e as string)
+                    fieldsValidation.showError("No se ha podido actualizar la contraseña", errorMessage, showEdit);
+                })
+                
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                editProfile(result.value);
+                editProfile(user);
             } else if (result.isDenied) {
                 showEditNoPss();
             }
@@ -76,8 +132,11 @@ function LogedMenu() {
         let user = await getUserInSesion();
         Swal.fire({
             title: 'Edita tu perfil',
-            html: `<input type="text" id="name-ep" class="swal2-input" placeholder=` + user.username + `>
+            html: ` <label for="name-ep" class="swal2-label">Nombre de usuario: </label>
+                    <input type="text" id="name-ep" class="swal2-input" placeholder=` + user.username + `>
+                    <label for="webid-ep" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
+                    <label for="biagrafia-ep" class="swal2-label">Descripción: </label>
                     <textarea rows="5" id="biografia-ep" class="swal2-input" placeholder="Descripción"></textarea>`,
             confirmButtonText: 'Editar',
             denyButtonText: 'Cambiar contraseña',
@@ -85,18 +144,48 @@ function LogedMenu() {
             confirmButtonColor: '#81c784',
             denyButtonColor: 'grey',
             focusConfirm: false,
+            imageUrl: url,
+            imageWidth: 'auto',
+            imageHeight: 200,
+            imageAlt: 'Foto de perfil actual',
             preConfirm: () => {
                 let name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).value
                 let webid = (Swal.getPopup().querySelector('#webid-ep') as HTMLInputElement).value
                 let descripcion = (Swal.getPopup().querySelector('#biografia-ep') as HTMLInputElement).value
-                if (!name || !webid) {
-                    name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).placeholder
+
+                if(!name && !webid && !descripcion){
+                    showQuestion();
+                } else{
+
+                    if(!name)
+                        name = user.username as string;
+                    
+                    console.log(webid)
+                    if(!webid)
+                        webid = user.webID as string;
+                        
+                    console.log("el de verdad --> ", webid)
+                    
+                    if(!descripcion)
+                        descripcion = "..."; // Cambiarlo por user.biography
+
+                    editSchema.validate({
+                        username: name,
+                        webID: webid,
+                        biography: descripcion
+                    }).then(() => {
+                        user = {username: name, webID: webid, password: user.password }
+                        return user;
+                    }).catch( e => {
+                        console.log("error    " + e)
+                        let errorMessage = (e as string)
+                        fieldsValidation.showError("No se ha podido actualizar el perfil", errorMessage, showEditNoPss);
+                    })
                 }
-                return { username: name, webID: webid, password: user.password }
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                editProfile(result.value);
+                editProfile(user);
             } else if (result.isDenied) {
                 showEdit();
             }
