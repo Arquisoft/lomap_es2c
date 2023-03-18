@@ -16,6 +16,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
+import { TextField } from '@mui/material';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -33,6 +34,12 @@ const MyMenu = styled(Menu)({
 
 //#endregion
 
+//#region DEFINICION DE COMPONENTES PERSONALIZADOS
+
+function LoginInformation(props:any) {
+    return <b><p>Se ha iniciado sesión como {props.name}</p></b>;
+  }
+//#endregion
 function LogedMenu() {
 
 
@@ -242,10 +249,13 @@ function LogedMenu() {
 
     //#endregion
 
+    getUsername()
+    
     return (
+        
         //#region COMPONENTE
         <BoxProfile>
-            <b><p>Sesión iniciada como {getUsername()}{username}</p></b>
+            <LoginInformation name={username} />
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />

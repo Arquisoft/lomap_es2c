@@ -13,9 +13,23 @@ const MapContainer = styled(Container)({
 
 })
 
+function CSSLeafletLink(){
+    return  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossOrigin=""/>;
+}
+
+function ScriptLeafletLink(){
+    return <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossOrigin=""></script>;
+}
+
 export function MapPage() {
     return (
         <MapContainer disableGutters>
+            <CSSLeafletLink/>
+            <ScriptLeafletLink/>
             <LeftWindow />
             <MapComponent />
         </MapContainer>
