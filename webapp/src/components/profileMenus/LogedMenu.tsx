@@ -12,6 +12,9 @@ import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
 import { getUserDetails, getUserInSesion } from '../../api/api';
 import Swal from 'sweetalert2';
+import PersonIcon from '@mui/icons-material/Person';
+import EditIcon from '@mui/icons-material/Edit';
+import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
 
 //#region DEFINICION DE COMPONENTES STYLED
