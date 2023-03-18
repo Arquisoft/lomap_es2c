@@ -1,8 +1,9 @@
 import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager } from './controllers/UserManager'
+import { Place } from './entities/Place';
 
-export { FactoryLoMap };
-export type { User, SesionManager };
+export { FactoryLoMap, Group, Place };
+export type { User, SesionManager, MapManager, PODManager };
 
 interface SesionManager {
     cerrarSesion: () => boolean;
@@ -17,9 +18,9 @@ interface SesionManager {
 //#region FACADE
 
 interface MapManager {
-    verMapaDe: (user: User) => Group[];
+    verMapaDe: (user: User) => Promise<Group[]>;
     añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
-    crearGrupo: (nombre: Group) => Group;
+    crearGrupo: (nombre: String) => Group;
     eliminarGrupo: (grupo: Group) => boolean;
     eliminarLugarDeGrupo: (lugar: Place, grupo: Group) => Group;
     aplicarFiltro: (grupo: Group, filtro: string) => Place[];
@@ -37,6 +38,13 @@ interface FriendManager {
 
 //#endregion
 
+interface PODManager {
+    guardarCoord: (WebID: String, Coor: String) => null;
+    getCoordenadas: (WebID: String) => Place[];
+    guardarGrupo: (WebID: String, Group: Group) => null;
+    getGrupos: (WebID: String) => Group[];
+}
+
 //#region INTERFACES AUXILIARES
 
 class FactoryLoMap {
@@ -52,13 +60,18 @@ class FactoryLoMap {
 
 //#region CLASES DE EJEMPLO PARA FUNCIONAR
 class FriendRequest { }
-class Group { }
-class Place { }
+// class Group { }
+// class Place { }
 //#endregion
 
 interface User {
     username: String
     password: String
     webID: String
+}
+
+interface Group{
+    name: String
+    places: Place[]
 }
 

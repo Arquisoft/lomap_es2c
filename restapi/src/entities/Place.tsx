@@ -1,4 +1,4 @@
-
+export { Place }
 class Place {
     name: String
     street: String
