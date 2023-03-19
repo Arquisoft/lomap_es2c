@@ -48,7 +48,9 @@ export async function login(user: User): Promise<User> {
     });
     //The objects returned by the api are directly convertible to User objects
     switch (response.status) {
-        case 505: throw new Error("Fallo login");
+        case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 200: return response.json();
         default: throw new Error("Unexpected error");
     }

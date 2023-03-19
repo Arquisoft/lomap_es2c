@@ -61,7 +61,11 @@ export function Header(props: { logged: boolean }) {
     //#region METODOS DE CLASE
 
     const goHome = () => {
-        //redirect to main page
+        if (props.logged == true) {
+            navigate("/home");
+        } else {
+            navigate("/");
+        }
     };
 
     const getMode = () => {
