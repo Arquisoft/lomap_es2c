@@ -75,5 +75,5 @@ A table with columns <Library> and <Definition>.
 [options="header",cols="1,2"]
 |===
 |Librería|Explicación
-| moongose | Librería que facilita la integración de una base de datos MongoDB y Node.js
+| mongoose | Librería que facilita la integración de una base de datos MongoDB y Node.js
 |===
