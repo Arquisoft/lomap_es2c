@@ -1,18 +1,18 @@
-import { Box } from '@mui/material'
-import React from 'react'
+import { Box, Collapse, Divider } from '@mui/material'
+import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
+import MapIcon from '@mui/icons-material/Map';
+import { getMyGroups, getUserInSesion } from '../../api/api';
+import { Group, User } from '../../shared/shareddtypes';
+import AddIcon from '@mui/icons-material/Add';
+import { ExpandLess } from '@mui/icons-material';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import PlaceIcon from '@mui/icons-material/Place';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -20,88 +20,104 @@ const ScrollBox = styled(Box)({
     scrollbarColor: 'black white'
 })
 
+const AddItem = styled(ListItemButton)({
+    color: '#81c784',
+})
+
 export const MapsManagerPanel = () => {
 
-    const [open, setOpen] = React.useState(
-        [
-            false,
-            false,
-            false,
-        ]
-    );
+    const userGroups = () => {
+        let myGroups: Group[] = [];
+        getUserInSesion().then(function (user) {
+            getMyGroups(user).then(function (groups) {
+                for (let i = 0; i < groups.length; i++) {
+                    myGroups.push(groups[i]);
+                }
+            })
+        })
+        myGroups.push({
+            "nombre": "grupo1",
+            "places": [{
+                "latitude": "5",
+                "longitud": "6",
+                "nombre": "Lugar 1"
+            }, {
+                "latitude": "5",
+                "longitud": "6",
+                "nombre": "Lugar 1"
+            }]
+        })
+        return myGroups;
+    }
 
-    const handleClick = (item: number) => {
-        open[item] = !open[item]
-        setOpen([
-            open[0],
-            open[1],
-            open[2],
-        ])
-        console.log(open)
+    const [groups, setGroups] = useState(userGroups())
+
+    const updateGroups = () => {
+        setGroups(userGroups())
+    }
+
+    const addGroup = () => {
+        updateGroups()
+    }
+
+    const handleClick = (i: number) => {
+
     }
 
     return (
-        <List
-            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-            subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                    Tus grupos de mapas
-                </ListSubheader>
-            }
-        >
-            <ListItemButton onClick={() => handleClick(0)}>
-                <ListItemIcon>
-                    <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary="Inbox" />
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open[0]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemIcon>
-                            <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText primary="Starred" />
-                    </ListItemButton>
-                </List>
-            </Collapse>
-            <ListItemButton onClick={() => handleClick(1)}>
-                <ListItemIcon>
-                    <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary="Inbox" />
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open[1]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemIcon>
-                            <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText primary="Starred" />
-                    </ListItemButton>
-                </List>
-            </Collapse>
-            <ListItemButton onClick={() => handleClick(2)}>
-                <ListItemIcon>
-                    <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary="Inbox" />
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open[2]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }}>
-                        <ListItemIcon>
-                            <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText primary="Starred" />
-                    </ListItemButton>
-                </List>
-            </Collapse>
-        </List>
+        <ScrollBox>
+            <List onLoad={updateGroups}
+                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                subheader={
+                    <ListSubheader component="div" id="nested-list-subheader">
+                        Tus grupos de mapas
+                    </ListSubheader>
+                }
+            >
+                <AddItem onClick={() => addGroup()}>
+                    <ListItemIcon>
+                        <AddIcon htmlColor='#81c784' />
+                    </ListItemIcon>
+                    <ListItemText primary="Añadir" />
+                </AddItem>
+                <Divider light color="#81c784" />
+                {groups.map((group, i) => {
+                    return (
+                        <>
+                            <ListItemButton onClick={() => handleClick(i)}>
+                                <ListItemIcon>
+                                    <MapIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={group.nombre} />
+                                <ExpandLess />
+                            </ListItemButton>
+                            <Collapse in={true} timeout="auto" unmountOnExit>
+                                <List component="div" disablePadding>
+                                    {group.places.map((place, j) => {
+                                        return (
+                                            <>
+                                                <ListItemButton sx={{ pl: 4 }}>
+                                                    <ListItemIcon>
+                                                        <PlaceIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={place.nombre} />
+                                                    <SentimentSatisfiedAltIcon htmlColor="green" />
+                                                </ListItemButton>
+                                            </>
+                                        )
+                                    })}
+                                </List>
+                            </Collapse>
+                        </>
+                    )
+                })}
+            </List>
+        </ScrollBox>
     )
 }
+function getMyMaps(user: User) {
+    throw new Error('Function not implemented.');
+}
+
