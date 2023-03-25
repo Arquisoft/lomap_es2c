@@ -83,3 +83,12 @@ export async function getMyGroups(user: User): Promise<Group[]> {
     });
     return response.json()
 }
+export async function getMyFriends(user: User): Promise<User[]> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/friendmanager/friends', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
+    return response.json()
+}

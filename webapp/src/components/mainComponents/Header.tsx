@@ -89,7 +89,7 @@ export function Header(props: { logged: boolean }) {
                         key={uuid()}
                         onClick={goHome}
                     >
-                        <img id="imgLogo" src="../nobgLogo.png"></img>
+                        <img id="imgLogo" src="nobgLogo.png"></img>
                     </ButtonHOME>
                     <BoxNAV>
                     </BoxNAV>

@@ -244,8 +244,8 @@ function LogedMenu() {
 
     return (
         //#region COMPONENTE
-        <BoxProfile>
-            <b><p>Sesión iniciada como {getUsername()}{username}</p></b>
+        <BoxProfile onLoad={getUsername}>
+            <b><p>Sesión iniciada como {username}</p></b>
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />

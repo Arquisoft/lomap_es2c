@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import { createTheme, Tabs, ThemeProvider } from '@mui/material';
 import { MapsManagerPanel } from './MapsManagerPanel';
 import { FriendManagerPanel } from './FriendManagerPanel';
+import { showError } from '../../utils/fieldsValidation';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
