@@ -91,8 +91,11 @@ async function modificarUsuario(user: User) {
 
     const mongoose = require('mongoose');
     mongoose.set('strictQuery', true);
-
-    await mongoose.connect(uri);
+    try{
+        await mongoose.connect(uri);
+    }catch{
+        return new UserImpl("bderror","","");
+    }
 
     const userSchema = new mongoose.Schema({
         username: String,
@@ -103,7 +106,14 @@ async function modificarUsuario(user: User) {
 
     const usuario = mongoose.model('users', userSchema);
 
-    const resultado = await usuario.updateOne({ username: user.username }, { webid: user.webID, password: user.password });
+    let resultado;
+    try{
+        resultado=await usuario.updateOne({ username: user.username }, { webid: user.webID, password: user.password });
+    }catch{
+        return new UserImpl("bderror","","");
+    }
+
+    if(resultado.modifiedCount==0){ return new UserImpl("notfound","","") }
     console.log(resultado.modifiedCount);
 
     mongoose.connection.close();
