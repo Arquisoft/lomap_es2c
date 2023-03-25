@@ -55,10 +55,10 @@ class FriendManagerImpl implements FriendManager {
 
 
 
-        return null;
+        return new FriendRequest(de,a,false);
     }
     async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-
+        solicitud.status=true;
         const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
 
         const mongoose = require('mongoose');
@@ -98,13 +98,13 @@ class FriendManagerImpl implements FriendManager {
 
         mongoose.connection.close();
 
-        return null;
+        return solicitud;
 
 
 
     }
     async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-
+        solicitud.status=false;
         const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
 
         const mongoose = require('mongoose');
@@ -121,14 +121,10 @@ class FriendManagerImpl implements FriendManager {
         const usuario = mongoose.model('friendrequests', userSchema);
 
         const resultado = await usuario.updateOne({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: "rechazada" });
-        return null;
+        return solicitud;
 
     }
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
-
-
-
-
 
         const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
         const mongoose = require('mongoose');
