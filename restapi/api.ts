@@ -34,6 +34,42 @@ api.post(
     }
 );
 
+api.post(
+    "/usermanager/edit", [
+        check('name').isLength({ min: 1 }).trim().escape(),
+        check('email').isEmail().normalizeEmail(),
+    ],
+    async (req: Request, res: Response): Promise<Response> => {
+        let user=req.body.user;
+
+        let u=fac.FactoryLoMap.getUserManager().modificarPerfil(user);
+        return res.sendStatus(200).send(u);
+    }
+);
+
+api.post(
+    "/usermanager/details", [
+        check('name').isLength({ min: 1 }).trim().escape(),
+        check('email').isEmail().normalizeEmail(),
+    ],
+    async (req: Request, res: Response): Promise<Response> => {
+        let user=req.body.user;
+            let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
+            if(u.username=="notfound"){
+                return res.sendStatus(507).send("Usuario no encontrado para listar detalle");
+            }else if("bderror"){
+                return res.sendStatus(508).send("Error en la conexión con la base de datos");
+            }
+            else{
+                return res.sendStatus(200).send(u);
+            }
+    }
+);
+
+
+
+
+
 api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Response> => {
     console.log("hi")
     let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();

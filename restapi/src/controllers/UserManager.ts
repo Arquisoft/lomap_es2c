@@ -26,9 +26,11 @@ async function buscarUsuarioPorUsername(u: User) {
     const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
     const mongoose = require('mongoose');
     mongoose.set('strictQuery', true);
-
+    try{
     await mongoose.connect(uri);
-
+    }catch{
+        return new UserImpl("bderror","","");
+    }
     const userSchema = new mongoose.Schema({
         username: String,
         password: String,
@@ -36,12 +38,17 @@ async function buscarUsuarioPorUsername(u: User) {
         img: String
     });
 
+    let resultado;
 
     const usuario = mongoose.model('users', userSchema);
+    try{
+        resultado= await usuario.findOne({ username: u.username });
+    }catch{
+        return new UserImpl("bderror","","");
+    }
 
-    let resultado = await usuario.findOne({ username: u.username });
+    if (resultado == null) { return new UserImpl("notfound","","") };
 
-    if (resultado == null) { return null };
     console.log(resultado);
     resultado = resultado.toString();
     mongoose.connection.close();
