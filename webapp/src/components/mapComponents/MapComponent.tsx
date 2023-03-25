@@ -1,52 +1,89 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
-import { LeftWindow } from '../windowComponents/LeftWindow'
 import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
-import { useState } from 'react';
 import L from 'leaflet';
+import { AddPlace } from './AddPlaceComponent';
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 
 const MapBox = styled(Box)({
     minWidth: "75vw",
     backgroundColor: "brown"
 })
 
-
 export const MapComponent = () => {
 
-    function onMapClick(e:any) {
-        alert("You clicked the map at " + e.latlng);
-    }
+    const [url, setUrl] = useState("../add-point.png");
 
+    var addIcon = L.icon({
+        iconUrl: url,
     
-    function Prueba():any {
-        const map = useMap()
-        map.on('click', onMapClick);
-        console.log('map center:', map.getCenter())
-        L.circle([51.508, -0.11], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5,
-            radius: 500
-        }).addTo(map);
-        return null
-  }
+        iconSize:     [38, 55], // size of the icon
+        shadowSize:   [50, 64], // size of the shadow
+        iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        shadowAnchor: [4, 62],  // the same for the shadow
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+
+    function onMapClick(e:any) {
+        // AddPlaceComponent("prueba", "porfa", null)
+         addd(e.latlng[0], e.latlng[1])
+         //alert("You clicked the map at " + e.latlng);
+     }
+ 
+     
+     function Prueba():any {
+         const map = useMap()
+         map.on('click', onMapClick);
+         
+         return null
+   }
+ 
+   function addd(long:number, lat:number):any {
+     return <Marker position={[lat,long]} icon={addIcon}>
+                  <Popup keepInView={true}>
+                 <button>añadir lugar</button>
+                  </Popup>
+              </Marker>
+ }
+ 
+ 
+   function Markers():any {
+        return <Marker position={[50.8504500, 4.3487800]} icon={addIcon}>
+                     <Popup keepInView={true}>
+                    <button>añadir lugar</button>
+                     </Popup>
+                 </Marker>
+   }
+
+    const mapRef = useRef<L.Map>(null);
+  
+    useEffect(() => {
+      if (mapRef.current) {
+        mapRef.current.setView([51.505, -0.09], 13);
+      }
+    }, []);
+  
     return (
-        <MapBox>
-            <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
-                
-                <TileLayer
+      <MapContainer
+        center={[51.505, -0.09]}
+        zoom={13}
+        style={{ height: '100vh', width: '100vw' }}
+        whenCreated={(map:any) => {
+           mapRef.current = map;
+        }}
+      >
+       <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Prueba/>
-                <Marker position={[51.505, -0.09]}>
-                    <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                </Marker>
-            </MapContainer>
-        </MapBox>
-    )
-}
+        <Marker position={[51.505, -0.09]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+      </MapContainer>
+    );
+  };
+  
+
