@@ -4,6 +4,17 @@ export interface User {
     webID: String
 }
 
+export interface Group {
+    places: Place[]
+    nombre: String
+}
+
+export interface Place {
+    latitude: String
+    longitud: String
+    nombre: String
+}
+
 export type User2 = {
     name: string;
     email: string;

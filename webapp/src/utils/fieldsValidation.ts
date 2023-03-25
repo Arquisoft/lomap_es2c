@@ -1,14 +1,14 @@
 import * as yup from "yup";
 import Swal from 'sweetalert2';
 
-export function showError (errorTitle: string, errorMessage: string, f: () => any) {
+export function showError(errorTitle: string, errorMessage: string, f: () => any) {
     Swal.fire({
         icon: 'error',
         title: errorTitle,
         text: errorMessage,
         confirmButtonColor: '#81c784',
     }).then((result) => {
-        if(result.isConfirmed)
+        if (result.isConfirmed)
             f();
     });
 }
@@ -17,13 +17,16 @@ export function checkPasswords(pass: String, confirmPass: String) {
     return confirmPass === pass
 }
 
-const usernameConstraints = yup.string().matches(/^[A-Za-z][A-Za-z0-9]+$/, "El nombre de usuario debe de empezar por una letra")
-                                            .min(6, "El nombre de usuario debe de tener entre 6 y 10 caracteres")
-                                                .max(10, "El nombre de usuario debe de tener entre 6 y 10 caracteres");
+const usernameConstraints = yup.string().matches(/^[A-Za-z0-9]+$/, "El nombre de usuario debe de empezar por una letra")
+    .min(6, "El nombre de usuario debe de tener entre 6 y 10 caracteres")
+    .max(10, "El nombre de usuario debe de tener entre 6 y 10 caracteres");
 
-const passwordConstraints = yup.string().matches(/^[A-Za-z0-9]+$/, 'La contraseña no puede contener caracteres especiales')
-                                            .min(8, "La contraseña debe de tener una longitud mínima de 8 caracteres")
-                                                .max(24, "La contraseña debe de tener una longitud mínima de 24 caracteres"); 
+const passwordConstraints = yup.string()
+    .matches(/^.*[0-9].*$/, 'La contraseña debe contener al menos un número')
+    .matches(/^.*[A-Z].*$/, 'La contraseña debe contener al menos una letra mayúscula')
+    .matches(/^.*\W.*$/, 'La contraseña debe contener al menos un caracter especial')
+    .min(8, "La contraseña debe de tener una longitud mínima de 8 caracteres")
+    .max(24, "La contraseña debe de tener una longitud máxima de 24 caracteres");
 
 const webIDConstraints = yup.string().min(15, "Introduce un webID válido").matches(/^https:\/\/.*$/, "Introduce un webID válido");
 
@@ -34,7 +37,7 @@ export const signupValidationSchema = yup.object({
     username: usernameConstraints.required("Debe de introducir un nombre de usuario"),
     webID: webIDConstraints.required(),
     password: passwordConstraints.required("Debe de introducir una contraseña"),
-  }).required();
+}).required();
 
 
 export const editProfileValidation = yup.object({

@@ -57,4 +57,9 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
     //IF / ELSES CON CADA POSIBLE ERROR Y EL STATUS ASOCIADO
 })
 
+api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {
+    let userRes = await fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
+    return res.status(200).send(userRes);
+})
+
 export default api;
