@@ -91,3 +91,31 @@ class MapManagerImpl implements MapManager {
     }
 
 }
+
+
+const map = new MapManagerImpl()
+
+const place:Place = {
+    name: "name",
+    street: "street",
+    postalcode: "postalcode",
+    city: "city",
+    country: "country",
+    coordinates: "coordinate",
+    review: "review",
+    score: "score",
+    image: "image"
+}
+
+const user:User = {
+    username: "security",
+    password: "pruebaSecurity",
+    webID: "123456"
+}
+
+const group:Group = {
+    name: "Grupo",
+    places: [place]
+}
+
+console.log(map.mostrarGrupo(group))

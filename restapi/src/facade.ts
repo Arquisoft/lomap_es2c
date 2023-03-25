@@ -3,8 +3,8 @@ import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager } from './controllers/UserManager'
 import { Place } from './entities/Place';
 
-export { FactoryLoMap, Group, Place };
-export type { User, SesionManager, MapManager, PODManager };
+export { FactoryLoMap, Place };
+export type { User, SesionManager, MapManager, PODManager, Group };
 
 interface SesionManager {
     cerrarSesion: () => boolean;
