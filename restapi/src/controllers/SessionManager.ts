@@ -2,7 +2,7 @@ import UserSchema from "../entities/UserSchema";
 import { User, SesionManager } from "../facade";
 export { UserSesionManager };
 
-const sessionStorage = require('sessionstorage-for-nodejs')
+const sessionStorage = require('node-sessionstorage')
 
 class UserSesionManager implements SesionManager {
     // userInSession: User | null;

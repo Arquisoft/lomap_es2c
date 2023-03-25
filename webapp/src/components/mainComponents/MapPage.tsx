@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import { LeftWindow } from '../windowComponents/LeftWindow'
@@ -26,6 +26,9 @@ function ScriptLeafletLink(){
 }
 
 export function MapPage() {
+
+
+
     return (
         <MapContainer disableGutters>
             <CSSLeafletLink/>

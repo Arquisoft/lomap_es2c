@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
-import { getUserDetails, getUserInSesion } from '../../api/api';
+import { getUserInSesion } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
@@ -47,7 +47,7 @@ function LogedMenu() {
 
     const editSchema = fieldsValidation.editProfileValidation;
 
-    
+
     //#region METODOS DE CLASE
 
     const getProfile = async () => {
@@ -75,7 +75,7 @@ function LogedMenu() {
         })
     }
 
-    
+
 
     const showQuestion = () => {
         Swal.fire({
@@ -87,13 +87,13 @@ function LogedMenu() {
             cancelButtonColor: 'grey',
             confirmButtonText: 'Salir sin editar',
             cancelButtonText: 'Volver'
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-              Swal.close();
+                Swal.close();
             } else {
                 showEditNoPss()
             }
-          })
+        })
     }
 
     async function showEdit(): Promise<void> {
@@ -108,7 +108,7 @@ function LogedMenu() {
                     <label for="rpassword-ep" class="swal2-label">Confirmar nueva contraseña: </label>
                     <input type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
                     `,
-            
+
             confirmButtonText: 'Cambiar contraseña',
             denyButtonText: 'Volver',
             confirmButtonColor: '#81c784',
@@ -117,15 +117,15 @@ function LogedMenu() {
             focusConfirm: false,
             preConfirm: async () => {
                 let pass = (Swal.getPopup().querySelector('#password-ep') as HTMLInputElement).value
-            
-                passwordSchema.validate({password:pass}).then(() => {
+
+                passwordSchema.validate({ password: pass }).then(() => {
 
                     let confirmPass = (Swal.getPopup().querySelector('#rpassword-ep') as HTMLInputElement).value
 
-                    if(fieldsValidation.checkPasswords(pass, confirmPass)){
+                    if (fieldsValidation.checkPasswords(pass, confirmPass)) {
                         let oldPassword = (Swal.getPopup().querySelector('#opassword-ep') as HTMLInputElement).value
-                        
-                        if(oldPassword === oldPassword){ // Comprobar con la guardada en la BD
+
+                        if (oldPassword === oldPassword) { // Comprobar con la guardada en la BD
                             user = { username: user.username, webID: user.webID, password: pass };
                             return user;
                         } else {
@@ -134,14 +134,14 @@ function LogedMenu() {
                     }
                     else {
                         fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", showEdit);
-                        
+
                     }
-                }).catch( e => {
-                  
+                }).catch(e => {
+
                     let errorMessage = (e as string)
                     fieldsValidation.showError("No se ha podido actualizar la contraseña", errorMessage, showEdit);
                 })
-                
+
             }
         }).then((result) => {
             if (result.isConfirmed) {
@@ -182,17 +182,17 @@ function LogedMenu() {
                 let webid = (Swal.getPopup().querySelector('#webid-ep') as HTMLInputElement).value
                 let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
 
-                if(!name && !webid && !biography){
+                if (!name && !webid && !biography) {
                     showQuestion();
-                } else{
+                } else {
 
-                    if(!name)
+                    if (!name)
                         name = user.username as string;
-                    
-                    if(!webid)
+
+                    if (!webid)
                         webid = user.webID as string;
-                    
-                    if(!biography)
+
+                    if (!biography)
                         biography = "..."; // Cambiarlo por user.biography
 
                     editSchema.validate({
@@ -200,9 +200,9 @@ function LogedMenu() {
                         webID: webid,
                         biography: biography
                     }).then(() => {
-                        user = {username: name, webID: webid, password: user.password }
+                        user = { username: name, webID: webid, password: user.password }
                         return user;
-                    }).catch( e => {
+                    }).catch(e => {
                         let errorMessage = (e as string)
                         fieldsValidation.showError("No se ha podido actualizar el perfil", errorMessage, showEditNoPss);
                     })

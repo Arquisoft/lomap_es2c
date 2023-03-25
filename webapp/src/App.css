@@ -44,7 +44,8 @@ body {
     overflow-y: overlay;
 }
 
-#biography-ep, #biography-gp {
+#biography-ep,
+#biography-gp {
     height: 7em;
     resize: none;
 }
@@ -68,3 +69,6 @@ body.swal2-shown>[aria-hidden="true"] {
     width: 75vw;
     height: 75vh;
   }
+#homeA {
+    color: black;
+}

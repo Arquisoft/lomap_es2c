@@ -2,6 +2,7 @@ import React from 'react'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
@@ -71,6 +72,13 @@ const MainBox = styled(Box)({
 //#endregion
 
 export function HomePage() {
+
+    const navigate = useNavigate();
+
+    const goSignup = () => {
+        navigate("signup")
+    }
+
     return (
 
         //#region COMPONENTE
@@ -78,12 +86,13 @@ export function HomePage() {
             <HomeContainer>
                 <TextBox>
                     <img src="../logoCompleto.png"></img>
-                    <p>La empresa de desarrollo de software HappySw ha sido contratada por el ayuntamiento de la ciudad de Bruselas para desarrollar un sistema denominado LoMap en el que los ciudadanos puedan disponer de mapas personalizados sobre lugares y negocios locales de la ciudad.
-                        Los lugares que se incluirán en el mapa pueden ir desde tiendas a bares, restaurantes, paisajes, monumentos, etc.</p>
-                    <p>Los mapas personalizados estarán bajo control de los usuarios y la información compartida será almacenadas en el pod personal que cada usuario proporcione siguiendo los principios del proyecto SOLID.
-                        Aunque la empresa ha sido contratada por el ayuntamiento de una ciudad concreta, su intención es crear una solución de software genérica que pueda ser desplegada y utilizada en otras ciudades.</p>
-                    <p>El enfoque inicial es sobre los usuarios, permitiéndoles crear mapas personalizados de los lugares que les interesan.
-                        El siguiente paso podría ser permitir a los establecimientos (tiendas, restaurantes, etc.) crear sus propios espacios como una versión digital de su lugar físico.</p>
+                    <p>Bienvenido a LoMap, la aplicación que te permite organizar tu vida alrededor de los lugares que más te gustan.</p>
+                    <p>En nuestra aplicación podrás guardar todos los lugares que te gustan, te relajan y te encanta visitar una y otra vez. ¿Acabas de comer en el restaurante nuevco de la ciudad?,
+                        ¿descubriste un mirador al que necesitas ir con tu amor platónico?, ¿te has enamorado de la camarera de ese bar y necesitas volver?,
+                        Añade todos los lugares que quieras en LoMap y organizalos en los grupos que prefieras para tener toda tu vida a un solo click.</p>
+                    <p>Podrás añadir comentarios a cada lugar, fotos para recordar lo maravillosos que eran. Puedes añadir a tus amigos y compartir con ellos esos lugares
+                        a los que siempre se te olvida llevarles. No dudes, crea tu cuenta <a id="homeA" onClick={goSignup}>aquí</a> de forma gratuita y disfruta de nuestra aplicación.
+                    </p>
                 </TextBox>
                 <InfoBox>
                 </InfoBox>
