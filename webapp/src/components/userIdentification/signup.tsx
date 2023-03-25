@@ -64,7 +64,7 @@ const CSSTextField = styled(TextField)({
         },
     }, '.MuiFormHelperText-root': {
         color: 'white !important',
-      }
+    }
 });
 
 //#endregion
@@ -78,7 +78,7 @@ export function Signup() {
 
 
     const navigate = useNavigate();
-    
+
     const { register, handleSubmit, formState: { errors } } = useForm<UserSchema>({
         resolver: yupResolver(schema)
     });
@@ -94,7 +94,7 @@ export function Signup() {
 
     const trySignup = (user: UserSchema) => {
         if (user.username && user.webID && user.password) {
-            let newUser: User = {username: user.username, webID: user.webID, password: user.password};
+            let newUser: User = { username: user.username, webID: user.webID, password: user.password };
             if (fieldsValidation.checkPasswords(pass, confirmPass)) {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
@@ -124,7 +124,7 @@ export function Signup() {
         })
     }
 
-    
+
     const showLogin = () => {
         //Cambiar del Signup a Login component
         navigate("/login");

@@ -66,10 +66,11 @@ export function Footer() {
                             <li><a href="https://arquisoft.github.io/lomap_es2c/">Documentación</a></li>
                             <li><a href="https://www.inrupt.com/solid">Inrupt PODs</a></li>
                             <li><a href="https://www.uniovi.es/">Universidad de Oviedo</a></li>
+                            <li><a href="https://leafletjs.com/">Leafletjs (Mapa)</a></li>
                         </ul>
                     </LinkBox>
                     <RightsBox>
-                        <p><img width="35px" alt="Logo lomap_es2c" src="./nobgLogo.png" /> © LoMap es2c</p>
+                        <p><img width="35px" alt="Logo lomap_es2c" src="nobgLogo.png" /> © LoMap es2c</p>
                         <p>Proyecto Open Source bajo la autoría del equipo de desarrollo lomap_es2c y con la supervisión de la Universidad de Oviedo.</p>
                     </RightsBox>
                 </FooterBox>

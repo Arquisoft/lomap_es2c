@@ -15,6 +15,7 @@
         "express-prom-bundle": "^6.6.0",
         "express-validator": "^6.15.0",
         "mongoose": "^7.0.1",
+        "node-sessionstorage": "^1.0.0",
         "prom-client": "^14.1.1",
         "sessionstorage-for-nodejs": "^1.0.2"
     },

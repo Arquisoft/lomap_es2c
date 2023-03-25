@@ -75,7 +75,7 @@ export function Login() {
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
             if (userApi != null) {
-                navigate("/home");
+                navigate("/home/0");
             }
         }).catch((e) => {
             console.log(e.message)
