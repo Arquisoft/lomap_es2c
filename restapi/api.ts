@@ -50,16 +50,14 @@ api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<R
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
-    if (userRes.username == "passwordNotFound") {
-        return res.status(506).send("Contraseña errónea")
-    } else if(userRes.username == "userNotFound"){
-        return res.status(507).send("Usuario no encontrado")
-    }
-    else {
+    if (userRes.username == "passwordNotFound" || "userNotFound") {
+        return res.status(506).send("Usuario o contraseña errónea")
+    } else {
         return res.status(200).send(userRes);
         
     }
     //IF / ELSES CON CADA POSIBLE ERROR Y EL STATUS ASOCIADO
 })
+
 
 export default api;

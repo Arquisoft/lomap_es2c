@@ -1,3 +1,4 @@
+import { MapManagerImpl } from './controllers/MapManager';
 import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager } from './controllers/UserManager'
 import { Place } from './entities/Place';
@@ -54,6 +55,10 @@ class FactoryLoMap {
 
     static getSesionManager(): SesionManager {
         return new UserSesionManager();
+    }
+
+    static getMapManager(): MapManager {
+        return new MapManagerImpl();
     }
 }
 //#endregion
