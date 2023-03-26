@@ -69,6 +69,23 @@ body.swal2-shown>[aria-hidden="true"] {
     width: 75vw;
     height: 75vh;
   }
+
 #homeA {
     color: black;
+}
+
+#addPlaceDyn {
+    background: transparent; 
+    color:#81c784; 
+    border: 2px solid #81c784; 
+    border-radius: 6px; 
+    font-size:1.2em;
+}
+
+#addPlaceDyn:hover {
+    background: #81c784; 
+    color: black; 
+    border: 2px solid #81c784; 
+    border-radius: 6px; 
+    font-size:1.2em;
 }
