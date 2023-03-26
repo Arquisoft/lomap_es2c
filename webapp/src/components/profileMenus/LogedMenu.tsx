@@ -227,9 +227,8 @@ function LogedMenu() {
     };
 
     const getUsername = () => {
-        getUserInSesion().then(function (userReq) {
-            setUsername(userReq.username)
-        });
+        let user = getUserInSesion();
+        setUsername(user.username)
     }
 
     //#endregion

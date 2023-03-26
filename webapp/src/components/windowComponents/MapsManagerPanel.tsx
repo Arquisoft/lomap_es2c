@@ -36,12 +36,11 @@ export const MapsManagerPanel = () => {
 
     const userGroups = () => {
         let myGroups: Group[] = [];
-        getUserInSesion().then(function (user) {
-            getMyGroups(user).then(function (groups) {
-                for (let i = 0; i < groups.length; i++) {
-                    myGroups.push(groups[i]);
-                }
-            })
+        let user = getUserInSesion();
+        getMyGroups(user).then(function (groups) {
+            for (let i = 0; i < groups.length; i++) {
+                myGroups.push(groups[i]);
+            }
         })
         myGroups.push({
             "nombre": "grupo1",
