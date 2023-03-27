@@ -2,7 +2,7 @@ import UserSchema from "../entities/UserSchema";
 import { User, SesionManager } from "../facade";
 export { UserSesionManager };
 
-const sessionStorage = require('sessionstorage-for-nodejs')
+const sessionStorage = require('node-sessionstorage')
 
 class UserSesionManager implements SesionManager {
     // userInSession: User | null;
@@ -17,21 +17,16 @@ class UserSesionManager implements SesionManager {
         return true;
     }
 
-    registrarse(usuario: User) {
+    async registrarse(usuario: User): Promise<User> {
         // this.userInSession = usuario;
         sessionStorage.setItem('userInSession', JSON.stringify(usuario));
-        console.log("que")
-        console.log(sessionStorage.getItem('userInSession'))
-
         const usuarioSchema = new UserSchema({
             username: usuario.username,
             webID: usuario.webID,
             password: usuario.password
         });
 
-        console.log(usuarioSchema.username)
-
-        usuarioSchema.save();
+        await usuarioSchema.save();
         return usuario;
     }
 
@@ -51,13 +46,13 @@ class UserSesionManager implements SesionManager {
 
         if (usuarioEncontrado != null) {
             // this.userInSession = usuarioEncontrado
-            console.log(usuarioEncontrado)
             sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
-            return user;
+            return usuarioEncontrado;
         }
-
-        console.log("Usuario no encontrado");
-        return user
+        else {
+            sessionStorage.setItem('userInSession', null);
+            return null;
+        }
     }
 
 }
