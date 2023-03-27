@@ -6,9 +6,15 @@ class UserImpl implements User {
     password: String
     webID: String
 
-    constructor(username: String, password: String, webid: String) {
+    img:String;
+
+    constructor(username: String, password: String, webid: String,img?:String) {
         this.username = username
         this.password = password
         this.webID = webid
+        if(img){
+            this.img=img;
+        }
     }
+
 }

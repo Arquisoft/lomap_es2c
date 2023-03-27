@@ -2,9 +2,12 @@ import UserSchema from "../entities/UserSchema";
 import { User, SesionManager } from "../facade";
 export { UserSesionManager };
 
-const sessionStorage = require('node-sessionstorage')
+const sessionStorage = require('sessionstorage-for-nodejs')
+const bcrypt = require("bcryptjs");
 
 class UserSesionManager implements SesionManager {
+
+    rondasDeEncriptacion = 10
     // userInSession: User | null;
 
     constructor() {
@@ -23,7 +26,7 @@ class UserSesionManager implements SesionManager {
         const usuarioSchema = new UserSchema({
             username: usuario.username,
             webID: usuario.webID,
-            password: usuario.password
+            password: await bcrypt.hash(usuario.password, this.rondasDeEncriptacion)
         });
 
         await usuarioSchema.save();
@@ -40,19 +43,23 @@ class UserSesionManager implements SesionManager {
 
     async iniciarSesion(user: User): Promise<User> {
         let usuarioEncontrado = await UserSchema.findOne({
-            username: user.username,
-            password: user.password
+            username: user.username
+            //password: user.password
         });
 
         if (usuarioEncontrado != null) {
-            // this.userInSession = usuarioEncontrado
-            sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
-            return usuarioEncontrado;
+            if(await bcrypt.compare(user.password, usuarioEncontrado.password)){
+                // this.userInSession = usuarioEncontrado
+                console.log(usuarioEncontrado)
+                sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
+                return user;
+            }
+            user.username = "passwordNotFound";
+            return user;
         }
-        else {
-            sessionStorage.setItem('userInSession', null);
-            return null;
-        }
+        user.username = "userNotFound";
+        // console.log("Usuario no encontrado");
+        return user
     }
 
 }

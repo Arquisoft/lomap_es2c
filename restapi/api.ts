@@ -9,7 +9,7 @@ interface User {
     email: string;
 }
 
-//This is not a restapi as it mantains state but it is here for
+//This is not a restapi as it mantains state, but it is here for
 //simplicity. A database should be used instead.
 let users: Array<User> = [];
 
@@ -34,6 +34,41 @@ api.post(
     }
 );
 
+
+api.post(
+    "/usermanager/details", async (req: Request, res: Response): Promise<Response> => {
+        let user=req.body.user;
+            let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
+            if(u.username=="notfound"){
+                return res.status(507).send("Usuario no encontrado para listar detalle");
+            }else if(u.username=="bderror"){
+                return res.status(508).send("Error en la conexión con la base de datos");
+            }
+            else{
+                return res.status(200).send(u);
+            }
+    }
+);
+
+api.post(
+    "/usermanager/edit",
+    async (req: Request, res: Response): Promise<Response> => {
+        let user=req.body.user;
+        let u = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
+        if(u.username=="notfound"){
+            return res.status(507).send("Usuario no encontrado");
+        }else if(u.username=="bderror"){
+            return res.status(508).send("Error en la conexión con la base de datos");
+        }
+        else{
+            return res.status(200).send(u);
+        }
+    }
+);
+
+
+
+
 api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Response> => {
     let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
     return res.status(200).send(user);
@@ -48,11 +83,14 @@ api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<R
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
-    if (userRes != null) {
-        return res.status(200).send(userRes);
+    if (userRes.username == "passwordNotFound") {
+        return res.status(506).send("Contraseña errónea")
+    } else if(userRes.username == "userNotFound"){
+        return res.status(507).send("Usuario no encontrado")
     }
     else {
-        return res.status(505).send("Error de login")
+        return res.status(200).send(userRes);
+        
     }
     //IF / ELSES CON CADA POSIBLE ERROR Y EL STATUS ASOCIADO
 })

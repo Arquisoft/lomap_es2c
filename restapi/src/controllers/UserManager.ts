@@ -1,5 +1,6 @@
 import { UserImpl } from "../entities/User";
 import type { User } from "../facade";
+import mongoose from "mongoose";
 
 export type { UserManager };
 //import UserSchema from '../entities/UserSchema'
@@ -22,13 +23,12 @@ class UserManagerImpl implements UserManager {
 
 async function buscarUsuarioPorUsername(u: User) {
 
-    //const uri = "mongodb+srv://adrianfernandezalvarez02:6StwePBGphR8AJfa@cluster0.bty3mrz.mongodb.net/animales?retryWrites=true&w=majority";
-    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
-    const mongoose = require('mongoose');
-    mongoose.set('strictQuery', true);
-
+    const {uri, mongoose} = getBD();
+    try{
     await mongoose.connect(uri);
-
+    }catch{
+        return new UserImpl("bderror","","");
+    }
     const userSchema = new mongoose.Schema({
         username: String,
         password: String,
@@ -36,12 +36,17 @@ async function buscarUsuarioPorUsername(u: User) {
         img: String
     });
 
+    let resultado;
 
     const usuario = mongoose.model('users', userSchema);
+    try{
+        resultado= await usuario.findOne({ username: u.username });
+    }catch{
+        return new UserImpl("bderror","","");
+    }
 
-    let resultado = await usuario.findOne({ username: u.username });
+    if (resultado == null) { return new UserImpl("notfound","","") };
 
-    if (resultado == null) { return null };
     console.log(resultado);
     resultado = resultado.toString();
     mongoose.connection.close();
@@ -75,17 +80,21 @@ async function prueba() {
 }*/
 
 
-
+function getBD() {
+    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
+    const mongoose = require('mongoose');
+    mongoose.set('strictQuery', true);
+    return {uri, mongoose};
+}
 
 async function modificarUsuario(user: User) {
 
-    //const uri = "mongodb+srv://adrianfernandezalvarez02:6StwePBGphR8AJfa@cluster0.bty3mrz.mongodb.net/animales?retryWrites=true&w=majority";
-    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
-
-    const mongoose = require('mongoose');
-    mongoose.set('strictQuery', true);
-
-    await mongoose.connect(uri);
+    const {uri, mongoose} = getBD();
+    try{
+        await mongoose.connect(uri);
+    }catch{
+        return new UserImpl("bderror","","");
+    }
 
     const userSchema = new mongoose.Schema({
         username: String,
@@ -96,7 +105,14 @@ async function modificarUsuario(user: User) {
 
     const usuario = mongoose.model('users', userSchema);
 
-    const resultado = await usuario.updateOne({ username: user.username }, { webid: user.webID, password: user.password });
+    let resultado;
+    try{
+        resultado=await usuario.updateOne({ username: user.username }, { webid: user.webID, password: user.password });
+    }catch{
+        return new UserImpl("bderror","","");
+    }
+
+    if(resultado.modifiedCount==0){ return new UserImpl("notfound","","") }
     console.log(resultado.modifiedCount);
 
     mongoose.connection.close();
