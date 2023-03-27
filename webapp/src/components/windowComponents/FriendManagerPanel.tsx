@@ -40,20 +40,19 @@ export const FriendManagerPanel = () => {
 
     const userFriends = () => {
         let myFriends: Friend[] = [];
-        getUserInSesion().then(function (user) {
-            getMyFriends(user).then(function (friends) {
-                for (let i = 0; i < friends.length; i++) {
-                    let friendGroups: Group[] = []
-                    getMyGroups(friends[1]).then(function (groups) {
-                        for (let j = 0; j < groups.length; j++)
-                            friendGroups.push(groups[j]);
-                    })
-                    myFriends.push({
-                        "user": friends[i],
-                        "groups": friendGroups,
-                    });
-                }
-            })
+        let user = getUserInSesion();
+        getMyFriends(user).then(function (friends) {
+            for (let i = 0; i < friends.length; i++) {
+                let friendGroups: Group[] = []
+                getMyGroups(friends[1]).then(function (groups) {
+                    for (let j = 0; j < groups.length; j++)
+                        friendGroups.push(groups[j]);
+                })
+                myFriends.push({
+                    "user": friends[i],
+                    "groups": friendGroups,
+                });
+            }
         })
         myFriends.push({
             "user": {
