@@ -14,9 +14,7 @@ class FriendManagerImpl implements FriendManager {
     async listarAmigos(user: User): Promise<User[]> {
 
 
-        const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
-        const mongoose = require('mongoose');
-        mongoose.set('strictQuery', true);
+        const {uri, mongoose} = this.getBD();
 
         await mongoose.connect(uri);
 
@@ -37,10 +35,16 @@ class FriendManagerImpl implements FriendManager {
         return null;
 
     }
-    async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
+
+    private getBD() {
         const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
         const mongoose = require('mongoose');
         mongoose.set('strictQuery', true);
+        return {uri, mongoose};
+    }
+
+    async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
+        const {uri, mongoose} = this.getBD();
 
         await mongoose.connect(uri);
 
@@ -58,13 +62,11 @@ class FriendManagerImpl implements FriendManager {
         return new FriendRequest(de,a,false);
     }
     async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        solicitud.status=true;
-        const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
 
-        const mongoose = require('mongoose');
-        mongoose.set('strictQuery', true);
-
+        const {uri, mongoose} = this.getBD();
         await mongoose.connect(uri);
+
+        solicitud.status=true;
 
         const userSchema = new mongoose.Schema({
             sender: String,
@@ -104,13 +106,10 @@ class FriendManagerImpl implements FriendManager {
 
     }
     async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        solicitud.status=false;
-        const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
-
-        const mongoose = require('mongoose');
-        mongoose.set('strictQuery', true);
-
+        const {uri, mongoose} = this.getBD();
         await mongoose.connect(uri);
+
+        solicitud.status=false;
 
         const userSchema = new mongoose.Schema({
             sender: String,
@@ -126,10 +125,7 @@ class FriendManagerImpl implements FriendManager {
     }
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
 
-        const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
-        const mongoose = require('mongoose');
-        mongoose.set('strictQuery', true);
-
+        const {uri, mongoose} = this.getBD();
         await mongoose.connect(uri);
 
         const userSchema = new mongoose.Schema({

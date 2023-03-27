@@ -1,5 +1,6 @@
 import { UserImpl } from "../entities/User";
 import type { User } from "../facade";
+import mongoose from "mongoose";
 
 export type { UserManager };
 //import UserSchema from '../entities/UserSchema'
@@ -22,10 +23,7 @@ class UserManagerImpl implements UserManager {
 
 async function buscarUsuarioPorUsername(u: User) {
 
-    //const uri = "mongodb+srv://adrianfernandezalvarez02:6StwePBGphR8AJfa@cluster0.bty3mrz.mongodb.net/animales?retryWrites=true&w=majority";
-    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
-    const mongoose = require('mongoose');
-    mongoose.set('strictQuery', true);
+    const {uri, mongoose} = getBD();
     try{
     await mongoose.connect(uri);
     }catch{
@@ -82,15 +80,16 @@ async function prueba() {
 }*/
 
 
-
+function getBD() {
+    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
+    const mongoose = require('mongoose');
+    mongoose.set('strictQuery', true);
+    return {uri, mongoose};
+}
 
 async function modificarUsuario(user: User) {
 
-    //const uri = "mongodb+srv://adrianfernandezalvarez02:6StwePBGphR8AJfa@cluster0.bty3mrz.mongodb.net/animales?retryWrites=true&w=majority";
-    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
-
-    const mongoose = require('mongoose');
-    mongoose.set('strictQuery', true);
+    const {uri, mongoose} = getBD();
     try{
         await mongoose.connect(uri);
     }catch{

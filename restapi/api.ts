@@ -9,7 +9,7 @@ interface User {
     email: string;
 }
 
-//This is not a restapi as it mantains state but it is here for
+//This is not a restapi as it mantains state, but it is here for
 //simplicity. A database should be used instead.
 let users: Array<User> = [];
 
@@ -35,13 +35,13 @@ api.post(
 );
 
 
-api.get(
+api.post(
     "/usermanager/details", async (req: Request, res: Response): Promise<Response> => {
         let user=req.body.user;
             let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
             if(u.username=="notfound"){
                 return res.status(507).send("Usuario no encontrado para listar detalle");
-            }else if("bderror"){
+            }else if(u.username=="bderror"){
                 return res.status(508).send("Error en la conexión con la base de datos");
             }
             else{
@@ -57,7 +57,7 @@ api.post(
         let u = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
         if(u.username=="notfound"){
             return res.status(507).send("Usuario no encontrado");
-        }else if("bderror"){
+        }else if(u.username=="bderror"){
             return res.status(508).send("Error en la conexión con la base de datos");
         }
         else{
