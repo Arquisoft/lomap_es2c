@@ -1,6 +1,6 @@
+import { Place } from "../entities/Place";
 import UserSchema from "../entities/UserSchema";
 import { Group, MapManager, SesionManager, User } from "../facade";
-import { Place } from "../facade";
 import { PODManager } from "../facade";
 export { MapManagerImpl };
 
@@ -11,7 +11,7 @@ class MapManagerImpl implements MapManager {
     sessionManager: SesionManager;
     pod: PODManager;
 
-    async verMapaDe (user: User) : Promise<Group[]> {
+    async verMapaDe(user: User): Promise<Group[]> {
         let usuarioEncontrado = await UserSchema.findOne({
             username: user.username
         });
@@ -21,7 +21,7 @@ class MapManagerImpl implements MapManager {
         return grupos
     }
 
-    añadirLugarAGrupo (lugar: Place, grupo: Group) : Group {
+    añadirLugarAGrupo(lugar: Place, grupo: Group): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
 
         grupo.places.push(lugar)
@@ -32,7 +32,7 @@ class MapManagerImpl implements MapManager {
     }
 
 
-    crearGrupo (nombre: String) : Group {
+    crearGrupo(nombre: String): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
 
         const grupo: Group = {
@@ -48,16 +48,16 @@ class MapManagerImpl implements MapManager {
     // Incompleto
     eliminarGrupo(grupo: Group): boolean {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
-      
+
         // let eliminado = this.pod.eliminarGrupo(user.webID, grupo)
-      
+
         // return eliminado;
 
         return false;
-      }
+    }
 
-    
-    eliminarLugarDeGrupo (lugar: Place, grupo: Group) : Group {
+
+    eliminarLugarDeGrupo(lugar: Place, grupo: Group): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
 
         const lugarIndex = grupo.places.findIndex(p => p.name === lugar.name);
@@ -71,7 +71,7 @@ class MapManagerImpl implements MapManager {
     }
 
     // Incompleto
-    aplicarFiltro (grupo: Group, filtro: string) : Place[] {
+    aplicarFiltro(grupo: Group, filtro: string): Place[] {
         // return grupo.places.filter(filtro?);
         return null
     }
@@ -79,14 +79,14 @@ class MapManagerImpl implements MapManager {
 
     editarGrupo(grupo: Group): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
-      
+
         this.pod.guardarGrupo(user.webID, grupo);
-      
+
         return grupo;
-      }
+    }
 
 
-    mostrarGrupo (grupo: Group) : Place[] {
+    mostrarGrupo(grupo: Group): Place[] {
         return grupo.places
     }
 

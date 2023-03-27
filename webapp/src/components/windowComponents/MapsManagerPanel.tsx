@@ -54,6 +54,18 @@ export const MapsManagerPanel = () => {
                 "nombre": "Lugar 1"
             }]
         })
+        myGroups.push({
+            "nombre": "grupo1",
+            "places": [{
+                "latitude": "5",
+                "longitud": "6",
+                "nombre": "Lugar 1"
+            }, {
+                "latitude": "5",
+                "longitud": "6",
+                "nombre": "Lugar 1"
+            }]
+        })
         return myGroups;
     }
 
@@ -66,10 +78,6 @@ export const MapsManagerPanel = () => {
     const [addForm, setAddForm] = useState("")
 
     if (op != addForm) setAddForm(op)
-
-    const updateGroups = () => {
-        setGroups(userGroups())
-    }
 
     const mostrarGrupo = (i: number) => {
         console.log("Se muestra el grupo " + i)
@@ -106,7 +114,7 @@ export const MapsManagerPanel = () => {
     return (
         <ScrollBox>
             {addForm == "0" ?
-                <List onLoad={updateGroups}
+                <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav"
                     aria-labelledby="nested-list-subheader"

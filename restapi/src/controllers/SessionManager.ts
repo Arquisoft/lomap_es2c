@@ -48,9 +48,10 @@ class UserSesionManager implements SesionManager {
         });
 
         if (usuarioEncontrado != null) {
-            if(await bcrypt.compare(user.password, usuarioEncontrado.password)){
+            console.log(user.password + "-" + usuarioEncontrado.password)
+            if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
                 // this.userInSession = usuarioEncontrado
-                console.log(usuarioEncontrado)
+                console.log("What: " + usuarioEncontrado)
                 sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
                 return user;
             }

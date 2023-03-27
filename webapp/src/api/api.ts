@@ -56,9 +56,13 @@ export async function login(user: User): Promise<User> {
     }
 }
 
-export async function getUserDetails(): Promise<User> {
+export async function getUserDetails(user: User): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/usermanager/details');
+    let response = await fetch(apiEndPoint + '/usermanager/details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
     //The objects returned by the api are directly convertible to User objects
     return response.json()
 }

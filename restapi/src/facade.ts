@@ -1,11 +1,10 @@
+import { FriendManagerImpl } from './controllers/FriendsManager';
 import { UserSesionManager } from './controllers/SessionManager'
-import { UserManager } from './controllers/UserManager'
+import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { Place } from './entities/Place';
+import { FriendManager } from './controllers/FriendsManager'
 
-export { FactoryLoMap, Group, Place };
-export type { User, SesionManager, MapManager, PODManager };
-
-interface SesionManager {
+export interface SesionManager {
     cerrarSesion: () => boolean;
     iniciarSesion: (usuario: User) => Promise<User>;
     registrarse: (usuario: User) => Promise<User>;
@@ -17,7 +16,7 @@ interface SesionManager {
 
 //#region FACADE
 
-interface MapManager {
+export interface MapManager {
     verMapaDe: (user: User) => Promise<Group[]>;
     añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
     crearGrupo: (nombre: String) => Group;
@@ -28,17 +27,9 @@ interface MapManager {
     mostrarGrupo: (grupo: Group) => Place[];
 }
 
-interface FriendManager {
-    listarAmigos: (user: User) => User[];
-    enviarSolicitud: (de: User, a: User) => FriendRequest;
-    aceptarSolicitud: (solicitud: FriendRequest) => FriendRequest;
-    rechazarSolicitud: (solicitud: FriendRequest) => FriendRequest;
-    listarSolicitudes: (user: User) => FriendRequest[];
-}
-
 //#endregion
 
-interface PODManager {
+export interface PODManager {
     guardarCoord: (WebID: String, Coor: String) => null;
     getCoordenadas: (WebID: String) => Place[];
     guardarGrupo: (WebID: String, Group: Group) => null;
@@ -47,13 +38,19 @@ interface PODManager {
 
 //#region INTERFACES AUXILIARES
 
-class FactoryLoMap {
-    //static getMapManager: () => MapManager;
-    static getUserManager: () => UserManager;
-    //static getFriendManager: () => FriendManager;
+export class FactoryLoMap {
+    static getMapManager: () => MapManager;
+
+    static getFriendManager(): FriendManager {
+        return new FriendManagerImpl();
+    };
 
     static getSesionManager(): SesionManager {
         return new UserSesionManager();
+    }
+
+    static getUserManager(): UserManager {
+        return new UserManagerImpl();
     }
 }
 //#endregion
@@ -64,13 +61,13 @@ class FriendRequest { }
 // class Place { }
 //#endregion
 
-interface User {
+export interface User {
     username: String
     password: String
     webID: String
 }
 
-interface Group{
+export interface Group {
     name: String
     places: Place[]
 }

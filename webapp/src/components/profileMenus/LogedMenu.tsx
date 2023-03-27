@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
-import { getUserInSesion } from '../../api/api';
+import { editUserDetails, getUserDetails, getUserInSesion } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
@@ -45,7 +45,7 @@ function LogedMenu() {
 
     const getProfile = async () => {
         closeUserMenu();
-        let user = await getUserInSesion();
+        let user = await getUserDetails(getUserInSesion());
         Swal.fire({
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
@@ -69,7 +69,6 @@ function LogedMenu() {
     }
 
 
-
     const showQuestion = () => {
         Swal.fire({
             title: "Cancelar edición",
@@ -91,7 +90,7 @@ function LogedMenu() {
 
     async function showEdit(): Promise<void> {
         closeUserMenu();
-        let user = await getUserInSesion();
+        let user = await getUserDetails(getUserInSesion());
         Swal.fire({
             title: 'Cambiar contraseña',
             html: `<label for="opassword-ep" class="swal2-label">Contraseña actual: </label>
@@ -136,22 +135,18 @@ function LogedMenu() {
                 })
 
             }
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                editProfile(user);
+                await editUserDetails(user);
             } else if (result.isDenied) {
                 showEditNoPss();
             }
         })
     }
 
-    const editProfile = (user: User) => {
-
-    }
-
     async function showEditNoPss(): Promise<void> {
         closeUserMenu();
-        let user = await getUserInSesion();
+        let user = await getUserDetails(getUserInSesion());
         Swal.fire({
             title: 'Edita tu perfil',
             html: ` <label for="name-ep" class="swal2-label">Nombre de usuario: </label>
@@ -201,9 +196,9 @@ function LogedMenu() {
                     })
                 }
             }
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                editProfile(user);
+                await editUserDetails(user);
             } else if (result.isDenied) {
                 showEdit();
             }

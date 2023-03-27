@@ -1,8 +1,10 @@
-import {User} from "../facade";
-import {FriendRequest} from "../entities/FriendRequest";
+import { User } from "../facade";
+import { FriendRequest } from "../entities/FriendRequest";
+import FriendshipSchema from "../entities/FriendshipSchema";
+import UserSchema from "../entities/UserSchema";
 
 
-interface FriendManager {
+export interface FriendManager {
     listarAmigos: (user: User) => Promise<User[]>;
     enviarSolicitud: (de: User, a: User) => Promise<FriendRequest>;
     aceptarSolicitud: (solicitud: FriendRequest) => Promise<FriendRequest>;
@@ -10,140 +12,63 @@ interface FriendManager {
     listarSolicitudes: (user: User) => Promise<FriendRequest[]>;
 }
 
-class FriendManagerImpl implements FriendManager {
+export class FriendManagerImpl implements FriendManager {
+
     async listarAmigos(user: User): Promise<User[]> {
-
-
-        const {uri, mongoose} = this.getBD();
-
-        await mongoose.connect(uri);
-
-        const userSchema = new mongoose.Schema({
-            user1: String,
-            user2: String,
-        });
-
-        let usuario = mongoose.model('friendships', userSchema)
-
-
-        let resultado = await usuario.find({ user1: user.username });
-
-        console.log(resultado);
-
-        mongoose.connection.close();
-
-        return null;
-
-    }
-
-    private getBD() {
-        const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
-        const mongoose = require('mongoose');
-        mongoose.set('strictQuery', true);
-        return {uri, mongoose};
+        let resultado = await FriendshipSchema.find({ sender: user.username, status: 1 }, { receiver: 1, _id: 0 });
+        let resultado2 = await FriendshipSchema.find({ receiver: user.username, status: 1 }, { sender: 1, _id: 0 });
+        let ret: User[] = [];
+        for (let i = 0; i < resultado.length; i++) {
+            let user2 = await UserSchema.findOne({ username: resultado[i].receiver }, { webID: 1, username: 1, password: 1 }) as User;
+            ret.push(user2)
+        }
+        for (let i = 0; i < resultado2.length; i++) {
+            let user2 = await UserSchema.findOne({ username: resultado2[i].sender }, { webID: 1, username: 1, password: 1 }) as User;
+            ret.push(user2)
+        }
+        return ret;
     }
 
     async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
-        const {uri, mongoose} = this.getBD();
 
-        await mongoose.connect(uri);
-
-        const userSchema = new mongoose.Schema({
+        const userSchema = new FriendshipSchema({
             sender: de.username,
             receiver: a.username,
-            status: "pendiente"
+            status: 0
         });
-        const usuario = mongoose.model('friendrequests', userSchema);
 
-        usuario.save();
-
+        await userSchema.save();
 
 
-        return new FriendRequest(de,a,false);
+        return new FriendRequest(de, a, 0);
     }
     async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
 
-        const {uri, mongoose} = this.getBD();
-        await mongoose.connect(uri);
+        solicitud.status = 1;
 
-        solicitud.status=true;
-
-        const userSchema = new mongoose.Schema({
-            sender: String,
-            receiver: String,
-            status: String
-        });
-
-        const usuario = mongoose.model('friendrequests', userSchema);
-
-        const resultado = await usuario.updateOne({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: "aceptada" });
-        console.log(resultado.modifiedCount);
+        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: 1 }) as FriendRequest;
 
 
-
-        const aSchema = new mongoose.Schema({
-            user1: solicitud.sender,
-            user2: solicitud.receiver
-        });
-
-        let b = mongoose.model('friendships')
-        b.save();
-
-        let cSchema = new mongoose.Schema({
-            user1: solicitud.receiver,
-            user2: solicitud.sender
-        });
-
-        let c = mongoose.model('friendships')
-        c.save();
-
-
-        mongoose.connection.close();
-
-        return solicitud;
+        return resultado;
 
 
 
     }
     async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        const {uri, mongoose} = this.getBD();
-        await mongoose.connect(uri);
+        solicitud.status = -1;
 
-        solicitud.status=false;
+        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: 1 }) as FriendRequest;
 
-        const userSchema = new mongoose.Schema({
-            sender: String,
-            receiver: String,
-            status: String
-        });
 
-        const usuario = mongoose.model('friendrequests', userSchema);
-
-        const resultado = await usuario.updateOne({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: "rechazada" });
-        return solicitud;
+        return resultado;
 
     }
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
 
-        const {uri, mongoose} = this.getBD();
-        await mongoose.connect(uri);
-
-        const userSchema = new mongoose.Schema({
-            sender: String,
-            receiver: String,
-            status: String
-        });
-
-        let usuario = mongoose.model('friendrequests', userSchema)
+        let resultado = await UserSchema.find({ sender: user.username, status: 0 }) as FriendRequest[];
 
 
-        let resultado = await usuario.find({ receiver: user.username });
-
-        console.log(resultado);
-
-        mongoose.connection.close();
-
-        return null;
+        return resultado;
 
     }
 

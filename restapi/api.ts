@@ -37,30 +37,30 @@ api.post(
 
 api.post(
     "/usermanager/details", async (req: Request, res: Response): Promise<Response> => {
-        let user=req.body.user;
-            let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
-            if(u.username=="notfound"){
-                return res.status(507).send("Usuario no encontrado para listar detalle");
-            }else if(u.username=="bderror"){
-                return res.status(508).send("Error en la conexión con la base de datos");
-            }
-            else{
-                return res.status(200).send(u);
-            }
+        let user = req.body.user;
+        let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
+        if (u.username == "notfound") {
+            return res.status(507).send("Usuario no encontrado para listar detalle");
+        } else if (u.username == "bderror") {
+            return res.status(508).send("Error en la conexión con la base de datos");
+        }
+        else {
+            return res.status(200).send(u);
+        }
     }
 );
 
 api.post(
     "/usermanager/edit",
     async (req: Request, res: Response): Promise<Response> => {
-        let user=req.body.user;
+        let user = req.body.user;
         let u = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
-        if(u.username=="notfound"){
+        if (u.username == "notfound") {
             return res.status(507).send("Usuario no encontrado");
-        }else if(u.username=="bderror"){
+        } else if (u.username == "bderror") {
             return res.status(508).send("Error en la conexión con la base de datos");
         }
-        else{
+        else {
             return res.status(200).send(u);
         }
     }
@@ -82,15 +82,17 @@ api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<R
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
+    console.log(user)
     let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
+    console.log(userRes)
     if (userRes.username == "passwordNotFound") {
         return res.status(506).send("Contraseña errónea")
-    } else if(userRes.username == "userNotFound"){
+    } else if (userRes.username == "userNotFound") {
         return res.status(507).send("Usuario no encontrado")
     }
     else {
         return res.status(200).send(userRes);
-        
+
     }
     //IF / ELSES CON CADA POSIBLE ERROR Y EL STATUS ASOCIADO
 })
@@ -98,6 +100,12 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
 api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {
     let userRes = await fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
     return res.status(200).send(userRes);
+})
+
+api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
+    let user = req.body.user;
+    let friends = await fac.FactoryLoMap.getFriendManager().listarAmigos(user)
+    return res.status(200).send(friends);
 })
 
 export default api;
