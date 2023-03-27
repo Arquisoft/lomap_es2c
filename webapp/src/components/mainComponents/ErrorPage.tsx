@@ -43,7 +43,7 @@ export const ErrorPage = () => {
                 Error 404: Página no encontrada
             </TitleBox>
             <TextBox>
-                Disculpamos las molestias pero la página a la que acaba de intentar acceder no existe o no se encuentra disponible. Vuelva al menú principal calcando<a href="/">aquí.</a>
+                Disculpamos las molestias pero la página a la que acaba de intentar acceder no existe o no se encuentra disponible. Vuelva al menú principal calcando <a href="/">aquí</a>.
             </TextBox>
         </ErrorBox>
     )
