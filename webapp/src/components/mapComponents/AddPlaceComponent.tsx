@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Rating, { IconContainerProps } from '@mui/material/Rating';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
@@ -111,7 +112,7 @@ function IconContainer(props: IconContainerProps) {
   return <span {...other}>{customIcons[value].icon}</span>;
 }
 
-export default function RadioGroupRating() {
+export function RadioGroupRating() {
   return (
     <StyledRating
       name="highlight-selected-only"
@@ -125,10 +126,13 @@ export default function RadioGroupRating() {
 
 
 
-export function AddPlace(lat:number, lng:number) {
+export default function AddPlace() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = (data: any) => console.log(data);
  
+  const { lat, lon } = useParams();
+
+
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <CSSTypography variant="body1" align="center"
@@ -147,9 +151,9 @@ export function AddPlace(lat:number, lng:number) {
         /> 
         <CSSTextField
               id="longitude-AP"
-              label="Longitud"
-              placeholder={lng? lng.toString() : "Longitud"}
-              disabled={lng? true : false}
+              label={lon? ("Longitud: " + lon.toString()) : "Longitud"}
+              placeholder="Longitud"
+              disabled={lon? true : false}
               type="number"
               fullWidth
               {...register("longitude")}
@@ -157,8 +161,8 @@ export function AddPlace(lat:number, lng:number) {
           />   
           <CSSTextField
               id="latitude-AP"
-              label="Latitud"
-              placeholder={lat? lat.toString() : "Latitud"}
+              label={lat?  ("Latitud: " + lat.toString()) : "Latitud"}
+              placeholder="Latitud"
               disabled={lat? true : false}
               type="number"
               fullWidth

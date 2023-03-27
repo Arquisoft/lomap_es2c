@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet';
+import { useNavigate } from 'react-router-dom';
 
 const MapBox = styled(Box)({
   minWidth: "75vw",
@@ -28,9 +29,36 @@ const markers: MarkerData[] = [
 ];
 
 
+function OpenAddPlaceMenu(props:any): any {
+  const navigate = useNavigate()
+  const addButton = document.getElementById("addPlaceDyn");
+  addButton?.addEventListener('click', function handleClick(event) {
+    console.log('button clicked');
+    console.log(event);
+    console.log(event.target);
+  });
+  console.log("entra1 --> " + props)
+  console.log(addButton);
+  if(addButton != null){
+    window.addEventListener('DOMContentLoaded', () => {
+      addButton.onclick = (() => {console.log("entra x el onclick ")
+      navigate("/home/1/" + props.lat + "/" + props.lng + "/")})
+    addButton.addEventListener('click', () => {
+      console.log("entra x el add")
+      navigate("/home/1/" + props.lat + "/" + props.lng + "/");
+    });
+    });
+
+    console.log("entra2")
+   // addButton.onclick = (() => navigate("/home/1/" + props.lat + "/" + props.lng + "/"))
+    //addButton.addEventListener('click', () => {navigate("/home/1/" + props.lat + "/" + props.lng + "/")});
+  }
+}
 
 function AddPlace(): any {
   const [marker, setMarker] = useState(null)
+  const [lat, setLatitude] = useState(null)
+  const [lng, setLongitude] = useState(null)
   const map = useMap()
 
   const m = useMapEvents({
@@ -38,18 +66,20 @@ function AddPlace(): any {
       if (marker !== null) {
         marker.remove();
       }
-
+      setLatitude(e.latlng.lat);
+      setLongitude(e.latlng.lng);
+      
       var newMarker: L.Marker = L.marker(e.latlng);
-
+      
       newMarker.bindPopup((new L.Popup({ keepInView: true })).setContent('<button id="addPlaceDyn">Añadir lugar</button>'))
       setMarker(newMarker)
-      console.log(marker)
 
     }
   })
-
+ 
   if (marker !== null) {
     marker.addTo(map)
+    return (<OpenAddPlaceMenu lat={lat} lng={lng}/>)
   }
 
   return null;

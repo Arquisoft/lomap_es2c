@@ -2,6 +2,7 @@ import { Box } from '@mui/material'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useParams } from 'react-router-dom';
+import AddPlaceComponent from '../mapComponents/AddPlaceComponent';
 
 export const AddPlaceForm = () => {
 
@@ -11,8 +12,8 @@ export const AddPlaceForm = () => {
 
     return (
         <Box>
-            Place <CloseIcon onClick={() => navigate("/home/0")} htmlColor="red" />
-            {lat} - {lon}
+            Volver al grupo <CloseIcon onClick={() => navigate("/home/0")} htmlColor="red" />
+            <AddPlaceComponent></AddPlaceComponent> 
         </Box>
     )
 }
