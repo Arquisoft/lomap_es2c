@@ -2,6 +2,7 @@ import { Place } from "../entities/Place";
 import UserSchema from "../entities/UserSchema";
 import { Group, MapManager, SesionManager, User } from "../facade";
 import { PODManager } from "../facade";
+import * as repo from '../persistence/Repository';
 export { MapManagerImpl };
 
 const sessionStorage = require('sessionstorage-for-nodejs')
@@ -12,9 +13,7 @@ class MapManagerImpl implements MapManager {
     pod: PODManager;
 
     async verMapaDe(user: User): Promise<Group[]> {
-        let usuarioEncontrado = await UserSchema.findOne({
-            username: user.username
-        });
+        let usuarioEncontrado = await repo.Repository.findOne(user)
 
         let grupos = this.pod.getGrupos(usuarioEncontrado.webID)
 
