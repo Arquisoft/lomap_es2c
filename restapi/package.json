@@ -10,11 +10,16 @@
     "license": "ISC",
     "dependencies": {
         "body-parser": "^1.20.1",
+        "cloudinary": "^1.35.0",
+        "cloudinary-client": "^0.0.1",
+        "bcrypt": "^5.1.0",
+        "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
         "express": "^4.18.2",
         "express-prom-bundle": "^6.6.0",
         "express-validator": "^6.15.0",
         "mongoose": "^7.0.1",
+        "node-sessionstorage": "^1.0.0",
         "prom-client": "^14.1.1",
         "sessionstorage-for-nodejs": "^1.0.2"
     },

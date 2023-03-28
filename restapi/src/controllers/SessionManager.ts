@@ -3,8 +3,11 @@ import { User, SesionManager } from "../facade";
 export { UserSesionManager };
 
 const sessionStorage = require('sessionstorage-for-nodejs')
+const bcrypt = require("bcryptjs");
 
 class UserSesionManager implements SesionManager {
+
+    rondasDeEncriptacion = 10
     // userInSession: User | null;
 
     constructor() {
@@ -17,21 +20,16 @@ class UserSesionManager implements SesionManager {
         return true;
     }
 
-    registrarse(usuario: User) {
+    async registrarse(usuario: User): Promise<User> {
         // this.userInSession = usuario;
         sessionStorage.setItem('userInSession', JSON.stringify(usuario));
-        console.log("que")
-        console.log(sessionStorage.getItem('userInSession'))
-
         const usuarioSchema = new UserSchema({
             username: usuario.username,
             webID: usuario.webID,
-            password: usuario.password
+            password: await bcrypt.hash(usuario.password, this.rondasDeEncriptacion)
         });
 
-        console.log(usuarioSchema.username)
-
-        usuarioSchema.save();
+        await usuarioSchema.save();
         return usuario;
     }
 
@@ -45,18 +43,23 @@ class UserSesionManager implements SesionManager {
 
     async iniciarSesion(user: User): Promise<User> {
         let usuarioEncontrado = await UserSchema.findOne({
-            username: user.username,
-            password: user.password
+            username: user.username
+            //password: user.password
         });
 
         if (usuarioEncontrado != null) {
-            // this.userInSession = usuarioEncontrado
-            console.log(usuarioEncontrado)
-            sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
+            console.log(user.password + "-" + usuarioEncontrado.password)
+            if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
+                // this.userInSession = usuarioEncontrado
+                console.log("What: " + usuarioEncontrado)
+                sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
+                return user;
+            }
+            user.username = "passwordNotFound";
             return user;
         }
-
-        console.log("Usuario no encontrado");
+        user.username = "userNotFound";
+        // console.log("Usuario no encontrado");
         return user
     }
 

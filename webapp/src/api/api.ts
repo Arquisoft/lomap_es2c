@@ -1,5 +1,7 @@
 import { UserManager } from '../../../restapi/src/controllers/UserManager';
-import { SesionManager, User, User2 } from '../shared/shareddtypes';
+import { Group, SesionManager, User, User2 } from '../shared/shareddtypes';
+
+const sessionStorage = require('node-sessionstorage')
 
 export async function addUser(user: User2): Promise<boolean> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
@@ -21,11 +23,8 @@ export async function getUsers(): Promise<User2[]> {
     return response.json()
 }
 
-export async function getUserInSesion(): Promise<User> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/sesionmanager/user');
-    //The objects returned by the api are directly convertible to User objects
-    return response.json()
+export function getUserInSesion(): User {
+    return JSON.parse(sessionStorage.getItem('userInSession') ?? null) as User;
 }
 
 export async function signup(user: User): Promise<User> {
@@ -47,5 +46,53 @@ export async function login(user: User): Promise<User> {
         body: JSON.stringify({ 'user': user })
     });
     //The objects returned by the api are directly convertible to User objects
+    switch (response.status) {
+        case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 200: sessionStorage.setItem('userInSession', JSON.stringify(user));
+            ; return response.json();
+        default: throw new Error("Unexpected error");
+    }
+}
+
+export async function getUserDetails(user: User): Promise<User> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/usermanager/details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
+    //The objects returned by the api are directly convertible to User objects
+    return response.json()
+}
+
+export async function editUserDetails(user: User): Promise<User> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/usermanager/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
+    //The objects returned by the api are directly convertible to User objects
+    return response.json()
+}
+
+export async function getMyGroups(user: User): Promise<Group[]> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/mapmanager/usermap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
+    return response.json()
+}
+export async function getMyFriends(user: User): Promise<User[]> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/friendmanager/friends', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
     return response.json()
 }

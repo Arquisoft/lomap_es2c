@@ -61,7 +61,11 @@ export function Header(props: { logged: boolean }) {
     //#region METODOS DE CLASE
 
     const goHome = () => {
-        //redirect to main page
+        if (props.logged == true) {
+            navigate("/home/groups");
+        } else {
+            navigate("/");
+        }
     };
 
     const getMode = () => {
@@ -85,7 +89,7 @@ export function Header(props: { logged: boolean }) {
                         key={uuid()}
                         onClick={goHome}
                     >
-                        <img id="imgLogo" src="../nobgLogo.png"></img>
+                        <img id="imgLogo" src="nobgLogo.png"></img>
                     </ButtonHOME>
                     <BoxNAV>
                     </BoxNAV>
