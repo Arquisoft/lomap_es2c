@@ -1,5 +1,5 @@
 import { Box, Collapse, Divider, Tooltip } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
@@ -17,6 +17,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { AddPlaceForm } from './AddPlaceForm';
 import { AddGroupForm } from './AddGroupForm';
 import { useNavigate, useParams } from 'react-router-dom';
+import { render } from 'react-dom';
+import { ErrorPage } from 'components/mainComponents/ErrorPage';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -34,10 +36,12 @@ const VerticalDivider = styled(Divider)({
 
 export const MapsManagerPanel = () => {
 
-    const userGroups = () => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    const userGroups = async () => {
         let myGroups: Group[] = [];
         let user = getUserInSesion();
-        getMyGroups(user).then(function (groups) {
+        await getMyGroups(user).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
@@ -71,49 +75,15 @@ export const MapsManagerPanel = () => {
 
     const { op } = useParams()
 
-    const [groups, setGroups] = useState(userGroups())
-
     const navigate = useNavigate()
 
     const [addForm, setAddForm] = useState("")
 
     if (op != addForm) setAddForm(op)
 
-    const mostrarGrupo = (i: number) => {
-        console.log("Se muestra el grupo " + i)
-    }
-
-    const generateOpen = () => {
-        let str = ""
-        for (let i = 0; i < groups.length; i++) {
-            str += '0';
-        }
-        return str;
-    }
-
-    const [open, setOpen] = React.useState(generateOpen());
-
-    const handleClick = (item: number) => {
-        let c = open.charAt(item) == '0' ? '1' : '0';
-        let newOpen = ""
-        for (let i = 0; i < open.length; i++) {
-            newOpen += (i == item ? c : open.charAt(i));
-        }
-        setOpen(newOpen)
-        console.log(newOpen)
-    }
-
-    const isOpen = (item: number) => {
-        return open.charAt(item) == '0' ? false : true;
-    }
-
-    const deleteGroup = (group: number) => {
-        alert("eliminar grupo " + group);
-    }
-
     return (
         <ScrollBox>
-            {addForm == "0" ?
+            {addForm == "main" ?
                 <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav"
@@ -124,66 +94,121 @@ export const MapsManagerPanel = () => {
                         </ListSubheader>
                     }
                 >
-                    <AddItem onClick={() => navigate("/home/2")}>
+                    <AddItem onClick={() => navigate("/home/groups/addgroup")}>
                         <ListItemIcon>
                             <AddIcon htmlColor='#81c784' />
                         </ListItemIcon>
                         <ListItemText primary="Añadir grupo" />
                     </AddItem>
                     <Divider light color="#81c784" />
-                    {groups.map((group, i) => {
-                        return (
-                            <React.Fragment key={i}>
-                                < ListItemButton>
-                                    <ListItemIcon>
-                                        <MapIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={group.nombre} />
-                                    {isOpen(i) ?
-                                        (
-                                            <Tooltip title="Close group places">
-                                                <ExpandLess onClick={() => { mostrarGrupo(i); handleClick(i) }} />
-                                            </Tooltip>)
-                                        :
-                                        (
-                                            <Tooltip title="Show group places">
-                                                <ExpandMore onClick={() => { mostrarGrupo(i); handleClick(i) }} />
-                                            </Tooltip>
-                                        )}
-                                    <VerticalDivider orientation='vertical' flexItem />
-                                    <Tooltip title="Delete group">
-                                        <CloseIcon onClick={() => deleteGroup(i)} htmlColor="red" />
-                                    </Tooltip>
-                                </ListItemButton>
-                                <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>
-                                    <List component="div" disablePadding>
-                                        {group.places.map((place, j) => {
-                                            return (
-                                                <React.Fragment key={i + "-" + j}>
-                                                    <ListItemButton sx={{ pl: 4 }}>
-                                                        <ListItemIcon>
-                                                            <PlaceIcon />
-                                                        </ListItemIcon>
-                                                        <ListItemText primary={place.nombre} />
-                                                        <SentimentSatisfiedAltIcon htmlColor="green" />
-                                                    </ListItemButton>
-                                                </React.Fragment>
-                                            )
-                                        })}
-                                    </List>
-                                </Collapse>
-                            </React.Fragment>
-                        )
-                    })}
+                    <Box ref={ref}>
+                        <Groups groups={userGroups()} daddy={ref} />
+                    </Box>
                 </List >
                 :
-                (addForm == "1" ?
+                (addForm == "addplace" ?
                     <AddPlaceForm ></AddPlaceForm>
                     :
-                    <AddGroupForm ></AddGroupForm>
+                    (addForm == "addgroup" ?
+                        <AddGroupForm ></AddGroupForm>
+                        :
+                        <ErrorPage></ErrorPage>
+                    )
                 )
             }
         </ScrollBox >
     )
+}
+
+const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
+
+    const navigate = useNavigate()
+
+    const [open, setOpen] = React.useState("");
+
+    const deleteGroup = (group: Group) => {
+        alert("eliminar grupo " + group);
+    }
+
+    const generateOpen = (elems: number) => {
+        let str = ""
+        for (let i = 0; i < elems; i++) {
+            str += '0';
+        }
+        console.log("Generate open: " + str)
+        return str;
+    }
+
+    const handleClick = (item: number) => {
+        let c = open.charAt(item) == '0' ? '1' : '0';
+        let newOpen = ""
+        for (let i = 0; i < open.length; i++) {
+            newOpen += (i == item ? c : open.charAt(i));
+        }
+        setOpen(newOpen)
+    }
+
+    const isOpen = (item: number) => {
+        let c = open.charAt(item);
+        if (c != '0' && c != '1') return false;
+        return open.charAt(item) == '0' ? false : true;
+    }
+
+    const mostrarGrupo = (group: Group) => {
+        navigate("/home/groups/main/" + group.nombre)
+        alert("Se muestra el grupo " + group.nombre)
+    }
+
+    props.groups.then((grps: Group[]) => {
+        if (open.length != grps.length) setOpen(generateOpen(grps.length))
+        render(
+            <>
+                {grps.map((group, i) => {
+                    return (
+                        <React.Fragment key={i}>
+                            < ListItemButton >
+                                <ListItemIcon>
+                                    <MapIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={group.nombre} onClick={() => mostrarGrupo(group)} />
+                                {isOpen(i) ?
+                                    (
+                                        <Tooltip title="Close group places">
+                                            <ExpandLess onClick={() => { handleClick(i) }} />
+                                        </Tooltip>)
+                                    :
+                                    (
+                                        <Tooltip title="Show group places">
+                                            <ExpandMore onClick={() => { handleClick(i) }} />
+                                        </Tooltip>
+                                    )}
+                                <VerticalDivider orientation='vertical' flexItem />
+                                <Tooltip title="Delete group">
+                                    <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
+                                </Tooltip>
+                            </ListItemButton>
+                            <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>
+                                <List component="div" disablePadding>
+                                    {group.places.map((place, j) => {
+                                        return (
+                                            <React.Fragment key={i + "-" + j}>
+                                                <ListItemButton sx={{ pl: 4 }}>
+                                                    <ListItemIcon>
+                                                        <PlaceIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={place.nombre} />
+                                                    <SentimentSatisfiedAltIcon htmlColor="green" />
+                                                </ListItemButton>
+                                            </React.Fragment>
+                                        )
+                                    })}
+                                </List>
+                            </Collapse>
+                        </React.Fragment>
+                    )
+                })}
+            </>, props.daddy.current)
+    })
+    return <></>
 }
 

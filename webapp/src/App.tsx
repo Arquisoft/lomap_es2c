@@ -13,7 +13,14 @@ function App(): JSX.Element {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<HomeView />} />
-                <Route path='/home/:op/:lat?/:lon?' element={<AuthChecker><LoggedView /></AuthChecker>} />
+                {/* 
+                    mainop = [groups/friends]
+                    ?op = [groupView (addplace, addgroup, main)/friendName]
+                    ?id = [shownGroupName]
+                    ?lat = [optional lat to add from map]
+                    ?lon = [optional lon to add from map]
+                */}
+                <Route path='/home/:mainop/:op/:id?/:lat?/:lon?' element={<AuthChecker><LoggedView /></AuthChecker>} />
                 <Route path='/login' element={<LoginView />} />
                 <Route path='/signup' element={<SignupView />} />
                 <Route path='*' element={<NoFound />} />
