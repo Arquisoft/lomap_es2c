@@ -1,4 +1,4 @@
-import { Box, Divider, Tooltip } from '@mui/material'
+import { Box, Button, Divider, Input, InputLabel, TextField, Tooltip } from '@mui/material'
 import React, { createRef, useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -17,15 +17,16 @@ import MapIcon from '@mui/icons-material/Map';
 import PlaceIcon from '@mui/icons-material/Place';
 import PersonIcon from '@mui/icons-material/Person';
 import { Group, Place, User } from '../../shared/shareddtypes';
-import { getMyFriends, getMyGroups, getUserDetails, getUserInSesion } from '../../api/api';
+import { getMyFriends, getMyGroups, getUserDetails, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import { FireHydrantAltOutlined } from '@mui/icons-material';
+import { AccountCircle, FireHydrantAltOutlined } from '@mui/icons-material';
 import { render } from 'react-dom';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-
+import InputAdornment from '@mui/material/InputAdornment';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface Friend {
     user: User,
@@ -38,19 +39,25 @@ const ScrollBox = styled(Box)({
     scrollbarColor: 'black white'
 })
 
-const AddItem = styled(ListItemButton)({
-    color: '#81c784',
-})
-
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
 })
 
+const AddFriendBox = styled(Box)({
+    padding: '1em 0em 1em',
+    display: 'flex',
+    alignItems: 'flex-end',
+})
+
+const AddItem = styled(ListItemButton)({
+    color: '#81c784',
+})
+
 export const FriendManagerPanel = () => {
 
-    const ref = useRef<HTMLDivElement>(null);
+    const [url, setUrl] = useState("../testUser.jfif");
 
-    const navigate = useNavigate()
+    const ref = useRef<HTMLDivElement>(null);
 
     const userFriends = async () => {
         console.log("Ejecucion")
@@ -100,37 +107,67 @@ export const FriendManagerPanel = () => {
         return myFriends;
     }
 
-    const addFriend = () => {
+    const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
+
+    const navigate = useNavigate()
+
+    const searchUser = (username: string) => {
+        searchUserByUsername(username).then((user) => {
+            showAddFriendConfirm(user)
+        })
     }
 
-    const mostrarGrupo = (i: number) => {
-        console.log("Se muestra el grupo " + i)
+    const showAddFriendConfirm = async (user: User) => {
+        let usr = await getUserDetails(user);
+        Swal.fire({
+            title: 'Mi perfil',
+            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+                    <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
+                    <label for="webid-gp" class="swal2-label">WebID: </label>
+                    <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + usr.webID + `>
+                    <label for="biography-gp" class="swal2-label">Biografía: </label>
+                    <textarea rows="4" id="biography-gp" class="swal2-input" disabled placeholder="Biografía..."></textarea>`,
+            confirmButtonText: 'Editar',
+            focusConfirm: false,
+            imageUrl: url,
+            imageWidth: 'auto',
+            imageHeight: 200,
+            imageAlt: 'Foto de perfil actual',
+            preConfirm: () => {
+                sendFriendRequest(user)
+            }
+        })
     }
 
     return (
-        <ScrollBox>
-            <List
-                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                    <ListSubheader component="div" id="nested-list-subheader">
-                        Tus amigos
-                    </ListSubheader>
-                }
-            >
-                <AddItem onClick={() => addFriend()}>
-                    <ListItemIcon>
+        <>{/* CONVERTIR EN UN FORMULARIO */}
+            <AddFriendBox>
+                <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                <TextField label="Añadir un amigo" variant="standard" />
+                <Tooltip title="Add friend">
+                    <Button>
                         <AddIcon htmlColor='#81c784' />
-                    </ListItemIcon>
-                    <ListItemText primary="Añadir amigo" />
-                </AddItem>
+                    </Button>
+                </Tooltip>
+            </AddFriendBox>
+            <ScrollBox>
                 <Divider light color="#81c784" />
-                <Box ref={ref}>
-                    <Friends friends={userFriends()} daddy={ref} />
-                </Box>
-            </List>
-        </ScrollBox >
+                <List
+                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    subheader={
+                        <ListSubheader component="div" id="nested-list-subheader">
+                            Tus amigos
+                        </ListSubheader>
+                    }
+                >
+                    <Box ref={ref}>
+                        <Friends friends={friends} daddy={ref} />
+                    </Box>
+                </List>
+            </ScrollBox >
+        </>
     )
 }
 
@@ -200,10 +237,10 @@ const Friends = (props: { friends: Promise<Friend[]>, daddy: any }) => {
                 {frds.map((friend, i) => {
                     return (
                         <React.Fragment key={i}>
-                            <ListItemButton onClick={() => showFriendProfile(friend.user)}>
+                            <ListItemButton>
                                 <ListItemIcon>
                                     <Tooltip title="See friend profile">
-                                        <PersonIcon />
+                                        <PersonIcon onClick={() => showFriendProfile(friend.user)} />
                                     </Tooltip>
                                 </ListItemIcon>
                                 <ListItemText primary={friend.user.username} />

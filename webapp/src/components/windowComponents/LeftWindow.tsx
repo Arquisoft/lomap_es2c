@@ -46,7 +46,7 @@ export function LeftWindow() {
     return (
         <Window>
             <ThemeProvider theme={theme}>
-                <MyTabContext value={value} theme={theme}>
+                <MyTabContext value={mainop} theme={theme}>
                     <Tabs
                         variant="fullWidth"
                         value={value}

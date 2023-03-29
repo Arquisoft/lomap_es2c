@@ -11,7 +11,7 @@ export const AddPlaceForm = () => {
 
     return (
         <Box>
-            Place <CloseIcon onClick={() => navigate("/home/0")} htmlColor="red" />
+            Place <CloseIcon onClick={() => navigate("/home/groups/main")} htmlColor="red" />
             {lat} - {lon}
         </Box>
     )

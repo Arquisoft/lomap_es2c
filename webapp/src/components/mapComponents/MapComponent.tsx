@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { LeftWindow } from '../windowComponents/LeftWindow'
 import { Button } from '@mui/material';
 import { MapsManagerPanel } from '../windowComponents/MapsManagerPanel';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 
 const MapBox = styled(Box)({
@@ -17,9 +17,11 @@ export const MapComponent = () => {
 
     const navigate = useNavigate();
 
+    const { mainop } = useParams();
+
     return (
         <MapBox>
-            <Button onClick={() => navigate("/home/1")}>
+            <Button onClick={() => { if (mainop == "groups") navigate("/home/groups/addplace") }}>
                 Añadir lugar
             </Button>
         </MapBox>
