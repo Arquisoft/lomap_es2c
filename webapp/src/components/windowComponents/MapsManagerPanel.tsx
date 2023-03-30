@@ -215,4 +215,3 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
     })
     return <></>
 }
-
