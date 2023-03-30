@@ -73,6 +73,8 @@ export const MapsManagerPanel = () => {
         return myGroups;
     }
 
+    const [groups, setGroups] = useState<Promise<Group[]>>(userGroups)
+
     const { op } = useParams()
 
     const navigate = useNavigate()
@@ -84,27 +86,29 @@ export const MapsManagerPanel = () => {
     return (
         <ScrollBox>
             {addForm == "main" ?
-                <List
-                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                    component="nav"
-                    aria-labelledby="nested-list-subheader"
-                    subheader={
-                        <ListSubheader component="div" id="nested-list-subheader">
-                            Tus grupos de mapas
-                        </ListSubheader>
-                    }
-                >
+                <>
                     <AddItem onClick={() => navigate("/home/groups/addgroup")}>
                         <ListItemIcon>
                             <AddIcon htmlColor='#81c784' />
                         </ListItemIcon>
                         <ListItemText primary="Añadir grupo" />
                     </AddItem>
-                    <Divider light color="#81c784" />
-                    <Box ref={ref}>
-                        <Groups groups={userGroups()} daddy={ref} />
-                    </Box>
-                </List >
+                    <List
+                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                        component="nav"
+                        aria-labelledby="nested-list-subheader"
+                        subheader={
+                            <ListSubheader component="div" id="nested-list-subheader">
+                                Tus grupos de mapas
+                            </ListSubheader>
+                        }
+                    >
+                        <Divider light color="#81c784" />
+                        <Box ref={ref}>
+                            <Groups groups={groups} daddy={ref} />
+                        </Box>
+                    </List >
+                </>
                 :
                 (addForm == "addplace" ?
                     <AddPlaceForm ></AddPlaceForm>
@@ -211,4 +215,3 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
     })
     return <></>
 }
-

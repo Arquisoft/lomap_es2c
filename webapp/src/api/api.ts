@@ -1,7 +1,7 @@
 import { UserManager } from '../../../restapi/src/controllers/UserManager';
 import { Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
-const sessionStorage = require('node-sessionstorage')
+const sessionStorage = require('sessionstorage-for-nodejs')
 
 export async function addUser(user: User2): Promise<boolean> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
@@ -93,6 +93,32 @@ export async function getMyFriends(user: User): Promise<User[]> {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'user': user })
+    });
+    return response.json()
+}
+
+export async function sendFriendRequest(user: User): Promise<String> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/friendmanager/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
+    return response.json()
+}
+
+export async function searchUserByUsername(username: string): Promise<User> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/usermanager/find/' + username);
+    return response.json()
+}
+
+export async function addGroup(group: Group): Promise<Group[]> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/mapmanager/addgroup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'group': group, "user": getUserInSesion() })
     });
     return response.json()
 }

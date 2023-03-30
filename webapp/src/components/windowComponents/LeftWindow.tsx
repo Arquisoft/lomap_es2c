@@ -43,10 +43,12 @@ export function LeftWindow() {
         setValue(newValue);
     };
 
+    
+
     return (
         <Window>
             <ThemeProvider theme={theme}>
-                <MyTabContext value={value} theme={theme}>
+                <MyTabContext value={mainop} theme={theme}>
                     <Tabs
                         variant="fullWidth"
                         value={value}
@@ -60,6 +62,7 @@ export function LeftWindow() {
                     </Tabs>
                     <TabPanel value="groups">
                         <MapsManagerPanel />
+                        
                     </TabPanel>
                     <TabPanel value="friends">
                         <FriendManagerPanel />

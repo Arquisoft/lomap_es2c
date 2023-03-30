@@ -80,7 +80,6 @@ export function Login() {
         }).catch((e) => {
             console.log(e.message)
         });
-        //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
 
