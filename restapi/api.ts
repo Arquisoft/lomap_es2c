@@ -100,14 +100,26 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
 })
 
 api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {
-    let userRes = await fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
-    return res.status(200).send(userRes);
+    let groups = await fac.FactoryLoMap.getMapManager().verMapaDe(req.body.user);
+    
+    // Añadir gestión de errores cuando tengamos la información necesaria
+
+    return res.status(200).send(groups);
 })
 
 api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let friends = await fac.FactoryLoMap.getFriendManager().listarAmigos(user)
     return res.status(200).send(friends);
+})
+
+api.post("/mapmanager/addgroup", async (req: Request, res: Response): Promise<Response> =>{
+    let user = req.body.user;
+    let group = req.body.group;
+
+    let grupos = await fac.FactoryLoMap.getMapManager().añadirGrupo(group)
+    
+    return res.status(200).send(grupos)
 })
 
 export default api;

@@ -95,4 +95,14 @@ class MapManagerImpl implements MapManager {
         return grupo.places
     }
 
+    async añadirGrupo(grupo: Group): Promise<Group[]> {
+        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
+
+        this.pod.saveGroup(this.session, grupo);
+
+        let grupos = this.pod.getGroups(this.session);
+
+        return grupos;
+    }
+
 }

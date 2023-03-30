@@ -26,6 +26,7 @@ export interface MapManager {
     aplicarFiltro: (grupo: Group, filtro: string) => Place[];
     editarGrupo: (grupo: Group) => Group;
     mostrarGrupo: (grupo: Group) => Place[];
+    añadirGrupo: (grupo: Group) => Promise<Group[]>;
 }
 
 //#endregion
