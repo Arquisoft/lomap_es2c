@@ -1,5 +1,5 @@
-import { Box, Divider, Tooltip } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Button, Divider, Input, InputLabel, TextField, Tooltip } from '@mui/material'
+import React, { createRef, useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
@@ -17,9 +17,16 @@ import MapIcon from '@mui/icons-material/Map';
 import PlaceIcon from '@mui/icons-material/Place';
 import PersonIcon from '@mui/icons-material/Person';
 import { Group, Place, User } from '../../shared/shareddtypes';
-import { getMyFriends, getMyGroups, getUserInSesion } from '../../api/api';
+import { getMyFriends, getMyGroups, getUserDetails, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
-
+import AddIcon from '@mui/icons-material/Add';
+import { AccountCircle, FireHydrantAltOutlined } from '@mui/icons-material';
+import { render } from 'react-dom';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import InputAdornment from '@mui/material/InputAdornment';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface Friend {
     user: User,
@@ -36,70 +43,150 @@ const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
 })
 
+const AddFriendBox = styled(Box)({
+    padding: '1em 0em 1em',
+    display: 'flex',
+    alignItems: 'flex-end',
+})
+
+const AddItem = styled(ListItemButton)({
+    color: '#81c784',
+})
+
 export const FriendManagerPanel = () => {
 
-    const userFriends = () => {
+    const [url, setUrl] = useState("../testUser.jfif");
+
+    const ref = useRef<HTMLDivElement>(null);
+
+    const userFriends = async () => {
+        console.log("Ejecucion")
         let myFriends: Friend[] = [];
-        getUserInSesion().then(function (user) {
-            getMyFriends(user).then(function (friends) {
-                for (let i = 0; i < friends.length; i++) {
-                    let friendGroups: Group[] = []
-                    getMyGroups(friends[1]).then(function (groups) {
-                        for (let j = 0; j < groups.length; j++)
-                            friendGroups.push(groups[j]);
-                    })
-                    myFriends.push({
-                        "user": friends[i],
-                        "groups": friendGroups,
-                    });
-                }
-            })
+        let user = getUserInSesion();
+        await getMyFriends(user).then(function (friends) {
+            console.log(friends.length)
+            for (let i = 0; i < friends.length; i++) {
+                let friendGroups: Group[] = []
+                getMyGroups(friends[i]).then(function (groups) {
+                    for (let j = 0; j < groups.length; j++)
+                        friendGroups.push(groups[j]);
+                })
+                myFriends.push({
+                    "user": friends[i],
+                    "groups": [{
+                        "nombre": "Grupo 1",
+                        "places": [{
+                            "latitude": "5",
+                            "longitud": "6",
+                            "nombre": "Lugar 1"
+                        }, {
+                            "latitude": "5",
+                            "longitud": "6",
+                            "nombre": "Lugar 1"
+                        }]
+                    }],
+                });
+                myFriends.push({
+                    "user": friends[i],
+                    "groups": [{
+                        "nombre": "Grupo 1",
+                        "places": [{
+                            "latitude": "5",
+                            "longitud": "6",
+                            "nombre": "Lugar 1"
+                        }, {
+                            "latitude": "5",
+                            "longitud": "6",
+                            "nombre": "Lugar 1"
+                        }]
+                    }],
+                });
+            }
         })
-        myFriends.push({
-            "user": {
-                "username": "Paula",
-                "webID": "<3",
-                "password": "Universidad2023-",
-            },
-            "groups": [{
-                "nombre": "Grupo 1",
-                "places": [{
-                    "latitude": "5",
-                    "longitud": "6",
-                    "nombre": "Lugar 1"
-                }, {
-                    "latitude": "5",
-                    "longitud": "6",
-                    "nombre": "Lugar 1"
-                }]
-            }]
-        })
+        console.log(myFriends)
         return myFriends;
     }
 
-    const [friends, setFriends] = useState(userFriends())
+    const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
 
-    const updateFriends = () => {
-        setFriends(userFriends())
+    const navigate = useNavigate()
+
+    const searchUser = (username: string) => {
+        searchUserByUsername(username).then((user) => {
+            showAddFriendConfirm(user)
+        })
     }
 
-    const addFriend = () => {
-        updateFriends()
+    const showAddFriendConfirm = async (user: User) => {
+        let usr = await getUserDetails(user);
+        Swal.fire({
+            title: 'Mi perfil',
+            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+                    <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
+                    <label for="webid-gp" class="swal2-label">WebID: </label>
+                    <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + usr.webID + `>
+                    <label for="biography-gp" class="swal2-label">Biografía: </label>
+                    <textarea rows="4" id="biography-gp" class="swal2-input" disabled placeholder="Biografía..."></textarea>`,
+            confirmButtonText: 'Editar',
+            focusConfirm: false,
+            imageUrl: url,
+            imageWidth: 'auto',
+            imageHeight: 200,
+            imageAlt: 'Foto de perfil actual',
+            preConfirm: () => {
+                sendFriendRequest(user)
+            }
+        })
     }
 
-    const mostrarGrupo = (i: number) => {
-        console.log("Se muestra el grupo " + i)
-    }
+    return (
+        <>{/* CONVERTIR EN UN FORMULARIO */}
+            <AddFriendBox>
+                <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                <TextField label="Añadir un amigo" variant="standard" />
+                <Tooltip title="Add friend">
+                    <Button>
+                        <AddIcon htmlColor='#81c784' />
+                    </Button>
+                </Tooltip>
+            </AddFriendBox>
+            <ScrollBox>
+                <Divider light color="#81c784" />
+                <List
+                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    subheader={
+                        <ListSubheader component="div" id="nested-list-subheader">
+                            Tus amigos
+                        </ListSubheader>
+                    }
+                >
+                    <Box ref={ref}>
+                        <Friends friends={friends} daddy={ref} />
+                    </Box>
+                </List>
+            </ScrollBox >
+        </>
+    )
+}
 
-    const generateOpen = () => {
+const Friends = (props: { friends: Promise<Friend[]>, daddy: any }) => {
+
+    const [url, setUrl] = useState("../testUser.jfif");
+
+    const navigate = useNavigate()
+
+    const [open, setOpen] = React.useState("");
+
+    const generateOpen = (elems: number) => {
         let str = ""
-        for (let i = 0; i < friends.length; i++) {
+        for (let i = 0; i < elems; i++) {
             str += '0';
         }
+        console.log("Generate open: " + str)
         return str;
     }
-
-    const [open, setOpen] = React.useState(generateOpen());
 
     const handleClick = (item: number) => {
         let c = open.charAt(item) == '0' ? '1' : '0';
@@ -108,10 +195,11 @@ export const FriendManagerPanel = () => {
             newOpen += (i == item ? c : open.charAt(i));
         }
         setOpen(newOpen)
-        console.log(newOpen)
     }
 
     const isOpen = (item: number) => {
+        let c = open.charAt(item);
+        if (c != '0' && c != '1') return false;
         return open.charAt(item) == '0' ? false : true;
     }
 
@@ -119,25 +207,40 @@ export const FriendManagerPanel = () => {
         alert("eliminar amigo " + friend);
     }
 
-    return (
-        <ScrollBox>
-            <List
-                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                    <ListSubheader component="div" id="nested-list-subheader">
-                        Tus grupos de mapas
-                    </ListSubheader>
-                }
-            >
-                {friends.map((friend, i) => {
+    const showFriendProfile = async (user: User) => {
+        let usr = await getUserDetails(user);
+        Swal.fire({
+            title: 'Mi perfil',
+            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+                    <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
+                    <label for="webid-gp" class="swal2-label">WebID: </label>
+                    <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + usr.webID + `>
+                    <label for="biography-gp" class="swal2-label">Biografía: </label>
+                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="Biografía..."></textarea>`,
+            focusConfirm: false,
+            imageUrl: url,
+            imageWidth: 'auto',
+            imageHeight: 200,
+            imageAlt: 'Foto de perfil actual',
+        })
+    }
+
+    const showGroup = (group: Group, user: User) => {
+        navigate("/home/friends/" + user.username + "/" + group.nombre);
+        alert("Mostrando el grupo " + user.username + "/" + group.nombre)
+    }
+
+    props.friends.then((frds: Friend[]) => {
+        if (open.length != frds.length) setOpen(generateOpen(frds.length))
+        render(
+            <>
+                {frds.map((friend, i) => {
                     return (
                         <React.Fragment key={i}>
                             <ListItemButton>
                                 <ListItemIcon>
                                     <Tooltip title="See friend profile">
-                                        <PersonIcon />
+                                        <PersonIcon onClick={() => showFriendProfile(friend.user)} />
                                     </Tooltip>
                                 </ListItemIcon>
                                 <ListItemText primary={friend.user.username} />
@@ -158,21 +261,23 @@ export const FriendManagerPanel = () => {
                                 <List component="div" disablePadding>
                                     {friend.groups.map((group, j) => {
                                         return (
-                                            <Tooltip title="Show on map">
-                                                <ListItemButton sx={{ pl: 4 }}>
-                                                    <ListItemIcon>
-                                                        <MapIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={group.nombre} />
-                                                </ListItemButton>
-                                            </Tooltip>)
+                                            <React.Fragment key={i + "-" + j}>
+                                                <Tooltip title="Show on map">
+                                                    <ListItemButton sx={{ pl: 4 }} onClick={() => showGroup(group, friend.user)}>
+                                                        <ListItemIcon>
+                                                            <MapIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={group.nombre} />
+                                                    </ListItemButton>
+                                                </Tooltip>
+                                            </React.Fragment>
+                                        )
                                     })}
-
                                 </List>
                             </Collapse>
                         </React.Fragment>)
                 })}
-            </List>
-        </ScrollBox >
-    )
+            </>, props.daddy.current)
+    })
+    return <></>
 }

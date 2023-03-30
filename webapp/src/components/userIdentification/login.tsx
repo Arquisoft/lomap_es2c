@@ -75,12 +75,11 @@ export function Login() {
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
             if (userApi != null) {
-                navigate("/home/0");
+                navigate("/home/groups/main");
             }
         }).catch((e) => {
             console.log(e.message)
         });
-        //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
 

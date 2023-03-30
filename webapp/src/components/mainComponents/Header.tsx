@@ -62,7 +62,7 @@ export function Header(props: { logged: boolean }) {
 
     const goHome = () => {
         if (props.logged == true) {
-            navigate("/home");
+            navigate("/home/groups");
         } else {
             navigate("/");
         }
