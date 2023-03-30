@@ -1,16 +1,16 @@
 export { Place }
 class Place {
-    name: String
-    street: String
-    postalcode: String
-    city: String
-    country: String
-    coordinates: String
-    review: String
-    score: String
-    image: String
+    name: string
+    street: string
+    postalcode: string
+    city: string
+    country: string
+    coordinates: string
+    review: string
+    score: string
+    image: string
 
-    constructor(name: String, street: String, postalcode: String, city: String, country: String, coordinates: String, review: String, score: String, image: String) {
+    constructor(name: string, street: string, postalcode: string, city: string, country: string, coordinates: string, review: string, score: string, image: string) {
         this.name = name
         this.street = street
         this.postalcode = postalcode

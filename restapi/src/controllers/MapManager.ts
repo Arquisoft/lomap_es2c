@@ -1,3 +1,4 @@
+import { Session } from "@inrupt/solid-client-authn-browser/dist/Session";
 import { Place } from "../entities/Place";
 import UserSchema from "../entities/UserSchema";
 import { Group, MapManager, SesionManager, User } from "../facade";
@@ -9,13 +10,18 @@ const sessionStorage = require('sessionstorage-for-nodejs')
 
 class MapManagerImpl implements MapManager {
 
+    session: Session
     sessionManager: SesionManager;
     pod: PODManager;
+
+    constructor(session: Session){
+        this.session = session
+    }
 
     async verMapaDe(user: User): Promise<Group[]> {
         let usuarioEncontrado = await repo.Repository.findOne(user)
 
-        let grupos = this.pod.getGrupos(usuarioEncontrado.webID)
+        let grupos = this.pod.getGroups(this.session)
 
         return grupos
     }
@@ -25,7 +31,7 @@ class MapManagerImpl implements MapManager {
 
         grupo.places.push(lugar)
 
-        this.pod.guardarGrupo(user.webID, grupo)
+        this.pod.saveGroup(this.session, grupo)
 
         return grupo;
     }
@@ -39,7 +45,7 @@ class MapManagerImpl implements MapManager {
             places: []
         };
 
-        this.pod.guardarGrupo(user.webID, grupo)
+        this.pod.saveGroup(this.session, grupo)
 
         return grupo;
     }
@@ -64,7 +70,7 @@ class MapManagerImpl implements MapManager {
             grupo.places.splice(lugarIndex, 1);
         }
 
-        this.pod.guardarGrupo(user.webID, grupo)
+        this.pod.saveGroup(this.session, grupo)
 
         return grupo;
     }
@@ -79,7 +85,7 @@ class MapManagerImpl implements MapManager {
     editarGrupo(grupo: Group): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
 
-        this.pod.guardarGrupo(user.webID, grupo);
+        this.pod.saveGroup(this.session, grupo);
 
         return grupo;
     }
