@@ -20,7 +20,7 @@ function App(): JSX.Element {
                     ?lat = [optional lat to add from map]
                     ?lon = [optional lon to add from map]
                 */}
-                <Route path='/home/:mainop/:op/:id?/:lat?/:lon?' element={<AuthChecker><LoggedView /></AuthChecker>} />
+                <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthChecker><LoggedView /></AuthChecker>} />
                 <Route path='/login' element={<LoginView />} />
                 <Route path='/signup' element={<SignupView />} />
                 <Route path='*' element={<NoFound />} />

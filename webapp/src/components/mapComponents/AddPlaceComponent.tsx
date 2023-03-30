@@ -130,7 +130,7 @@ export default function AddPlace() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = (data: any) => console.log(data);
  
-  const { lat, lon } = useParams();
+  const { lat, lng } = useParams();
 
 
   return (
@@ -151,9 +151,9 @@ export default function AddPlace() {
         /> 
         <CSSTextField
               id="longitude-AP"
-              label={lon? ("Longitud: " + lon.toString()) : "Longitud"}
+              label={lng? ("Longitud: " + lng.toString()) : "Longitud"}
               placeholder="Longitud"
-              disabled={lon? true : false}
+              disabled={lng? true : false}
               type="number"
               fullWidth
               {...register("longitude")}

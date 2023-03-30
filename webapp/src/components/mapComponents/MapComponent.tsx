@@ -36,6 +36,7 @@ function AddPlace(): any {
   const [lng, setLongitude] = useState("Longitud:")
   const navigate = useNavigate()
   const map = useMap()
+  const {id} = useParams()
 
   let nMarker: L.Marker = null;
 
@@ -50,7 +51,7 @@ function AddPlace(): any {
         nMarker = L.marker(e.latlng);
         nMarker.bindPopup((new L.Popup({ keepInView: true })).setContent("<p>Lugar a añadir</p>"))
         nMarker.addTo(map)    
-        navigate("/home/1/" + lat + "/" + lng + "/")
+        navigate("/home/groups/addplace/" + id + "/" + lat + "/" + lng + "/")
         setMarker(nMarker)
     }}
   })

@@ -43,6 +43,8 @@ export function LeftWindow() {
         setValue(newValue);
     };
 
+    
+
     return (
         <Window>
             <ThemeProvider theme={theme}>
@@ -60,6 +62,7 @@ export function LeftWindow() {
                     </Tabs>
                     <TabPanel value="groups">
                         <MapsManagerPanel />
+                        
                     </TabPanel>
                     <TabPanel value="friends">
                         <FriendManagerPanel />
