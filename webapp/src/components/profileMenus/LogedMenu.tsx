@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
-import { editUserDetails, getUserDetails, getUserInSesion } from '../../api/api';
+import { editUserDetails, getUserDetails, getUserInSesion, logout } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
@@ -36,9 +36,9 @@ const MyMenu = styled(Menu)({
 
 //#region DEFINICION DE COMPONENTES PERSONALIZADOS
 
-function LoginInformation(props:any) {
+function LoginInformation(props: any) {
     return <b><p>Se ha iniciado sesión como {props.name}</p></b>;
-  }
+}
 //#endregion
 function LogedMenu() {
 
@@ -215,6 +215,7 @@ function LogedMenu() {
 
     const goLogout = () => {
         closeUserMenu();
+        logout();
         //var state = FactoryLoMap.getSesionManager().cerrarSesion();
         navigate("/");
         //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
@@ -243,12 +244,12 @@ function LogedMenu() {
 
     //#endregion
 
-    
+
     return (
-        
+
         //#region COMPONENTE
         <BoxProfile onLoad={getUsername}>
-            <LoginInformation name={username}/>
+            <LoginInformation name={username} />
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />

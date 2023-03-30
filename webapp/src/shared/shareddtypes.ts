@@ -51,6 +51,15 @@ export interface UserManager {
     listarDetalles: (user: User) => Promise<User>;
 }
 
-export interface FriendRequest { }
+export interface Friend {
+    user: User,
+    groups: Group[],
+}
+
+export interface FriendRequest {
+    receiver: User,
+    sender: User,
+    status: number,
+}
 export interface Group { }
 export interface Place { }

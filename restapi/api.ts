@@ -108,4 +108,10 @@ api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<
     return res.status(200).send(friends);
 })
 
+api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
+    let user = req.body.user;
+    //let friends = await fac.FactoryLoMap.getFriendManager().listarAmigos(user)
+    return res.status(200).send([]);
+})
+
 export default api;
