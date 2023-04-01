@@ -24,6 +24,7 @@ import { FriendsComponent } from './FriendsComponent';
 import { FriendRequestsComponent } from './FriendRequestsComponent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
+import { useForm, SubmitHandler } from "react-hook-form";
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -62,7 +63,7 @@ export const FriendManagerPanel = () => {
     const navigate = useNavigate()
 
     const userFriends = async () => {
-        console.log("Ejecucion")
+   
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
         await getMyFriends(user).then(function (friends) {
@@ -99,7 +100,7 @@ export const FriendManagerPanel = () => {
     const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
 
     const userFriendRequests = async (): Promise<FriendRequest[]> => {
-        console.log("Ejecucion")
+        
         let myFriendRequests: FriendRequest[] = [];
         let user = getUserInSesion();
         await getMyFriendRequests(user).then((friendRequests) => {
@@ -136,11 +137,32 @@ export const FriendManagerPanel = () => {
     }
 
     const [friendRequests, setFriendRequests] = useState<Promise<FriendRequest[]>>(userFriendRequests());
+    const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
-    const searchUser = (username: string) => {
-        searchUserByUsername(username).then((user) => {
-            showAddFriendConfirm(user)
-        })
+    
+    const onSubmit: SubmitHandler<User> = data => searchUser(data);
+
+    const searchUser = (user:User) => {
+        searchUserByUsername(user).then((res) => {
+            if(res.username != 'undefined' && res.username != null)
+                showAddFriendConfirm(res)
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'No se ha enviado la solicitud de amistad',
+                  })
+            }})
+
+                /*
+            console.log("usuario encontrado --> " + res)
+        }).catch((err) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: err,
+              })
+        })*/
     }
 
     const showAddFriendConfirm = async (user: User) => {
@@ -176,12 +198,18 @@ export const FriendManagerPanel = () => {
                 </Tooltip>
             </OptionsBox>
             {op != "requests" ?
-                <>{/* CONVERTIR EN UN FORMULARIO */}
-                    <AddFriendBox>
+                <>
+                    <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
                         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                        <TextField label="Añadir un amigo" variant="standard" />
+                        <TextField 
+                            label="Añadir un amigo" 
+                            variant="standard" 
+                            placeholder="Nombre de usuario"
+                            {...register("username", { maxLength: 20 })}
+                            helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
+                        />
                         <Tooltip title="Add friend">
-                            <Button>
+                            <Button type="submit">
                                 <AddIcon htmlColor='#81c784' />
                             </Button>
                         </Tooltip>

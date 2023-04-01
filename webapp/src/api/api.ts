@@ -110,9 +110,16 @@ export async function sendFriendRequest(user: User): Promise<String> {
     return response.json()
 }
 
-export async function searchUserByUsername(username: string): Promise<User> {
+export async function searchUserByUsername(user: User): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/usermanager/find/' + username);
+    let response = await fetch(apiEndPoint + '/usermanager/details/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    })
+    .then((res) => {return res})
+    .catch((err) => {return err } );
+
     return response.json()
 }
 

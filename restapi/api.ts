@@ -40,9 +40,9 @@ api.post(
         let user = req.body.user;
         let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
         if (u.username == "notfound") {
-            return res.status(507).send("Usuario no encontrado para listar detalle");
+            return res.status(404).json({error: "El usuario no existe."});
         } else if (u.username == "bderror") {
-            return res.status(508).send("Error en la conexión con la base de datos");
+            return res.status(500).json({error: "Error en la conexión con la base de datos"});
         }
         else {
             return res.status(200).send(u);
@@ -56,9 +56,9 @@ api.post(
         let user = req.body.user;
         let u = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
         if (u.username == "notfound") {
-            return res.status(507).send("Usuario no encontrado");
+            return res.status(407).json("Usuario no encontrado");
         } else if (u.username == "bderror") {
-            return res.status(508).send("Error en la conexión con la base de datos");
+            return res.status(408).json("Error en la conexión con la base de datos");
         }
         else {
             return res.status(200).send(u);
