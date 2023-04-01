@@ -1,32 +1,21 @@
-import { Box, Button, Divider, Input, InputLabel, TextField, Tooltip } from '@mui/material'
+import { Divider, Tooltip } from '@mui/material'
 import React, { createRef, useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
-import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 import MapIcon from '@mui/icons-material/Map';
-import PlaceIcon from '@mui/icons-material/Place';
 import PersonIcon from '@mui/icons-material/Person';
 import { Friend, Group, Place, User } from '../../../shared/shareddtypes';
 import { getMyFriends, getMyGroups, getUserDetails, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
-import { AccountCircle, FireHydrantAltOutlined } from '@mui/icons-material';
 import { render } from 'react-dom';
-import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import InputAdornment from '@mui/material/InputAdornment';
-import { SubmitHandler, useForm } from 'react-hook-form';
 
 
 const VerticalDivider = styled(Divider)({
