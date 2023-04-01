@@ -7,8 +7,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MapIcon from '@mui/icons-material/Map';
-import { getMyGroups, getUserInSesion } from '../../api/api';
-import { Group, User } from '../../shared/shareddtypes';
+import { getMyGroups, getUserInSesion } from '../../../api/api';
+import { Group, User } from '../../../shared/shareddtypes';
 import AddIcon from '@mui/icons-material/Add';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
@@ -34,6 +34,10 @@ const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
 })
 
+const HorizontalDivider = styled(Divider)({
+    minWidth: '25vw'
+})
+
 export const MapsManagerPanel = () => {
 
     const ref = useRef<HTMLDivElement>(null);
@@ -47,7 +51,7 @@ export const MapsManagerPanel = () => {
             }
         })
         myGroups.push({
-            "nombre": "grupo1",
+            "nombre": "Bares favoritos",
             "places": [{
                 "latitude": "5",
                 "longitud": "6",
@@ -59,7 +63,7 @@ export const MapsManagerPanel = () => {
             }]
         })
         myGroups.push({
-            "nombre": "grupo1",
+            "nombre": "Rutas de montaña",
             "places": [{
                 "latitude": "5",
                 "longitud": "6",
@@ -84,7 +88,7 @@ export const MapsManagerPanel = () => {
     if (op != addForm) setAddForm(op)
 
     return (
-        <ScrollBox>
+        <>
             {addForm == "main" ?
                 <>
                     <AddItem onClick={() => navigate("/home/groups/addgroup")}>
@@ -103,10 +107,12 @@ export const MapsManagerPanel = () => {
                             </ListSubheader>
                         }
                     >
-                        <Divider light color="#81c784" />
-                        <Box ref={ref}>
-                            <Groups groups={groups} daddy={ref} />
-                        </Box>
+                        <HorizontalDivider light color="#81c784" />
+                        <ScrollBox>
+                            <Box ref={ref}>
+                                <Groups groups={groups} daddy={ref} />
+                            </Box>
+                        </ScrollBox>
                     </List >
                 </>
                 :
@@ -120,7 +126,7 @@ export const MapsManagerPanel = () => {
                     )
                 )
             }
-        </ScrollBox >
+        </ >
     )
 }
 

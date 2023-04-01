@@ -29,6 +29,7 @@ const ErrorBox = styled(Box)({
 const TitleBox = styled(Box)({
     fontSize: "3em",
     alignSelf: "center",
+    padding: "0.5em"
 })
 
 const TextBox = styled(Box)({
@@ -43,7 +44,7 @@ export const ErrorPage = () => {
                 Error 404: Página no encontrada
             </TitleBox>
             <TextBox>
-                Disculpamos las molestias pero la página a la que acaba de intentar acceder no existe o no se encuentra disponible. Vuelva al menú principal calcando <a href="/">aquí</a>.
+                Disculpamos las molestias pero la página a la que acaba de intentar acceder no existe o no se encuentra disponible. Vuelva al menú principal calcando <a href="/">aquí</a> o contacte con nosotros mediante nuestro GitHub proporcionado en el pie de la página. ¡Gracias por la compresión!
             </TextBox>
         </ErrorBox>
     )

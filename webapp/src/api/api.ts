@@ -1,5 +1,4 @@
-import { UserManager } from '../../../restapi/src/controllers/UserManager';
-import { Group, SesionManager, User, User2 } from '../shared/shareddtypes';
+import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
 const sessionStorage = require('sessionstorage-for-nodejs')
 
@@ -25,6 +24,10 @@ export async function getUsers(): Promise<User2[]> {
 
 export function getUserInSesion(): User {
     return JSON.parse(sessionStorage.getItem('userInSession') ?? null) as User;
+}
+
+export function logout() {
+    sessionStorage.setItem('userInSession', null)
 }
 
 export async function signup(user: User): Promise<User> {
@@ -119,6 +122,16 @@ export async function addGroup(group: Group): Promise<Group[]> {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'group': group, "user": getUserInSesion() })
+    });
+    return response.json()
+}
+
+export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/friendmanager/friendrequests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
     });
     return response.json()
 }
