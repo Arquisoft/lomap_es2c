@@ -70,7 +70,7 @@ export interface User {
 }
 
 export interface Group {
-    name: String
+    name: string
     places: Place[]
 }
 
