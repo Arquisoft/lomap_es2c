@@ -34,6 +34,20 @@ api.post(
     }
 );
 
+api.get(
+    "/usermanager/searchUserByUsername",
+    async (req: Request, res: Response): Promise<Response> => {
+      try {
+        const username = req.query.username.toString();
+        const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
+        return res.status(200).json(user);
+      } catch (err) {
+        return res.status(404).send({error: err.toString()})
+      }
+    }
+  );
+  
+
 
 api.post(
     "/usermanager/details", async (req: Request, res: Response): Promise<Response> => {

@@ -143,26 +143,27 @@ export const FriendManagerPanel = () => {
     const onSubmit: SubmitHandler<User> = data => searchUser(data);
 
     const searchUser = (user:User) => {
-        searchUserByUsername(user).then((res) => {
-            if(res.username != 'undefined' && res.username != null)
-                showAddFriendConfirm(res)
-            else {
+        try{
+            searchUserByUsername(user.username).then((res) => {
+                if(res != null && res.username != null)
+                    showAddFriendConfirm(res)
+            })
+            .catch((err: Error) => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'No se ha enviado la solicitud de amistad',
-                  })
-            }})
+                    text: err.message,
+                        })
+            });
 
-                /*
-            console.log("usuario encontrado --> " + res)
-        }).catch((err) => {
+        } catch (e) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: err,
-              })
-        })*/
+                text: 'No se ha enviado la solicitud de amistad',
+                    })
+        }
+
     }
 
     const showAddFriendConfirm = async (user: User) => {

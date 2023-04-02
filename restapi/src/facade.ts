@@ -62,13 +62,13 @@ class FriendRequest { }
 //#endregion
 
 export interface User {
-    username: String
-    password: String
-    webID: String
+    username: string
+    password: string
+    webID: string
 }
 
 export interface Group {
-    name: String
+    name: string
     places: Place[]
 }
 

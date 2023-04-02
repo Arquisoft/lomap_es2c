@@ -7,10 +7,11 @@ export type { UserManager };
 export { UserManagerImpl };
 
 const bcrypt = require("bcryptjs");
-//import UserSchema from '../entities/UserSchema'
+
 interface UserManager {
     modificarPerfil: (user: User) => Promise<User>;
     listarDetalles: (user: User) => Promise<User>;
+    buscarUsuario: (username: string) => Promise<User>;
 }
 
 
@@ -19,12 +20,15 @@ class UserManagerImpl implements UserManager {
         return modificarUsuario(user);
     }
     public listarDetalles(user: User) {
-        return buscarUsuarioPorUsername(user);
+        return buscarUsuarioPorUsername(user.username);
+    }
+    public buscarUsuario(username: string){
+        return buscarUsuarioPorUsername(username);
     }
 }
 
 
-async function buscarUsuarioPorUsername(u: User) {
+async function buscarUsuarioPorUsername(username: string) {
 
     const { uri, mongoose } = getBD();
     try {
@@ -36,41 +40,21 @@ async function buscarUsuarioPorUsername(u: User) {
     let resultado: User;
 
     try {
-        resultado = await UserSchema.findOne({ username: u.username }, { _id: 0, __v: 0 }) as User;
+        resultado = await UserSchema.findOne({ username: username }, { _id: 0, __v: 0 }) as User;
     } catch {
-        return new UserImpl("bderror", "", "");
+        throw new Error("Error al conectarse con la base de datos.")
     }
 
-    if (resultado == null) { return new UserImpl("notfound", "", "") };
+    if (resultado == null) { 
+        throw new Error("El usuario no existe.")
+    }
 
-    console.log("Res:" + resultado);
-    /*
-    resultado = resultado.toString();
-    mongoose.connection.close();
-
-    resultado = resultado.replace("username", '"username"');
-    resultado = resultado.replace("img", '"img"');
-    resultado = resultado.replace("password", '"password"');
-    resultado = resultado.replace("webid", '"webid"');
-    resultado = resultado.replaceAll("'", '"');
-    resultado = deleteSecondLine(resultado);
-
-    let b = JSON.parse(resultado);
-    */
-
+    
+   
     return resultado;
 
 }
 
-/*prueba().catch(err => console.log(err));
-
-async function prueba() {
-    
-    const u=buscarUsuarioPorUsername(new User("adri","","",""));
-    console.log((await u).img);
-    console.log("gola");
-
-}*/
 
 function getBD() {
     const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
@@ -101,14 +85,3 @@ async function modificarUsuario(user: User) {
     return resultado;
 
 }
-/*
-prueba().catch(err => console.log(err));
-
-async function prueba() {
-    
-    const u=modificarUsuario(new User("adrokoelloco","80","80","80"));
-    console.log((await u).webid);
-
-
-
-}*/

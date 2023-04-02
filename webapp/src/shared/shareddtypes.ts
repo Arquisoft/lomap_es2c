@@ -1,7 +1,7 @@
 export interface User {
-    username: String
-    password: String
-    webID: String
+    username: string
+    password: string
+    webID: string
 }
 
 export interface Group {
