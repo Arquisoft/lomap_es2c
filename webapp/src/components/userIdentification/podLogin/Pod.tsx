@@ -114,7 +114,7 @@ export default function BasicSelect() {
 
             <LoginButton
              oidcIssuer={idp}
-             redirectUrl={window.location.href}
+             redirectUrl={"http://localhost:3000/home/groups/main"}
             >
                     <CSSButton
                             sx={{ mt: "1.5em", mb: "2em" }}
@@ -122,7 +122,6 @@ export default function BasicSelect() {
                             type="submit"
                             size="large"
                             fullWidth
-                            onClick={handleLogin}
                         >
                             Iniciar sesión
                     </CSSButton>
