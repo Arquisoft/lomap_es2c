@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import ImgCarrusel from './ImgCarrusel';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
@@ -35,7 +37,7 @@ const TextBox = styled(Box)({
 
 const InfoBox = styled(Box)({
     gridColumn: '4/6',
-    gridRow: '1/3',
+    gridRow: '1/5',
     justifySelf: 'center',
     alignSelf: 'center',
     color: "white",
@@ -47,27 +49,36 @@ const InfoBox = styled(Box)({
     height: '100%',
     textAlign: 'justify',
     paddingTop: '0.85em',
-})
-
-const ImgBox = styled(Box)({
-    gridColumn: '4/6',
-    gridRow: '3/5',
-    justifySelf: 'center',
-    alignSelf: 'center',
-    color: "white",
-    fontFamily: 'Calibri',
-    fontWeight: 'lighter',
-    fontSize: '1em',
-    backgroundColor: '#81c784',
-    width: '100%',
-    height: '100%',
-    textAlign: 'center',
-    paddingTop: '0.85em',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
 })
 
 const MainBox = styled(Box)({
     display: 'flex',
     justifyContent: 'center',
+})
+
+const ScrollBox = styled(Box)({
+    maxHeight: '60vh',
+    overflow: 'auto',
+    scrollbarColor: 'black white',
+    padding: '0em 1em 0em',
+})
+
+const TitleBox = styled(Box)({
+    textAlign: 'center',
+    justifyContent: 'center',
+    fontSize: '1.2em'
+})
+
+const GoButton = styled(Button)({
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#1f4a21',
+    color: 'white',
+    marginBottom: '0.5em'
 })
 //#endregion
 
@@ -76,7 +87,7 @@ export function HomePage() {
     const navigate = useNavigate();
 
     const goSignup = () => {
-        navigate("signup")
+        navigate("/signup")
     }
 
     return (
@@ -95,11 +106,16 @@ export function HomePage() {
                     </p>
                 </TextBox>
                 <InfoBox>
+                    <TitleBox>
+                        Descubre LoMap
+                    </TitleBox>
+                    <ScrollBox>
+                        <ImgCarrusel />
+                    </ScrollBox>
+                    <GoButton onClick={() => navigate("/home/groups/main")}>
+                        ¡Adelante!
+                    </GoButton>
                 </InfoBox>
-                <ImgBox>
-                    <img width="90%" src="../bruselas.jfif" />
-                    <p>Conoce Bruselas de la mano de tus amigos</p>
-                </ImgBox>
             </HomeContainer >
         </MainBox>
         //#endregion

@@ -1,5 +1,5 @@
-import { Box, Button, Divider, Input, InputLabel, TextField, Tooltip } from '@mui/material'
-import React, { createRef, useEffect, useState } from 'react'
+import { Box, Button, Divider, TextField, Tooltip } from '@mui/material'
+import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
@@ -7,31 +7,24 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 import MapIcon from '@mui/icons-material/Map';
-import PlaceIcon from '@mui/icons-material/Place';
 import PersonIcon from '@mui/icons-material/Person';
-import { Group, Place, User } from '../../shared/shareddtypes';
-import { getMyFriends, getMyGroups, getUserDetails, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../api/api';
+import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
+import { getMyFriendRequests, getMyFriends, getMyGroups, getUserDetails, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { AccountCircle, FireHydrantAltOutlined } from '@mui/icons-material';
 import { render } from 'react-dom';
 import { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import InputAdornment from '@mui/material/InputAdornment';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
-interface Friend {
-    user: User,
-    groups: Group[],
-}
+import { FriendsComponent } from './FriendsComponent';
+import { FriendRequestsComponent } from './FriendRequestsComponent'
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import GroupIcon from '@mui/icons-material/Group';
+import { useForm, SubmitHandler } from "react-hook-form";
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -49,8 +42,14 @@ const AddFriendBox = styled(Box)({
     alignItems: 'flex-end',
 })
 
-const AddItem = styled(ListItemButton)({
-    color: '#81c784',
+const OptionsBox = styled(Box)({
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row'
+})
+
+const HorizontalDivider = styled(Divider)({
+    minWidth: '25vw'
 })
 
 export const FriendManagerPanel = () => {
@@ -59,8 +58,12 @@ export const FriendManagerPanel = () => {
 
     const ref = useRef<HTMLDivElement>(null);
 
+    const { op } = useParams()
+
+    const navigate = useNavigate()
+
     const userFriends = async () => {
-        console.log("Ejecucion")
+   
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
         await getMyFriends(user).then(function (friends) {
@@ -71,6 +74,7 @@ export const FriendManagerPanel = () => {
                     for (let j = 0; j < groups.length; j++)
                         friendGroups.push(groups[j]);
                 })
+                friends[i].username = "Manolo"
                 myFriends.push({
                     "user": friends[i],
                     "groups": [{
@@ -86,21 +90,7 @@ export const FriendManagerPanel = () => {
                         }]
                     }],
                 });
-                myFriends.push({
-                    "user": friends[i],
-                    "groups": [{
-                        "nombre": "Grupo 1",
-                        "places": [{
-                            "latitude": "5",
-                            "longitud": "6",
-                            "nombre": "Lugar 1"
-                        }, {
-                            "latitude": "5",
-                            "longitud": "6",
-                            "nombre": "Lugar 1"
-                        }]
-                    }],
-                });
+
             }
         })
         console.log(myFriends)
@@ -109,12 +99,71 @@ export const FriendManagerPanel = () => {
 
     const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
 
-    const navigate = useNavigate()
-
-    const searchUser = (username: string) => {
-        searchUserByUsername(username).then((user) => {
-            showAddFriendConfirm(user)
+    const userFriendRequests = async (): Promise<FriendRequest[]> => {
+        
+        let myFriendRequests: FriendRequest[] = [];
+        let user = getUserInSesion();
+        await getMyFriendRequests(user).then((friendRequests) => {
+            for (let i = 0; i < friendRequests.length; i++)
+                myFriendRequests.push(friendRequests[i]);
+        });
+        myFriendRequests.push({
+            sender: {
+                username: "Acosador",
+                webID: "WebID de acosador",
+                password: ".",
+            },
+            receiver: {
+                username: "security2",
+                webID: "WebID de acosador",
+                password: ".",
+            },
+            status: 0
         })
+        myFriendRequests.push({
+            sender: {
+                username: "security",
+                webID: "WebID de acosador",
+                password: ".",
+            },
+            receiver: {
+                username: "security2",
+                webID: "WebID de acosador",
+                password: ".",
+            },
+            status: 0
+        })
+        return myFriendRequests;
+    }
+
+    const [friendRequests, setFriendRequests] = useState<Promise<FriendRequest[]>>(userFriendRequests());
+    const { register, handleSubmit, formState: { errors } } = useForm<User>();
+
+    
+    const onSubmit: SubmitHandler<User> = data => searchUser(data);
+
+    const searchUser = (user:User) => {
+        try{
+            searchUserByUsername(user.username).then((res) => {
+                if(res != null && res.username != null)
+                    showAddFriendConfirm(res)
+            })
+            .catch((err: Error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: err.message,
+                        })
+            });
+
+        } catch (e) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No se ha enviado la solicitud de amistad',
+                    })
+        }
+
     }
 
     const showAddFriendConfirm = async (user: User) => {
@@ -140,38 +189,75 @@ export const FriendManagerPanel = () => {
     }
 
     return (
-        <>{/* CONVERTIR EN UN FORMULARIO */}
-            <AddFriendBox>
-                <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                <TextField label="Añadir un amigo" variant="standard" />
-                <Tooltip title="Add friend">
-                    <Button>
-                        <AddIcon htmlColor='#81c784' />
-                    </Button>
+        <>
+            <OptionsBox>
+                <Tooltip title="Friends">
+                    <GroupIcon onClick={() => navigate("/home/friends/main")} htmlColor={op == "main" ? "#1f4a21" : "#81c784"} />
                 </Tooltip>
-            </AddFriendBox>
-            <ScrollBox>
-                <Divider light color="#81c784" />
-                <List
-                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                    component="nav"
-                    aria-labelledby="nested-list-subheader"
-                    subheader={
-                        <ListSubheader component="div" id="nested-list-subheader">
-                            Tus amigos
-                        </ListSubheader>
-                    }
-                >
-                    <Box ref={ref}>
-                        <Friends friends={friends} daddy={ref} />
-                    </Box>
-                </List>
-            </ScrollBox >
-        </>
-    )
+                <Tooltip title="Friend requests">
+                    <NotificationsActiveIcon onClick={() => navigate("/home/friends/requests")} htmlColor={op == "requests" ? "#1f4a21" : "#81c784"} />
+                </Tooltip>
+            </OptionsBox>
+            {op != "requests" ?
+                <>
+                    <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
+                        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                        <TextField 
+                            label="Añadir un amigo" 
+                            variant="standard" 
+                            placeholder="Nombre de usuario"
+                            {...register("username", { maxLength: 20 })}
+                            helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
+                        />
+                        <Tooltip title="Add friend">
+                            <Button type="submit">
+                                <AddIcon htmlColor='#81c784' />
+                            </Button>
+                        </Tooltip>
+                    </AddFriendBox>
+                    <HorizontalDivider light color="#81c784" />
+                    <ScrollBox>
+                        <List
+                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                            component="nav"
+                            aria-labelledby="nested-list-subheader"
+                            subheader={
+                                <ListSubheader component="div" id="nested-list-subheader">
+                                    Tus amigos
+                                </ListSubheader>
+                            }
+                        >
+                            <Box ref={ref}>
+                                <FriendsComponent friends={friends} daddy={ref} />
+                            </Box>
+                        </List>
+                    </ScrollBox >
+                </>
+                :
+                <>
+                    <HorizontalDivider light color="#81c784" />
+                    <ScrollBox>
+                        <List
+                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                            component="nav"
+                            aria-labelledby="nested-list-subheader"
+                            subheader={
+                                <ListSubheader component="div" id="nested-list-subheader">
+                                    Solicitudes de amistad
+                                </ListSubheader>
+                            }
+                        >
+                            <Box ref={ref}>
+                                <FriendRequestsComponent friendRequests={friendRequests} daddy={ref} />
+                            </Box>
+                        </List>
+                    </ScrollBox >
+                </>
+            }
+        </>)
 }
 
-const Friends = (props: { friends: Promise<Friend[]>, daddy: any }) => {
+const FriendRequests = (props: { friends: Promise<Friend[]>, daddy: any }) => {
 
     const [url, setUrl] = useState("../testUser.jfif");
 

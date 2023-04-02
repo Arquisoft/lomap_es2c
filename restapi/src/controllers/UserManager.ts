@@ -1,17 +1,17 @@
 import { UserImpl } from "../entities/User";
 import type { User } from "../facade";
 import UserSchema from "../entities/UserSchema";
-import * as repo from '../persistence/Repository';
 import mongoose from "mongoose";
 
 export type { UserManager };
 export { UserManagerImpl };
 
 const bcrypt = require("bcryptjs");
-//import UserSchema from '../entities/UserSchema'
+
 interface UserManager {
     modificarPerfil: (user: User) => Promise<User>;
     listarDetalles: (user: User) => Promise<User>;
+    buscarUsuario: (username: string) => Promise<User>;
 }
 
 
@@ -20,63 +20,41 @@ class UserManagerImpl implements UserManager {
         return modificarUsuario(user);
     }
     public listarDetalles(user: User) {
-        return buscarUsuarioPorUsername(user);
+        return buscarUsuarioPorUsername(user.username);
+    }
+    public buscarUsuario(username: string){
+        return buscarUsuarioPorUsername(username);
     }
 }
 
 
-async function buscarUsuarioPorUsername(u: User) {
-    
-    /*
+async function buscarUsuarioPorUsername(username: string) {
+
     const { uri, mongoose } = getBD();
     try {
         await mongoose.connect(uri);
     } catch {
         return new UserImpl("bderror", "", "");
     }
-    */
-    
-    let resultado: User;
-    resultado = await repo.Repository.findOne(u)
 
-    /*
+    let resultado: User;
+
     try {
-        resultado = await UserSchema.findOne({ username: u.username }, { _id: 0, __v: 0 }) as User;
+        resultado = await UserSchema.findOne({ username: username }, { _id: 0, __v: 0 }) as User;
     } catch {
-        return new UserImpl("bderror", "", "");
+        throw new Error("Error al conectarse con la base de datos.")
     }
 
-    if (resultado == null) { return new UserImpl("notfound", "", "") };
-    */
+    if (resultado == null) { 
+        throw new Error("El usuario no existe.")
+    }
 
-    console.log("Res:" + resultado);
-    /*
-    mongoose.connection.close();
     
-    resultado = resultado.toString();
-    resultado = resultado.replace("username", '"username"');
-    resultado = resultado.replace("img", '"img"');
-    resultado = resultado.replace("password", '"password"');
-    resultado = resultado.replace("webid", '"webid"');
-    resultado = resultado.replaceAll("'", '"');
-    resultado = deleteSecondLine(resultado);
-
-    let b = JSON.parse(resultado);
-    */
-
+   
     return resultado;
 
 }
 
-/*prueba().catch(err => console.log(err));
-
-async function prueba() {
-    
-    const u=buscarUsuarioPorUsername(new User("adri","","",""));
-    console.log((await u).img);
-    console.log("gola");
-
-}*/
 
 function getBD() {
     const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
@@ -87,7 +65,6 @@ function getBD() {
 
 async function modificarUsuario(user: User) {
 
-    /*
     console.log("Editar: " + JSON.stringify(user))
     const { uri, mongoose } = getBD();
     try {
@@ -95,12 +72,8 @@ async function modificarUsuario(user: User) {
     } catch {
         return new UserImpl("bderror", "", "");
     }
-    */
 
     let resultado: User;
-    resultado = await repo.Repository.findOneAndUpdate(user)
-
-    /*
     try {
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID });
     } catch {
@@ -108,19 +81,7 @@ async function modificarUsuario(user: User) {
     }
 
     mongoose.connection.close();
-    */
 
     return resultado;
 
 }
-/*
-prueba().catch(err => console.log(err));
-
-async function prueba() {
-    
-    const u=modificarUsuario(new User("adrokoelloco","80","80","80"));
-    console.log((await u).webid);
-
-
-
-}*/

@@ -1,7 +1,4 @@
-import { UserManager } from '../../../restapi/src/controllers/UserManager';
-import { Group, SesionManager, User, User2 } from '../shared/shareddtypes';
-
-const sessionStorage = require('sessionstorage-for-nodejs')
+import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
 export async function addUser(user: User2): Promise<boolean> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
@@ -24,7 +21,12 @@ export async function getUsers(): Promise<User2[]> {
 }
 
 export function getUserInSesion(): User {
-    return JSON.parse(sessionStorage.getItem('userInSession') ?? null) as User;
+    return JSON.parse(window.localStorage.getItem('userInSession') ?? null) as User;
+}
+
+export function logout() {
+    window.localStorage.removeItem('userInSession');
+    window.localStorage.setItem('isLogged', "false");
 }
 
 export async function signup(user: User): Promise<User> {
@@ -50,7 +52,8 @@ export async function login(user: User): Promise<User> {
         case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
-        case 200: sessionStorage.setItem('userInSession', JSON.stringify(user));
+        case 200: window.localStorage.setItem('userInSession', JSON.stringify(user));
+            window.localStorage.setItem('isLogged', "true");
             ; return response.json();
         default: throw new Error("Unexpected error");
     }
@@ -108,10 +111,30 @@ export async function sendFriendRequest(user: User): Promise<String> {
 }
 
 export async function searchUserByUsername(username: string): Promise<User> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/usermanager/find/' + username);
-    return response.json()
-}
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api';
+    
+    try {
+      let response = await fetch(`${apiEndPoint}/usermanager/searchUserByUsername?username=${username}`, { method: 'GET' })
+      .then(async (res) => {
+        if(!res.ok){
+            let e = await res.json();
+            throw new Error(e.error.toString());
+        }
+            
+        return res
+      }).then((user) => {
+        return user.json();
+      })
+      
+      return response
+    } catch (error) {
+      throw error
+    }
+
+  }
+  
+  
+
 
 export async function addGroup(group: Group): Promise<Group[]> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
@@ -119,6 +142,16 @@ export async function addGroup(group: Group): Promise<Group[]> {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'group': group, "user": getUserInSesion() })
+    });
+    return response.json()
+}
+
+export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/friendmanager/friendrequests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
     });
     return response.json()
 }

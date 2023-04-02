@@ -4,7 +4,7 @@ import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
-import { Signup } from '../components/userIdentification/Signup';
+import { HomePage } from '../components/mainComponents/HomePage';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -29,14 +29,14 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function SignupView() {
+export default function HomeViewLogged() {
 
     return (
 
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
-            <MyPaper elevation={1}><Header logged={false} /></MyPaper>
-            <Signup />
+            <MyPaper elevation={1}><Header logged={true} /></MyPaper>
+            <HomePage />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

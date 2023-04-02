@@ -34,15 +34,29 @@ api.post(
     }
 );
 
+api.get(
+    "/usermanager/searchUserByUsername",
+    async (req: Request, res: Response): Promise<Response> => {
+      try {
+        const username = req.query.username.toString();
+        const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
+        return res.status(200).json(user);
+      } catch (err) {
+        return res.status(404).send({error: err.toString()})
+      }
+    }
+  );
+  
+
 
 api.post(
     "/usermanager/details", async (req: Request, res: Response): Promise<Response> => {
         let user = req.body.user;
         let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
         if (u.username == "notfound") {
-            return res.status(507).send("Usuario no encontrado para listar detalle");
+            return res.status(404).json({error: "El usuario no existe."});
         } else if (u.username == "bderror") {
-            return res.status(508).send("Error en la conexión con la base de datos");
+            return res.status(500).json({error: "Error en la conexión con la base de datos"});
         }
         else {
             return res.status(200).send(u);
@@ -56,9 +70,9 @@ api.post(
         let user = req.body.user;
         let u = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
         if (u.username == "notfound") {
-            return res.status(507).send("Usuario no encontrado");
+            return res.status(407).json("Usuario no encontrado");
         } else if (u.username == "bderror") {
-            return res.status(508).send("Error en la conexión con la base de datos");
+            return res.status(408).json("Error en la conexión con la base de datos");
         }
         else {
             return res.status(200).send(u);
@@ -77,12 +91,7 @@ api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Resp
 api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let userRes = await fac.FactoryLoMap.getSesionManager().registrarse(user);
-    if (userRes.username == "userRepeated") {
-        return res.status(509).send("Nombre de usuario ya existente")
-    } else {
-        return res.status(200).send(userRes);
-
-    }
+    return res.status(200).send(userRes);
 })
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
@@ -91,8 +100,11 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
     let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
     console.log(userRes)
     if (userRes.username == "passwordNotFound") {
-        return res.status(506).send("Usuario o contraseña errónea")
-    } else {
+        return res.status(506).send("Contraseña errónea")
+    } else if (userRes.username == "userNotFound") {
+        return res.status(507).send("Usuario no encontrado")
+    }
+    else {
         return res.status(200).send(userRes);
 
     }
@@ -100,11 +112,8 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
 })
 
 api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {
-    let groups = await fac.FactoryLoMap.getMapManager().verMapaDe(req.body.user);
-    
-    // Añadir gestión de errores cuando tengamos la información necesaria
-
-    return res.status(200).send(groups);
+    let userRes = await fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
+    return res.status(200).send(userRes);
 })
 
 api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
@@ -113,13 +122,10 @@ api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<
     return res.status(200).send(friends);
 })
 
-api.post("/mapmanager/addgroup", async (req: Request, res: Response): Promise<Response> =>{
+api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
-    let group = req.body.group;
-
-    let grupos = await fac.FactoryLoMap.getMapManager().añadirGrupo(group)
-    
-    return res.status(200).send(grupos)
+    //let friends = await fac.FactoryLoMap.getFriendManager().listarAmigos(user)
+    return res.status(200).send([]);
 })
 
 export default api;
