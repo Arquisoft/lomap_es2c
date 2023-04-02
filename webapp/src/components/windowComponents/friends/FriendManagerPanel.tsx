@@ -1,5 +1,5 @@
-import { Box, Button, Divider, Input, InputLabel, TextField, Tooltip } from '@mui/material'
-import React, { createRef, useEffect, useState } from 'react'
+import { Box, Button, Divider, TextField, Tooltip } from '@mui/material'
+import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
@@ -7,14 +7,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 import MapIcon from '@mui/icons-material/Map';
-import PlaceIcon from '@mui/icons-material/Place';
 import PersonIcon from '@mui/icons-material/Person';
 import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
 import { getMyFriendRequests, getMyFriends, getMyGroups, getUserDetails, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
@@ -23,14 +18,13 @@ import AddIcon from '@mui/icons-material/Add';
 import { AccountCircle, FireHydrantAltOutlined } from '@mui/icons-material';
 import { render } from 'react-dom';
 import { useRef } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import InputAdornment from '@mui/material/InputAdornment';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { FriendsComponent } from './FriendsComponent';
 import { FriendRequestsComponent } from './FriendRequestsComponent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
+import { useForm, SubmitHandler } from "react-hook-form";
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -69,7 +63,7 @@ export const FriendManagerPanel = () => {
     const navigate = useNavigate()
 
     const userFriends = async () => {
-        console.log("Ejecucion")
+   
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
         await getMyFriends(user).then(function (friends) {
@@ -106,7 +100,7 @@ export const FriendManagerPanel = () => {
     const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
 
     const userFriendRequests = async (): Promise<FriendRequest[]> => {
-        console.log("Ejecucion")
+        
         let myFriendRequests: FriendRequest[] = [];
         let user = getUserInSesion();
         await getMyFriendRequests(user).then((friendRequests) => {
@@ -143,11 +137,32 @@ export const FriendManagerPanel = () => {
     }
 
     const [friendRequests, setFriendRequests] = useState<Promise<FriendRequest[]>>(userFriendRequests());
+    const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
-    const searchUser = (username: string) => {
-        searchUserByUsername(username).then((user) => {
-            showAddFriendConfirm(user)
-        })
+    
+    const onSubmit: SubmitHandler<User> = data => searchUser(data);
+
+    const searchUser = (user:User) => {
+        searchUserByUsername(user).then((res) => {
+            if(res.username != 'undefined' && res.username != null)
+                showAddFriendConfirm(res)
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'No se ha enviado la solicitud de amistad',
+                  })
+            }})
+
+                /*
+            console.log("usuario encontrado --> " + res)
+        }).catch((err) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: err,
+              })
+        })*/
     }
 
     const showAddFriendConfirm = async (user: User) => {
@@ -183,12 +198,18 @@ export const FriendManagerPanel = () => {
                 </Tooltip>
             </OptionsBox>
             {op != "requests" ?
-                <>{/* CONVERTIR EN UN FORMULARIO */}
-                    <AddFriendBox>
+                <>
+                    <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
                         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                        <TextField label="Añadir un amigo" variant="standard" />
+                        <TextField 
+                            label="Añadir un amigo" 
+                            variant="standard" 
+                            placeholder="Nombre de usuario"
+                            {...register("username", { maxLength: 20 })}
+                            helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
+                        />
                         <Tooltip title="Add friend">
-                            <Button>
+                            <Button type="submit">
                                 <AddIcon htmlColor='#81c784' />
                             </Button>
                         </Tooltip>

@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const BoxProfile = styled(Box)({

@@ -9,14 +9,12 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { User } from '../../shared/shareddtypes';
 import { editUserDetails, getUserDetails, getUserInSesion, logout } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
-import { TextField } from '@mui/material';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
