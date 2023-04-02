@@ -63,7 +63,7 @@ export const FriendManagerPanel = () => {
     const navigate = useNavigate()
 
     const userFriends = async () => {
-   
+
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
         await getMyFriends(user).then(function (friends) {
@@ -100,69 +100,44 @@ export const FriendManagerPanel = () => {
     const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
 
     const userFriendRequests = async (): Promise<FriendRequest[]> => {
-        
+
         let myFriendRequests: FriendRequest[] = [];
         let user = getUserInSesion();
         await getMyFriendRequests(user).then((friendRequests) => {
             for (let i = 0; i < friendRequests.length; i++)
                 myFriendRequests.push(friendRequests[i]);
         });
-        myFriendRequests.push({
-            sender: {
-                username: "Acosador",
-                webID: "WebID de acosador",
-                password: ".",
-            },
-            receiver: {
-                username: "security2",
-                webID: "WebID de acosador",
-                password: ".",
-            },
-            status: 0
-        })
-        myFriendRequests.push({
-            sender: {
-                username: "security",
-                webID: "WebID de acosador",
-                password: ".",
-            },
-            receiver: {
-                username: "security2",
-                webID: "WebID de acosador",
-                password: ".",
-            },
-            status: 0
-        })
         return myFriendRequests;
     }
 
     const [friendRequests, setFriendRequests] = useState<Promise<FriendRequest[]>>(userFriendRequests());
     const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
-    
+
     const onSubmit: SubmitHandler<User> = data => searchUser(data);
 
-    const searchUser = (user:User) => {
+    const searchUser = (user: User) => {
         searchUserByUsername(user).then((res) => {
-            if(res.username != 'undefined' && res.username != null)
+            if (res.username != 'undefined' && res.username != null)
                 showAddFriendConfirm(res)
             else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'No se ha enviado la solicitud de amistad',
-                  })
-            }})
+                })
+            }
+        })
 
-                /*
-            console.log("usuario encontrado --> " + res)
-        }).catch((err) => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: err,
-              })
-        })*/
+        /*
+    console.log("usuario encontrado --> " + res)
+}).catch((err) => {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err,
+      })
+})*/
     }
 
     const showAddFriendConfirm = async (user: User) => {
@@ -201,9 +176,9 @@ export const FriendManagerPanel = () => {
                 <>
                     <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
                         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                        <TextField 
-                            label="Añadir un amigo" 
-                            variant="standard" 
+                        <TextField
+                            label="Añadir un amigo"
+                            variant="standard"
                             placeholder="Nombre de usuario"
                             {...register("username", { maxLength: 20 })}
                             helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}

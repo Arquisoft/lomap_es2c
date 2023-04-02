@@ -2,6 +2,8 @@ export interface User {
     username: String
     password: String
     webID: String
+    description: String
+    img: String
 }
 
 export interface Group {
