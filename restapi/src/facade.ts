@@ -3,6 +3,7 @@ import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { Place } from './entities/Place';
 import { FriendManager } from './controllers/FriendsManager'
+import { Session } from '@inrupt/solid-client-authn-browser';
 
 export interface SesionManager {
     cerrarSesion: () => boolean;
@@ -25,15 +26,16 @@ export interface MapManager {
     aplicarFiltro: (grupo: Group, filtro: string) => Place[];
     editarGrupo: (grupo: Group) => Group;
     mostrarGrupo: (grupo: Group) => Place[];
+    añadirGrupo: (grupo: Group) => Promise<Group[]>;
 }
 
 //#endregion
 
 export interface PODManager {
-    guardarCoord: (WebID: String, Coor: String) => null;
-    getCoordenadas: (WebID: String) => Place[];
-    guardarGrupo: (WebID: String, Group: Group) => null;
-    getGrupos: (WebID: String) => Group[];
+    savePlace: (session: Session, Place: Place) => Promise<void>;
+    getPlaces: (session: Session) => Promise<Place[]>;
+    saveGroup: (session: Session, Group: Group) => Promise<void>;
+    getGroups: (session: Session) => Promise<Group[]>;
 }
 
 //#region INTERFACES AUXILIARES
@@ -68,7 +70,7 @@ export interface User {
 }
 
 export interface Group {
-    name: String
+    name: string
     places: Place[]
 }
 

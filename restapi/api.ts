@@ -77,7 +77,12 @@ api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Resp
 api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let userRes = await fac.FactoryLoMap.getSesionManager().registrarse(user);
-    return res.status(200).send(userRes);
+    if (userRes.username == "userRepeated") {
+        return res.status(509).send("Nombre de usuario ya existente")
+    } else {
+        return res.status(200).send(userRes);
+
+    }
 })
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
@@ -86,11 +91,8 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
     let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
     console.log(userRes)
     if (userRes.username == "passwordNotFound") {
-        return res.status(506).send("Contraseña errónea")
-    } else if (userRes.username == "userNotFound") {
-        return res.status(507).send("Usuario no encontrado")
-    }
-    else {
+        return res.status(506).send("Usuario o contraseña errónea")
+    } else {
         return res.status(200).send(userRes);
 
     }
@@ -98,8 +100,11 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
 })
 
 api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {
-    let userRes = await fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
-    return res.status(200).send(userRes);
+    let groups = await fac.FactoryLoMap.getMapManager().verMapaDe(req.body.user);
+    
+    // Añadir gestión de errores cuando tengamos la información necesaria
+
+    return res.status(200).send(groups);
 })
 
 api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
@@ -112,6 +117,15 @@ api.post("/friendmanager/friendrequests", async (req: Request, res: Response): P
     let user = req.body.user;
     //let friends = await fac.FactoryLoMap.getFriendManager().listarAmigos(user)
     return res.status(200).send([]);
+})
+
+api.post("/mapmanager/addgroup", async (req: Request, res: Response): Promise<Response> =>{
+    let user = req.body.user;
+    let group = req.body.group;
+
+    let grupos = await fac.FactoryLoMap.getMapManager().añadirGrupo(group)
+    
+    return res.status(200).send(grupos)
 })
 
 export default api;
