@@ -15,6 +15,7 @@ import { signup } from '../../api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
+import { handleErrors } from 'api/ErrorHandler';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -109,7 +110,6 @@ export function Signup() {
     }
 
     const successSignup = (user: User) => {
-        console.log(user)
         Swal.fire({
             title: 'Cuenta creada',
             text: "¡Cuenta " + user.username + " ha sido creada con éxito!",

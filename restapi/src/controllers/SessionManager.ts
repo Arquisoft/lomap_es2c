@@ -18,7 +18,7 @@ class UserSesionManager implements SesionManager {
 
     async registrarse(usuario: User): Promise<User> {
         let usuarioEncontrado = await repo.Repository.findOne(usuario)
-
+        console.log(usuarioEncontrado)
         if (usuarioEncontrado.username != "notfound") {
             usuario.username = "userRepeated"
             return usuario
@@ -37,9 +37,8 @@ class UserSesionManager implements SesionManager {
         let usuarioEncontrado = await repo.Repository.findOne(user)
 
         if (usuarioEncontrado != null) {
-            console.log(await bcrypt.hash(user.password, this.rondasDeEncriptacion) + "-" + usuarioEncontrado.password)
             if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
-                return user;
+                return usuarioEncontrado;
             }
             user.username = "passwordNotFound";
             return user;

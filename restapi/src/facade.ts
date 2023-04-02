@@ -70,6 +70,8 @@ export interface User {
     username: String
     password: String
     webID: String
+    img: String
+    description: String
 }
 
 export interface Group {

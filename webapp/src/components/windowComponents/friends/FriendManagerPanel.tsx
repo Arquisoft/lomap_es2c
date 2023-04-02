@@ -12,7 +12,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
 import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
-import { getMyFriendRequests, getMyFriends, getMyGroups, getUserDetails, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
+import { getMyFriendRequests, getMyFriends, getMyGroups, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { AccountCircle, FireHydrantAltOutlined } from '@mui/icons-material';
@@ -141,7 +141,7 @@ export const FriendManagerPanel = () => {
     }
 
     const showAddFriendConfirm = async (user: User) => {
-        let usr = await getUserDetails(user);
+        let usr = user;
         Swal.fire({
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
@@ -268,7 +268,7 @@ const FriendRequests = (props: { friends: Promise<Friend[]>, daddy: any }) => {
     }
 
     const showFriendProfile = async (user: User) => {
-        let usr = await getUserDetails(user);
+        let usr = user;
         Swal.fire({
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
