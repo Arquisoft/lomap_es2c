@@ -7,6 +7,7 @@ import LoggedView from './views/LoggedView';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthChecker } from 'auth/AuthChecker';
 import { NoFound } from 'views/NoFound';
+import PodView  from 'views/PodView';
 
 function App(): JSX.Element {
     return (
@@ -22,6 +23,7 @@ function App(): JSX.Element {
                 */}
                 <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthChecker><LoggedView /></AuthChecker>} />
                 <Route path='/login' element={<LoginView />} />
+                <Route path='/podlogin' element={<PodView />} />
                 <Route path='/signup' element={<SignupView />} />
                 <Route path='*' element={<NoFound />} />
             </Routes>
