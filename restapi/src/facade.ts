@@ -3,8 +3,6 @@ import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { Place } from './entities/Place';
 import { FriendManager } from './controllers/FriendsManager'
-import { Session } from '@inrupt/solid-client-authn-browser';
-import { MapManagerImpl } from './controllers/MapManager';
 
 export interface SesionManager {
     cerrarSesion: () => boolean;
@@ -21,30 +19,27 @@ export interface SesionManager {
 export interface MapManager {
     verMapaDe: (user: User) => Promise<Group[]>;
     añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
-    crearGrupo: (nombre: string) => Group;
+    crearGrupo: (nombre: String) => Group;
     eliminarGrupo: (grupo: Group) => boolean;
     eliminarLugarDeGrupo: (lugar: Place, grupo: Group) => Group;
     aplicarFiltro: (grupo: Group, filtro: string) => Place[];
     editarGrupo: (grupo: Group) => Group;
     mostrarGrupo: (grupo: Group) => Place[];
-    añadirGrupo: (grupo: Group) => Promise<Group[]>;
 }
 
 //#endregion
 
 export interface PODManager {
-    savePlace: (session: Session, Place: Place) => Promise<void>;
-    getPlaces: (session: Session) => Promise<Place[]>;
-    saveGroup: (session: Session, Group: Group) => Promise<void>;
-    getGroups: (session: Session) => Promise<Group[]>;
+    guardarCoord: (WebID: String, Coor: String) => null;
+    getCoordenadas: (WebID: String) => Place[];
+    guardarGrupo: (WebID: String, Group: Group) => null;
+    getGrupos: (WebID: String) => Group[];
 }
 
 //#region INTERFACES AUXILIARES
 
 export class FactoryLoMap {
-    static getMapManager(): MapManager {
-        return new MapManagerImpl(null);
-    };
+    static getMapManager: () => MapManager;
 
     static getFriendManager(): FriendManager {
         return new FriendManagerImpl();
@@ -73,7 +68,7 @@ export interface User {
 }
 
 export interface Group {
-    name: string
+    name: String
     places: Place[]
 }
 

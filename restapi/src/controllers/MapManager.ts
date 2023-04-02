@@ -1,46 +1,46 @@
-import { Session } from "@inrupt/solid-client-authn-browser/dist/Session";
 import { Place } from "../entities/Place";
 import UserSchema from "../entities/UserSchema";
 import { Group, MapManager, SesionManager, User } from "../facade";
 import { PODManager } from "../facade";
-import * as repo from '../persistence/Repository';
 export { MapManagerImpl };
+
+const sessionStorage = require('sessionstorage-for-nodejs')
 
 class MapManagerImpl implements MapManager {
 
-    session: Session
     sessionManager: SesionManager;
     pod: PODManager;
 
-    constructor(session: Session) {
-        this.session = session
-    }
-
     async verMapaDe(user: User): Promise<Group[]> {
-        let usuarioEncontrado = await repo.Repository.findOne(user)
+        let usuarioEncontrado = await UserSchema.findOne({
+            username: user.username
+        });
 
-        let grupos = this.pod.getGroups(this.session)
+        let grupos = this.pod.getGrupos(usuarioEncontrado.webID)
 
         return grupos
     }
 
     añadirLugarAGrupo(lugar: Place, grupo: Group): Group {
+        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
 
         grupo.places.push(lugar)
 
-        this.pod.saveGroup(this.session, grupo)
+        this.pod.guardarGrupo(user.webID, grupo)
 
         return grupo;
     }
 
 
-    crearGrupo(nombre: string): Group {
+    crearGrupo(nombre: String): Group {
+        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
+
         const grupo: Group = {
             name: nombre,
             places: []
         };
 
-        this.pod.saveGroup(this.session, grupo)
+        this.pod.guardarGrupo(user.webID, grupo)
 
         return grupo;
     }
@@ -65,7 +65,7 @@ class MapManagerImpl implements MapManager {
             grupo.places.splice(lugarIndex, 1);
         }
 
-        this.pod.saveGroup(this.session, grupo)
+        this.pod.guardarGrupo(user.webID, grupo)
 
         return grupo;
     }
@@ -80,7 +80,7 @@ class MapManagerImpl implements MapManager {
     editarGrupo(grupo: Group): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
 
-        this.pod.saveGroup(this.session, grupo);
+        this.pod.guardarGrupo(user.webID, grupo);
 
         return grupo;
     }
@@ -88,16 +88,6 @@ class MapManagerImpl implements MapManager {
 
     mostrarGrupo(grupo: Group): Place[] {
         return grupo.places
-    }
-
-    async añadirGrupo(grupo: Group): Promise<Group[]> {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
-
-        this.pod.saveGroup(this.session, grupo);
-
-        let grupos = this.pod.getGroups(this.session);
-
-        return grupos;
     }
 
 }

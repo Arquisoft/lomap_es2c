@@ -13,7 +13,7 @@ function App(): JSX.Element {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={window.sessionStorage.getItem("isLogged") == "true" ? <HomeViewLogged /> : <HomeView />} />
+                <Route path='/' element={<HomeView />} />
                 {/* 
                     mainop = [groups/friends]
                     ?op = [groupView (addplace, addgroup, main)/friendName]

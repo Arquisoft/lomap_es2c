@@ -32,9 +32,8 @@ export default function StandardImageList() {
                             <IconButton
                                 sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                 aria-label={`info about ${item.title}`}
-                                onClick={() => showImg(item.img, item.title)}
                             >
-                                <VisibilityIcon />
+                                <VisibilityIcon onClick={() => showImg(item.img, item.title)} />
                             </IconButton>
                         }
                     />

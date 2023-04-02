@@ -123,7 +123,7 @@ function LogedMenu() {
                         let oldPassword = (Swal.getPopup().querySelector('#opassword-ep') as HTMLInputElement).value
 
                         if (oldPassword === oldPassword) { // Comprobar con la guardada en la BD
-                            user = { username: user.username, webID: user.webID, password: pass, description: user.description, img: user.img };
+                            user = { username: user.username, webID: user.webID, password: pass };
                             return user;
                         } else {
                             fieldsValidation.showError("No se ha podido actualizar la contraseña", "Contraseña actual incorrecta", showEdit);
@@ -159,7 +159,7 @@ function LogedMenu() {
                     <label for="webid-ep" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
                     <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
+                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="Biografía..."></textarea>`,
             confirmButtonText: 'Editar',
             denyButtonText: 'Cambiar contraseña',
             showDenyButton: true,
@@ -174,7 +174,6 @@ function LogedMenu() {
                 let name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).value
                 let webid = (Swal.getPopup().querySelector('#webid-ep') as HTMLInputElement).value
                 let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
-                let description = (Swal.getPopup().querySelector('#description-ep') as HTMLInputElement).value
 
                 if (!name && !webid && !biography) {
                     showQuestion();
@@ -194,7 +193,7 @@ function LogedMenu() {
                         webID: webid,
                         biography: biography
                     }).then(() => {
-                        user = { username: name, webID: webid, password: user.password, description: description, img: user.img }
+                        user = { username: name, webID: webid, password: user.password }
                         return user;
                     }).catch(e => {
                         let errorMessage = (e as string)

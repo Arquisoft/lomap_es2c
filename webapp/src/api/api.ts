@@ -1,5 +1,7 @@
 import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
+const sessionStorage = require('sessionstorage-for-nodejs')
+
 export async function addUser(user: User2): Promise<boolean> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/users/add', {
@@ -21,12 +23,11 @@ export async function getUsers(): Promise<User2[]> {
 }
 
 export function getUserInSesion(): User {
-    return JSON.parse(window.localStorage.getItem('userInSession') ?? null) as User;
+    return JSON.parse(sessionStorage.getItem('userInSession') ?? null) as User;
 }
 
 export function logout() {
-    window.localStorage.removeItem('userInSession');
-    window.localStorage.setItem('isLogged', "false");
+    sessionStorage.setItem('userInSession', null)
 }
 
 export async function signup(user: User): Promise<User> {
@@ -52,16 +53,10 @@ export async function login(user: User): Promise<User> {
         case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
-        case 200: setSessionUser(response);
+        case 200: sessionStorage.setItem('userInSession', JSON.stringify(user));
             ; return response.json();
         default: throw new Error("Unexpected error");
     }
-}
-
-function setSessionUser(response: Response) {
-    let user = response.json();
-    window.localStorage.setItem('userInSession', JSON.stringify(user));
-    window.localStorage.setItem('isLogged', "true");
 }
 
 export async function getUserDetails(user: User): Promise<User> {
@@ -83,7 +78,6 @@ export async function editUserDetails(user: User): Promise<User> {
         body: JSON.stringify({ 'user': user })
     });
     //The objects returned by the api are directly convertible to User objects
-    setSessionUser(response);
     return response.json()
 }
 
@@ -118,9 +112,13 @@ export async function sendFriendRequest(user: User): Promise<String> {
 
 export async function searchUserByUsername(user: User): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/usermanager/find/' + user.username)
-        .then((res) => { return res })
-        .catch((err) => { return err });
+    let response = await fetch(apiEndPoint + '/usermanager/details/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    })
+    .then((res) => {return res})
+    .catch((err) => {return err } );
 
     return response.json()
 }

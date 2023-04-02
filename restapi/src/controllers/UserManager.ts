@@ -1,7 +1,6 @@
 import { UserImpl } from "../entities/User";
 import type { User } from "../facade";
 import UserSchema from "../entities/UserSchema";
-import * as repo from '../persistence/Repository';
 import mongoose from "mongoose";
 
 export type { UserManager };
@@ -26,20 +25,16 @@ class UserManagerImpl implements UserManager {
 
 
 async function buscarUsuarioPorUsername(u: User) {
-    
-    /*
+
     const { uri, mongoose } = getBD();
     try {
         await mongoose.connect(uri);
     } catch {
         return new UserImpl("bderror", "", "");
     }
-    */
-    
-    let resultado: User;
-    resultado = await repo.Repository.findOne(u)
 
-    /*
+    let resultado: User;
+
     try {
         resultado = await UserSchema.findOne({ username: u.username }, { _id: 0, __v: 0 }) as User;
     } catch {
@@ -47,13 +42,12 @@ async function buscarUsuarioPorUsername(u: User) {
     }
 
     if (resultado == null) { return new UserImpl("notfound", "", "") };
-    */
 
     console.log("Res:" + resultado);
     /*
-    mongoose.connection.close();
-    
     resultado = resultado.toString();
+    mongoose.connection.close();
+
     resultado = resultado.replace("username", '"username"');
     resultado = resultado.replace("img", '"img"');
     resultado = resultado.replace("password", '"password"');
@@ -87,7 +81,6 @@ function getBD() {
 
 async function modificarUsuario(user: User) {
 
-    /*
     console.log("Editar: " + JSON.stringify(user))
     const { uri, mongoose } = getBD();
     try {
@@ -95,12 +88,8 @@ async function modificarUsuario(user: User) {
     } catch {
         return new UserImpl("bderror", "", "");
     }
-    */
 
     let resultado: User;
-    resultado = await repo.Repository.findOneAndUpdate(user)
-
-    /*
     try {
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID });
     } catch {
@@ -108,7 +97,6 @@ async function modificarUsuario(user: User) {
     }
 
     mongoose.connection.close();
-    */
 
     return resultado;
 
