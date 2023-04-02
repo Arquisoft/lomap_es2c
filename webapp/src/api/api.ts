@@ -1,7 +1,5 @@
 import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
-const sessionStorage = require('sessionstorage-for-nodejs')
-
 export async function addUser(user: User2): Promise<boolean> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/users/add', {
@@ -23,11 +21,12 @@ export async function getUsers(): Promise<User2[]> {
 }
 
 export function getUserInSesion(): User {
-    return JSON.parse(sessionStorage.getItem('userInSession') ?? null) as User;
+    return JSON.parse(window.localStorage.getItem('userInSession') ?? null) as User;
 }
 
 export function logout() {
-    sessionStorage.setItem('userInSession', null)
+    window.localStorage.removeItem('userInSession');
+    window.localStorage.setItem('isLogged', "false");
 }
 
 export async function signup(user: User): Promise<User> {
@@ -53,7 +52,8 @@ export async function login(user: User): Promise<User> {
         case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
-        case 200: sessionStorage.setItem('userInSession', JSON.stringify(user));
+        case 200: window.localStorage.setItem('userInSession', JSON.stringify(user));
+            window.localStorage.setItem('isLogged', "true");
             ; return response.json();
         default: throw new Error("Unexpected error");
     }
