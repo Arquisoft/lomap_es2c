@@ -6,15 +6,13 @@ import { PODManager } from "../facade";
 import * as repo from '../persistence/Repository';
 export { MapManagerImpl };
 
-const sessionStorage = require('sessionstorage-for-nodejs')
-
 class MapManagerImpl implements MapManager {
 
     session: Session
     sessionManager: SesionManager;
     pod: PODManager;
 
-    constructor(session: Session){
+    constructor(session: Session) {
         this.session = session
     }
 
@@ -27,7 +25,6 @@ class MapManagerImpl implements MapManager {
     }
 
     añadirLugarAGrupo(lugar: Place, grupo: Group): Group {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
 
         grupo.places.push(lugar)
 
@@ -37,9 +34,7 @@ class MapManagerImpl implements MapManager {
     }
 
 
-    crearGrupo(nombre: String): Group {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
-
+    crearGrupo(nombre: string): Group {
         const grupo: Group = {
             name: nombre,
             places: []

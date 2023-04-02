@@ -4,6 +4,7 @@ import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { Place } from './entities/Place';
 import { FriendManager } from './controllers/FriendsManager'
 import { Session } from '@inrupt/solid-client-authn-browser';
+import { MapManagerImpl } from './controllers/MapManager';
 
 export interface SesionManager {
     cerrarSesion: () => boolean;
@@ -20,7 +21,7 @@ export interface SesionManager {
 export interface MapManager {
     verMapaDe: (user: User) => Promise<Group[]>;
     añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
-    crearGrupo: (nombre: String) => Group;
+    crearGrupo: (nombre: string) => Group;
     eliminarGrupo: (grupo: Group) => boolean;
     eliminarLugarDeGrupo: (lugar: Place, grupo: Group) => Group;
     aplicarFiltro: (grupo: Group, filtro: string) => Place[];
@@ -41,7 +42,9 @@ export interface PODManager {
 //#region INTERFACES AUXILIARES
 
 export class FactoryLoMap {
-    static getMapManager: () => MapManager;
+    static getMapManager(): MapManager {
+        return new MapManagerImpl(null);
+    };
 
     static getFriendManager(): FriendManager {
         return new FriendManagerImpl();

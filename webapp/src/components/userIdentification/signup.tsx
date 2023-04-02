@@ -94,7 +94,7 @@ export function Signup() {
 
     const trySignup = (user: UserSchema) => {
         if (user.username && user.webID && user.password) {
-            let newUser: User = { username: user.username, webID: user.webID, password: user.password };
+            let newUser: User = { username: user.username, webID: user.webID, password: user.password, description: "", img: "" };
             if (fieldsValidation.checkPasswords(pass, confirmPass)) {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)

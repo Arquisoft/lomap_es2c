@@ -3,7 +3,6 @@ import { User, SesionManager } from "../facade";
 import * as repo from '../persistence/Repository';
 export { UserSesionManager };
 
-const sessionStorage = require('sessionstorage-for-nodejs')
 const bcrypt = require("bcryptjs");
 
 class UserSesionManager implements SesionManager {
@@ -14,15 +13,13 @@ class UserSesionManager implements SesionManager {
     }
 
     cerrarSesion() {
-        sessionStorage.removeItem('userInSession')
         return true;
     }
 
     async registrarse(usuario: User): Promise<User> {
-        sessionStorage.setItem('userInSession', JSON.stringify(usuario));
         let usuarioEncontrado = await repo.Repository.findOne(usuario)
 
-        if(usuarioEncontrado.username != "notfound"){
+        if (usuarioEncontrado.username != "notfound") {
             usuario.username = "userRepeated"
             return usuario
         }
@@ -42,12 +39,11 @@ class UserSesionManager implements SesionManager {
         if (usuarioEncontrado != null) {
             console.log(await bcrypt.hash(user.password, this.rondasDeEncriptacion) + "-" + usuarioEncontrado.password)
             if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
-                sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
                 return user;
             }
             user.username = "passwordNotFound";
             return user;
-        }            
+        }
         user.username = "userNotFound";
         return user
     }

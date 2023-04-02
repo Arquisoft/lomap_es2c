@@ -40,9 +40,9 @@ api.post(
         let user = req.body.user;
         let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
         if (u.username == "notfound") {
-            return res.status(404).json({error: "El usuario no existe."});
+            return res.status(404).json({ error: "El usuario no existe." });
         } else if (u.username == "bderror") {
-            return res.status(500).json({error: "Error en la conexión con la base de datos"});
+            return res.status(500).json({ error: "Error en la conexión con la base de datos" });
         }
         else {
             return res.status(200).send(u);
@@ -65,14 +65,6 @@ api.post(
         }
     }
 );
-
-
-
-
-api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Response> => {
-    let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
-    return res.status(200).send(user);
-})
 
 api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
@@ -101,7 +93,7 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
 
 api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {
     let groups = await fac.FactoryLoMap.getMapManager().verMapaDe(req.body.user);
-    
+
     // Añadir gestión de errores cuando tengamos la información necesaria
 
     return res.status(200).send(groups);
@@ -119,13 +111,13 @@ api.post("/friendmanager/friendrequests", async (req: Request, res: Response): P
     return res.status(200).send([]);
 })
 
-api.post("/mapmanager/addgroup", async (req: Request, res: Response): Promise<Response> =>{
+api.post("/mapmanager/addgroup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let group = req.body.group;
 
-    let grupos = await fac.FactoryLoMap.getMapManager().añadirGrupo(group)
-    
-    return res.status(200).send(grupos)
+    //let grupos = await fac.FactoryLoMap.getMapManager().añadirGrupo(group)
+
+    return res.status(200).send([])
 })
 
 export default api;
