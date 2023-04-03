@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import { check } from 'express-validator';
 import * as fac from './src/facade';
-import {FriendRequest} from "./src/entities/FriendRequest";
+import { FriendRequest } from "./src/entities/FriendRequest";
 
 const api: Router = express.Router()
 
@@ -38,16 +38,16 @@ api.post(
 api.get(
     "/usermanager/find/username",
     async (req: Request, res: Response): Promise<Response> => {
-      try {
-        const username = req.query.username.toString();
-        const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
-        return res.status(200).json(user);
-      } catch (err) {
-        return res.status(404).send({error: err.toString()})
-      }
+        try {
+            const username = req.query.username.toString();
+            const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
+            return res.status(200).json(user);
+        } catch (err) {
+            return res.status(404).send({ error: err.toString() })
+        }
     }
-  );
-  
+);
+
 
 
 api.post(
@@ -55,9 +55,9 @@ api.post(
         let user = req.body.user;
         let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
         if (u.username == "notfound") {
-            return res.status(404).json({error: "El usuario no existe."});
+            return res.status(404).json({ error: "El usuario no existe." });
         } else if (u.username == "bderror") {
-            return res.status(500).json({error: "Error en la conexión con la base de datos"});
+            return res.status(500).json({ error: "Error en la conexión con la base de datos" });
         }
         else {
             return res.status(200).send(u);
@@ -125,8 +125,6 @@ api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<
 
 
 
-
-
 api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let solicitudes = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user)
@@ -135,8 +133,8 @@ api.post("/friendmanager/friendrequests", async (req: Request, res: Response): P
 
 api.post("/friendmanager/updaterequest/:status", async (req: Request, res: Response): Promise<Response> => {
     let status = req.params.status;
-    let fr=req.body.friendrequest;
-    let r = await fac.FactoryLoMap.getFriendManager().actualizarSolicitud(fr,+status);
+    let fr = req.body.friendrequest;
+    let r = await fac.FactoryLoMap.getFriendManager().actualizarSolicitud(fr, +status);
     return res.status(200).send(r);
 })
 
@@ -147,9 +145,9 @@ api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<
 })
 
 api.post("/friendmanager/add", async (req: Request, res: Response): Promise<Response> => {
-    let userEnSesion=fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
-    let user = req.body.user;
-    let r = await fac.FactoryLoMap.getFriendManager().enviarSolicitud(userEnSesion,user);
+    let userEnSesion = req.body.sender;
+    let user = req.body.receiver;
+    let r = await fac.FactoryLoMap.getFriendManager().enviarSolicitud(userEnSesion, user);
     return res.status(200).send(r);
 })
 
@@ -158,6 +156,19 @@ api.post("/friendmanager/requests", async (req: Request, res: Response): Promise
     let r = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user);
     return res.status(200).send(r);
 })
+
+api.get(
+    "/usermanager/searchUserByUsername",
+    async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const username = req.query.username.toString();
+            const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
+            return res.status(200).json(user);
+        } catch (err) {
+            return res.status(404).send({ error: err.toString() })
+        }
+    }
+);
 
 
 export default api;

@@ -3,7 +3,7 @@ export interface User {
     password: string
     webID: string
     img: string
-    description: string 
+    description: string
 }
 
 export interface Group {
@@ -59,8 +59,8 @@ export interface Friend {
 }
 
 export interface FriendRequest {
-    receiver: User,
-    sender: User,
+    receiver: string,
+    sender: string,
     status: number,
 }
 export interface Group { }

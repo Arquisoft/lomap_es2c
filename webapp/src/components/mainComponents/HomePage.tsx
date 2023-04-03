@@ -25,7 +25,7 @@ const TextBox = styled(Box)({
     color: "white",
     fontFamily: 'Calibri',
     fontWeight: 'lighter',
-    fontSize: '1.2em',
+    fontSize: '1.1em',
     backgroundColor: '#81c784',
     width: '100%',
     height: '100%',
@@ -43,7 +43,7 @@ const InfoBox = styled(Box)({
     color: "white",
     fontFamily: 'Calibri',
     fontWeight: 'lighter',
-    fontSize: '1.1em',
+    fontSize: '1em',
     backgroundColor: '#81c784',
     width: '100%',
     height: '100%',
@@ -60,10 +60,10 @@ const MainBox = styled(Box)({
 })
 
 const ScrollBox = styled(Box)({
-    maxHeight: '60vh',
+    maxHeight: '50vh',
     overflow: 'auto',
     scrollbarColor: 'black white',
-    padding: '0em 1em 0em',
+    padding: '0em 0.9em 0em',
 })
 
 const TitleBox = styled(Box)({
@@ -78,7 +78,7 @@ const GoButton = styled(Button)({
     alignSelf: 'center',
     backgroundColor: '#1f4a21',
     color: 'white',
-    marginBottom: '0.5em'
+    marginBottom: '0.4em'
 })
 //#endregion
 

@@ -101,36 +101,44 @@ export async function sendFriendRequest(user: User): Promise<String> {
     let response = await fetch(apiEndPoint + '/friendmanager/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'user': user })
+        body: JSON.stringify({ 'receiver': user, 'sender': getUserInSesion() })
     });
     return response.json()
 }
 
 export async function searchUserByUsername(username: string): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api';
-    
+
     try {
-      let response = await fetch(`${apiEndPoint}/usermanager/searchUserByUsername?username=${username}`, { method: 'GET' })
-      .then(async (res) => {
-        if(!res.ok){
-            let e = await res.json();
-            throw new Error(e.error.toString());
-        }
-            
-        return res
-      }).then((user) => {
-        return user.json();
-      })
-      
-      return response
+        let response = await fetch(`${apiEndPoint}/usermanager/searchUserByUsername?username=${username}`, { method: 'GET' })
+            .then(async (res) => {
+                if (!res.ok) {
+                    let e = await res.json();
+                    throw new Error(e.error.toString());
+                }
+
+                return res
+            }).then((user) => {
+                return user.json();
+            })
+
+        return response
     } catch (error) {
-      throw error
+        throw error
     }
 
-  }
-  
-  
+}
 
+export async function updateRequest(req: FriendRequest, status: number) {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + "/friendmanager/updaterequest/" + status, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "friendrequest": req })
+    });
+    //The objects returned by the api are directly convertible to User objects
+    return response.json()
+}
 
 export async function addGroup(group: Group): Promise<Group[]> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
@@ -164,4 +172,14 @@ export async function editPassword(oldpss: String, newpss: String): Promise<User
     window.localStorage.setItem('userInSession', JSON.stringify(user));
     window.localStorage.setItem('isLogged', "true");
     return user
+}
+
+export async function deleteFriend(friend: User): Promise<FriendRequest> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/friendmanager/deletefriend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'friend': friend, "user": getUserInSesion() })
+    });
+    return response.json()
 }
