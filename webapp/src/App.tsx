@@ -8,15 +8,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthChecker } from 'auth/AuthChecker';
 import { NoFound } from 'views/NoFound';
 import HomeViewLogged from 'views/HomeViewLogged';
+import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
 
 function App(): JSX.Element {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={window.sessionStorage.getItem("isLogged") == "true" ? 
-                                            <HomeViewLogged /> 
-                                            : <HomeView />
-                                        } />
+                <Route path='/' element={<AuthCheckerNoLogged> <HomeView /> </AuthCheckerNoLogged>} />
                 {/* 
                     mainop = [groups/friends]
                     ?op = [groupView (addplace, addgroup, main)/friendName]
@@ -25,9 +23,9 @@ function App(): JSX.Element {
                     ?lon = [optional lon to add from map]
                 */}
                 <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthChecker><LoggedView /></AuthChecker>} />
-                <Route path='/login' element={<LoginView />} />
+                <Route path='/login' element={<AuthCheckerNoLogged> <LoginView /></AuthCheckerNoLogged>} />
                 <Route path='/home' element={<AuthChecker><HomeViewLogged /></AuthChecker>} />
-                <Route path='/signup' element={<SignupView />} />
+                <Route path='/signup' element={<AuthCheckerNoLogged> <SignupView /></AuthCheckerNoLogged>} />
                 <Route path='*' element={<NoFound />} />
             </Routes>
         </BrowserRouter>

@@ -11,7 +11,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
 import { Friend, Group, Place, User } from '../../../shared/shareddtypes';
-import { getMyFriends, getMyGroups, getUserDetails, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
+import { getMyFriends, getMyGroups, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
 import { render } from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -60,7 +60,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     }
 
     const showFriendProfile = async (user: User) => {
-        let usr = await getUserDetails(user);
+        let usr = user;
         Swal.fire({
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>

@@ -52,22 +52,18 @@ export async function login(user: User): Promise<User> {
         case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
-        case 200: window.localStorage.setItem('userInSession', JSON.stringify(user));
-            window.localStorage.setItem('isLogged', "true");
-            ; return response.json();
+        case 200:
+            ; return setSessionUser(response);
         default: throw new Error("Unexpected error");
     }
 }
 
-export async function getUserDetails(user: User): Promise<User> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/usermanager/details', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'user': user })
-    });
-    //The objects returned by the api are directly convertible to User objects
-    return response.json()
+async function setSessionUser(response: Response): Promise<User> {
+    let user = await response.json();
+    console.log(user)
+    window.localStorage.setItem('userInSession', JSON.stringify(user));
+    window.localStorage.setItem('isLogged', "true");
+    return user;
 }
 
 export async function editUserDetails(user: User): Promise<User> {
@@ -78,17 +74,17 @@ export async function editUserDetails(user: User): Promise<User> {
         body: JSON.stringify({ 'user': user })
     });
     //The objects returned by the api are directly convertible to User objects
-    return response.json()
+    return setSessionUser(response);
 }
 
 export async function getMyGroups(user: User): Promise<Group[]> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/mapmanager/usermap', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'user': user })
-    });
-    return response.json()
+    // let response = await fetch(apiEndPoint + '/mapmanager/usermap', {
+    //   method: 'POST',
+    //  headers: { 'Content-Type': 'application/json' },
+    // body: JSON.stringify({ 'user': user })
+    //});
+    return []
 }
 export async function getMyFriends(user: User): Promise<User[]> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
@@ -154,4 +150,18 @@ export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> 
         body: JSON.stringify({ 'user': user })
     });
     return response.json()
+}
+
+export async function editPassword(oldpss: String, newpss: String): Promise<User> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/usermanager/editpsw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'oldpss': oldpss, 'newpss': newpss, 'user': getUserInSesion() })
+    });
+    console.log(oldpss + "-" + newpss)
+    let user = { 'username': 'editpss', 'webID': 'editpss', 'description': 'editpss', 'img': 'editpss', 'password': '..' }
+    window.localStorage.setItem('userInSession', JSON.stringify(user));
+    window.localStorage.setItem('isLogged', "true");
+    return user
 }
