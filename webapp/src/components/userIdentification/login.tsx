@@ -76,7 +76,7 @@ export function Login() {
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
             if (userApi != null) {
-                navigate("/home/groups/main");
+                navigate("/podlogin");
             }
         }).catch((e) => {
             console.log(e.message)

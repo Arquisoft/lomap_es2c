@@ -36,7 +36,7 @@ class MapManagerImpl implements MapManager {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
 
         const grupo: Group = {
-            name: nombre,
+            name: nombre.toString(),
             places: []
         };
 

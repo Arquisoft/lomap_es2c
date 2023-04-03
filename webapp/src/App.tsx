@@ -9,6 +9,7 @@ import { AuthChecker } from 'auth/AuthChecker';
 import { NoFound } from 'views/NoFound';
 import HomeViewLogged from 'views/HomeViewLogged';
 import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
+import PodView  from 'views/PodView';
 
 function App(): JSX.Element {
     return (
@@ -26,6 +27,7 @@ function App(): JSX.Element {
                 <Route path='/login' element={<AuthCheckerNoLogged> <LoginView /></AuthCheckerNoLogged>} />
                 <Route path='/home' element={<AuthChecker><HomeViewLogged /></AuthChecker>} />
                 <Route path='/signup' element={<AuthCheckerNoLogged> <SignupView /></AuthCheckerNoLogged>} />
+                <Route path='/podlogin' element={<PodView />} />
                 <Route path='*' element={<NoFound />} />
             </Routes>
         </BrowserRouter>

@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import { check } from 'express-validator';
 import * as fac from './src/facade';
+import {FriendRequest} from "./src/entities/FriendRequest";
 
 const api: Router = express.Router()
 
@@ -35,7 +36,7 @@ api.post(
 );
 
 api.get(
-    "/usermanager/searchUserByUsername",
+    "/usermanager/find/username",
     async (req: Request, res: Response): Promise<Response> => {
       try {
         const username = req.query.username.toString();
@@ -122,10 +123,41 @@ api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<
     return res.status(200).send(friends);
 })
 
+
+
+
+
 api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
-    //let friends = await fac.FactoryLoMap.getFriendManager().listarAmigos(user)
-    return res.status(200).send([]);
+    let solicitudes = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user)
+    return res.status(200).send(solicitudes);
 })
+
+api.post("/friendmanager/updaterequest/:status", async (req: Request, res: Response): Promise<Response> => {
+    let status = req.params.status;
+    let fr=req.body.friendrequest;
+    let r = await fac.FactoryLoMap.getFriendManager().actualizarSolicitud(fr,+status);
+    return res.status(200).send(r);
+})
+
+api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
+    let user = req.body.user;
+    let r = await fac.FactoryLoMap.getFriendManager().listarAmigos(user);
+    return res.status(200).send(r);
+})
+
+api.post("/friendmanager/add", async (req: Request, res: Response): Promise<Response> => {
+    let userEnSesion=fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
+    let user = req.body.user;
+    let r = await fac.FactoryLoMap.getFriendManager().enviarSolicitud(userEnSesion,user);
+    return res.status(200).send(r);
+})
+
+api.post("/friendmanager/requests", async (req: Request, res: Response): Promise<Response> => {
+    let user = req.body.user;
+    let r = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user);
+    return res.status(200).send(r);
+})
+
 
 export default api;
