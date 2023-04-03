@@ -158,7 +158,7 @@ function LogedMenu() {
                     <label for="webid-ep" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
                     <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
+                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="Biografía..."></textarea>`,
             confirmButtonText: 'Editar',
             denyButtonText: 'Cambiar contraseña',
             showDenyButton: true,

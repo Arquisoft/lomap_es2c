@@ -2,21 +2,18 @@ import { User } from '../facade'
 export { UserImpl }
 
 class UserImpl implements User {
-    username: String
-    password: String
-    webID: String
-    description: String
-    img: String;
+    username: string
+    password: string
+    webID: string
 
-    constructor(username: String, password: String, webid: String, description?: String, img?: String) {
+    img:String;
+
+    constructor(username: string, password: string, webid: string,img?:string) {
         this.username = username
         this.password = password
         this.webID = webid
-        if (img) {
-            this.img = img;
-        }
-        if (description) {
-            this.description = description;
+        if(img){
+            this.img=img;
         }
     }
 

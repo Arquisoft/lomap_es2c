@@ -9,7 +9,6 @@ const app: Application = express();
 const port: number = 5000;
 
 const db = require('./src/persistence/DataBase');
-const a = require('./src/controllers/PodManager')
 
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);

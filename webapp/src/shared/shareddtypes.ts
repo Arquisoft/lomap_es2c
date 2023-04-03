@@ -1,9 +1,9 @@
 export interface User {
-    username: String
-    password: String
-    webID: String
-    description: String
-    img: String
+    username: string
+    password: string
+    webID: string
+    img: string
+    description: string 
 }
 
 export interface Group {

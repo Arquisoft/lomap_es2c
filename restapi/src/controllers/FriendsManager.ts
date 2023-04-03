@@ -76,4 +76,4 @@ export class FriendManagerImpl implements FriendManager {
 }
 //let a = new FriendManagerImpl();
 //a.enviarSolicitud(new User("Juan", "", ""), new User("Adri", "", ""))
-//console.log("hola");
+console.log("hola");

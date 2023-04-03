@@ -106,14 +106,31 @@ export async function sendFriendRequest(user: User): Promise<String> {
     return response.json()
 }
 
-export async function searchUserByUsername(user: User): Promise<User> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/usermanager/find/' + user.username)
-        .then((res) => { return res })
-        .catch((err) => { return err });
+export async function searchUserByUsername(username: string): Promise<User> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api';
+    
+    try {
+      let response = await fetch(`${apiEndPoint}/usermanager/searchUserByUsername?username=${username}`, { method: 'GET' })
+      .then(async (res) => {
+        if(!res.ok){
+            let e = await res.json();
+            throw new Error(e.error.toString());
+        }
+            
+        return res
+      }).then((user) => {
+        return user.json();
+      })
+      
+      return response
+    } catch (error) {
+      throw error
+    }
 
-    return response.json()
-}
+  }
+  
+  
+
 
 export async function addGroup(group: Group): Promise<Group[]> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
