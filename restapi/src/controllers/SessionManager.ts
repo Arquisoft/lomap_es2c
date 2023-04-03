@@ -1,7 +1,7 @@
 import UserSchema from "../entities/UserSchema";
 import { User, SesionManager } from "../facade";
 export { UserSesionManager };
-
+import * as repo from "../persistence/Repository"
 const sessionStorage = require('sessionstorage-for-nodejs')
 const bcrypt = require("bcryptjs");
 
@@ -45,7 +45,7 @@ class UserSesionManager implements SesionManager {
         let usuarioEncontrado = await UserSchema.findOne({
             username: user.username
             //password: user.password
-        });
+        }) as User;
 
         if (usuarioEncontrado != null) {
             if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {

@@ -10,8 +10,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
-import { Friend, Group, Place, User } from '../../../shared/shareddtypes';
-import { getMyFriends, getMyGroups, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
+import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
 import CloseIcon from '@mui/icons-material/Close';
 import { render } from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,7 +22,7 @@ const VerticalDivider = styled(Divider)({
 })
 
 
-export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any }) => {
+export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any, refresh: any }) => {
 
     const [url, setUrl] = useState("../testUser.jfif");
 
@@ -55,8 +54,9 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
         return open.charAt(item) == '0' ? false : true;
     }
 
-    const deleteFriend = (friend: number) => {
+    const deleteFriend = (friend: User) => {
         alert("eliminar amigo " + friend);
+        props.refresh()
     }
 
     const showFriendProfile = async (user: User) => {
@@ -68,7 +68,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                     <label for="webid-gp" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + usr.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="Biografía..."></textarea>`,
+                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
             focusConfirm: false,
             imageUrl: url,
             imageWidth: 'auto',
@@ -106,7 +106,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                     </Tooltip>)}
                                 <VerticalDivider orientation='vertical' flexItem />
                                 <Tooltip title="Delete friend">
-                                    <CloseIcon onClick={() => deleteFriend(i)} htmlColor="red" />
+                                    <CloseIcon onClick={() => deleteFriend(friend.user)} htmlColor="red" />
                                 </Tooltip>
                             </ListItemButton>
                             <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>

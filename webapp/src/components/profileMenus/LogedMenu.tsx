@@ -9,13 +9,14 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { editPassword, editUserDetails, getUserInSesion, logout } from '../../api/api';
+import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import { handleErrors } from 'api/ErrorHandler';
+import { User } from 'shared/shareddtypes';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -46,14 +47,14 @@ function LogedMenu() {
 
     const editSchema = fieldsValidation.editProfileValidation;
 
-    const [userInSession, setUser] = useState(getUserInSesion())
+    const [userInSession, setUser] = useState(getUserInSesion().username)
 
 
     //#region METODOS DE CLASE
 
     const getProfile = async () => {
         closeUserMenu();
-        let user = userInSession;
+        let user = await searchUserByUsername(userInSession);
         Swal.fire({
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
@@ -150,15 +151,15 @@ function LogedMenu() {
 
     async function showEditNoPss(): Promise<void> {
         closeUserMenu();
-        let user = userInSession;
+        let user = await searchUserByUsername(userInSession);
         Swal.fire({
             title: 'Edita tu perfil',
             html: ` <label for="name-ep" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-ep" class="swal2-input" placeholder=` + user.username + `>
+                    <input type="text" id="name-ep" class="swal2-input" disabled placeholder=` + user.username + `>
                     <label for="webid-ep" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
                     <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="Biografía..."></textarea>`,
+                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Editar',
             denyButtonText: 'Cambiar contraseña',
             showDenyButton: true,
@@ -236,7 +237,7 @@ function LogedMenu() {
     //#region HOOKS
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
-    const [url, setUrl] = useState(typeof (userInSession.img) == 'undefined' ? "userTest.jfif" : userInSession.img.toString());
+    const [url, setUrl] = useState("testUser.jfif");
     const [username, setUsername] = useState<String>("");
     //#endregion
 
@@ -245,7 +246,7 @@ function LogedMenu() {
 
         //#region COMPONENTE
         <BoxProfile>
-            <LoginInformation name={userInSession.username.toString()} />
+            <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />

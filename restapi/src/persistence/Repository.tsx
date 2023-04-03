@@ -48,11 +48,9 @@ export class Repository {
         await Repository.OpenConnection(uri, mongoose);
 
         let resultado: User;
-        try {
-            resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID, description: user.description, img: user.img }, { new: true });
-        } catch {
-            return new UserImpl("bderror", "", "");
-        }
+
+        resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID, description: user.description, img: user.img }, { new: true });
+
 
         if (resultado == null) { return new UserImpl("notfound", "", "") };
 

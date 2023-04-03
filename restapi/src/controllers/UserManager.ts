@@ -2,6 +2,7 @@ import { UserImpl } from "../entities/User";
 import type { User } from "../facade";
 import UserSchema from "../entities/UserSchema";
 import mongoose from "mongoose";
+import * as repo from "../persistence/Repository"
 
 export type { UserManager };
 export { UserManagerImpl };
@@ -22,7 +23,7 @@ class UserManagerImpl implements UserManager {
     public listarDetalles(user: User) {
         return buscarUsuarioPorUsername(user.username);
     }
-    public buscarUsuario(username: string){
+    public buscarUsuario(username: string) {
         return buscarUsuarioPorUsername(username);
     }
 }
@@ -45,12 +46,12 @@ async function buscarUsuarioPorUsername(username: string) {
         throw new Error("Error al conectarse con la base de datos.")
     }
 
-    if (resultado == null) { 
+    if (resultado == null) {
         throw new Error("El usuario no existe.")
     }
 
-    
-   
+
+
     return resultado;
 
 }
@@ -65,6 +66,7 @@ function getBD() {
 
 async function modificarUsuario(user: User) {
 
+    /*
     console.log("Editar: " + JSON.stringify(user))
     const { uri, mongoose } = getBD();
     try {
@@ -72,8 +74,12 @@ async function modificarUsuario(user: User) {
     } catch {
         return new UserImpl("bderror", "", "");
     }
+    */
 
     let resultado: User;
+    resultado = await repo.Repository.findOneAndUpdate(user)
+
+    /*
     try {
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID });
     } catch {
@@ -81,7 +87,19 @@ async function modificarUsuario(user: User) {
     }
 
     mongoose.connection.close();
+    */
 
     return resultado;
 
 }
+/*
+prueba().catch(err => console.log(err));
+
+async function prueba() {
+    
+    const u=modificarUsuario(new User("adrokoelloco","80","80","80"));
+    console.log((await u).webid);
+
+
+
+}*/
