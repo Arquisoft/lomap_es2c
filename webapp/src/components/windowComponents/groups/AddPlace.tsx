@@ -2,9 +2,9 @@ import { Box } from '@mui/material'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useParams } from 'react-router-dom';
-import AddPlaceComponent from './AddPlaceForm';
+import AddPlaceForm from './AddPlaceForm';
 
-export const AddPlaceForm = () => {
+export const AddPlace = () => {
 
     const navigate = useNavigate()
 
@@ -12,7 +12,7 @@ export const AddPlaceForm = () => {
 
     return (
         <Box>
-            <AddPlaceComponent></AddPlaceComponent>
+            <AddPlaceForm></AddPlaceForm>
         </Box>
     )
 }

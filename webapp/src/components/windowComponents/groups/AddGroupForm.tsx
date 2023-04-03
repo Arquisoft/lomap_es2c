@@ -1,18 +1,14 @@
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import Rating, { IconContainerProps } from '@mui/material/Rating';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -64,121 +60,38 @@ const CSSTextField = styled(TextField)({
 });
 
 
-const LegendTypography = styled(Typography)({
-    color: 'rgba(0, 0, 0, 0.6)',
-    fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
-    fontWeight: '400',
-    fontSize: '1rem',
-    lineHeight: '1.4375em',
-    letterSpacing: '0.00938em',
-});
 
-const StyledRating = styled(Rating)(({ theme }) => ({
-    '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
-        color: theme.palette.action.disabled,
-    },
-}));
-
-const customIcons: {
-    [index: string]: {
-        icon: React.ReactElement;
-        label: string;
-    };
-} = {
-    1: {
-        icon: <SentimentVeryDissatisfiedIcon color="error" />,
-        label: 'Very Dissatisfied',
-    },
-    2: {
-        icon: <SentimentDissatisfiedIcon color="error" />,
-        label: 'Dissatisfied',
-    },
-    3: {
-        icon: <SentimentSatisfiedIcon color="warning" />,
-        label: 'Neutral',
-    },
-    4: {
-        icon: <SentimentSatisfiedAltIcon color="success" />,
-        label: 'Satisfied',
-    },
-    5: {
-        icon: <SentimentVerySatisfiedIcon color="success" />,
-        label: 'Very Satisfied',
-    },
-};
-
-function IconContainer(props: IconContainerProps) {
-    const { value, ...other } = props;
-    return <span {...other}>{customIcons[value].icon}</span>;
-}
-
-export function RadioGroupRating() {
-    return (
-        <StyledRating
-            name="highlight-selected-only"
-            defaultValue={4}
-            IconContainerComponent={IconContainer}
-            getLabelText={(value: number) => customIcons[value].label}
-            highlightSelectedOnly
-        />
-    );
-}
-
-
-
-export default function AddPlace() {
+export default function AddGroupForm() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = (data: any) => console.log(data);
 
-    const { lat, lng } = useParams();
+    const navigate = useNavigate()
 
-
-    return (
+    return (<>
+        <div>
+        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+          <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+            Mis grupos
+          </Link>
+          <Typography color="text.primary">Nuevo grupo</Typography>
+        </Breadcrumbs>
+      </div>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
             <CSSTypography variant="body1" align="center"
-                sx={{ mb: "0.5em" }}>
-                Añadir lugar
+                sx={{ mt:"1.5em", mb: "1em" }}>
+                Nuevo grupo de lugares
             </CSSTypography>
             <CSSTextField
                 id="placename-AP"
                 variant="outlined"
-                label="Nombre del lugar"
-                placeholder="Nombre del lugar"
+                label="Nombre del grupo"
+                placeholder="Nombre del grupo"
                 fullWidth
-                {...register("placename")}
+                {...register("groupname")}
                 helperText={errors.placename ? 'Nombre inválido' : ''}
 
             />
-            <CSSTextField
-                id="longitude-AP"
-                label={lng ? ("Longitud: " + lng.toString()) : "Longitud"}
-                placeholder="Longitud"
-                disabled={lng ? true : false}
-                type="number"
-                fullWidth
-                {...register("longitude")}
-                helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
-            />
-            <CSSTextField
-                id="latitude-AP"
-                label={lat ? ("Latitud: " + lat.toString()) : "Latitud"}
-                placeholder="Latitud"
-                disabled={lat ? true : false}
-                type="number"
-                fullWidth
-                {...register("latitude")}
-                helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
-            />
-            <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
-
-            <textarea
-                placeholder="Reseña..."
-                style={{ width: '98.7%', height: '7vh', resize: 'none' }}
-                {...register("review-AP", { required: true, maxLength: 150 })} />
-
-
-            <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
-            <RadioGroupRating />
+            
             <CSSButton
                 sx={{ mt: "1.2em" }}
                 variant="contained"
@@ -186,9 +99,10 @@ export default function AddPlace() {
                 size="large"
                 fullWidth
             >
-                Añadir
+                Crear grupo
             </CSSButton>
 
         </Box>
+        </>
     );
 }

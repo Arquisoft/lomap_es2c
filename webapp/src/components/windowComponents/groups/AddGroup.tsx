@@ -2,14 +2,15 @@ import { Box } from '@mui/material'
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
+import AddGroupForm  from './AddGroupForm';
 
-export const AddGroupForm = () => {
+export const AddGroup = () => {
 
     const navigate = useNavigate()
 
     return (
         <Box>
-            Group <CloseIcon onClick={() => navigate("/home/groups/main")} htmlColor="red" />
+            <AddGroupForm></AddGroupForm>
         </Box>
     )
 }

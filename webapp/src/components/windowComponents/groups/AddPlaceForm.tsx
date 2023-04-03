@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Rating, { IconContainerProps } from '@mui/material/Rating';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
@@ -12,7 +11,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -126,17 +128,28 @@ export function RadioGroupRating() {
 
 
 
-export default function AddPlace() {
+export default function AddPlaceForm() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = (data: any) => console.log(data);
 
-    const { lat, lng } = useParams();
+    const { id, lat, lng } = useParams();
+    const navigate = useNavigate()
 
 
     return (
+        <>
+        <div>
+        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+          <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+            Mis grupos
+          </Link>
+          <Typography color="inherit">{id}</Typography>
+          <Typography color="text.primary">Nuevo grupo</Typography>
+        </Breadcrumbs>
+      </div>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
             <CSSTypography variant="body1" align="center"
-                sx={{ mb: "0.5em" }}>
+                sx={{ mt:"0.5em", mb: "0.5em" }}>
                 Añadir lugar
             </CSSTypography>
             <CSSTextField
@@ -190,5 +203,6 @@ export default function AddPlace() {
             </CSSButton>
 
         </Box>
+        </>
     );
 }
