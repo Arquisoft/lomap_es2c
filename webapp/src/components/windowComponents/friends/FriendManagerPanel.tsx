@@ -150,7 +150,7 @@ export const FriendManagerPanel = () => {
                     <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + usr.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="4" id="biography-gp" class="swal2-input" disabled placeholder="Biografía..."></textarea>`,
-            confirmButtonText: 'Editar',
+            confirmButtonText: 'Enviar',
             focusConfirm: false,
             imageUrl: url,
             imageWidth: 'auto',
