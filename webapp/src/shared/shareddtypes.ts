@@ -6,13 +6,13 @@ export interface User {
 
 export interface Group {
     places: Place[]
-    nombre: String
+    nombre: string
 }
 
 export interface Place {
-    latitude: String
-    longitud: String
-    nombre: String
+    latitude: string
+    longitud: string
+    nombre: string
 }
 
 export type User2 = {

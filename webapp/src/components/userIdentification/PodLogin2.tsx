@@ -6,9 +6,15 @@ import {
   useSession,
 } from "@inrupt/solid-ui-react";
 import { Session } from "@inrupt/solid-client-authn-browser";
+import { login, loginPod } from "api/api";
+import { User } from "../../../../restapi/src/facade";
+import { useNavigate } from "react-router-dom";
+import { SubmitHandler } from "react-hook-form";
+import PodManager from "podManager/PodManager";
 
 export function PodLogin() {
 
+  const pod = new PodManager()
   const { session } = useSession();
 
   const handleLogin = () => {
@@ -16,10 +22,33 @@ export function PodLogin() {
   };
 
   console.log(session)
-
+  
   const handleLogout = () => {
-    console.log("sale sesion")
+    
   };
+  const navigate = useNavigate();
+  
+  
+  
+  const tryLogin = async () => {
+    let user = {"username":"username", "password":"password", "webID":"webID"}
+    console.log("Aquí")
+    console.log("Allá")
+    
+    pod.savePlace(session, {"nombre":"Gijón", "latitude": "1", "longitud":"2"})
+
+    console.log(session.info.isLoggedIn) 
+    
+    let places = await pod.getPlaces(session)
+
+    places.forEach((place: any) => {
+      console.log(place)
+    }
+
+      )
+
+    console.log(places)
+  }
 
 
   return (
@@ -31,7 +60,7 @@ export function PodLogin() {
             redirectUrl={window.location.href}
            
           > 
-          <button onClick={handleLogin}> inicia sesion</button>
+          <button onClick={tryLogin}> inicia sesion</button>
           </LoginButton>
         ) : (
           <LogoutButton>

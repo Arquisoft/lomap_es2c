@@ -1,4 +1,6 @@
 import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
+import { Session } from "@inrupt/solid-client-authn-browser";
+import { UserManager } from '../../../restapi/src/controllers/UserManager';
 
 export async function addUser(user: User2): Promise<boolean> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
@@ -110,6 +112,56 @@ export async function sendFriendRequest(user: User): Promise<String> {
     return response.json()
 }
 
+export async function searchUserByUsername2(username: string): Promise<User> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/usermanager/find/' + username);
+    return response.json()
+}
+
+export async function addGroup(group: Group): Promise<Group[]> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/mapmanager/addgroup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'group': group, "user": getUserInSesion() })
+    });
+    return response.json()
+}
+
+
+
+export async function loginPod(user: User, session: Session): Promise<User> {
+
+    console.log(session)
+
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    console.log("pasa por aquí")
+    let response = await fetch(apiEndPoint + '/sesionmanager/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user, 'session': session })
+    });
+
+    console.log(response)
+    //The objects returned by the api are directly convertible to User objects
+    switch (response.status) {
+        case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 200: sessionStorage.setItem('userInSession', JSON.stringify(user));
+            ; return response.json();
+        default: throw new Error("Unexpected error");
+    }
+}
+export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> {
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    let response = await fetch(apiEndPoint + '/friendmanager/friendrequests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'user': user })
+    });
+    return response.json()
+}
 export async function searchUserByUsername(username: string): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api';
     
@@ -130,28 +182,4 @@ export async function searchUserByUsername(username: string): Promise<User> {
     } catch (error) {
       throw error
     }
-
   }
-  
-  
-
-
-export async function addGroup(group: Group): Promise<Group[]> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/mapmanager/addgroup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'group': group, "user": getUserInSesion() })
-    });
-    return response.json()
-}
-
-export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/friendmanager/friendrequests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'user': user })
-    });
-    return response.json()
-}
