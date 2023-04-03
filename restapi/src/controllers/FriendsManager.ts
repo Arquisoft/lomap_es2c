@@ -41,7 +41,7 @@ export class FriendManagerImpl implements FriendManager {
         console.log(amigosString)
 
         for(let i=0;i<amigosString.length;i++){
-            let user = await UserSchema.findOne({ username: amigosString[i] }, { webID: 1, username: 1, password: 1 }) as User;
+            let user = await UserSchema.findOne({ username: amigosString[i] }, { webID: 1, username: 1, password: 1 ,_id:0}) as User;
             ret.push(user);
         }
         console.log(ret);
@@ -84,18 +84,18 @@ export class FriendManagerImpl implements FriendManager {
 //let a = new FriendManagerImpl();
 //a.enviarSolicitud(new User("Juan", "", ""), new User("Adri", "", ""))
 //console.log("hola");
-//let u1=new UserImpl("security","","","");
-//let u2=new UserImpl("security3","","","")
+let u1=new UserImpl("security","","","");
+let u2=new UserImpl("security3","","","")
 //let u3=new UserImpl("test3","","","");
 //let u4=new UserImpl("test4","","","")
 
-//let a=new FriendManagerImpl();
+let a=new FriendManagerImpl();
 
 //a.enviarSolicitud(u1,u2).then(c=>console.log(c));
 //a.actualizarSolicitud(new FriendRequest(u1,u2,0),1).then(c=>console.log(c));
 //let b=a.listarSolicitudes(u1).then(c=>console.log(c));
 
-//a.listarAmigos(u2).then(c=>console.log(c));
+a.listarAmigos(u2).then(c=>console.log(c));
 //a.listarAmigos(u1).then(c=>console.log(c));
 //enviar solicitud funciona
 //aceptar solicitud funciona
