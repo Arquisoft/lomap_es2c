@@ -34,33 +34,47 @@ api.post(
     }
 );
 
+api.get(
+    "/usermanager/searchUserByUsername",
+    async (req: Request, res: Response): Promise<Response> => {
+      try {
+        const username = req.query.username.toString();
+        const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
+        return res.status(200).json(user);
+      } catch (err) {
+        return res.status(404).send({error: err.toString()})
+      }
+    }
+  );
+  
+
 
 api.post(
     "/usermanager/details", async (req: Request, res: Response): Promise<Response> => {
-        let user=req.body.user;
-            let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
-            if(u.username=="notfound"){
-                return res.status(507).send("Usuario no encontrado para listar detalle");
-            }else if(u.username=="bderror"){
-                return res.status(508).send("Error en la conexión con la base de datos");
-            }
-            else{
-                return res.status(200).send(u);
-            }
+        let user = req.body.user;
+        let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
+        if (u.username == "notfound") {
+            return res.status(404).json({error: "El usuario no existe."});
+        } else if (u.username == "bderror") {
+            return res.status(500).json({error: "Error en la conexión con la base de datos"});
+        }
+        else {
+            return res.status(200).send(u);
+        }
     }
 );
 
 api.post(
     "/usermanager/edit",
     async (req: Request, res: Response): Promise<Response> => {
-        let user=req.body.user;
+        let user = req.body.user;
         let u = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
-        if(u.username=="notfound"){
-            return res.status(507).send("Usuario no encontrado");
-        }else if(u.username=="bderror"){
-            return res.status(508).send("Error en la conexión con la base de datos");
+        if (u.username == "notfound") {
+            return res.status(407).json("Usuario no encontrado");
+        } else if (u.username == "bderror") {
+            return res.status(408).json("Error en la conexión con la base de datos");
         }
-        else{
+        else {
             return res.status(200).send(u);
         }
     }
@@ -70,7 +84,6 @@ api.post(
 
 
 api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Response> => {
-    console.log("hi")
     let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
     return res.status(200).send(user);
 })
@@ -78,23 +91,41 @@ api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Resp
 api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let userRes = await fac.FactoryLoMap.getSesionManager().registrarse(user);
-    console.log(userRes)
     return res.status(200).send(userRes);
 })
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
+    console.log(user)
     let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
+    console.log(userRes)
     if (userRes.username == "passwordNotFound") {
         return res.status(506).send("Contraseña errónea")
-    } else if(userRes.username == "userNotFound"){
+    } else if (userRes.username == "userNotFound") {
         return res.status(507).send("Usuario no encontrado")
     }
     else {
         return res.status(200).send(userRes);
-        
+
     }
     //IF / ELSES CON CADA POSIBLE ERROR Y EL STATUS ASOCIADO
+})
+
+api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {
+    let userRes = await fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
+    return res.status(200).send(userRes);
+})
+
+api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
+    let user = req.body.user;
+    let friends = await fac.FactoryLoMap.getFriendManager().listarAmigos(user)
+    return res.status(200).send(friends);
+})
+
+api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
+    let user = req.body.user;
+    //let friends = await fac.FactoryLoMap.getFriendManager().listarAmigos(user)
+    return res.status(200).send([]);
 })
 
 export default api;

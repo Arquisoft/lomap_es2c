@@ -1,6 +1,9 @@
 name: CI for LOMAP ES2C
 
 on:
+  push:
+    branches:
+      - develop
   release:
     types: [published]
 

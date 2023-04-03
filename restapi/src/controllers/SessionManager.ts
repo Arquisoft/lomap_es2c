@@ -23,16 +23,11 @@ class UserSesionManager implements SesionManager {
     async registrarse(usuario: User): Promise<User> {
         // this.userInSession = usuario;
         sessionStorage.setItem('userInSession', JSON.stringify(usuario));
-        console.log("que")
-        console.log(sessionStorage.getItem('userInSession'))
-
         const usuarioSchema = new UserSchema({
             username: usuario.username,
             webID: usuario.webID,
             password: await bcrypt.hash(usuario.password, this.rondasDeEncriptacion)
         });
-
-        console.log(usuarioSchema.username)
 
         await usuarioSchema.save();
         return usuario;
@@ -51,12 +46,12 @@ class UserSesionManager implements SesionManager {
             username: user.username
             //password: user.password
         });
-        console.log(usuarioEncontrado)
 
         if (usuarioEncontrado != null) {
-            if(await bcrypt.compare(user.password, usuarioEncontrado.password)){
+            console.log(user.password + "-" + usuarioEncontrado.password)
+            if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
                 // this.userInSession = usuarioEncontrado
-                console.log(usuarioEncontrado)
+                console.log("What: " + usuarioEncontrado)
                 sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
                 return user;
             }

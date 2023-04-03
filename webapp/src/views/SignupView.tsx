@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
-import { Signup } from '../components/userIdentification/signup';
+import { Signup } from '../components/userIdentification/Signup';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({

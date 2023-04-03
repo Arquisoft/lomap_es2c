@@ -1,7 +1,18 @@
 export interface User {
-    username: String
-    password: String
-    webID: String
+    username: string
+    password: string
+    webID: string
+}
+
+export interface Group {
+    places: Place[]
+    nombre: String
+}
+
+export interface Place {
+    latitude: String
+    longitud: String
+    nombre: String
 }
 
 export type User2 = {
@@ -40,6 +51,15 @@ export interface UserManager {
     listarDetalles: (user: User) => Promise<User>;
 }
 
-export interface FriendRequest { }
+export interface Friend {
+    user: User,
+    groups: Group[],
+}
+
+export interface FriendRequest {
+    receiver: User,
+    sender: User,
+    status: number,
+}
 export interface Group { }
 export interface Place { }
