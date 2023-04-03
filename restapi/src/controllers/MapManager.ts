@@ -37,7 +37,7 @@ class MapManagerImpl implements MapManager {
     }
 
 
-    crearGrupo(nombre: String): Group {
+    crearGrupo(nombre: string): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
 
         const grupo: Group = {

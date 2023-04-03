@@ -20,7 +20,7 @@ export interface SesionManager {
 export interface MapManager {
     verMapaDe: (user: User) => Promise<Group[]>;
     añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
-    crearGrupo: (nombre: String) => Group;
+    crearGrupo: (nombre: string) => Group;
     eliminarGrupo: (grupo: Group) => boolean;
     eliminarLugarDeGrupo: (lugar: Place, grupo: Group) => Group;
     aplicarFiltro: (grupo: Group, filtro: string) => Place[];

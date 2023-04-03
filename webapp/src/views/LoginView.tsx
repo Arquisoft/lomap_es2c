@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
 import { Login } from '../components/userIdentification/login';
+import  PodLogin  from 'components/userIdentification/PodLogin';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -36,7 +37,7 @@ export default function LoginView() {
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header logged={false} /></MyPaper>
-            <Login />
+            <PodLogin />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

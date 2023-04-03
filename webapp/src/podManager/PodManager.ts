@@ -158,31 +158,35 @@ class PodManager {
           //return [];
         }
       }
-      
+    
 
+    // podUrl must be correct for the moment
     async saveGroup(session: Session, group: Group): Promise<void> {
-        try {
-            let url = "https://uo282716.inrupt.net/profile/card#me/public/groups/" + group.nombre.replace(/\s/g, '');
-    
-            let JSONLDgroup: JsonLdDocument = {
-                "@context": "https://schema.org/",
-                "@type": "Group",
-                "name": group.nombre,
-                "place": group.places.map(place => "https://uo282716.inrupt.net/profile/card#me/public/places/" + place.nombre.replace(/\s/g, ''))
-            };
-    
-            let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
-            let file = new File([blob], group.nombre + ".jsonld", { type: blob.type });
-    
-            await overwriteFile(
-                url,
-                file,
-                { contentType: file.type, fetch: session.fetch }
-            );
-        } catch (error) {
-            console.log(error);
-        }
-    }
+      console.log(session.info.isLoggedIn)
+      try {
+
+          let url = "https://uo282716.inrupt.net/profile/public/groups/" + group.nombre.replace(/\s/g, '')
+  
+          let JSONLDgroup: JsonLdDocument = {
+            "@context": "https://schema.org/",
+            "@type": "Group",
+            "name": group.nombre,
+            "place": group.places.map(place => "https://uo282716.inrupt.net/profile/public/places/" + place.nombre.replace(/\s/g, ''))
+        };
+  
+          let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
+          let file = new File([blob], group.nombre + ".jsonld", { type: blob.type });
+
+          await overwriteFile(
+              url,
+              file,
+              { contentType: file.type, fetch: session.fetch }
+          );
+      } catch (error) {
+          console.log(error);
+      }
+
+  }
     
     async getGroups(session: Session): Promise<Group[]> {
         try {

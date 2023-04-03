@@ -11,8 +11,9 @@ import { User } from "../../../../restapi/src/facade";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler } from "react-hook-form";
 import PodManager from "podManager/PodManager";
+import { Group, Place } from "shared/shareddtypes";
 
-export function PodLogin() {
+export default function PodLogin() {
 
   const pod = new PodManager()
   const { session } = useSession();
@@ -31,23 +32,32 @@ export function PodLogin() {
   
   
   const tryLogin = async () => {
-    let user = {"username":"username", "password":"password", "webID":"webID"}
-    console.log("Aquí")
-    console.log("Allá")
-    
-    pod.savePlace(session, {"nombre":"Gijón", "latitude": "1", "longitud":"2"})
-
-    console.log(session.info.isLoggedIn) 
-    
-    let places = await pod.getPlaces(session)
-
-    places.forEach((place: any) => {
-      console.log(place)
+    let place:Place = {"nombre":"Prueba", "latitude": "1", "longitud":"2"}
+    let place2:Place = {"nombre":"Oviedo", "latitude": "1", "longitud":"2"}
+    let group:Group = {
+      "nombre": "Grupo",
+      places: [place, place2]
     }
 
-      )
+    pod.saveGroup(session, group)
 
-    console.log(places)
+    // let user = {"username":"username", "password":"password", "webID":"webID"}
+    // console.log("Aquí")
+    // console.log("Allá")
+    
+    // pod.savePlace(session, {"nombre":"Prueba", "latitude": "1", "longitud":"2"})
+
+    // console.log(session.info.isLoggedIn) 
+    
+    // let places = await pod.getPlaces(session)
+
+    // places.forEach((place: any) => {
+    //   console.log(place)
+    // }
+
+    //   )
+
+    // console.log(places)
   }
 
 
