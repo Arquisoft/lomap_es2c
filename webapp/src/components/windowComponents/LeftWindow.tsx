@@ -5,7 +5,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import { styled } from '@mui/material/styles';
 import { createTheme, Tabs, ThemeProvider } from '@mui/material';
-import { MapsManagerPanel } from './groups/MapsManagerPanel';
+import { MapsManagerPanel } from './groups/GroupsManagerPanel';
 import { FriendManagerPanel } from './friends/FriendManagerPanel';
 import { showError } from '../../utils/fieldsValidation';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';

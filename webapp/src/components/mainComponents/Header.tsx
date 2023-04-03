@@ -7,8 +7,8 @@ import Button from '@mui/material/Button';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import LogedMenu from '../profileMenus/LogedMenu';
-import { NoLogedMenu } from '../profileMenus/NoLogedMenu';
+import LogedMenu from '../profileMenus/LoggedMenu';
+import { NoLogedMenu } from '../profileMenus/NoLoggedMenu';
 import { useNavigate } from 'react-router-dom';
 
 //#region DEFINICION DE COMPONENTES STYLED
