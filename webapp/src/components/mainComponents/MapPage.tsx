@@ -31,8 +31,6 @@ export function MapPage() {
 
     return (
         <MapContainer disableGutters>
-            <CSSLeafletLink/>
-            <ScriptLeafletLink/>
             <LeftWindow />
             <MapComponent />
         </MapContainer>
