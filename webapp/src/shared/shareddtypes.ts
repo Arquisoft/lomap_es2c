@@ -2,6 +2,8 @@ export interface User {
     username: string
     password: string
     webID: string
+    img: string
+    description: string 
 }
 
 export interface Group {

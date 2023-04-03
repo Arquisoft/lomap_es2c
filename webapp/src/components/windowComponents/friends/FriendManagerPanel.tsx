@@ -112,11 +112,15 @@ export const FriendManagerPanel = () => {
                 username: "Acosador",
                 webID: "WebID de acosador",
                 password: ".",
+                img: "",
+                description: ""
             },
             receiver: {
                 username: "security2",
                 webID: "WebID de acosador",
                 password: ".",
+                img: "",
+                description: ""
             },
             status: 0
         })
@@ -125,11 +129,15 @@ export const FriendManagerPanel = () => {
                 username: "security",
                 webID: "WebID de acosador",
                 password: ".",
+                img: "",
+                description: ""
             },
             receiver: {
                 username: "security2",
                 webID: "WebID de acosador",
                 password: ".",
+                img: "",
+                description: ""
             },
             status: 0
         })
