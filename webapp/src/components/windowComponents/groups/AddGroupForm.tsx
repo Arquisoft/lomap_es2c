@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -9,6 +9,9 @@ import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import * as fieldsValidation from '../../../utils/fieldsValidation';
+import * as yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -62,10 +65,20 @@ const CSSTextField = styled(TextField)({
 
 
 export default function AddGroupForm() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = (data: any) => console.log(data);
+
+    const schema = fieldsValidation.groupValidation;
+    type GroupSchema = yup.InferType<typeof schema>;
+
+    const { register, handleSubmit, formState: { errors } } = useForm<GroupSchema>({
+        resolver: yupResolver(schema)
+    });
+
+    const onSubmit: SubmitHandler<GroupSchema> = (data: any) => console.log(data);
+
 
     const navigate = useNavigate()
+
+
 
     return (<>
         <div>
@@ -87,8 +100,8 @@ export default function AddGroupForm() {
                 label="Nombre del grupo"
                 placeholder="Nombre del grupo"
                 fullWidth
-                {...register("groupname")}
-                helperText={errors.placename ? 'Nombre inválido' : ''}
+                {...register("groupName")}
+                helperText={errors.groupName ? errors.groupName.message : ''}
 
             />
             
