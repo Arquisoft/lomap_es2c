@@ -1,10 +1,10 @@
-import { SCHEMA_INRUPT } from "@inrupt/vocab-common-rdf";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { addStringNoLocale, addUrl, createSolidDataset, getFile, getJsonLdParser, getSolidDataset, getStringNoLocale, getThingAll, getUrl, getUrlAll, overwriteFile } from "@inrupt/solid-client";
-import { setThing, createThing } from "@inrupt/solid-client";
+import { setThing, createThing, Thing } from "@inrupt/solid-client";
 import { saveSolidDatasetAt } from "@inrupt/solid-client";
 import { Group, Place } from "shared/shareddtypes";
 import { JsonLdDocument, JsonLdProcessor } from 'jsonld';
+import { wait } from "@testing-library/user-event/dist/utils";
 
 class PodManager {
     
@@ -15,14 +15,17 @@ class PodManager {
         try {
 
             let url = "https://uo282716.inrupt.net/profile/public/places/" + place.nombre
-    
+
             let JSONLDplace: JsonLdDocument = {
-                "@context": "https://schema.org/",
-                "@type": "Place",
-                "name": place.nombre,
+              "@context": "https://schema.org",
+              "@type": "Place",
+              "geo": {
+                "@type": "GeoCoordinates",
                 "latitude": place.latitude,
                 "longitude": place.longitud
-            };
+              },
+              "name": place.nombre
+            }
     
             let blob = new Blob([JSON.stringify(JSONLDplace)], { type: "application/ld+json" });
             let file = new File([blob], place.nombre + ".jsonld", { type: blob.type });
@@ -38,15 +41,12 @@ class PodManager {
 
     }
 
-    
-
-
     async getPlaces(session: Session): Promise<Place[]> {
       const placesFolderPath = 'https://uo282716.inrupt.net/profile/public/places/';
       const placeStructure = {
-        name: 'http://schema.org/name',
-        longitude: 'http://schema.org/longitude',
-        latitude: 'http://schema.org/latitude',
+        name: 'http://www.w3.org/2006/vcard/ns#fn',
+        longitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#long',
+        latitude: 'http://www.w3.org/2003/01/geo/wgs84_pos#lat',
       }
 
       
@@ -60,44 +60,53 @@ class PodManager {
         console.log(x)
       })
 
+      const urls = placeThings.map((placeThing: Thing) => {
+        return placeThing.url
+      })
+      console.log(urls)
+
       // Mapear cada objeto en un lugar
-      const places: Place[] = placeThings.map((placeThing) => {
-        console.log(placeThing.predicates)
-        const place: Place = {
-          nombre: getUrl(placeThing, placeStructure.name),
-          longitud: getUrl(placeThing, placeStructure.longitude),
-          latitude: getUrl(placeThing, placeStructure.latitude),
-        };
-        console.log(place)
-        return place;
-      });
+      // const places: Place[] = await Promise.all(placeThings.map((placeThing: Thing) => {
+      //   console.log(placeThing.url)
+      //   const place: Place = {
+      //     nombre: getUrl(placeThing, placeStructure.name),
+      //     longitud: getUrl(placeThing, placeStructure.longitude),
+      //     latitude: getUrl(placeThing, placeStructure.latitude),
+      //   };
+      //   console.log(place)
+      //   return place;
+      //   }));
 
-        // await this.get(session, placeThing.url).then((place:Place) =>{
-        //   console.log(place)
-        //   if(place != undefined){
-            
-        //     console.log("a")
-        //     places.push(place)
-        //   }
-        //   return place
-        // }).catch((e: Error) => {
-
-        // })
-
+        const places: Promise<Place>[] = []
+        await Promise.all(placeThings.map((placeThing: Thing) => {
+          if(!placeThing.url.endsWith('/')) {
+            try {
+              const place = this.get(session, placeThing.url);
+              console.log(place)
+              if (place !== undefined) {
+                console.log(66)
+                places.push(place);
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        }));
         
-      
+        setTimeout(() => {
+          console.log('Después de 5 segundos');
+        }, 5000);
 
- 
       console.log(places.length)
-      return places;
+      return await Promise.all(places);
     }
 
     async get(session: Session, url: string): Promise<Place> {
       try {
-        const file = await getFile(
-          url,
-          {fetch: session.fetch}
-        );
+          const file = await getFile(
+            url,
+            {fetch: session.fetch}
+          )
 
           const text = await file.text();
 
@@ -111,7 +120,8 @@ class PodManager {
             place.latitude = data.latitude
           };
 
-          console.log(place)
+          console.log(place)      
+          
           return place;
       } catch (error) {
         console.log(error);

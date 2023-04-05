@@ -39,7 +39,7 @@ export default function PodLogin() {
       places: [place, place2]
     }
 
-    pod.saveGroup(session, group)
+    // pod.saveGroup(session, group)
 
     // let user = {"username":"username", "password":"password", "webID":"webID"}
     // console.log("Aquí")
@@ -49,15 +49,15 @@ export default function PodLogin() {
 
     // console.log(session.info.isLoggedIn) 
     
-    // let places = await pod.getPlaces(session)
+    console.log(2)
 
-    // places.forEach((place: any) => {
-    //   console.log(place)
-    // }
+    let places = await pod.getPlaces(session)
 
-    //   )
+    places.forEach((place: any) => {
+       console.log(place)
+    })
 
-    // console.log(places)
+    console.log(places)
   }
 
 
