@@ -9,7 +9,7 @@ export const AddGroupForm = () => {
 
     return (
         <Box>
-            Group <CloseIcon onClick={() => navigate("/home/0")} htmlColor="red" />
+            Group <CloseIcon onClick={() => navigate("/home/groups/main")} htmlColor="red" />
         </Box>
     )
 }

@@ -11,7 +11,7 @@ const friendshipSchema = new Schema(
             required: true,
         },
         status: {
-            type: Number,
+            type: String,
             required: true,
         },
     }

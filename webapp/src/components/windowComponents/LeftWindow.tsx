@@ -5,8 +5,8 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import { styled } from '@mui/material/styles';
 import { createTheme, Tabs, ThemeProvider } from '@mui/material';
-import { MapsManagerPanel } from './MapsManagerPanel';
-import { FriendManagerPanel } from './FriendManagerPanel';
+import { MapsManagerPanel } from './groups/MapsManagerPanel';
+import { FriendManagerPanel } from './friends/FriendManagerPanel';
 import { showError } from '../../utils/fieldsValidation';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
@@ -43,10 +43,12 @@ export function LeftWindow() {
         setValue(newValue);
     };
 
+
+
     return (
         <Window>
             <ThemeProvider theme={theme}>
-                <MyTabContext value={value} theme={theme}>
+                <MyTabContext value={mainop} theme={theme}>
                     <Tabs
                         variant="fullWidth"
                         value={value}
@@ -60,6 +62,7 @@ export function LeftWindow() {
                     </Tabs>
                     <TabPanel value="groups">
                         <MapsManagerPanel />
+
                     </TabPanel>
                     <TabPanel value="friends">
                         <FriendManagerPanel />

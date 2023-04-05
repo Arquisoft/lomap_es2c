@@ -9,13 +9,14 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { User } from '../../shared/shareddtypes';
-import { editUserDetails, getUserDetails, getUserInSesion } from '../../api/api';
+import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
+import { handleErrors } from 'api/ErrorHandler';
+import { User } from 'shared/shareddtypes';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -33,6 +34,12 @@ const MyMenu = styled(Menu)({
 
 //#endregion
 
+//#region DEFINICION DE COMPONENTES PERSONALIZADOS
+
+function LoginInformation(props: any) {
+    return <b><p>Se ha iniciado sesión como {props.name}</p></b>;
+}
+//#endregion
 function LogedMenu() {
 
 
@@ -40,12 +47,14 @@ function LogedMenu() {
 
     const editSchema = fieldsValidation.editProfileValidation;
 
+    const [userInSession, setUser] = useState(getUserInSesion().username)
+
 
     //#region METODOS DE CLASE
 
     const getProfile = async () => {
         closeUserMenu();
-        let user = await getUserDetails(getUserInSesion());
+        let user = await searchUserByUsername(userInSession);
         Swal.fire({
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
@@ -53,7 +62,7 @@ function LogedMenu() {
                     <label for="webid-gp" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="Biografía..."></textarea>`,
+                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Editar perfil',
             confirmButtonColor: '#81c784',
             focusConfirm: false,
@@ -90,7 +99,8 @@ function LogedMenu() {
 
     async function showEdit(): Promise<void> {
         closeUserMenu();
-        let user = await getUserDetails(getUserInSesion());
+        let oldpsw: string;
+        let newpsw: string;
         Swal.fire({
             title: 'Cambiar contraseña',
             html: `<label for="opassword-ep" class="swal2-label">Contraseña actual: </label>
@@ -116,13 +126,8 @@ function LogedMenu() {
 
                     if (fieldsValidation.checkPasswords(pass, confirmPass)) {
                         let oldPassword = (Swal.getPopup().querySelector('#opassword-ep') as HTMLInputElement).value
-
-                        if (oldPassword === oldPassword) { // Comprobar con la guardada en la BD
-                            user = { username: user.username, webID: user.webID, password: pass };
-                            return user;
-                        } else {
-                            fieldsValidation.showError("No se ha podido actualizar la contraseña", "Contraseña actual incorrecta", showEdit);
-                        }
+                        oldpsw = oldPassword;
+                        newpsw = pass;
                     }
                     else {
                         fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", showEdit);
@@ -137,7 +142,7 @@ function LogedMenu() {
             }
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await editUserDetails(user);
+                await handleErrors(() => editPassword(oldpsw, newpsw), Swal.close)
             } else if (result.isDenied) {
                 showEditNoPss();
             }
@@ -146,15 +151,15 @@ function LogedMenu() {
 
     async function showEditNoPss(): Promise<void> {
         closeUserMenu();
-        let user = await getUserDetails(getUserInSesion());
+        let user = await searchUserByUsername(userInSession);
         Swal.fire({
             title: 'Edita tu perfil',
             html: ` <label for="name-ep" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-ep" class="swal2-input" placeholder=` + user.username + `>
+                    <input type="text" id="name-ep" class="swal2-input" disabled placeholder=` + user.username + `>
                     <label for="webid-ep" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
                     <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="Biografía..."></textarea>`,
+                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Editar',
             denyButtonText: 'Cambiar contraseña',
             showDenyButton: true,
@@ -188,7 +193,7 @@ function LogedMenu() {
                         webID: webid,
                         biography: biography
                     }).then(() => {
-                        user = { username: name, webID: webid, password: user.password }
+                        user = { username: name, webID: webid, password: user.password, description: biography, img: user.img }
                         return user;
                     }).catch(e => {
                         let errorMessage = (e as string)
@@ -198,7 +203,7 @@ function LogedMenu() {
             }
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await editUserDetails(user);
+                await handleErrors(() => editUserDetails(user), Swal.close);
             } else if (result.isDenied) {
                 showEdit();
             }
@@ -208,6 +213,7 @@ function LogedMenu() {
 
     const goLogout = () => {
         closeUserMenu();
+        logout();
         //var state = FactoryLoMap.getSesionManager().cerrarSesion();
         navigate("/");
         //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
@@ -231,15 +237,16 @@ function LogedMenu() {
     //#region HOOKS
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
-    const [url, setUrl] = useState("../testUser.jfif");
+    const [url, setUrl] = useState("testUser.jfif");
     const [username, setUsername] = useState<String>("");
-
     //#endregion
 
+
     return (
+
         //#region COMPONENTE
-        <BoxProfile onLoad={getUsername}>
-            <b><p>Sesión iniciada como {username}</p></b>
+        <BoxProfile>
+            <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />
