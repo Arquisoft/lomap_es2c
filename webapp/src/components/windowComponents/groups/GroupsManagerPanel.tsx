@@ -14,8 +14,8 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
-import { AddPlace } from './AddPlace';
-import { AddGroup } from './AddGroup';
+import AddPlaceForm from './AddPlaceForm';
+import AddGroupForm from './AddGroupForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
@@ -115,10 +115,10 @@ export const GroupsManagerPanel = () => {
                 </>
                 :
                 (op == "addgroup" ?
-                    <AddGroup ></AddGroup>
+                    <AddGroupForm />
                     :
                     (op == "addplace" ?
-                        <AddPlace ></AddPlace>
+                        <AddPlaceForm />
                         :
                         <ErrorPage></ErrorPage>
                     )
