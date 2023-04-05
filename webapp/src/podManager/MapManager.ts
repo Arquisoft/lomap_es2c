@@ -1,34 +1,26 @@
 import { Session } from "@inrupt/solid-client-authn-browser/dist/Session";
-import { Place } from "../entities/Place";
-import UserSchema from "../entities/UserSchema";
-import { Group, MapManager, SesionManager, User } from "../facade";
-import { PODManager } from "../facade";
-import * as repo from '../persistence/Repository';
-export { MapManagerImpl };
+import PodManager from "./PodManager";
+import { Group, Place, User } from "shared/shareddtypes";
+export { MapManager };
 
 const sessionStorage = require('sessionstorage-for-nodejs')
 
-class MapManagerImpl implements MapManager {
+class MapManager {
 
     session: Session
-    sessionManager: SesionManager;
-    pod: PODManager;
+    pod: PodManager;
 
     constructor(session: Session){
         this.session = session
     }
 
     async verMapaDe(user: User): Promise<Group[]> {
-        let usuarioEncontrado = await repo.Repository.findOne(user)
-
         let grupos = this.pod.getGroups(this.session)
 
         return grupos
     }
 
     añadirLugarAGrupo(lugar: Place, grupo: Group): Group {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
-
         grupo.places.push(lugar)
 
         this.pod.saveGroup(this.session, grupo)
@@ -38,10 +30,8 @@ class MapManagerImpl implements MapManager {
 
 
     crearGrupo(nombre: string): Group {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
-
         const grupo: Group = {
-            name: nombre,
+            nombre: nombre,
             places: []
         };
 
@@ -63,9 +53,7 @@ class MapManagerImpl implements MapManager {
 
 
     eliminarLugarDeGrupo(lugar: Place, grupo: Group): Group {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
-
-        const lugarIndex = grupo.places.findIndex(p => p.name === lugar.name);
+        const lugarIndex = grupo.places.findIndex(p => p.nombre === lugar.nombre);
         if (lugarIndex !== -1) {
             grupo.places.splice(lugarIndex, 1);
         }
@@ -83,8 +71,6 @@ class MapManagerImpl implements MapManager {
 
 
     editarGrupo(grupo: Group): Group {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
-
         this.pod.saveGroup(this.session, grupo);
 
         return grupo;
@@ -96,8 +82,6 @@ class MapManagerImpl implements MapManager {
     }
 
     async añadirGrupo(grupo: Group): Promise<Group[]> {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
-
         this.pod.saveGroup(this.session, grupo);
 
         let grupos = this.pod.getGroups(this.session);

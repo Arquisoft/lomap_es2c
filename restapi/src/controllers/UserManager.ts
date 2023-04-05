@@ -1,7 +1,13 @@
 import { UserImpl } from "../entities/User";
 import type { User } from "../facade";
+import UserSchema from "../entities/UserSchema";
+import * as repo from '../persistence/Repository';
+import mongoose from "mongoose";
 
 export type { UserManager };
+export { UserManagerImpl };
+
+const bcrypt = require("bcryptjs");
 //import UserSchema from '../entities/UserSchema'
 interface UserManager {
     modificarPerfil: (user: User) => Promise<User>;
@@ -12,7 +18,6 @@ interface UserManager {
 class UserManagerImpl implements UserManager {
     public modificarPerfil(user: User) {
         return modificarUsuario(user);
-
     }
     public listarDetalles(user: User) {
         return buscarUsuarioPorUsername(user);
@@ -21,31 +26,34 @@ class UserManagerImpl implements UserManager {
 
 
 async function buscarUsuarioPorUsername(u: User) {
+    
+    /*
+    const { uri, mongoose } = getBD();
+    try {
+        await mongoose.connect(uri);
+    } catch {
+        return new UserImpl("bderror", "", "");
+    }
+    */
+    
+    let resultado: User;
+    resultado = await repo.Repository.findOne(u)
 
-    //const uri = "mongodb+srv://adrianfernandezalvarez02:6StwePBGphR8AJfa@cluster0.bty3mrz.mongodb.net/animales?retryWrites=true&w=majority";
-    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
-    const mongoose = require('mongoose');
-    mongoose.set('strictQuery', true);
+    /*
+    try {
+        resultado = await UserSchema.findOne({ username: u.username }, { _id: 0, __v: 0 }) as User;
+    } catch {
+        return new UserImpl("bderror", "", "");
+    }
 
-    await mongoose.connect(uri);
+    if (resultado == null) { return new UserImpl("notfound", "", "") };
+    */
 
-    const userSchema = new mongoose.Schema({
-        username: String,
-        password: String,
-        webid: String,
-        img: String
-    });
-
-
-    const usuario = mongoose.model('users', userSchema);
-
-    let resultado = await usuario.findOne({ username: u.username });
-
-    if (resultado == null) { return null };
-    console.log(resultado);
-    resultado = resultado.toString();
+    console.log("Res:" + resultado);
+    /*
     mongoose.connection.close();
-
+    
+    resultado = resultado.toString();
     resultado = resultado.replace("username", '"username"');
     resultado = resultado.replace("img", '"img"');
     resultado = resultado.replace("password", '"password"');
@@ -54,14 +62,10 @@ async function buscarUsuarioPorUsername(u: User) {
     resultado = deleteSecondLine(resultado);
 
     let b = JSON.parse(resultado);
+    */
 
-    return new UserImpl(b.username, b.password, b.webid);
+    return resultado;
 
-}
-function deleteSecondLine(json: string): string {
-    let jsonArray: string[] = json.split("\n");
-    jsonArray.splice(1, 1);
-    return jsonArray.join("\n");
 }
 
 /*prueba().catch(err => console.log(err));
@@ -74,34 +78,39 @@ async function prueba() {
 
 }*/
 
-
-
+function getBD() {
+    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
+    const mongoose = require('mongoose');
+    mongoose.set('strictQuery', true);
+    return { uri, mongoose };
+}
 
 async function modificarUsuario(user: User) {
 
-    //const uri = "mongodb+srv://adrianfernandezalvarez02:6StwePBGphR8AJfa@cluster0.bty3mrz.mongodb.net/animales?retryWrites=true&w=majority";
-    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
+    /*
+    console.log("Editar: " + JSON.stringify(user))
+    const { uri, mongoose } = getBD();
+    try {
+        await mongoose.connect(uri);
+    } catch {
+        return new UserImpl("bderror", "", "");
+    }
+    */
 
-    const mongoose = require('mongoose');
-    mongoose.set('strictQuery', true);
+    let resultado: User;
+    resultado = await repo.Repository.findOneAndUpdate(user)
 
-    await mongoose.connect(uri);
-
-    const userSchema = new mongoose.Schema({
-        username: String,
-        password: String,
-        webid: String,
-        img: String
-    });
-
-    const usuario = mongoose.model('users', userSchema);
-
-    const resultado = await usuario.updateOne({ username: user.username }, { webid: user.webID, password: user.password });
-    console.log(resultado.modifiedCount);
+    /*
+    try {
+        resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID });
+    } catch {
+        return new UserImpl("bderror", "", "");
+    }
 
     mongoose.connection.close();
+    */
 
-    return user;
+    return resultado;
 
 }
 /*

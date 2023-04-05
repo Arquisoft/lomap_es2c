@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "uuid": "^9.0.0"
+    "@hookform/resolvers": "^2.9.11",
+    "@inrupt/solid-ui-react": "^2.8.2",
+    "uuid": "^9.0.0",
+    "yup": "^1.0.2"
   }
 }

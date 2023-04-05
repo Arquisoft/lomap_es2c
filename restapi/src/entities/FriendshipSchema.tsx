@@ -1,10 +1,19 @@
-import { model, Schema} from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const friendshipSchema = new Schema(
     {
-        sender: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-        receiver: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-        status: Boolean
+        sender: {
+            type: String,
+            required: true,
+        },
+        receiver: {
+            type: String,
+            required: true,
+        },
+        status: {
+            type: Number,
+            required: true,
+        },
     }
 )
 
@@ -15,6 +24,6 @@ friendshipSchema.set('toJSON', {
     }
 })
 
-const Friendship = model("User", friendshipSchema);
+const Friendship = model("Friendship", friendshipSchema);
 
 export default Friendship;
