@@ -66,26 +66,26 @@ body.swal2-shown>[aria-hidden="true"] {
 
 
 .leaflet-container {
-    width: 75vw;
-    height: 75vh;
-  }
+    width: 70vw;
+    height: auto;
+}
 
 #homeA {
     color: black;
 }
 
 #addPlaceDyn {
-    background: transparent; 
-    color:#81c784; 
-    border: 2px solid #81c784; 
-    border-radius: 6px; 
-    font-size:1.2em;
+    background: transparent;
+    color: #81c784;
+    border: 2px solid #81c784;
+    border-radius: 6px;
+    font-size: 1.2em;
 }
 
 #addPlaceDyn:hover {
-    background: #81c784; 
-    color: black; 
-    border: 2px solid #81c784; 
-    border-radius: 6px; 
-    font-size:1.2em;
+    background: #81c784;
+    color: black;
+    border: 2px solid #81c784;
+    border-radius: 6px;
+    font-size: 1.2em;
 }

@@ -49,6 +49,9 @@ const BoxNAV = styled(Box)({
 
 const MyBar = styled(AppBar)({
     background: '#81c784',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
 })
 //#endregion
 
