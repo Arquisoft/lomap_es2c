@@ -54,7 +54,7 @@ export class FriendManagerImpl implements FriendManager {
 
         for (let i = 0; i < amigosString.length; i++) {
             let user = await UserSchema.findOne({ username: amigosString[i] }, { _id: 0, __v: 0 }) as User;
-            user.password="";
+            if(user!=null){user.password="";}
             ret.push(user);
         }
         await FriendManagerImpl.CloseConnection(mongoose)
@@ -109,6 +109,20 @@ export class FriendManagerImpl implements FriendManager {
         return resultado;
 
     }
+
+    async eliminarAmigo(amigo1:User,amigo2:User): Promise<boolean> {
+        const { uri, mongoose } = FriendManagerImpl.getBD();
+
+        await FriendManagerImpl.OpenConnection(uri, mongoose);
+
+        const resultado1 = await FriendshipSchema.deleteMany({ sender: amigo1.username, receiver: amigo2.username, status: FriendManagerImpl.aceptado });
+        const resultado2 = await FriendshipSchema.deleteMany({ sender: amigo2.username, receiver: amigo1.username, status: FriendManagerImpl.aceptado });
+        console.log(resultado1)
+        console.log(resultado2)
+        await FriendManagerImpl.CloseConnection(mongoose)
+        return true;
+    }
+
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
 
         const { uri, mongoose } = FriendManagerImpl.getBD();
@@ -150,9 +164,9 @@ export class FriendManagerImpl implements FriendManager {
 //let u4=new UserImpl("test4","","","")
 
 //let a = new FriendManagerImpl();
-
+//a.eliminarAmigo(u1,u2).then(c=>console.log(c));
 //a.enviarSolicitud(u1,u2).then(c=>console.log(c));
-//a.actualizarSolicitud(new FriendRequest(u1,u2,0),1).then(c=>console.log(c));
+//a.actualizarSolicitud(new FriendRequest(u1.username,u2.username,0),1).then(c=>console.log(c));
 //let b=a.listarSolicitudes(u2).then(c=>console.log(c));
 
 //a.listarAmigos(u2).then(c => console.log(c));
