@@ -59,6 +59,10 @@ export class Repository {
         return resultado
     }
 
+
+
+
+
     private static async OpenConnection(uri: string, mongoose: any) {
         try {
             await mongoose.connect(uri);
