@@ -1,8 +1,10 @@
+import { MapManagerImpl } from './controllers/MapManager';
 import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { Place } from './entities/Place';
 import { FriendManager, FriendManagerImpl } from './controllers/FriendsManager'
 import { Session } from '@inrupt/solid-client-authn-browser';
+
 
 export interface SesionManager {
     cerrarSesion: () => boolean;
@@ -40,6 +42,7 @@ export interface PODManager {
 //#region INTERFACES AUXILIARES
 
 export class FactoryLoMap {
+    static getMapManager: () => MapManager;
 
     static getFriendManager(): FriendManager {
         return new FriendManagerImpl();
