@@ -5,11 +5,6 @@ import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 're
 import L from 'leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const MapBox = styled(Box)({
-    minWidth: "75vw",
-    backgroundColor: "brown"
-})
-
 const center = {
     lat: 50.8504500,
     lng: 4.3487800
@@ -30,39 +25,38 @@ const markers: MarkerData[] = [
 
 
 function AddPlace(): any {
-  
-  const [marker, setMarker] = useState(new L.Marker(center))
-  const [lat, setLatitude] = useState("Latitud:")
-  const [lng, setLongitude] = useState("Longitud:")
-  const navigate = useNavigate()
-  const map = useMap()
-  const {op, id} = useParams()
 
-  let nMarker: L.Marker = null;
+    const [marker, setMarker] = useState(new L.Marker(center))
+    const [lat, setLatitude] = useState("Latitud:")
+    const [lng, setLongitude] = useState("Longitud:")
+    const navigate = useNavigate()
+    const map = useMap()
+    const { op, id } = useParams()
 
-  useMapEvents({
-    click(e) {
-      if(op == 'addplace'){
-          setLatitude(e.latlng.lat.toString());
-          setLongitude(e.latlng.lng.toString());
-          if (marker !== null) {
-            marker.remove();
-          }
-          if(lat!=="Latitud:"){
-            nMarker = L.marker(e.latlng);
-            nMarker.bindPopup((new L.Popup({ keepInView: true })).setContent("<p>Lugar a añadir</p>"))
-            nMarker.addTo(map)    
-            navigate("/home/groups/addplace/" + id + "/" + lat + "/" + lng + "/")
-            setMarker(nMarker)
-            console.log(marker)
+    let nMarker: L.Marker = null;
+
+    useMapEvents({
+        click(e) {
+            if (op == 'addplace') {
+                setLatitude(e.latlng.lat.toString());
+                setLongitude(e.latlng.lng.toString());
+                if (marker !== null) {
+                    marker.remove();
+                }
+                if (lat !== "Latitud:") {
+                    nMarker = L.marker(e.latlng);
+                    nMarker.bindPopup((new L.Popup({ keepInView: true })).setContent("<p>Lugar a añadir</p>"))
+                    nMarker.addTo(map)
+                    navigate("/home/groups/addplace/" + id + "/" + lat + "/" + lng + "/")
+                    setMarker(nMarker)
+                    console.log(marker)
+                }
+            }
         }
-      }}
-  })
+    })
 
-  return null;
+    return null;
 }
-
-
 
 export const MapComponent = () => {
 
@@ -79,7 +73,6 @@ export const MapComponent = () => {
             ))}
             <AddPlace />
         </MapContainer>
-
     );
 
 };

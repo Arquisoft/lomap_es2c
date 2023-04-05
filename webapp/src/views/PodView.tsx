@@ -4,7 +4,7 @@ import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
-import Pod  from '../components/userIdentification/podLogin/Pod';
+import Pod from '../components/userIdentification/podLogin/Pod';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
