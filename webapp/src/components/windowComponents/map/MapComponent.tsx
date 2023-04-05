@@ -30,33 +30,36 @@ const markers: MarkerData[] = [
 
 
 function AddPlace(): any {
+  
+  const [marker, setMarker] = useState(new L.Marker(center))
+  const [lat, setLatitude] = useState("Latitud:")
+  const [lng, setLongitude] = useState("Longitud:")
+  const navigate = useNavigate()
+  const map = useMap()
+  const {op, id} = useParams()
 
-    const [marker, setMarker] = useState(null)
-    const [lat, setLatitude] = useState("Latitud:")
-    const [lng, setLongitude] = useState("Longitud:")
-    const navigate = useNavigate()
-    const map = useMap()
-    const { id } = useParams()
+  let nMarker: L.Marker = null;
 
-    let nMarker: L.Marker = null;
-
-    useMapEvents({
-        click(e) {
-            setLatitude(e.latlng.lat.toString());
-            setLongitude(e.latlng.lng.toString());
-            if (marker !== null) {
-                marker.remove();
-            }
-            if (lat !== "Latitud:") {
-                nMarker = L.marker(e.latlng);
-                nMarker.bindPopup((new L.Popup({ keepInView: true })).setContent("<p>Lugar a añadir</p>"))
-                nMarker.addTo(map)
-                navigate("/home/groups/addplace/" + id + "/" + lat + "/" + lng)
-                setMarker(nMarker)
-            }
+  useMapEvents({
+    click(e) {
+      if(op == 'addplace'){
+          setLatitude(e.latlng.lat.toString());
+          setLongitude(e.latlng.lng.toString());
+          if (marker !== null) {
+            marker.remove();
+          }
+          if(lat!=="Latitud:"){
+            nMarker = L.marker(e.latlng);
+            nMarker.bindPopup((new L.Popup({ keepInView: true })).setContent("<p>Lugar a añadir</p>"))
+            nMarker.addTo(map)    
+            navigate("/home/groups/addplace/" + id + "/" + lat + "/" + lng + "/")
+            setMarker(nMarker)
+            console.log(marker)
         }
-    })
-    return null;
+      }}
+  })
+
+  return null;
 }
 
 
