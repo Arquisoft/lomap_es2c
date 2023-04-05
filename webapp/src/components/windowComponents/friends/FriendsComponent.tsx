@@ -35,7 +35,6 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
         for (let i = 0; i < elems; i++) {
             str += '0';
         }
-        console.log("Generate open: " + str)
         return str;
     }
 
@@ -84,52 +83,51 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
 
     props.friends.then((frds: Friend[]) => {
         if (open.length != frds.length) setOpen(generateOpen(frds.length))
-        render(
-            <>
-                {frds.map((friend, i) => {
-                    return (
-                        <React.Fragment key={i}>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Tooltip title="See friend profile">
-                                        <PersonIcon onClick={() => showFriendProfile(friend.user)} />
-                                    </Tooltip>
-                                </ListItemIcon>
-                                <ListItemText primary={friend.user.username} />
-                                {isOpen(i) ?
-                                    (<Tooltip title="Close friend groups">
+        try {
+            render(
+                <>
+                    {frds.map((friend, i) => {
+                        return (
+                            <React.Fragment key={i}>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <Tooltip title="See friend profile">
+                                            <PersonIcon onClick={() => showFriendProfile(friend.user)} />
+                                        </Tooltip>
+                                    </ListItemIcon>
+                                    <ListItemText primary={friend.user.username} />
+                                    {isOpen(i) ?
                                         <ExpandLess onClick={() => handleClick(i)} />
-                                    </Tooltip>)
-                                    :
-                                    (<Tooltip title="See friend groups">
+                                        :
                                         <ExpandMore onClick={() => handleClick(i)} />
-                                    </Tooltip>)}
-                                <VerticalDivider orientation='vertical' flexItem />
-                                <Tooltip title="Delete friend">
-                                    <CloseIcon onClick={() => deleteFriend(friend.user)} htmlColor="red" />
-                                </Tooltip>
-                            </ListItemButton>
-                            <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>
-                                <List component="div" disablePadding>
-                                    {friend.groups.map((group, j) => {
-                                        return (
-                                            <React.Fragment key={i + "-" + j}>
-                                                <Tooltip title="Show on map">
-                                                    <ListItemButton sx={{ pl: 4 }} onClick={() => showGroup(group, friend.user)}>
-                                                        <ListItemIcon>
-                                                            <MapIcon />
-                                                        </ListItemIcon>
-                                                        <ListItemText primary={group.nombre} />
-                                                    </ListItemButton>
-                                                </Tooltip>
-                                            </React.Fragment>
-                                        )
-                                    })}
-                                </List>
-                            </Collapse>
-                        </React.Fragment>)
-                })}
-            </>, props.daddy.current)
+                                    }
+                                    <VerticalDivider orientation='vertical' flexItem />
+                                    <Tooltip title="Delete friend" sx={{ ml: "0.5em" }}>
+                                        <CloseIcon onClick={() => deleteFriend(friend.user)} htmlColor="red" />
+                                    </Tooltip>
+                                </ListItemButton>
+                                <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                        {friend.groups.map((group, j) => {
+                                            return (
+                                                <React.Fragment key={i + "-" + j}>
+                                                    <Tooltip title="Show on map">
+                                                        <ListItemButton sx={{ pl: 4 }} onClick={() => showGroup(group, friend.user)}>
+                                                            <ListItemIcon>
+                                                                <MapIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={group.nombre} />
+                                                        </ListItemButton>
+                                                    </Tooltip>
+                                                </React.Fragment>
+                                            )
+                                        })}
+                                    </List>
+                                </Collapse>
+                            </React.Fragment>)
+                    })}
+                </>, props.daddy.current)
+        } catch (e: any) { }
     })
     return <></>
 }

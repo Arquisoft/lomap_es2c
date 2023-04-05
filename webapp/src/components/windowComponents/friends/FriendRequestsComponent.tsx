@@ -68,30 +68,32 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
 
     props.friendRequests.then((frds: FriendRequest[]) => {
         if (open.length != frds.length) setOpen(generateOpen(frds.length))
-        render(
-            <>
-                {frds.map((request, i) => {
-                    console.log(request)
-                    return (
-                        <React.Fragment key={i}>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Tooltip title="See friend profile">
-                                        <PersonIcon onClick={() => showFriendProfile(request.sender)} />
+        try {
+            render(
+                <>
+                    {frds.map((request, i) => {
+                        console.log(request)
+                        return (
+                            <React.Fragment key={i}>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <Tooltip title="See friend profile">
+                                            <PersonIcon onClick={() => showFriendProfile(request.sender)} />
+                                        </Tooltip>
+                                    </ListItemIcon>
+                                    <ListItemText primary={request.sender} />
+                                    <Tooltip title="Decline request">
+                                        <CloseIcon onClick={() => declineRequest(request)} htmlColor="red" />
                                     </Tooltip>
-                                </ListItemIcon>
-                                <ListItemText primary={request.sender} />
-                                <Tooltip title="Decline request">
-                                    <CloseIcon onClick={() => declineRequest(request)} htmlColor="red" />
-                                </Tooltip>
-                                <VerticalDivider orientation='vertical' flexItem />
-                                <Tooltip title="Accept request">
-                                    <CheckIcon onClick={() => acceptRequest(request)} htmlColor="green" />
-                                </Tooltip>
-                            </ListItemButton>
-                        </React.Fragment>)
-                })}
-            </>, props.daddy.current)
+                                    <VerticalDivider orientation='vertical' flexItem />
+                                    <Tooltip title="Accept request">
+                                        <CheckIcon onClick={() => acceptRequest(request)} htmlColor="green" />
+                                    </Tooltip>
+                                </ListItemButton>
+                            </React.Fragment>)
+                    })}
+                </>, props.daddy.current)
+        } catch (e: any) { }
     })
     return <></>
 }

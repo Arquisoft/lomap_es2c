@@ -12,7 +12,8 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
-    minWidth: '25vw',
+    width: '30vw',
+    height: '78.2vh'
 })
 
 const MyTabContext = styled(TabContext)({

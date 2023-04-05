@@ -65,6 +65,12 @@ const CSSTextField = styled(TextField)({
     }
 });
 
+const ScrollBox = styled(Box)({
+    maxHeight: '60vh',
+    overflow: 'hidden auto',
+    scrollbarColor: '#81c784 white',
+})
+
 
 const LegendTypography = styled(Typography)({
     color: 'rgba(0, 0, 0, 0.6)',
@@ -138,71 +144,71 @@ export default function AddPlaceForm() {
 
     return (
         <>
-        <div>
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-          <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-            Mis grupos
-          </Link>
-          <Typography color="inherit">{id}</Typography>
-          <Typography color="text.primary">Nuevo grupo</Typography>
-        </Breadcrumbs>
-      </div>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-            <CSSTypography variant="body1" align="center"
-                sx={{ mt:"0.5em", mb: "0.5em" }}>
-                Añadir lugar
-            </CSSTypography>
-            <CSSTextField
-                id="placename-AP"
-                variant="outlined"
-                label="Nombre del lugar"
-                placeholder="Nombre del lugar"
-                fullWidth
-                {...register("placename")}
-                helperText={errors.placename ? 'Nombre inválido' : ''}
+            <div>
+                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                        Mis grupos
+                    </Link>
+                    <Typography color="inherit">{id}</Typography>
+                    <Typography color="text.primary">Nuevo grupo</Typography>
+                </Breadcrumbs>
+            </div>
+            <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+                <CSSTypography variant="body1" align="center"
+                    sx={{ mt: "0.5em", mb: "0.5em" }}>
+                    Añadir lugar
+                </CSSTypography>
+                <CSSTextField
+                    id="placename-AP"
+                    variant="outlined"
+                    label="Nombre del lugar"
+                    placeholder="Nombre del lugar"
+                    fullWidth
+                    {...register("placename")}
+                    helperText={errors.placename ? 'Nombre inválido' : ''}
 
-            />
-            <CSSTextField
-                id="longitude-AP"
-                label={lng ? ("Longitud: " + lng.toString()) : "Longitud"}
-                placeholder="Longitud"
-                disabled={lng ? true : false}
-                type="number"
-                fullWidth
-                {...register("longitude")}
-                helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
-            />
-            <CSSTextField
-                id="latitude-AP"
-                label={lat ? ("Latitud: " + lat.toString()) : "Latitud"}
-                placeholder="Latitud"
-                disabled={lat ? true : false}
-                type="number"
-                fullWidth
-                {...register("latitude")}
-                helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
-            />
-            <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
+                />
+                <CSSTextField
+                    id="longitude-AP"
+                    label={lng ? ("Longitud: " + lng.toString()) : "Longitud"}
+                    placeholder="Longitud"
+                    disabled={lng ? true : false}
+                    type="number"
+                    fullWidth
+                    {...register("longitude")}
+                    helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
+                />
+                <CSSTextField
+                    id="latitude-AP"
+                    label={lat ? ("Latitud: " + lat.toString()) : "Latitud"}
+                    placeholder="Latitud"
+                    disabled={lat ? true : false}
+                    type="number"
+                    fullWidth
+                    {...register("latitude")}
+                    helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
+                />
+                <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
 
-            <textarea
-                placeholder="Reseña..."
-                style={{ width: '98.7%', height: '7vh', resize: 'none' }}
-                {...register("review-AP", { required: true, maxLength: 150 })} />
+                <textarea
+                    placeholder="Reseña..."
+                    style={{ width: '98.7%', height: '7vh', resize: 'none' }}
+                    {...register("review-AP", { required: true, maxLength: 150 })} />
 
 
-            <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
-            <RadioGroupRating />
-            <CSSButton
-                sx={{ mt: "1.2em" }}
-                variant="contained"
-                type="submit"
-                size="large"
-                fullWidth
-            >
-                Añadir
-            </CSSButton>
+                <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
+                <RadioGroupRating />
+                <CSSButton
+                    sx={{ mt: "1.2em" }}
+                    variant="contained"
+                    type="submit"
+                    size="large"
+                    fullWidth
+                >
+                    Añadir
+                </CSSButton>
 
-        </Box>
+            </Box>
         </>
     );
 }

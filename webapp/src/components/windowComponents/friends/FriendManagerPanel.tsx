@@ -32,14 +32,11 @@ const ScrollBox = styled(Box)({
     scrollbarColor: 'black white'
 })
 
-const VerticalDivider = styled(Divider)({
-    padding: '0em 0.4em 0em'
-})
-
 const AddFriendBox = styled(Box)({
     padding: '1em 0em 1em',
     display: 'flex',
     alignItems: 'flex-end',
+    justifyContent: 'center',
 })
 
 const OptionsBox = styled(Box)({
@@ -49,7 +46,7 @@ const OptionsBox = styled(Box)({
 })
 
 const HorizontalDivider = styled(Divider)({
-    minWidth: '25vw'
+    width: '100%'
 })
 
 export const FriendManagerPanel = () => {
@@ -179,7 +176,6 @@ export const FriendManagerPanel = () => {
                     <ScrollBox>
                         <List
                             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                            component="nav"
                             aria-labelledby="nested-list-subheader"
                             subheader={
                                 <ListSubheader component="div" id="nested-list-subheader">

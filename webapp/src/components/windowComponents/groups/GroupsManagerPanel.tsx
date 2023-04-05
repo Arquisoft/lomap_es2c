@@ -14,8 +14,8 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
-import { AddPlace } from './AddPlace';
-import { AddGroup } from './AddGroup';
+import AddPlaceForm from './AddPlaceForm';
+import AddGroupForm from './AddGroupForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
@@ -36,7 +36,7 @@ const VerticalDivider = styled(Divider)({
 })
 
 const HorizontalDivider = styled(Divider)({
-    minWidth: '25vw'
+    width: '100%'
 })
 
 export const GroupsManagerPanel = () => {
@@ -95,9 +95,9 @@ export const GroupsManagerPanel = () => {
                         </ListItemIcon>
                         <ListItemText primary="Añadir grupo" />
                     </AddItem>
+                    <HorizontalDivider light color="#81c784" />
                     <List
                         sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        component="nav"
                         aria-labelledby="nested-list-subheader"
                         subheader={
                             <ListSubheader component="div" id="nested-list-subheader">
@@ -105,7 +105,6 @@ export const GroupsManagerPanel = () => {
                             </ListSubheader>
                         }
                     >
-                        <HorizontalDivider light color="#81c784" />
                         <ScrollBox>
                             <Box ref={ref}>
                                 <Groups groups={groups} daddy={ref} />
@@ -115,10 +114,10 @@ export const GroupsManagerPanel = () => {
                 </>
                 :
                 (op == "addgroup" ?
-                    <AddGroup ></AddGroup>
+                    <AddGroupForm />
                     :
                     (op == "addplace" ?
-                        <AddPlace ></AddPlace>
+                        <AddPlaceForm />
                         :
                         <ErrorPage></ErrorPage>
                     )
@@ -147,7 +146,6 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
         for (let i = 0; i < elems; i++) {
             str += '0';
         }
-        console.log("Generate open: " + str)
         return str;
     }
 
@@ -184,23 +182,18 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
                                 </ListItemIcon>
                                 <ListItemText primary={group.nombre} onClick={() => mostrarGrupo(group)} />
                                 {isOpen(i) ?
-                                    (
-                                        <Tooltip title="Close group places">
-                                            <ExpandLess onClick={() => { handleClick(i) }} />
-                                        </Tooltip>)
+
+                                    <ExpandLess onClick={() => { handleClick(i) }} />
                                     :
-                                    (
-                                        <Tooltip title="Show group places">
-                                            <ExpandMore onClick={() => { handleClick(i) }} />
-                                        </Tooltip>
-                                    )}
+
+                                    <ExpandMore onClick={() => { handleClick(i) }} />
+                                }
                                 <VerticalDivider orientation='vertical' flexItem />
-                                <Tooltip title="Add place"  sx={{ ml:"0.4em" }}>
-                                    
+                                <Box sx={{ ml: "0.8em" }}>
                                     <AddLocationIcon onClick={() => addPlace(group)} htmlColor="#81c784" />
-                                </Tooltip>
+                                </Box>
                                 <VerticalDivider orientation='vertical' flexItem />
-                                <Tooltip title="Delete group" sx={{ ml:"0.4em" }}>
+                                <Tooltip title="Delete group" sx={{ ml: "0.6em" }}>
                                     <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
                                 </Tooltip>
                             </ListItemButton>
