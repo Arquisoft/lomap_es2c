@@ -9,7 +9,7 @@ import { AuthChecker } from 'auth/AuthChecker';
 import { NoFound } from 'views/NoFound';
 import HomeViewLogged from 'views/HomeViewLogged';
 import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
-import PodView  from 'views/PodView';
+import PodView from 'views/PodView';
 
 function App(): JSX.Element {
     return (

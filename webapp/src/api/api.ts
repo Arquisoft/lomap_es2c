@@ -1,3 +1,4 @@
+import { readCookie } from 'utils/CookieReader';
 import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
 export async function addUser(user: User2): Promise<boolean> {
@@ -21,12 +22,12 @@ export async function getUsers(): Promise<User2[]> {
 }
 
 export function getUserInSesion(): User {
-    return JSON.parse(window.localStorage.getItem('userInSession') ?? null) as User;
+    return JSON.parse(readCookie("userInSession") ?? null) as User;
 }
 
 export function logout() {
-    window.localStorage.removeItem('userInSession');
-    window.localStorage.setItem('isLogged', "false");
+    document.cookie = "isLogged=; path=/"
+    document.cookie = "userInSession=; path=/"
 }
 
 export async function signup(user: User): Promise<User> {
@@ -60,9 +61,8 @@ export async function login(user: User): Promise<User> {
 
 async function setSessionUser(response: Response): Promise<User> {
     let user = await response.json();
-    console.log(user)
-    window.localStorage.setItem('userInSession', JSON.stringify(user));
-    window.localStorage.setItem('isLogged', "true");
+    document.cookie = "isLogged=true; path=/"
+    document.cookie = "userInSession=" + JSON.stringify(user) + "; path=/"
     return user;
 }
 

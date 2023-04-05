@@ -11,7 +11,7 @@ const HomeContainer = styled(Container)({
     display: 'grid',
     gridTemplateColumns: 'repeat(5,1fr)',
     gridTemplateRows: 'repeat(4,1fr)',
-    margin: '3em',
+    margin: '2.5em',
     rowGap: '2em',
     columnGap: '3em',
     textAlign: 'center',
