@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Container from '@mui/material/Container';
-import { Paper, StyledComponentProps } from '@mui/material';
+import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
-import { HomePage } from '../components/mainComponents/HomePage';
 import { MapPage } from '../components/mainComponents/MapPage';
 
 //#region DEFINICION DE COMPONENTES STYLED

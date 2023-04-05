@@ -62,7 +62,7 @@ export function Header(props: { logged: boolean }) {
 
     const goHome = () => {
         if (props.logged == true) {
-            navigate("/home/groups");
+            navigate("/home");
         } else {
             navigate("/");
         }
@@ -96,7 +96,7 @@ export function Header(props: { logged: boolean }) {
                     {getMode()}
                 </Toolbar>
             </Container>
-        </MyBar>
+        </MyBar >
         //#endregion
 
     );

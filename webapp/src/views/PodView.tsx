@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
-import { Login } from '../components/userIdentification/LoginForm';
+import Pod  from '../components/userIdentification/podLogin/Pod';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -29,14 +29,14 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function LoginView() {
+export default function PodView() {
 
     return (
 
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header logged={false} /></MyPaper>
-            <Login />
+            <Pod />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

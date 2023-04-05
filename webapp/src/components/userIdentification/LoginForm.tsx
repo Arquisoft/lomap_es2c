@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
 import { login } from '../../api/api';
+import { handleErrors } from 'api/ErrorHandler';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -75,7 +76,7 @@ export function Login() {
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
             if (userApi != null) {
-                navigate("/home/groups/main");
+                navigate("/podlogin");
             }
         }).catch((e) => {
             console.log(e.message)
