@@ -89,3 +89,11 @@ body.swal2-shown>[aria-hidden="true"] {
     border-radius: 6px;
     font-size: 1.2em;
 }
+
+a:visited, a:hover {
+    color: #1f4a21;
+}
+
+a {
+    color:white;
+}
