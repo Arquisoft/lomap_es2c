@@ -54,6 +54,7 @@ export class FriendManagerImpl implements FriendManager {
 
         for (let i = 0; i < amigosString.length; i++) {
             let user = await UserSchema.findOne({ username: amigosString[i] }, { _id: 0, __v: 0 }) as User;
+            user.password="";
             ret.push(user);
         }
         await FriendManagerImpl.CloseConnection(mongoose)

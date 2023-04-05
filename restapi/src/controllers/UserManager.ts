@@ -42,6 +42,7 @@ async function buscarUsuarioPorUsername(username: string) {
 
     try {
         resultado = await UserSchema.findOne({ username: username }, { _id: 0, __v: 0 }) as User;
+        resultado.password="";
     } catch {
         throw new Error("Error al conectarse con la base de datos.")
     }
@@ -88,7 +89,7 @@ async function modificarUsuario(user: User) {
 
     mongoose.connection.close();
     */
-
+    resultado.password="";
     return resultado;
 
 }
