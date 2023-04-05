@@ -14,11 +14,12 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
-import { AddPlaceForm } from './AddPlaceForm';
-import { AddGroupForm } from './AddGroupForm';
+import { AddPlace } from './AddPlace';
+import { AddGroup } from './AddGroup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
+import AddLocationIcon from '@mui/icons-material/AddLocation';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -38,7 +39,7 @@ const HorizontalDivider = styled(Divider)({
     minWidth: '25vw'
 })
 
-export const MapsManagerPanel = () => {
+export const GroupsManagerPanel = () => {
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -83,13 +84,10 @@ export const MapsManagerPanel = () => {
 
     const navigate = useNavigate()
 
-    const [addForm, setAddForm] = useState("")
-
-    if (op != addForm) setAddForm(op)
 
     return (
         <>
-            {addForm == "main" ?
+            {op == "main" ?
                 <>
                     <AddItem onClick={() => navigate("/home/groups/addgroup")}>
                         <ListItemIcon>
@@ -116,11 +114,11 @@ export const MapsManagerPanel = () => {
                     </List >
                 </>
                 :
-                (addForm == "addplace" ?
-                    <AddPlaceForm ></AddPlaceForm>
+                (op == "addgroup" ?
+                    <AddGroup ></AddGroup>
                     :
-                    (addForm == "addgroup" ?
-                        <AddGroupForm ></AddGroupForm>
+                    (op == "addplace" ?
+                        <AddPlace ></AddPlace>
                         :
                         <ErrorPage></ErrorPage>
                     )
@@ -138,6 +136,10 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
 
     const deleteGroup = (group: Group) => {
         alert("eliminar grupo " + group);
+    }
+
+    const addPlace = (group: Group) => {
+        navigate("/home/groups/addplace/" + group.nombre)
     }
 
     const generateOpen = (elems: number) => {
@@ -193,7 +195,12 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
                                         </Tooltip>
                                     )}
                                 <VerticalDivider orientation='vertical' flexItem />
-                                <Tooltip title="Delete group">
+                                <Tooltip title="Add place"  sx={{ ml:"0.4em" }}>
+                                    
+                                    <AddLocationIcon onClick={() => addPlace(group)} htmlColor="#81c784" />
+                                </Tooltip>
+                                <VerticalDivider orientation='vertical' flexItem />
+                                <Tooltip title="Delete group" sx={{ ml:"0.4em" }}>
                                     <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
                                 </Tooltip>
                             </ListItemButton>

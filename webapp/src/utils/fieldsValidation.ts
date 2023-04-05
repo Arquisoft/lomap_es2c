@@ -49,3 +49,12 @@ export const editProfileValidation = yup.object({
 export const passwordValidation = yup.object({
     password: passwordConstraints
 }).required();
+
+
+
+export const groupValidation = yup.object({
+    groupName: yup.string().matches(/^[A-Za-z0-9]+$/, "El nombre debe de empezar por una letra")
+                    .min(3, "El nombre debe de tener entre 3 y 30 caracteres")
+                    .max(30, "El nombre debe de tener entre 3 y 30 caracteres")
+                    .required()
+    });
