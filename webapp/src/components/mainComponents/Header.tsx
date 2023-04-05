@@ -96,7 +96,7 @@ export function Header(props: { logged: boolean }) {
                     {getMode()}
                 </Toolbar>
             </Container>
-        </MyBar>
+        </MyBar >
         //#endregion
 
     );

@@ -65,6 +65,8 @@ export interface User {
     username: string
     password: string
     webID: string
+    description: string
+    img: string
 }
 
 export interface Group {
