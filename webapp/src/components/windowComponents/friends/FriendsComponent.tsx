@@ -64,8 +64,6 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                     <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
-                    <label for="webid-gp" class="swal2-label">WebID: </label>
-                    <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + usr.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
             focusConfirm: false,

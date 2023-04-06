@@ -9,6 +9,8 @@ import { GroupsManagerPanel } from './groups/GroupsManagerPanel';
 import { FriendManagerPanel } from './friends/FriendManagerPanel';
 import { showError } from '../../utils/fieldsValidation';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GroupIcon from '@mui/icons-material/Group';
+import MapIcon from '@mui/icons-material/Map';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
@@ -17,7 +19,11 @@ const Window = styled(Box)({
 })
 
 const MyTabContext = styled(TabContext)({
-    color: '#1f4a21'
+    color: '#1f4a21',
+})
+
+const MyTabs = styled(Tabs)({
+    height: '8vh',
 })
 
 const theme = createTheme({
@@ -50,7 +56,7 @@ export function LeftWindow() {
         <Window>
             <ThemeProvider theme={theme}>
                 <MyTabContext value={mainop} theme={theme}>
-                    <Tabs
+                    <MyTabs
                         variant="fullWidth"
                         value={value}
                         onChange={handleChange}
@@ -58,9 +64,9 @@ export function LeftWindow() {
                         indicatorColor="primary"
                         aria-label="secondary tabs example"
                     >
-                        <Tab value="groups" label="My maps" />
-                        <Tab value="friends" label="My friends" />
-                    </Tabs>
+                        <Tab value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
+                        <Tab value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
+                    </MyTabs>
                     <TabPanel value="groups">
                         <GroupsManagerPanel />
 
