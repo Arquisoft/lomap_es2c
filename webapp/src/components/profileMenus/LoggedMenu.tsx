@@ -55,11 +55,10 @@ function LogedMenu() {
     const getProfile = async () => {
         closeUserMenu();
         let user = await searchUserByUsername(userInSession);
+        console.log("loooog")
         Swal.fire({
             title: 'Mi perfil',
-            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + user.username + `>
-                    <label for="webid-gp" class="swal2-label">WebID: </label>
+            html: ` <label for="webid-gp" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
@@ -150,14 +149,12 @@ function LogedMenu() {
     }
 
     async function showEditNoPss(): Promise<void> {
+        console.log("loooog")
         closeUserMenu();
         let user = await searchUserByUsername(userInSession);
         Swal.fire({
             title: 'Edita tu perfil',
-            html: ` <label for="name-ep" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-ep" class="swal2-input" disabled placeholder=` + user.username + `>
-                    <label for="webid-ep" class="swal2-label">WebID: </label>
-                    <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
+            html: ` 
                     <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Editar',
@@ -171,29 +168,19 @@ function LogedMenu() {
             imageHeight: 200,
             imageAlt: 'Foto de perfil actual',
             preConfirm: () => {
-                let name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).value
-                let webid = (Swal.getPopup().querySelector('#webid-ep') as HTMLInputElement).value
                 let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
 
-                if (!name && !webid && !biography) {
+                if (!biography) {
                     showQuestion();
                 } else {
-
-                    if (!name)
-                        name = user.username as string;
-
-                    if (!webid)
-                        webid = user.webID as string;
 
                     if (!biography)
                         biography = "..."; // Cambiarlo por user.biography
 
                     editSchema.validate({
-                        username: name,
-                        webID: webid,
                         biography: biography
                     }).then(() => {
-                        user = { username: name, webID: webid, password: user.password, description: biography, img: user.img }
+                        user = { username: user.username, webID: user.webID, password: user.password, description: biography, img: user.img }
                         return user;
                     }).catch(e => {
                         let errorMessage = (e as string)

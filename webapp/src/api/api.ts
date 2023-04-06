@@ -53,8 +53,7 @@ export async function login(user: User): Promise<User> {
         case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
-        case 200:
-            ; return setSessionUser(response);
+        case 200: return setSessionUser(response);
         default: throw new Error("Unexpected error");
     }
 }

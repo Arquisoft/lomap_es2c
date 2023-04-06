@@ -97,9 +97,7 @@ api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<R
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
-    console.log(user)
     let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
-    console.log(userRes)
     if (userRes.username == "passwordNotFound") {
         return res.status(506).send("Contraseña errónea")
     } else if (userRes.username == "userNotFound") {
