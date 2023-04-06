@@ -13,8 +13,19 @@ export interface Group {
 
 export interface Place {
     latitude: string
-    longitud: string
+    longitude: string
     nombre: string
+    category: string
+    description: string
+    comments: Comment[]
+    reviewScore: string
+    date: string
+}
+
+export interface Comment {
+    author: string
+    comment: string
+    date: string
 }
 
 export type User2 = {

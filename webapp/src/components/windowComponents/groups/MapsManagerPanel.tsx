@@ -50,29 +50,94 @@ export const MapsManagerPanel = () => {
                 myGroups.push(groups[i]);
             }
         })
+
         myGroups.push({
             "nombre": "Bares favoritos",
             "places": [{
-                "latitude": "5",
-                "longitud": "6",
-                "nombre": "Lugar 1"
-            }, {
-                "latitude": "5",
-                "longitud": "6",
-                "nombre": "Lugar 1"
-            }]
+                nombre: "El Rincón de Juan",
+                category: "Bar",
+                latitude: "40.4168",
+                longitude: "-3.7038",
+                description: "Bar de tapas tradicional en el centro de Madrid.",
+                comments: [
+                  {
+                    author: "Pedro",
+                    comment: "Las mejores tapas de la ciudad, recomiendo las croquetas de jamón.",
+                    date: "2022-03-15T12:30:00Z"
+                  },
+                  {
+                    author: "Ana",
+                    comment: "Ambiente acogedor y personal muy amable.",
+                    date: "2022-03-18T19:45:00Z"
+                  }
+                ],
+                reviewScore: "4.5",
+                date: "2022-03-01T10:00:00Z"
+              },{
+                nombre: "La Taberna del Puerto",
+                category: "Bar",
+                latitude: "43.3623",
+                longitude: "-8.4115",
+                description: "Bar de mariscos y pescados en el puerto de A Coruña.",
+                comments: [
+                  {
+                    author: "María",
+                    comment: "Excelente marisco y vistas espectaculares del puerto.",
+                    date: "2022-03-25T14:20:00Z"
+                  },
+                  {
+                    author: "Juan",
+                    comment: "Muy buen servicio y atención, el arroz con bogavante estaba delicioso.",
+                    date: "2022-03-28T21:15:00Z"
+                  }
+                ],
+                reviewScore: "4.8",
+                date: "2022-03-10T13:45:00Z"
+              }]
         })
         myGroups.push({
             "nombre": "Rutas de montaña",
             "places": [{
-                "latitude": "5",
-                "longitud": "6",
-                "nombre": "Lugar 1"
-            }, {
-                "latitude": "5",
-                "longitud": "6",
-                "nombre": "Lugar 1"
-            }]
+                latitude: "42.6547",
+                longitude: "-0.9868",
+                nombre: "Ruta de la Forcanada",
+                category: "Rutas de montaña",
+                description: "Esta es una ruta de alta montaña en el Pirineo catalán. Es una de las más espectaculares de los Pirineos, y una de las más exigentes físicamente.",
+                comments: [
+                  {
+                    author: "Juan Pérez",
+                    comment: "Una ruta espectacular con paisajes increíbles. Hay que estar en buena forma física para hacerla.",
+                    date: "2022-06-15"
+                  },
+                  {
+                    author: "María Rodríguez",
+                    comment: "La ruta es muy dura, pero las vistas son impresionantes. Merece la pena el esfuerzo.",
+                    date: "2022-08-03"
+                  }
+                ],
+                reviewScore: "4.5",
+                date: "2022-07-01"
+              }, {
+                latitude: "43.1707",
+                longitude: "-1.2467",
+                nombre: "Camino de Santiago",
+                category: "Rutas de montaña",
+                description: "El Camino de Santiago es una ruta de peregrinación que se ha convertido en una de las rutas de senderismo más populares de España. Se puede hacer en diferentes etapas, y ofrece una gran variedad de paisajes y lugares de interés.",
+                comments: [
+                  {
+                    author: "Pedro Gómez",
+                    comment: "Hacer el Camino de Santiago es una experiencia única. Es una ruta con mucha historia y cultura, y los paisajes son muy variados.",
+                    date: "2022-05-10"
+                  },
+                  {
+                    author: "Sofía Martínez",
+                    comment: "El Camino de Santiago es una experiencia inolvidable. Es una ruta exigente físicamente, pero muy gratificante.",
+                    date: "2022-09-01"
+                  }
+                ],
+                reviewScore: "4.7",
+                date: "2022-06-01"
+              }]
         })
         return myGroups;
     }
