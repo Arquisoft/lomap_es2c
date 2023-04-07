@@ -52,7 +52,7 @@ export const MapsManagerPanel = () => {
         })
 
         myGroups.push({
-            "nombre": "Bares favoritos",
+            "name": "Bares favoritos",
             "places": [{
                 nombre: "El Rincón de Juan",
                 category: "Bar",
@@ -96,7 +96,7 @@ export const MapsManagerPanel = () => {
               }]
         })
         myGroups.push({
-            "nombre": "Rutas de montaña",
+            "name": "Rutas de montaña",
             "places": [{
                 latitude: "42.6547",
                 longitude: "-0.9868",
@@ -230,8 +230,8 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
     }
 
     const mostrarGrupo = (group: Group) => {
-        navigate("/home/groups/main/" + group.nombre)
-        alert("Se muestra el grupo " + group.nombre)
+        navigate("/home/groups/main/" + group.name)
+        alert("Se muestra el grupo " + group.name)
     }
 
     props.groups.then((grps: Group[]) => {
@@ -245,7 +245,7 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
                                 <ListItemIcon>
                                     <MapIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={group.nombre} onClick={() => mostrarGrupo(group)} />
+                                <ListItemText primary={group.name} onClick={() => mostrarGrupo(group)} />
                                 {isOpen(i) ?
                                     (
                                         <Tooltip title="Close group places">

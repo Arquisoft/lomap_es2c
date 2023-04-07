@@ -8,7 +8,7 @@ export interface User {
 
 export interface Group {
     places: Place[]
-    nombre: string
+    name: string
 }
 
 export interface Place {

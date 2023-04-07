@@ -78,8 +78,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     }
 
     const showGroup = (group: Group, user: User) => {
-        navigate("/home/friends/" + user.username + "/" + group.nombre);
-        alert("Mostrando el grupo " + user.username + "/" + group.nombre)
+        navigate("/home/friends/" + user.username + "/" + group.name);
+        alert("Mostrando el grupo " + user.username + "/" + group.name)
     }
 
     props.friends.then((frds: Friend[]) => {
@@ -119,7 +119,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                                         <ListItemIcon>
                                                             <MapIcon />
                                                         </ListItemIcon>
-                                                        <ListItemText primary={group.nombre} />
+                                                        <ListItemText primary={group.name} />
                                                     </ListItemButton>
                                                 </Tooltip>
                                             </React.Fragment>

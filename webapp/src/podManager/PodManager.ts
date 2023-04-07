@@ -7,12 +7,12 @@ import { JsonLdDocument, JsonLdProcessor } from 'jsonld';
 import { wait } from "@testing-library/user-event/dist/utils";
 import { url } from "inspector";
 
-
 class PodManager {
     
 
     // podUrl must be correct for the moment
     async savePlace(session: Session, place: Place): Promise<void> {
+      console.log(session)
       try {
         let url = session.info.webId.replace("card#me", "public") + "/places";
         let places = await this.getPlaces(session);
@@ -92,20 +92,39 @@ class PodManager {
         return [];
       }
     }
-    
-    async saveGroup(session: Session, group: Group): Promise<void> {
+
+    async updateGroup(session: Session, group: Group): Promise<void> {
       try {
+        console.log(2)
+
         let url = session.info.webId.replace("card#me", "public") + "/groups";
         let groups = await this.getGroups(session);
+
+        groups.forEach((gr : Group) => {
+          console.log(gr)
+        })
+
+        console.log(group)
     
-        groups.push(group);
+        // Buscar el índice del grupo existente
+        const groupIndex = groups.findIndex((oldGroup) => group.name == oldGroup.name);
+        console.log(groupIndex)
+
+        if (groupIndex === -1) {
+          throw new Error(`No se encontró el grupo con el nombre ${group.name}`);
+        }
+
+        // Actualizar las propiedades del grupo existente
+        groups[groupIndex] = group;
+
+        console.log(groups)
     
         let JSONLDgroup: JsonLdDocument = {
           "@context": "https://schema.org",
           "@type": "Groups",
           "groups": groups.map((group) => ({
             "@type": "Group",
-            "name": group.nombre,
+            "name": group.name,
             "places": group.places.map((place) => ({
               "@type": "Place",
               "name": place.nombre,
@@ -129,7 +148,115 @@ class PodManager {
         };
     
         let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
-        let file = new File([blob], group.nombre + ".jsonld", { type: blob.type });
+        let file = new File([blob], group.name + ".jsonld", { type: blob.type });
+    
+        await overwriteFile(
+          url,
+          file,
+          { contentType: file.type, fetch: session.fetch }
+        );
+        console.log("Grupo añadido");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async deleteGroup(session: Session, group: Group): Promise<void> {
+      try {
+        console.log(2)
+
+        let url = session.info.webId.replace("card#me", "public") + "/groups";
+        let groups = await this.getGroups(session);
+
+        groups.forEach((gr : Group) => {
+          console.log(gr)
+        })
+
+        console.log(group)
+    
+        groups = groups.filter((oldGroup) => group.name !== oldGroup.name);
+
+        console.log(groups)
+    
+        let JSONLDgroup: JsonLdDocument = {
+          "@context": "https://schema.org",
+          "@type": "Groups",
+          "groups": groups.map((group) => ({
+            "@type": "Group",
+            "name": group.name,
+            "places": group.places.map((place) => ({
+              "@type": "Place",
+              "name": place.nombre,
+              "category": place.category,
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": place.latitude,
+                "longitude": place.longitude
+              },
+              "description":place.description,
+              "comment": place.comments.map((comment) => ({
+                "@type": "Comment",
+                "author": comment.author,
+                "comment": comment.comment,
+                "date": comment.date
+              })),
+              "reviewScore":place.reviewScore,
+              "date":place.date
+            }))
+          }))
+        };
+    
+        let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
+        let file = new File([blob], group.name + ".jsonld", { type: blob.type });
+    
+        await overwriteFile(
+          url,
+          file,
+          { contentType: file.type, fetch: session.fetch }
+        );
+        console.log("Grupo añadido");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    
+    async saveGroup(session: Session, group: Group): Promise<void> {
+      try {
+        let url = session.info.webId.replace("card#me", "public") + "/groups";
+        let groups = await this.getGroups(session);
+    
+        groups.push(group);
+    
+        let JSONLDgroup: JsonLdDocument = {
+          "@context": "https://schema.org",
+          "@type": "Groups",
+          "groups": groups.map((group) => ({
+            "@type": "Group",
+            "name": group.name,
+            "places": group.places.map((place) => ({
+              "@type": "Place",
+              "name": place.nombre,
+              "category": place.category,
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": place.latitude,
+                "longitude": place.longitude
+              },
+              "description":place.description,
+              "comment": place.comments.map((comment) => ({
+                "@type": "Comment",
+                "author": comment.author,
+                "comment": comment.comment,
+                "date": comment.date
+              })),
+              "reviewScore":place.reviewScore,
+              "date":place.date
+            }))
+          }))
+        };
+    
+        let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
+        let file = new File([blob], group.name + ".jsonld", { type: blob.type });
     
         await overwriteFile(
           url,
@@ -143,6 +270,7 @@ class PodManager {
     }
     
     async getGroups(session: Session): Promise<Group[]> {
+      console.log(session)
       let url = session.info.webId.replace("card#me", "public") + "/groups"
 
       try {
