@@ -9,10 +9,14 @@ import { AuthChecker } from 'auth/AuthChecker';
 import { NoFound } from 'views/NoFound';
 import HomeViewLogged from 'views/HomeViewLogged';
 import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
+import { AuthPodChecker } from 'auth/AuthPodChecker';
 import PodView from 'views/PodView';
+import { SessionProvider, useSession } from "@inrupt/solid-ui-react";
 
 function App(): JSX.Element {
+    const { session } = useSession(); 
     return (
+        <SessionProvider sessionId={session?.info.sessionId as string}>
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<AuthCheckerNoLogged> <HomeView /> </AuthCheckerNoLogged>} />
@@ -23,14 +27,15 @@ function App(): JSX.Element {
                     ?lat = [optional lat to add from map]
                     ?lon = [optional lon to add from map]
                 */}
-                <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthChecker><LoggedView /></AuthChecker>} />
+                <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthPodChecker><LoggedView /></AuthPodChecker>} />
                 <Route path='/login' element={<AuthCheckerNoLogged> <LoginView /></AuthCheckerNoLogged>} />
-                <Route path='/home' element={<AuthChecker><HomeViewLogged /></AuthChecker>} />
+                <Route path='/home' element={<AuthPodChecker><HomeViewLogged /></AuthPodChecker>} />
                 <Route path='/signup' element={<AuthCheckerNoLogged> <SignupView /></AuthCheckerNoLogged>} />
-                <Route path='/podlogin' element={<PodView />} />
+                <Route path='/podlogin' element={<AuthChecker><PodView /></AuthChecker>} />
                 <Route path='*' element={<NoFound />} />
             </Routes>
         </BrowserRouter>
+        </SessionProvider>
     );
 }
 
