@@ -25,6 +25,7 @@ import { FriendRequestsComponent } from './FriendRequestsComponent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
 import { useForm, SubmitHandler } from "react-hook-form";
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -132,13 +133,16 @@ export const FriendManagerPanel = () => {
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="4" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Enviar',
+            confirmButtonColor: "#81c784",
             focusConfirm: false,
             imageUrl: url,
             imageWidth: 'auto',
             imageHeight: 200,
             imageAlt: 'Foto de perfil actual',
             preConfirm: () => {
-                sendFriendRequest(user)
+                sendFriendRequest(user).then(() => {
+                    temporalSuccessMessage("La solicitud de amistad a <em>" + user.username + "</em> ha sido enviada correctamente.")
+                })
             }
         })
     }

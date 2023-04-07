@@ -38,13 +38,10 @@ export class FriendManagerImpl implements FriendManager {
             }
         }
 
-        console.log(amigosString)
-
         for (let i = 0; i < amigosString.length; i++) {
             let user = await UserSchema.findOne({ username: amigosString[i] }, { _id: 0, __v: 0 }) as User;
             ret.push(user);
         }
-        console.log(ret);
         return ret;
     }
 

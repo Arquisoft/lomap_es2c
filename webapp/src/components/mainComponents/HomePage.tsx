@@ -78,7 +78,22 @@ const GoButton = styled(Button)({
     alignSelf: 'center',
     backgroundColor: '#1f4a21',
     color: 'white',
-    marginBottom: '0.4em'
+    marginBottom: '0.4em',
+    '&:hover': {
+        backgroundColor: '#1f4a21',
+        color: 'white',
+        borderColor: '#0062cc',
+        boxShadow: 'none',
+    },
+    '&:active': {
+        boxShadow: 'none',
+        color: 'white',
+        backgroundColor: '#1f4a21',
+        borderColor: '#005cbf',
+    },
+    '&:focus': {
+        boxShadow: '0 0 0 0.2rem #1f4a21',
+    },
 })
 //#endregion
 
