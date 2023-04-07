@@ -132,8 +132,6 @@ export function RadioGroupRating() {
     );
 }
 
-
-
 export default function AddPlaceForm() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = (data: any) => console.log(data);

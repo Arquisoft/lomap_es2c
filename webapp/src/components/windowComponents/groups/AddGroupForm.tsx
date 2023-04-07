@@ -78,20 +78,18 @@ export default function AddGroupForm() {
 
     const navigate = useNavigate()
 
-
-
     return (<>
         <div>
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-          <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-            Mis grupos
-          </Link>
-          <Typography color="text.primary">Nuevo grupo</Typography>
-        </Breadcrumbs>
-      </div>
+            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                    Mis grupos
+                </Link>
+                <Typography color="text.primary">Nuevo grupo</Typography>
+            </Breadcrumbs>
+        </div>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
             <CSSTypography variant="body1" align="center"
-                sx={{ mt:"1.5em", mb: "1em" }}>
+                sx={{ mt: "1.5em", mb: "1em" }}>
                 Nuevo grupo de lugares
             </CSSTypography>
             <CSSTextField
@@ -104,7 +102,7 @@ export default function AddGroupForm() {
                 helperText={errors.groupName ? errors.groupName.message : ''}
 
             />
-            
+
             <CSSButton
                 sx={{ mt: "1.2em" }}
                 variant="contained"
@@ -116,6 +114,6 @@ export default function AddGroupForm() {
             </CSSButton>
 
         </Box>
-        </>
+    </>
     );
 }

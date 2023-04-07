@@ -12,6 +12,7 @@ import { render } from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import CheckIcon from '@mui/icons-material/Check';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
 
 
 const VerticalDivider = styled(Divider)({
@@ -56,12 +57,14 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
         updateRequest(request, -1)
         props.refresh();
         props.refreshFriends();
+        temporalSuccessMessage("Solicitud de amistad de <em>" + request.sender + "</em> rechazada correctamente.");
     }
 
     const acceptRequest = (request: FriendRequest) => {
         updateRequest(request, 1)
         props.refresh();
         props.refreshFriends();
+        temporalSuccessMessage("La solicitud de amistad de <em>" + request.sender + "</em> ha sido aceptada correctamente.");
     }
 
     props.friendRequests.then((frds: FriendRequest[]) => {
