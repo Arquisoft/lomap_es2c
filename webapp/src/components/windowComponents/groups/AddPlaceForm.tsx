@@ -15,6 +15,13 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useState } from 'react';
+import PlaceCategories  from './PlaceCategories';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import ListSubheader from '@mui/material/ListSubheader';
+import FormControl from '@mui/material/FormControl';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -65,11 +72,15 @@ const CSSTextField = styled(TextField)({
     }
 });
 
-const ScrollBox = styled(Box)({
-    maxHeight: '60vh',
-    overflow: 'hidden auto',
-    scrollbarColor: '#81c784 white',
+const CoordinatesBox = styled(Box)({
+   display: 'flex',
+   flexDirection: 'row',
 })
+
+const ReviewBox = styled(Box)({
+    display: 'grid',
+    gridTemplateColumns: '6fr 1fr 3fr',
+ })
 
 
 const LegendTypography = styled(Typography)({
@@ -115,6 +126,9 @@ const customIcons: {
     },
 };
 
+
+
+
 function IconContainer(props: IconContainerProps) {
     const { value, ...other } = props;
     return <span {...other}>{customIcons[value].icon}</span>;
@@ -139,6 +153,12 @@ export default function AddPlaceForm() {
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
 
+    const [category, setCategory] = useState('');
+
+    const handleChange = (event: SelectChangeEvent) => {
+      setCategory(event.target.value as string);
+    };
+
 
     return (
         <>
@@ -156,46 +176,79 @@ export default function AddPlaceForm() {
                     sx={{ mt: "0.5em", mb: "0.5em" }}>
                     Añadir lugar
                 </CSSTypography>
-                <CSSTextField
-                    id="placename-AP"
-                    variant="outlined"
-                    label="Nombre del lugar"
-                    placeholder="Nombre del lugar"
-                    fullWidth
-                    {...register("placename")}
-                    helperText={errors.placename ? 'Nombre inválido' : ''}
+                
+                    <CSSTextField
+                        id="placename-AP"
+                        variant="outlined"
+                        label="Nombre del lugar"
+                        placeholder="Nombre del lugar"
+                        fullWidth
+                        {...register("placename")}
+                        helperText={errors.placename ? 'Nombre inválido' : ''}
 
-                />
-                <CSSTextField
-                    id="longitude-AP"
-                    label={lng ? ("Longitud: " + lng.toString()) : "Longitud"}
-                    placeholder="Longitud"
-                    disabled={lng ? true : false}
-                    type="number"
-                    fullWidth
-                    {...register("longitude")}
-                    helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
-                />
+                    />
+                    <FormControl sx={{mt: '1.2em', mb: '1.2em', maxHeight: "50em", overflow: "none" }} fullWidth>
+                    <InputLabel sx={{mt: '0.2em'}} htmlFor="grouped-select">Categoría</InputLabel>
+                    <Select
+                        value={category}
+                        defaultValue="" 
+                        placeholder='Categoría'
+                        id="grouped-select" 
+                        label="Categoría"
+                        onChange={handleChange}
+                        fullWidth
+                    >
+                        {PlaceCategories.map(({ name, categories }) => (
+                        [
+                            <ListSubheader key={name}>{name}</ListSubheader>,
+                            ...categories.map((category) => (
+                            <MenuItem key={category+name} value={category}>
+                                {category}
+                            </MenuItem>
+                            )),
+                        ]
+                        ))}
+                    </Select>
+                    </FormControl>
+                    <CoordinatesBox>
+                    <CSSTextField
+                        id="longitude-AP"
+                        label={lng ? ("Longitud: " + lng.toString().substring(0,8)) : "Longitud"}
+                        placeholder="Longitud"
+                        disabled={lng ? true : false}
+                        type="number"
+                        
+                        {...register("longitude")}
+                        helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
+                    />
+               
                 <CSSTextField
                     id="latitude-AP"
-                    label={lat ? ("Latitud: " + lat.toString()) : "Latitud"}
+                    label={lat ? ("Latitud: " + lat.toString().substring(0,9)) : "Latitud"}
                     placeholder="Latitud"
                     disabled={lat ? true : false}
                     type="number"
-                    fullWidth
+                    
                     {...register("latitude")}
                     helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
                 />
+                 </CoordinatesBox>
+                 
+                 <ReviewBox>
+                 <Box>
                 <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
 
                 <textarea
                     placeholder="Reseña..."
-                    style={{ width: '98.7%', height: '7vh', resize: 'none' }}
+                    style={{ width: '98.7%', height: '7vh', resize: 'none'}}
                     {...register("review-AP", { required: true, maxLength: 150 })} />
 
-
+                </Box>
+                <Box sx={{ gridColumn: 3}}>
                 <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
                 <RadioGroupRating />
+                </Box>
+                </ReviewBox>
                 <CSSButton
                     sx={{ mt: "1.2em" }}
                     variant="contained"
