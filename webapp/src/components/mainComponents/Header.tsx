@@ -10,6 +10,7 @@ import uuid from 'react-uuid';
 import LogedMenu from '../profileMenus/LoggedMenu';
 import { NoLogedMenu } from '../profileMenus/NoLoggedMenu';
 import { useNavigate } from 'react-router-dom';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const ButtonGENERIC = styled(Button)({

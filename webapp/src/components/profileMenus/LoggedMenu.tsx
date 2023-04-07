@@ -17,6 +17,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import { handleErrors } from 'api/ErrorHandler';
 import { User } from 'shared/shareddtypes';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -55,11 +56,10 @@ function LogedMenu() {
     const getProfile = async () => {
         closeUserMenu();
         let user = await searchUserByUsername(userInSession);
+        console.log("loooog")
         Swal.fire({
             title: 'Mi perfil',
-            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + user.username + `>
-                    <label for="webid-gp" class="swal2-label">WebID: </label>
+            html: ` <label for="webid-gp" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
@@ -142,7 +142,10 @@ function LogedMenu() {
             }
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await handleErrors(() => editPassword(oldpsw, newpsw), Swal.close)
+                await handleErrors(() => editPassword(oldpsw, newpsw), () => {
+                    Swal.close();
+                })
+                temporalSuccessMessage("Contraseña editada correctamente.")
             } else if (result.isDenied) {
                 showEditNoPss();
             }
@@ -151,13 +154,11 @@ function LogedMenu() {
 
     async function showEditNoPss(): Promise<void> {
         closeUserMenu();
+        let edited = true;
         let user = await searchUserByUsername(userInSession);
         Swal.fire({
             title: 'Edita tu perfil',
-            html: ` <label for="name-ep" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-ep" class="swal2-input" disabled placeholder=` + user.username + `>
-                    <label for="webid-ep" class="swal2-label">WebID: </label>
-                    <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
+            html: ` 
                     <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Editar',
@@ -171,29 +172,20 @@ function LogedMenu() {
             imageHeight: 200,
             imageAlt: 'Foto de perfil actual',
             preConfirm: () => {
-                let name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).value
-                let webid = (Swal.getPopup().querySelector('#webid-ep') as HTMLInputElement).value
                 let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
 
-                if (!name && !webid && !biography) {
+                if (!biography) {
+                    edited = false;
                     showQuestion();
                 } else {
-
-                    if (!name)
-                        name = user.username as string;
-
-                    if (!webid)
-                        webid = user.webID as string;
-
+                    edited = true;
                     if (!biography)
                         biography = "..."; // Cambiarlo por user.biography
 
                     editSchema.validate({
-                        username: name,
-                        webID: webid,
                         biography: biography
                     }).then(() => {
-                        user = { username: name, webID: webid, password: user.password, description: biography, img: user.img }
+                        user = { username: user.username, webID: user.webID, password: user.password, description: biography, img: user.img }
                         return user;
                     }).catch(e => {
                         let errorMessage = (e as string)
@@ -202,21 +194,30 @@ function LogedMenu() {
                 }
             }
         }).then(async (result) => {
-            if (result.isConfirmed) {
-                await handleErrors(() => editUserDetails(user), Swal.close);
+            if (result.isConfirmed && edited) {
+                await editUserDetails(user)
+                temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
             } else if (result.isDenied) {
                 showEdit();
             }
         })
     }
 
-
-    const goLogout = () => {
+    const goLogout = (user: User) => {
         closeUserMenu();
         logout();
-        //var state = FactoryLoMap.getSesionManager().cerrarSesion();
         navigate("/");
-        //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
+        temporalSuccessMessage("La sesión se ha cerrado correctamente. " + getDespedida() + " <em>" + user.username + "</em>.");
+    }
+
+    const getDespedida = () => {
+        let now = new Date();
+        let hours = now.getHours();
+        if (hours >= 6 && hours < 8) return "Hasta luego, qué tenga usted un buen día";
+        if (hours >= 8 && hours < 12) return "Le echaremos de menos, ojalá verle de vuelta";
+        if (hours >= 12 && hours < 20) return "Adiós, o como dirían los italianos <em>chao</em>";
+        if (hours >= 20 || hours == 0) return "Buenas noches, que duerma usted bien";
+        if (hours >= 0 && hours < 6) return "¿Qué hacía todavía despierto? Buenas noches";
     }
 
     const closeUserMenu = () => {
@@ -273,7 +274,7 @@ function LogedMenu() {
                 <MenuItem key={uuid()} onClick={showEditNoPss}>
                     <EditIcon /> Edit profile
                 </MenuItem>
-                <MenuItem key={uuid()} onClick={goLogout}>
+                <MenuItem key={uuid()} onClick={() => goLogout(getUserInSesion())}>
                     <LogoutIcon /> Logout
                 </MenuItem>
             </MyMenu>

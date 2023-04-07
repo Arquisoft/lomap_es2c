@@ -97,3 +97,20 @@ a:visited, a:hover {
 a {
     color:white;
 }
+
+.swal-text {
+    font-size: 1em !important;
+    justify-self: left !important;
+    padding: 1em 1em 0em !important;
+    margin: 0em !important;
+    align-self: center !important;
+    color: #81c784 !important;
+}
+
+
+.swal-popup {
+    display: flex !important;
+    flex-direction: row !important;
+    height: 5vh;
+    align-content: center !important;
+}

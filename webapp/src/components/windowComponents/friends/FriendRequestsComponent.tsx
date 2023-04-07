@@ -12,6 +12,7 @@ import { render } from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import CheckIcon from '@mui/icons-material/Check';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
 
 
 const VerticalDivider = styled(Divider)({
@@ -42,8 +43,6 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                     <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
-                    <label for="webid-gp" class="swal2-label">WebID: </label>
-                    <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + usr.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
             focusConfirm: false,
@@ -58,12 +57,14 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
         updateRequest(request, -1)
         props.refresh();
         props.refreshFriends();
+        temporalSuccessMessage("Solicitud de amistad de <em>" + request.sender + "</em> rechazada correctamente.");
     }
 
     const acceptRequest = (request: FriendRequest) => {
         updateRequest(request, 1)
         props.refresh();
         props.refreshFriends();
+        temporalSuccessMessage("La solicitud de amistad de <em>" + request.sender + "</em> ha sido aceptada correctamente.");
     }
 
     props.friendRequests.then((frds: FriendRequest[]) => {
@@ -86,7 +87,7 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
                                         <CloseIcon onClick={() => declineRequest(request)} htmlColor="red" />
                                     </Tooltip>
                                     <VerticalDivider orientation='vertical' flexItem />
-                                    <Tooltip title="Accept request">
+                                    <Tooltip title="Accept request" sx={{ ml: "0.5em" }}>
                                         <CheckIcon onClick={() => acceptRequest(request)} htmlColor="green" />
                                     </Tooltip>
                                 </ListItemButton>

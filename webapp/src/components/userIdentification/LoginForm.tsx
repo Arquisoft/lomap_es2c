@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
 import { login } from '../../api/api';
 import { handleErrors } from 'api/ErrorHandler';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -76,6 +77,7 @@ export function Login() {
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
             if (userApi != null) {
+                temporalSuccessMessage("La sesión se ha iniciado correctamente. " + getSaludo() + " <em>" + user.username + "</em>.");
                 navigate("/podlogin");
             }
         }).catch((e) => {
@@ -83,6 +85,15 @@ export function Login() {
         });
     }
 
+    const getSaludo = () => {
+        let now = new Date();
+        let hours = now.getHours();
+        if (hours >= 6 && hours < 8) return "A quién madruga Dios le ayuda";
+        if (hours >= 8 && hours < 12) return "Ojalá tenga un buen día";
+        if (hours >= 12 && hours < 20) return "Nos complace verle de nuevo";
+        if (hours >= 20 || hours == 0) return "Buenas noches, ¿tuvo usted un buen día?,";
+        if (hours >= 0 && hours < 6) return "Debería irse a dormir";
+    }
 
     const showSignup = () => {
         //Cambiar del Login a Singup component
