@@ -1,3 +1,4 @@
+import { readCookie } from 'utils/CookieReader';
 import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
 export async function addUser(user: User2): Promise<boolean> {
@@ -22,12 +23,14 @@ export async function getUsers(): Promise<User2[]> {
 }
 
 export function getUserInSesion(): User {
-    return JSON.parse(window.localStorage.getItem('userInSession') ?? null) as User;
+    return JSON.parse(readCookie("userInSession") ?? null) as User;
 }
 
 export function logout() {
-    window.localStorage.removeItem('userInSession');
-    window.localStorage.setItem('isLogged', "false");
+    document.cookie = "isLogged=; path=/"
+    document.cookie = "userInSession=; path=/"
+    document.cookie = "isPodLogged=; path=/"
+    document.cookie = "userWebId=; path=/"
 }
 
 export async function signup(user: User): Promise<User> {
@@ -50,7 +53,7 @@ export async function login(user: User): Promise<User> {
     });
     //The objects returned by the api are directly convertible to User objects
     switch (response.status) {
-        case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 404: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 200: return setSessionUser(response);
@@ -76,17 +79,7 @@ export async function editUserDetails(user: User): Promise<User> {
     return setSessionUser(response);
 }
 
-export async function getMyGroups(user: User): Promise<Group[]> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    // let response = await fetch(apiEndPoint + '/mapmanager/usermap', {
-    // method: 'POST',
-    // headers: { 'Content-Type': 'application/json' },
-    // body: JSON.stringify({ 'user': user })
-    //});
-    return []
-}
 export async function getMyFriends(user: User): Promise<User[]> {
-    console.log("empieza")
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/friendmanager/friends', {
         method: 'POST',
@@ -109,19 +102,22 @@ export async function sendFriendRequest(user: User): Promise<String> {
 
 export async function searchUserByUsername(username: string): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api';
-    await fetch(`${apiEndPoint}/usermanager/searchUserByUsername?username=${username}`, { method: 'GET' })
-        .then(async (res) => {
-            if (!res.ok) {
-                let e = await res.json();
-                throw new Error(e.error.toString());
-            }
-            return res
-        }).then((user) => {
-            return user.json();
-        }).catch((e: any) => {
-            throw e
-        })
-    return
+    try {
+        let response = await fetch(`${apiEndPoint}/usermanager/searchUserByUsername?username=${username}`, { method: 'GET' })
+            .then(async (res) => {
+                if (!res.ok) {
+                    let e = await res.json();
+                    throw new Error(e.error.toString());
+                }
+                return res
+            }).then((user) => {
+                return user.json();
+            })
+        return response
+
+    } catch (error) {
+        throw error
+    }
 }
 
 export async function updateRequest(req: FriendRequest, status: number) {

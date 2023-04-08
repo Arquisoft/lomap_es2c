@@ -25,7 +25,7 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function LoggedView() {
+export default function LoggedView(props: { session: any }) {
 
     return (
 

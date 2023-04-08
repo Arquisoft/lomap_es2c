@@ -6,7 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
-import { getMyFriends, getMyGroups, getUserInSesion, searchUserByUsername, sendFriendRequest, updateRequest } from '../../../api/api';
+import { searchUserByUsername, sendFriendRequest, updateRequest } from '../../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
 import { render } from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';

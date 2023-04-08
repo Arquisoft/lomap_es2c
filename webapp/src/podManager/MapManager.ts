@@ -63,7 +63,7 @@ class MapManager {
     async aplicarFiltro(grupo: Group, filtro: string, session: Session): Promise<Place[]> {
 
         let grupos = await this.pod.getGroups(session)
-        
+
         let gr: Group = grupos.find(p => p.name === grupo.name)
 
         return gr.places.filter(p => p.category === filtro)

@@ -94,8 +94,6 @@ export class FriendManagerImpl implements FriendManager {
         await session.withTransaction(async () => {
             resultado1 = await FriendshipSchema.deleteMany({ sender: amigo1.username, receiver: amigo2.username, status: this.aceptado });
             resultado2 = await FriendshipSchema.deleteMany({ sender: amigo2.username, receiver: amigo1.username, status: this.aceptado });
-            console.log(resultado1)
-            console.log(resultado2)
             await session.commitTransaction();
         }).catch((error: any) => {
             session.abortTransaccion();

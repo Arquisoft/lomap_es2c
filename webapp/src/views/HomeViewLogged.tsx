@@ -12,6 +12,7 @@ import { User } from 'shared/shareddtypes';
 import Swal from 'sweetalert2';
 import { useNavigate, useParams } from 'react-router-dom';
 import { readCookie } from 'utils/CookieReader';
+import solid, { Session } from 'solid-auth-client';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -36,14 +37,18 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function HomeViewLogged() {
+export default function HomeViewLogged(props: { setSession: any }) {
 
-    const { session } = useSession();
     const navigate = useNavigate();
     const { welcome } = useParams();
+    const { session } = useSession();
 
-    if (session.info.webId)
+    if (session.info.webId) {
+        props.setSession(session)
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
+    }
+
+
 
     const getSaludo = () => {
         let now = new Date();

@@ -77,8 +77,10 @@ export default function AddGroupForm() {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<GroupSchema> = (data: any) => new MapManager().crearGrupo(data, session)
-
+    const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
+        console.log(session)
+        new MapManager().crearGrupo(data, session)
+    }
 
     const navigate = useNavigate()
 

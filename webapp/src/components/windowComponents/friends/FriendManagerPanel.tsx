@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import { Friend, FriendRequest, Group, User } from '../../../shared/shareddtypes';
-import { getMyFriendRequests, getMyFriends, getMyGroups, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
+import { getMyFriendRequests, getMyFriends, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
 import AddIcon from '@mui/icons-material/Add';
 import { AccountCircle } from '@mui/icons-material';
 import { useRef } from 'react';
@@ -16,6 +16,8 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { useSession } from '@inrupt/solid-ui-react';
+import PodManager from 'podManager/PodManager';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -42,6 +44,8 @@ const HorizontalDivider = styled(Divider)({
 
 export const FriendManagerPanel = () => {
 
+    const { session } = useSession()
+
     const [url, setUrl] = useState("../testUser.jfif");
 
     const ref = useRef<HTMLDivElement>(null);
@@ -56,10 +60,9 @@ export const FriendManagerPanel = () => {
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
         await getMyFriends(user).then(function (friends) {
-            console.log(friends.length)
             for (let i = 0; i < friends.length; i++) {
                 let friendGroups: Group[] = []
-                getMyGroups(friends[i]).then(function (groups) {
+                new PodManager().getGroups(session).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
                         friendGroups.push(groups[j]);
                 })
