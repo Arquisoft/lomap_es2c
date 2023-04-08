@@ -28,17 +28,31 @@ class UserManagerImpl implements UserManager {
         return buscarUsuarioPorUsername(username);
     }
 
-    modificarContrasena(user: User, oldpsw: string, newpsw: string): Promise<User> {
+    async modificarContrasena(user: User, oldpsw: string, newpsw: string): Promise<User> {
+        const { uri, mongoose } = getBD();
+        try {
+            await mongoose.connect(uri);
+        } catch {
+            throw new Error("Error al conectarse con la base de datos.")
+        }
+        let userBd
+        try {
 
+            userBd = await UserSchema.findOne({ username: user.username }, { _id: 0, __v: 0}) as User;
+        } catch {
+            throw new Error("El usuario no se encuentra")
+        }
 
+        if(await bcrypt.compare(oldpsw, userBd.password)){
+            console.log(await bcrypt.compare(oldpsw, userBd.password))
+            userBd.password=await bcrypt.hash(newpsw, 10)
+            await repo.Repository.findOneAndUpdatePassword(userBd)
 
-
-
-
-
-
-
-        return Promise.resolve(undefined);
+        }else{
+            throw new Error("La contraseña antigua era incorrecta")
+        }
+        //userBd.password=""
+        return userBd;
     }
 }
 
@@ -118,3 +132,6 @@ async function prueba() {
 
 
 }*/
+
+//let a=new UserManagerImpl();
+//a.modificarContrasena(new UserImpl("security","","",""),"12345A...","hola").then(a=>console.log(a));

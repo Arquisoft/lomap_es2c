@@ -50,8 +50,6 @@ export class FriendManagerImpl implements FriendManager {
             }
         }
 
-        console.log(amigosString)
-
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
         for (let i = 0; i < amigosString.length; i++) {
@@ -59,19 +57,37 @@ export class FriendManagerImpl implements FriendManager {
             if(user!=null){user.password="";}
             ret.push(user);
         }
+            await FriendManagerImpl.CloseConnection(mongoose)
+            console.log(ret);
+            return ret;
         }catch{
             throw new Error("Error al conectarse con la base de datos")
         }
-        await FriendManagerImpl.CloseConnection(mongoose)
-        console.log(ret);
-        return ret;
+
     }
 
     async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
-
+    console.log("añadiendo amigo")
+        let cond=null;
         const { uri, mongoose } = FriendManagerImpl.getBD();
         try{
         await FriendManagerImpl.OpenConnection(uri, mongoose);
+
+        cond=await FriendshipSchema.exists({
+            sender: new String(de.username),
+            receiver: new String(a.username)
+            }
+        );
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
+        console.log(cond)
+        if (cond!=null){
+            throw new Error("La solicitud de amistas/amistad ya existe")
+            return null
+        }
+
+        try{
 
         const userSchema = new FriendshipSchema({
             sender: new String(de.username),
@@ -79,14 +95,15 @@ export class FriendManagerImpl implements FriendManager {
             status: FriendManagerImpl.pendiente
         });
         await userSchema.save();
+        await FriendManagerImpl.CloseConnection(mongoose);
+        return new FriendRequest(de.username, a.username, FriendManagerImpl.pendiente);
         }catch{
             throw new Error("Error al conectarse con la base de datos")
         }
-        await FriendManagerImpl.CloseConnection(mongoose)
-        return new FriendRequest(de.username, a.username, FriendManagerImpl.pendiente);
+
     }
 
-    async actualizarSolicitud(solicitud: FriendRequest, status: number): Promise<FriendRequest> {
+    async actualizarSolicitud (solicitud: FriendRequest, status: number): Promise<FriendRequest> {
 
         const { uri, mongoose } = FriendManagerImpl.getBD();
         let resultado= null
@@ -95,11 +112,12 @@ export class FriendManagerImpl implements FriendManager {
 
         solicitud.status = status;
          resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver, status: 0 }, { status: solicitud.status }) as FriendRequest;
+            await FriendManagerImpl.CloseConnection(mongoose)
+            return resultado;
         }catch{
             throw new Error("Error al conectarse con la base de datos")
         }
-        await FriendManagerImpl.CloseConnection(mongoose)
-        return resultado;
+
     }
 
     async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
@@ -109,11 +127,12 @@ export class FriendManagerImpl implements FriendManager {
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
          resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.aceptado }) as FriendRequest;
+            await FriendManagerImpl.CloseConnection(mongoose)
+            return resultado;
         }catch{
             throw new Error("Error al conectarse con la base de datos")
         }
-        await FriendManagerImpl.CloseConnection(mongoose)
-        return resultado;
+
     }
     async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
         const { uri, mongoose } = FriendManagerImpl.getBD();
@@ -122,11 +141,12 @@ export class FriendManagerImpl implements FriendManager {
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
          resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.rechazado }) as FriendRequest;
+            await FriendManagerImpl.CloseConnection(mongoose)
+            return resultado;
         }catch{
             throw new Error("Error al conectarse con la base de datos")
         }
-        await FriendManagerImpl.CloseConnection(mongoose)
-        return resultado;
+
 
     }
 
@@ -139,13 +159,14 @@ export class FriendManagerImpl implements FriendManager {
 
         resultado1 = await FriendshipSchema.deleteMany({ sender: amigo1.username, receiver: amigo2.username, status: FriendManagerImpl.aceptado });
         resultado2 = await FriendshipSchema.deleteMany({ sender: amigo2.username, receiver: amigo1.username, status: FriendManagerImpl.aceptado });
+            console.log(resultado1)
+            console.log(resultado2)
+            await FriendManagerImpl.CloseConnection(mongoose)
+            return true;
         }catch{
             throw new Error("Error al conectarse con la base de datos")
         }
-        console.log(resultado1)
-        console.log(resultado2)
-        await FriendManagerImpl.CloseConnection(mongoose)
-        return true;
+
     }
 
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
@@ -158,10 +179,11 @@ export class FriendManagerImpl implements FriendManager {
          resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
 
         await FriendManagerImpl.CloseConnection(mongoose)
+            return resultado;
         }catch{
             throw new Error("Error al conectarse con la base de datos")
         }
-        return resultado;
+
     }
 
 
@@ -186,8 +208,8 @@ export class FriendManagerImpl implements FriendManager {
 //let a = new FriendManagerImpl();
 //a.enviarSolicitud(new User("Juan", "", ""), new User("Adri", "", ""))
 //console.log("hola");
-//let u1 = new UserImpl("testmalo", "", "", "");
-//let u2 = new UserImpl("testnoche", "", "", "")
+//let u1 = new UserImpl("testmalodddd", "", "", "");
+//let u2 = new UserImpl("testnochedfg", "", "", "")
 //let u3=new UserImpl("test3","","","");
 //let u4=new UserImpl("test4","","","")
 

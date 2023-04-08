@@ -101,7 +101,14 @@ api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<R
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
-    let userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
+    let userRes
+    try {
+         userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
+    }catch(err){
+            return res.status(404).send({ error: err.toString() })
+
+    }
+
 
     if (userRes.username == "passwordNotFound") {
         return res.status(506).send("Contraseña errónea")
@@ -168,8 +175,11 @@ api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<
 })
 
 api.post("/friendmanager/add", async (req: Request, res: Response): Promise<Response> => {
-    let userEnSesion = req.body.sender;
+
+
     try{
+        console.log("llamando a añadir amigo2")
+        let userEnSesion = req.body.sender;
         let user = req.body.receiver;
         let r = await fac.FactoryLoMap.getFriendManager().enviarSolicitud(userEnSesion, user);
         return res.status(200).send(r);

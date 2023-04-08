@@ -59,6 +59,24 @@ export class Repository {
         return resultado
     }
 
+    static async findOneAndUpdatePassword(user: User) {
+
+        const { uri, mongoose } = Repository.getBD();
+
+        await Repository.OpenConnection(uri, mongoose);
+
+        let resultado: User;
+
+        resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { password:user.password}, { new: true });
+
+
+        await Repository.CloseConnection(mongoose)
+        console.log(resultado)
+        return resultado
+    }
+
+
+
 
 
 

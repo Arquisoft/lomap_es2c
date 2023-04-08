@@ -10,7 +10,7 @@ const port: number = 5000;
 
 //const db = require('./src/persistence/DataBase')
 //require("./src/controllers/FriendsManager")
-
+//require("./src/controllers/UserManager")
 
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
