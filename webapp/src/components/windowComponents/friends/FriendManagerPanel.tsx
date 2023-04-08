@@ -3,20 +3,10 @@ import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import MapIcon from '@mui/icons-material/Map';
-import PersonIcon from '@mui/icons-material/Person';
-import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
+import { Friend, FriendRequest, Group, User } from '../../../shared/shareddtypes';
 import { getMyFriendRequests, getMyFriends, getMyGroups, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
-import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import { AccountCircle, FireHydrantAltOutlined } from '@mui/icons-material';
-import { render } from 'react-dom';
+import { AccountCircle } from '@mui/icons-material';
 import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -59,6 +49,7 @@ export const FriendManagerPanel = () => {
     const { op } = useParams()
 
     const navigate = useNavigate()
+
 
     const userFriends = async () => {
 

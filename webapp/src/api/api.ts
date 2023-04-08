@@ -28,6 +28,8 @@ export function getUserInSesion(): User {
 export function logout() {
     document.cookie = "isLogged=; path=/"
     document.cookie = "userInSession=; path=/"
+    document.cookie = "isPodLogged=; path=/"
+    document.cookie = "userWebId=; path=/"
 }
 
 export async function signup(user: User): Promise<User> {

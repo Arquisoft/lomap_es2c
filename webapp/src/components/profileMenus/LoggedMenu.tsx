@@ -19,6 +19,9 @@ import { handleErrors } from 'api/ErrorHandler';
 import { User } from 'shared/shareddtypes';
 import { NotificationManager, temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Divider } from '@mui/material';
+import {
+    LogoutButton
+} from "@inrupt/solid-ui-react";
 
 //#region DEFINICION DE COMPONENTES STYLED
 

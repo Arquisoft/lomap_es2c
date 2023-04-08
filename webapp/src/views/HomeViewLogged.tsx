@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
 import { HomePage } from '../components/mainComponents/HomePage';
+import { useSession } from "@inrupt/solid-ui-react";
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { editUserDetails, getUserInSesion, logout } from '../api/api';
+import { User } from 'shared/shareddtypes';
+import Swal from 'sweetalert2';
+import { useNavigate, useParams } from 'react-router-dom';
+import { readCookie } from 'utils/CookieReader';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { getUserInSesion } from 'api/api';
 import Swal from 'sweetalert2';
@@ -34,11 +41,12 @@ const MyPaper2 = styled(Paper)({
 
 export default function HomeViewLogged(props: { welcome: string }) {
 
-    const checkwebid = () => {
-        Swal.fire("Prueba").then(() => {
-            temporalSuccessMessage("La sesión se ha iniciado correctamente. " + getSaludo() + " <em>" + getUserInSesion().username + "</em>.");
-        })
-    }
+    const { session } = useSession();
+    const navigate = useNavigate();
+    const { welcome } = useParams();
+
+    if(session.info.webId)
+        document.cookie = "userWebId=" + session.info.webId + "; path=/"
 
     const getSaludo = () => {
         let now = new Date();
@@ -50,6 +58,50 @@ export default function HomeViewLogged(props: { welcome: string }) {
         if (hours >= 0 && hours < 6) return "Debería irse a dormir";
     }
 
+    const saludo = () => {
+        let user: User = getUserInSesion();
+        temporalSuccessMessage("La sesión se ha iniciado correctamente. " + getSaludo() + " <em>" + user.username + "</em>.");
+    }
+
+    const checkWebId = () => {
+        let user: User = getUserInSesion();
+        setTimeout(() => {
+            if(user.webID != readCookie("userWebId") ){
+                Swal.fire({
+                    title: "Actualizar webId",
+                    text: "El webId con el que has iniciado sesión no coincide con el vinculado a su perfil, ¿desea actualizarlo?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#81c784',
+                    cancelButtonColor: 'grey',
+                    confirmButtonText: 'Actualizar',
+                    cancelButtonText: 'Cerrar sesión'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let updatedUser: User = user;
+                        updatedUser.webID = session.info.webId;
+                        editUserDetails(updatedUser);
+                        saludo();
+                        Swal.close();
+                    } else {
+                        logout();
+                        navigate("/login")
+                    }
+                })
+            } else {
+                saludo();
+            }
+
+        }, 3000);
+        
+    }
+
+    useEffect(() => {
+        if(welcome)
+            checkWebId();
+      }, []); 
+    
+    
     if (props.welcome == "true") {
         checkwebid()
     }
