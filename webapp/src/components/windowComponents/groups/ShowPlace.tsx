@@ -157,12 +157,9 @@ const places: Place[] = [
 ]
 
 export default function ShowPlace() {
-    const { groupid, lat } = useParams();
+    const { id, lat } = useParams();
     const navigate = useNavigate()
 
-    console.log("   PARAMETROOOOOS  ")
-    console.log(groupid)
-    console.log(lat)
 
     let place: Place = places.find((p) => p.nombre == lat) //findPlaceByName(props.name)
     
@@ -174,7 +171,7 @@ export default function ShowPlace() {
                     <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
                         Mis grupos
                     </Link>
-                    <Typography color="inherit">{groupid}</Typography>
+                    <Typography color="inherit">{id}</Typography>
                     <Typography color="text.primary">{place.nombre}</Typography>
                 </Breadcrumbs>
             </div>

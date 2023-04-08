@@ -1,4 +1,3 @@
-import L from 'leaflet';
 import { MarkerData } from "shared/shareddtypes";
 
 
@@ -36,4 +35,14 @@ interface ClearAddPlaceMarkerAction {
 
 export const clearAddPlaceMarker = (): ClearAddPlaceMarkerAction => ({
   type: 'markers/clearAddPlaceMarker'
+});
+
+interface SetGroupMarker {
+  type: 'markers/setGroupMarker';
+  payload: string;
+}
+
+export const setGroupMarker = (groupName: string): SetGroupMarker => ({
+  type: 'markers/setGroupMarker', 
+  payload: groupName,
 });

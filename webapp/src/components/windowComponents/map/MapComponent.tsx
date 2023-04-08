@@ -77,10 +77,10 @@ export const MapComponent = (props: Props) => {
 
     const showAdd = useSelector((state: RootState) => state.markers.addPlaceMarker);
 
+    const groupid = useSelector((state: RootState) => state.markers.groupName);
+
     console.log("en el mapa")
     console.log(markers)
-
-    const { groupid } = useParams();
     const navigate = useNavigate();
 
     const handleMarkerClick = (name: string) => {

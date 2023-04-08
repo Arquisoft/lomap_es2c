@@ -22,7 +22,7 @@ import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import ShowPlace from './ShowPlace';
 import { useDispatch } from 'react-redux';
-import { addMarkers, clearMarkers } from 'utils/redux/action';
+import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -205,6 +205,7 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any, markers: MarkerDa
         const newMarkers = placeMarkers;
         dispatch(clearMarkers());
         console.log(newMarkers)
+        dispatch(setGroupMarker(group.nombre as string))
         dispatch(addMarkers(newMarkers));
         alert("Se muestra el grupo " + group.nombre)
         

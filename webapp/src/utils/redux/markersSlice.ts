@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import L from 'leaflet';
 import { MarkerData } from 'shared/shareddtypes';
 
 interface MarkersState {
   markers: MarkerData[];
   addPlaceMarker: boolean;
+  groupName: string;
 }
 
 const initialState: MarkersState = {
   markers: [],
   addPlaceMarker: false ,
+  groupName: "",
 };
 
 const markersSlice = createSlice({
@@ -26,6 +27,8 @@ const markersSlice = createSlice({
     },
     clearAddPlaceMarker(state) {
       state.addPlaceMarker = null;
+    }, setGroupMarker(state, action: PayloadAction<string>){
+        state.groupName = action.payload;
     }
   },
 });
