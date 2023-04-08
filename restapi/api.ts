@@ -116,14 +116,14 @@ api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Res
 })
 /*
 api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
-let user = req.body.user;
-let friends = null
-//try{
-friends= await fac.FactoryLoMap.getFriendManager().listarAmigos(user).then(a=>{return res.status(200).send(a)}).catch(err=>res.status(404).send(err.toString() ))
-//} catch (err) {
-return res.status(404)
-//}
-//return res.status(200).send("friends");
+    let user = req.body.user;
+    let friends = null
+    //try{
+        friends= await fac.FactoryLoMap.getFriendManager().listarAmigos(user).then(a=>{return res.status(200).send(a)}).catch(err=>res.status(404).send(err.toString() ))
+    //} catch (err) {
+       return res.status(404)
+    //}
+    //return res.status(200).send("friends");
 })*/
 
 
@@ -169,7 +169,7 @@ api.post("/friendmanager/add", async (req: Request, res: Response): Promise<Resp
         let r = await fac.FactoryLoMap.getFriendManager().enviarSolicitud(userEnSesion, user);
         return res.status(200).send(r);
     } catch (err) {
-        return res.status(404).send({ error: err.toString() })
+        return res.status(404).send(err.toString())
     }
 })
 
