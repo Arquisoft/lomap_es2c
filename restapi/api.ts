@@ -167,8 +167,25 @@ api.get(
         } catch (err) {
             return res.status(404).send({ error: err.toString() })
         }
+    })
+
+
+
+api.post(
+    "/friendmanager/deletefriend",
+    async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const user = req.body.user;
+            const friend = req.body.friend;
+            const b = await fac.FactoryLoMap.getFriendManager().eliminarAmigo(user,friend);
+            return res.status(200).json(b);
+        } catch (err) {
+            return res.status(404).send({ error: err.toString() })
+        }
     }
 );
+
+
 
 
 export default api;

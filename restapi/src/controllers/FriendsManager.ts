@@ -13,6 +13,7 @@ export interface FriendManager {
     rechazarSolicitud: (solicitud: FriendRequest) => Promise<FriendRequest>;
     listarSolicitudes: (user: User) => Promise<FriendRequest[]>;
     actualizarSolicitud: (solicitud: FriendRequest, status: number) => Promise<FriendRequest>;
+    eliminarAmigo: (amigo1:User,amigo2:User) => Promise<Boolean>;
 }
 
 export class FriendManagerImpl implements FriendManager {
