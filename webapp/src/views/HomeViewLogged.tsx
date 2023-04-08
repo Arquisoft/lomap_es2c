@@ -10,7 +10,7 @@ import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { editUserDetails, getUserInSesion, logout } from '../api/api';
 import { User } from 'shared/shareddtypes';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { readCookie } from 'utils/CookieReader';
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -40,6 +40,7 @@ export default function HomeViewLogged() {
 
     const { session } = useSession();
     const navigate = useNavigate();
+    const { welcome } = useParams();
 
     if(session.info.webId)
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
@@ -62,7 +63,7 @@ export default function HomeViewLogged() {
     const checkWebId = () => {
         let user: User = getUserInSesion();
         setTimeout(() => {
-            if(user.webID != readCookie("userWebId")){
+            if(user.webID != readCookie("userWebId") ){
                 Swal.fire({
                     title: "Actualizar webId",
                     text: "El webId con el que has iniciado sesión no coincide con el vinculado a su perfil, ¿desea actualizarlo?",
@@ -88,12 +89,13 @@ export default function HomeViewLogged() {
                 saludo();
             }
 
-        }, 1200);
+        }, 3000);
         
     }
 
     useEffect(() => {
-        checkWebId();
+        if(welcome)
+            checkWebId();
       }, []); 
     
     

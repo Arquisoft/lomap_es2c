@@ -111,7 +111,7 @@ export default function PodLogin() {
 
                     <LoginButton
                         oidcIssuer={idp}
-                        redirectUrl={"http://localhost:3000/home"}
+                        redirectUrl={"http://localhost:3000/home/welcome"}
                         onError={handleError}
                     >
                         <CSSButton
