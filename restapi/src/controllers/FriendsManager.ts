@@ -24,7 +24,8 @@ export class FriendManagerImpl implements FriendManager {
     async listarAmigos(user: User): Promise<User[]> {
 
         const { uri, mongoose } = FriendManagerImpl.getBD();
-
+        let ret: User[] = [];
+        try{
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
         let resultado = await FriendshipSchema.find({ sender: user.username, status: FriendManagerImpl.aceptado }, { receiver: 1, _id: 0 }) as FriendRequest[];
@@ -58,6 +59,9 @@ export class FriendManagerImpl implements FriendManager {
             if(user!=null){user.password="";}
             ret.push(user);
         }
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
         await FriendManagerImpl.CloseConnection(mongoose)
         console.log(ret);
         return ret;
@@ -66,7 +70,7 @@ export class FriendManagerImpl implements FriendManager {
     async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
 
         const { uri, mongoose } = FriendManagerImpl.getBD();
-
+        try{
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
         const userSchema = new FriendshipSchema({
@@ -75,6 +79,9 @@ export class FriendManagerImpl implements FriendManager {
             status: FriendManagerImpl.pendiente
         });
         await userSchema.save();
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
         await FriendManagerImpl.CloseConnection(mongoose)
         return new FriendRequest(de.username, a.username, FriendManagerImpl.pendiente);
     }
@@ -82,30 +89,42 @@ export class FriendManagerImpl implements FriendManager {
     async actualizarSolicitud(solicitud: FriendRequest, status: number): Promise<FriendRequest> {
 
         const { uri, mongoose } = FriendManagerImpl.getBD();
-
+        let resultado= null
+        try{
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
         solicitud.status = status;
-        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver, status: 0 }, { status: solicitud.status }) as FriendRequest;
+         resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver, status: 0 }, { status: solicitud.status }) as FriendRequest;
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
         await FriendManagerImpl.CloseConnection(mongoose)
         return resultado;
     }
 
     async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
         const { uri, mongoose } = FriendManagerImpl.getBD();
-
+        let resultado= null
+        try{
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
-        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.aceptado }) as FriendRequest;
+         resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.aceptado }) as FriendRequest;
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
         await FriendManagerImpl.CloseConnection(mongoose)
         return resultado;
     }
     async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
         const { uri, mongoose } = FriendManagerImpl.getBD();
-
+        let resultado=null
+        try{
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
-        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.rechazado }) as FriendRequest;
+         resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.rechazado }) as FriendRequest;
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
         await FriendManagerImpl.CloseConnection(mongoose)
         return resultado;
 
@@ -113,11 +132,16 @@ export class FriendManagerImpl implements FriendManager {
 
     async eliminarAmigo(amigo1:User,amigo2:User): Promise<boolean> {
         const { uri, mongoose } = FriendManagerImpl.getBD();
-
+        let resultado1=null
+        let resultado2=null
+        try{
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
-        const resultado1 = await FriendshipSchema.deleteMany({ sender: amigo1.username, receiver: amigo2.username, status: FriendManagerImpl.aceptado });
-        const resultado2 = await FriendshipSchema.deleteMany({ sender: amigo2.username, receiver: amigo1.username, status: FriendManagerImpl.aceptado });
+        resultado1 = await FriendshipSchema.deleteMany({ sender: amigo1.username, receiver: amigo2.username, status: FriendManagerImpl.aceptado });
+        resultado2 = await FriendshipSchema.deleteMany({ sender: amigo2.username, receiver: amigo1.username, status: FriendManagerImpl.aceptado });
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
         console.log(resultado1)
         console.log(resultado2)
         await FriendManagerImpl.CloseConnection(mongoose)
@@ -127,13 +151,16 @@ export class FriendManagerImpl implements FriendManager {
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
 
         const { uri, mongoose } = FriendManagerImpl.getBD();
-
+        let resultado=null
+        try{
         await FriendManagerImpl.OpenConnection(uri, mongoose);
 
-        let resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
+         resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
 
         await FriendManagerImpl.CloseConnection(mongoose)
-
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
         return resultado;
     }
 
@@ -147,8 +174,8 @@ export class FriendManagerImpl implements FriendManager {
     private static async OpenConnection(uri: string, mongoose: any){
         try {
             await mongoose.connect(uri);
-        } catch {
-            return new UserImpl("bderror", "", "");
+        }catch{
+        throw new Error("Error al conectarse con la base de datos")
         }
     }
 
@@ -159,8 +186,8 @@ export class FriendManagerImpl implements FriendManager {
 //let a = new FriendManagerImpl();
 //a.enviarSolicitud(new User("Juan", "", ""), new User("Adri", "", ""))
 //console.log("hola");
-//let u1 = new UserImpl("holi", "", "", "");
-//let u2 = new UserImpl("adiosi", "", "", "")
+//let u1 = new UserImpl("testmalo", "", "", "");
+//let u2 = new UserImpl("testnoche", "", "", "")
 //let u3=new UserImpl("test3","","","");
 //let u4=new UserImpl("test4","","","")
 

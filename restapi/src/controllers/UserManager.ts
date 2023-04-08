@@ -13,6 +13,7 @@ interface UserManager {
     modificarPerfil: (user: User) => Promise<User>;
     listarDetalles: (user: User) => Promise<User>;
     buscarUsuario: (username: string) => Promise<User>;
+    modificarContrasena:(user:User,oldpsw:string,newpsw:string)=>Promise<User>;
 }
 
 
@@ -26,6 +27,19 @@ class UserManagerImpl implements UserManager {
     public buscarUsuario(username: string) {
         return buscarUsuarioPorUsername(username);
     }
+
+    modificarContrasena(user: User, oldpsw: string, newpsw: string): Promise<User> {
+
+
+
+
+
+
+
+
+
+        return Promise.resolve(undefined);
+    }
 }
 
 
@@ -35,7 +49,7 @@ async function buscarUsuarioPorUsername(username: string) {
     try {
         await mongoose.connect(uri);
     } catch {
-        return new UserImpl("bderror", "", "");
+        throw new Error("Error al conectarse con la base de datos.")
     }
 
     let resultado: User;
@@ -50,9 +64,6 @@ async function buscarUsuarioPorUsername(username: string) {
     if (resultado == null) {
         throw new Error("El usuario no existe.")
     }
-
-
-
     return resultado;
 
 }
@@ -78,8 +89,11 @@ async function modificarUsuario(user: User) {
     */
 
     let resultado: User;
-    resultado = await repo.Repository.findOneAndUpdate(user)
-
+    try{
+        resultado = await repo.Repository.findOneAndUpdate(user)
+    }catch(err){
+        throw new Error("Error al conectarse con la base de datos.");
+    }
     /*
     try {
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID });
