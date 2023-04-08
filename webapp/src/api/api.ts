@@ -96,6 +96,7 @@ export async function getMyFriends(user: User): Promise<User[]> {
 }
 
 export async function sendFriendRequest(user: User): Promise<String> {
+    console.log("llamando a añadir amigo1")
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/friendmanager/add', {
         method: 'POST',

@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
 import { Login } from '../components/userIdentification/LoginForm';
+import { PodLogin } from 'components/userIdentification/PodLogin2';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({

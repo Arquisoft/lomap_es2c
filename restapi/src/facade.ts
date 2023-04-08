@@ -1,8 +1,9 @@
-import { FriendManagerImpl } from './controllers/FriendsManager';
+import { MapManagerImpl } from './controllers/MapManager';
 import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { Place } from './entities/Place';
-import { FriendManager } from './controllers/FriendsManager'
+import { FriendManager, FriendManagerImpl } from './controllers/FriendsManager'
+
 
 export interface SesionManager {
     cerrarSesion: () => boolean;
@@ -19,7 +20,7 @@ export interface SesionManager {
 export interface MapManager {
     verMapaDe: (user: User) => Promise<Group[]>;
     añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
-    crearGrupo: (nombre: String) => Group;
+    crearGrupo: (nombre: string) => Group;
     eliminarGrupo: (grupo: Group) => boolean;
     eliminarLugarDeGrupo: (lugar: Place, grupo: Group) => Group;
     aplicarFiltro: (grupo: Group, filtro: string) => Place[];
