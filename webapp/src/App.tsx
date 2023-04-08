@@ -5,10 +5,10 @@ import SignupView from './views/SignupView';
 import HomeView from './views/HomeView';
 import LoggedView from './views/LoggedView';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthChecker } from 'auth/AuthChecker';
+import { AuthChecker } from 'checkers/AuthChecker';
 import { NoFound } from 'views/NoFound';
 import HomeViewLogged from 'views/HomeViewLogged';
-import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
+import { AuthCheckerNoLogged } from 'checkers/AuthCheckerNoLogged';
 import PodView from 'views/PodView';
 
 function App(): JSX.Element {
@@ -25,7 +25,8 @@ function App(): JSX.Element {
                 */}
                 <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthChecker><LoggedView /></AuthChecker>} />
                 <Route path='/login' element={<AuthCheckerNoLogged> <LoginView /></AuthCheckerNoLogged>} />
-                <Route path='/home' element={<AuthChecker><HomeViewLogged /></AuthChecker>} />
+                <Route path='/home' element={<AuthChecker><HomeViewLogged welcome="false" /></AuthChecker>} />
+                <Route path='/welcome' element={<AuthChecker><HomeViewLogged welcome="true" /></AuthChecker>} />
                 <Route path='/signup' element={<AuthCheckerNoLogged> <SignupView /></AuthCheckerNoLogged>} />
                 <Route path='/podlogin' element={<PodView />} />
                 <Route path='*' element={<NoFound />} />

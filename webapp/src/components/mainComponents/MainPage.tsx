@@ -3,6 +3,8 @@ import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import { LeftWindow } from '../windowComponents/LeftWindow'
 import { MapComponent } from '../windowComponents/map/MapComponent';
+import { useParams } from 'react-router-dom';
+import { ErrorPage } from './ErrorPage';
 
 const MapContainer = styled(Container)({
     display: 'flex',
@@ -14,10 +16,19 @@ const MapContainer = styled(Container)({
 })
 
 export function MainPage() {
+
+    const { mainop } = useParams()
+
     return (
-        <MapContainer disableGutters>
-            <LeftWindow />
-            <MapComponent />
-        </MapContainer>
+        <>
+            {mainop == "groups" || mainop == "friends" ?
+                <MapContainer disableGutters>
+                    <LeftWindow />
+                    <MapComponent />
+                </MapContainer>
+                :
+                <ErrorPage />
+            }
+        </>
     )
 }

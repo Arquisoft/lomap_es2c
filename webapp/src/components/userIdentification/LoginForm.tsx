@@ -9,9 +9,9 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
-import { login } from '../../api/api';
+import { getMyFriendRequests, getUserInSesion, login } from '../../api/api';
 import { handleErrors } from 'api/ErrorHandler';
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -74,25 +74,23 @@ export function Login() {
     //#region METODOS DE CLASE
     const onSubmit: SubmitHandler<User> = data => tryLogin(data);
 
+    const checkRequests = () => {
+        getMyFriendRequests(getUserInSesion()).then((reqs) => {
+            if (reqs.length > -1) temporalInfoMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+        })
+    }
+
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
             if (userApi != null) {
-                temporalSuccessMessage("La sesión se ha iniciado correctamente. " + getSaludo() + " <em>" + user.username + "</em>.");
+                document.cookie = "notifications=; path=/"
+                //temporalSuccessMessage("La sesión se ha iniciado correctamente. " + getSaludo() + " <em>" + user.username + "</em>.");
+                //checkRequests();
                 navigate("/podlogin");
             }
         }).catch((e) => {
             console.log(e.message)
         });
-    }
-
-    const getSaludo = () => {
-        let now = new Date();
-        let hours = now.getHours();
-        if (hours >= 6 && hours < 8) return "A quién madruga Dios le ayuda";
-        if (hours >= 8 && hours < 12) return "Ojalá tenga un buen día";
-        if (hours >= 12 && hours < 20) return "Nos complace verle de nuevo";
-        if (hours >= 20 || hours == 0) return "Buenas noches, ¿tuvo usted un buen día?,";
-        if (hours >= 0 && hours < 6) return "Debería irse a dormir";
     }
 
     const showSignup = () => {

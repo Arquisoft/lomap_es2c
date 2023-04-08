@@ -25,7 +25,7 @@ import { FriendRequestsComponent } from './FriendRequestsComponent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
 import { useForm, SubmitHandler } from "react-hook-form";
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -84,7 +84,6 @@ export const FriendManagerPanel = () => {
     const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
 
     const userFriendRequests = async (): Promise<FriendRequest[]> => {
-
         let myFriendRequests: FriendRequest[] = [];
         let user = getUserInSesion();
         await getMyFriendRequests(user).then((friendRequests) => {

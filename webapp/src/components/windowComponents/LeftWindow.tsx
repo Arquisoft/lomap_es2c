@@ -11,6 +11,9 @@ import { showError } from '../../utils/fieldsValidation';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
 import MapIcon from '@mui/icons-material/Map';
+import { getMyFriendRequests, getUserInSesion } from 'api/api';
+import { temporalInfoMessage } from 'utils/MessageGenerator';
+import { ErrorPage } from 'components/mainComponents/ErrorPage';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
@@ -49,8 +52,6 @@ export function LeftWindow() {
         navigate("/home/" + newValue + "/main")
         setValue(newValue);
     };
-
-
 
     return (
         <Window>

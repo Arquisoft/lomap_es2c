@@ -9,7 +9,7 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
+import { editPassword, editUserDetails, getMyFriendRequests, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,7 +17,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import { handleErrors } from 'api/ErrorHandler';
 import { User } from 'shared/shareddtypes';
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { NotificationManager, temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { Divider } from '@mui/material';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -28,6 +29,9 @@ const BoxProfile = styled(Box)({
     columnGap: '2em'
 })
 
+const VerticalDivider = styled(Divider)({
+    padding: '0em 0.4em 0em'
+})
 
 const MyMenu = styled(Menu)({
     marginTop: '3em',
@@ -38,7 +42,7 @@ const MyMenu = styled(Menu)({
 //#region DEFINICION DE COMPONENTES PERSONALIZADOS
 
 function LoginInformation(props: any) {
-    return <b><p>Se ha iniciado sesión como {props.name}</p></b>;
+    return <b><p>{props.name}</p></b>;
 }
 //#endregion
 function LogedMenu() {
@@ -228,11 +232,6 @@ function LogedMenu() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const getUsername = () => {
-        let user = getUserInSesion();
-        setUsername(user.username)
-    }
-
     //#endregion
 
     //#region HOOKS
@@ -247,6 +246,8 @@ function LogedMenu() {
 
         //#region COMPONENTE
         <BoxProfile>
+            <NotificationManager />
+            <VerticalDivider orientation='vertical' flexItem />
             <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>

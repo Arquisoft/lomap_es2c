@@ -5,6 +5,9 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ImgCarrusel from './ImgCarrusel';
+import { getMyFriendRequests, getUserInSesion } from 'api/api';
+import { temporalInfoMessage } from 'utils/MessageGenerator';
+import { User } from 'shared/shareddtypes';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
@@ -105,6 +108,19 @@ export function HomePage() {
         navigate("/signup")
     }
 
+    const goMain = () => {
+        navigate("/home/groups/main")
+        if (getUserInSesion() != null) {
+            checkRequests(getUserInSesion())
+        }
+    }
+
+    const checkRequests = (user: User) => {
+        getMyFriendRequests(user).then((reqs) => {
+            if (reqs.length > 0) temporalInfoMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+        })
+    }
+
     return (
 
         //#region COMPONENTE
@@ -127,7 +143,7 @@ export function HomePage() {
                     <ScrollBox>
                         <ImgCarrusel />
                     </ScrollBox>
-                    <GoButton onClick={() => navigate("/home/groups/main")}>
+                    <GoButton onClick={() => goMain()}>
                         ¡Adelante!
                     </GoButton>
                 </InfoBox>
