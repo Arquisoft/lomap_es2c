@@ -15,7 +15,6 @@ import { signup } from '../../api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
-import { handleErrors } from 'api/ErrorHandler';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -95,7 +94,7 @@ export function Signup() {
 
     const trySignup = (user: UserSchema) => {
         if (user.username && user.webID && user.password) {
-            let newUser: User = { username: user.username, webID: user.webID, password: user.password, img: "", description: "" };
+            let newUser: User = { username: user.username, webID: user.webID, password: user.password };
             if (fieldsValidation.checkPasswords(pass, confirmPass)) {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
@@ -110,6 +109,7 @@ export function Signup() {
     }
 
     const successSignup = (user: User) => {
+        console.log(user)
         Swal.fire({
             title: 'Cuenta creada',
             text: "¡Cuenta " + user.username + " ha sido creada con éxito!",

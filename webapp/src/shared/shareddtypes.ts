@@ -2,30 +2,17 @@ export interface User {
     username: string
     password: string
     webID: string
-    img: string
-    description: string
 }
 
 export interface Group {
     places: Place[]
-    name: string
+    nombre: string
 }
 
 export interface Place {
     latitude: string
-    longitude: string
+    longitud: string
     nombre: string
-    category: string
-    description: string
-    comments: Comment[]
-    reviewScore: string
-    date: string
-}
-
-export interface Comment {
-    author: string
-    comment: string
-    date: string
 }
 
 export type User2 = {
@@ -70,8 +57,8 @@ export interface Friend {
 }
 
 export interface FriendRequest {
-    receiver: string,
-    sender: string,
+    receiver: User,
+    sender: User,
     status: number,
 }
 export interface Group { }

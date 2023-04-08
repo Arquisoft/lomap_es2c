@@ -12,8 +12,7 @@ export default function StandardImageList() {
         Swal.fire({
             html:
                 '<img alt="' + title + '"src="' + img + '"></img',
-            width: '90vw',
-            confirmButtonColor: '#81c784'
+            width: '90vw'
         })
     }
 
@@ -34,8 +33,8 @@ export default function StandardImageList() {
                                 sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                 aria-label={`info about ${item.title}`}
                                 onClick={() => showImg(item.img, item.title)}
-                            >
-                                <VisibilityIcon />
+                                >
+                                    <VisibilityIcon />
                             </IconButton>
                         }
                     />

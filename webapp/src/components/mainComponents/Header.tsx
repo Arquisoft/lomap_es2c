@@ -7,11 +7,9 @@ import Button from '@mui/material/Button';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import LogedMenu from '../profileMenus/LoggedMenu';
-import { NoLogedMenu } from '../profileMenus/NoLoggedMenu';
+import LogedMenu from '../profileMenus/LogedMenu';
+import { NoLogedMenu } from '../profileMenus/NoLogedMenu';
 import { useNavigate } from 'react-router-dom';
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
-import { Divider } from '@mui/material';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const ButtonGENERIC = styled(Button)({
@@ -24,10 +22,6 @@ const ButtonGENERIC = styled(Button)({
         backgroundColor: '#1f4a21',
     },
 });
-
-const VerticalDivider = styled(Divider)({
-    padding: '0em 0.4em 0em'
-})
 
 const ButtonHOME = styled(Button)({
     padding: '0em 0em 0em 0em',
@@ -55,15 +49,6 @@ const BoxNAV = styled(Box)({
 
 const MyBar = styled(AppBar)({
     background: '#81c784',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-})
-
-const MyToolbar = styled(Toolbar)({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
 })
 //#endregion
 
@@ -99,20 +84,19 @@ export function Header(props: { logged: boolean }) {
         //#region COMPONENTE 
         <MyBar position="static">
             <Container maxWidth="xl">
-                <MyToolbar disableGutters>
+                <Toolbar disableGutters>
                     <ButtonHOME
                         key={uuid()}
                         onClick={goHome}
                     >
                         <img id="imgLogo" src="nobgLogo.png"></img>
                     </ButtonHOME>
-                    <VerticalDivider orientation='vertical' flexItem />
                     <BoxNAV>
                     </BoxNAV>
                     {getMode()}
-                </MyToolbar>
+                </Toolbar>
             </Container>
-        </MyBar >
+        </MyBar>
         //#endregion
 
     );
