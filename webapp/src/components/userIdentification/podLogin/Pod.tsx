@@ -10,7 +10,7 @@ import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
-import { getUserInSesion } from '../../../api/api';
+import { logout } from '../../../api/api';
 import {
     LoginButton,
     SessionProvider,
@@ -46,7 +46,7 @@ const CSSTypography = styled(Typography)({
     fontWeight: 'lighter',
 });
 
-export default function BasicSelect() {
+export default function PodLogin() {
     const [provider, setProvider] = useState('');
     const [idp, setIdp] = useState("https://inrupt.net");
     const { session } = useSession();
@@ -55,20 +55,17 @@ export default function BasicSelect() {
     const navigate = useNavigate();
 
 
-    const handleChange = (event: SelectChangeEvent) => {
-        console.log(event)
-        setProvider(event.target.value as string);
-    };
 
     const handleLogin = async () => {
-        let user = await getUserInSesion();
-        if (user != null) {
-            navigate("/home/groups/main");
-        }
+        document.cookie = "isPodLogged=true; path=/"
     };
 
+    const handleError = async () => {
+        logout();
+        navigate("/login");
+    }
+
     return (
-        <SessionProvider>
             <Box sx={{ minWidth: 120 }}>
                 <SForm>
                     <CSSTypography variant="h5" align="center"
@@ -114,7 +111,8 @@ export default function BasicSelect() {
 
                     <LoginButton
                         oidcIssuer={idp}
-                        redirectUrl={"http://localhost:3000/home/groups/main"}
+                        redirectUrl={"http://localhost:3000/home/welcome"}
+                        onError={handleError}
                     >
                         <CSSButton
                             sx={{ mt: "1.5em", mb: "2em" }}
@@ -122,12 +120,12 @@ export default function BasicSelect() {
                             type="submit"
                             size="large"
                             fullWidth
+                            onClick={handleLogin}
                         >
                             Iniciar sesión
                         </CSSButton>
                     </LoginButton>
                 </SForm>
             </Box>
-        </SessionProvider>
     );
 }

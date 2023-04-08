@@ -3,20 +3,10 @@ import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import MapIcon from '@mui/icons-material/Map';
-import PersonIcon from '@mui/icons-material/Person';
-import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
+import { Friend, FriendRequest, Group, User } from '../../../shared/shareddtypes';
 import { getMyFriendRequests, getMyFriends, getMyGroups, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
-import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import { AccountCircle, FireHydrantAltOutlined } from '@mui/icons-material';
-import { render } from 'react-dom';
+import { AccountCircle } from '@mui/icons-material';
 import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -25,6 +15,7 @@ import { FriendRequestsComponent } from './FriendRequestsComponent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
 import { useForm, SubmitHandler } from "react-hook-form";
+import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -32,14 +23,11 @@ const ScrollBox = styled(Box)({
     scrollbarColor: 'black white'
 })
 
-const VerticalDivider = styled(Divider)({
-    padding: '0em 0.4em 0em'
-})
-
 const AddFriendBox = styled(Box)({
     padding: '1em 0em 1em',
     display: 'flex',
     alignItems: 'flex-end',
+    justifyContent: 'center',
 })
 
 const OptionsBox = styled(Box)({
@@ -49,7 +37,7 @@ const OptionsBox = styled(Box)({
 })
 
 const HorizontalDivider = styled(Divider)({
-    minWidth: '25vw'
+    width: '100%'
 })
 
 export const FriendManagerPanel = () => {
@@ -61,6 +49,7 @@ export const FriendManagerPanel = () => {
     const { op } = useParams()
 
     const navigate = useNavigate()
+
 
     const userFriends = async () => {
 
@@ -86,7 +75,6 @@ export const FriendManagerPanel = () => {
     const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
 
     const userFriendRequests = async (): Promise<FriendRequest[]> => {
-
         let myFriendRequests: FriendRequest[] = [];
         let user = getUserInSesion();
         await getMyFriendRequests(user).then((friendRequests) => {
@@ -132,18 +120,19 @@ export const FriendManagerPanel = () => {
             title: 'Mi perfil',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                     <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
-                    <label for="webid-gp" class="swal2-label">WebID: </label>
-                    <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + usr.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="4" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Enviar',
+            confirmButtonColor: "#81c784",
             focusConfirm: false,
             imageUrl: url,
             imageWidth: 'auto',
             imageHeight: 200,
             imageAlt: 'Foto de perfil actual',
             preConfirm: () => {
-                sendFriendRequest(user)
+                sendFriendRequest(user).then(() => {
+                    temporalSuccessMessage("La solicitud de amistad a <em>" + user.username + "</em> ha sido enviada correctamente.")
+                })
             }
         })
     }
@@ -179,7 +168,6 @@ export const FriendManagerPanel = () => {
                     <ScrollBox>
                         <List
                             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                            component="nav"
                             aria-labelledby="nested-list-subheader"
                             subheader={
                                 <ListSubheader component="div" id="nested-list-subheader">

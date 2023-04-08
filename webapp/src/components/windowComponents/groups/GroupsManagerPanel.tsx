@@ -14,11 +14,12 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
-import { AddPlaceForm } from './AddPlaceForm';
-import { AddGroupForm } from './AddGroupForm';
+import AddPlaceForm from './AddPlaceForm';
+import AddGroupForm from './AddGroupForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
+import AddLocationIcon from '@mui/icons-material/AddLocation';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -35,10 +36,10 @@ const VerticalDivider = styled(Divider)({
 })
 
 const HorizontalDivider = styled(Divider)({
-    minWidth: '25vw'
+    width: '100%'
 })
 
-export const MapsManagerPanel = () => {
+export const GroupsManagerPanel = () => {
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -148,13 +149,10 @@ export const MapsManagerPanel = () => {
 
     const navigate = useNavigate()
 
-    const [addForm, setAddForm] = useState("")
-
-    if (op != addForm) setAddForm(op)
 
     return (
         <>
-            {addForm == "main" ?
+            {op == "main" ?
                 <>
                     <AddItem onClick={() => navigate("/home/groups/addgroup")}>
                         <ListItemIcon>
@@ -162,9 +160,9 @@ export const MapsManagerPanel = () => {
                         </ListItemIcon>
                         <ListItemText primary="Añadir grupo" />
                     </AddItem>
+                    <HorizontalDivider light color="#81c784" />
                     <List
                         sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        component="nav"
                         aria-labelledby="nested-list-subheader"
                         subheader={
                             <ListSubheader component="div" id="nested-list-subheader">
@@ -172,7 +170,6 @@ export const MapsManagerPanel = () => {
                             </ListSubheader>
                         }
                     >
-                        <HorizontalDivider light color="#81c784" />
                         <ScrollBox>
                             <Box ref={ref}>
                                 <Groups groups={groups} daddy={ref} />
@@ -181,11 +178,11 @@ export const MapsManagerPanel = () => {
                     </List >
                 </>
                 :
-                (addForm == "addplace" ?
-                    <AddPlaceForm ></AddPlaceForm>
+                (op == "addgroup" ?
+                    <AddGroupForm />
                     :
-                    (addForm == "addgroup" ?
-                        <AddGroupForm ></AddGroupForm>
+                    (op == "addplace" ?
+                        <AddPlaceForm />
                         :
                         <ErrorPage></ErrorPage>
                     )
@@ -205,12 +202,15 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
         alert("eliminar grupo " + group);
     }
 
+    const addPlace = (group: Group) => {
+        navigate("/home/groups/addplace/" + group.nombre)
+    }
+
     const generateOpen = (elems: number) => {
         let str = ""
         for (let i = 0; i < elems; i++) {
             str += '0';
         }
-        console.log("Generate open: " + str)
         return str;
     }
 
@@ -247,18 +247,18 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
                                 </ListItemIcon>
                                 <ListItemText primary={group.name} onClick={() => mostrarGrupo(group)} />
                                 {isOpen(i) ?
-                                    (
-                                        <Tooltip title="Close group places">
-                                            <ExpandLess onClick={() => { handleClick(i) }} />
-                                        </Tooltip>)
+
+                                    <ExpandLess onClick={() => { handleClick(i) }} />
                                     :
-                                    (
-                                        <Tooltip title="Show group places">
-                                            <ExpandMore onClick={() => { handleClick(i) }} />
-                                        </Tooltip>
-                                    )}
+
+                                    <ExpandMore onClick={() => { handleClick(i) }} />
+                                }
                                 <VerticalDivider orientation='vertical' flexItem />
-                                <Tooltip title="Delete group">
+                                <Box sx={{ ml: "0.8em" }}>
+                                    <AddLocationIcon onClick={() => addPlace(group)} htmlColor="#81c784" />
+                                </Box>
+                                <VerticalDivider orientation='vertical' flexItem />
+                                <Tooltip title="Delete group" sx={{ ml: "0.6em" }}>
                                     <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
                                 </Tooltip>
                             </ListItemButton>

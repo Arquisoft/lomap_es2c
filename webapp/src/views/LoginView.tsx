@@ -37,7 +37,7 @@ export default function LoginView() {
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header logged={false} /></MyPaper>
-            <PodLogin />
+            <Login />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

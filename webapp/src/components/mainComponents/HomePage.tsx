@@ -5,13 +5,16 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ImgCarrusel from './ImgCarrusel';
+import { getMyFriendRequests, getUserInSesion } from 'api/api';
+import { temporalInfoMessage } from 'utils/MessageGenerator';
+import { User } from 'shared/shareddtypes';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
     display: 'grid',
     gridTemplateColumns: 'repeat(5,1fr)',
     gridTemplateRows: 'repeat(4,1fr)',
-    margin: '3em',
+    margin: '2.5em',
     rowGap: '2em',
     columnGap: '3em',
     textAlign: 'center',
@@ -78,7 +81,22 @@ const GoButton = styled(Button)({
     alignSelf: 'center',
     backgroundColor: '#1f4a21',
     color: 'white',
-    marginBottom: '0.4em'
+    marginBottom: '0.4em',
+    '&:hover': {
+        backgroundColor: '#1f4a21',
+        color: 'white',
+        borderColor: '#0062cc',
+        boxShadow: 'none',
+    },
+    '&:active': {
+        boxShadow: 'none',
+        color: 'white',
+        backgroundColor: '#1f4a21',
+        borderColor: '#005cbf',
+    },
+    '&:focus': {
+        boxShadow: '0 0 0 0.2rem #1f4a21',
+    },
 })
 //#endregion
 
@@ -88,6 +106,19 @@ export function HomePage() {
 
     const goSignup = () => {
         navigate("/signup")
+    }
+
+    const goMain = () => {
+        navigate("/home/groups/main")
+        if (getUserInSesion() != null) {
+            checkRequests(getUserInSesion())
+        }
+    }
+
+    const checkRequests = (user: User) => {
+        getMyFriendRequests(user).then((reqs) => {
+            if (reqs.length > 0) temporalInfoMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+        })
     }
 
     return (
@@ -112,7 +143,7 @@ export function HomePage() {
                     <ScrollBox>
                         <ImgCarrusel />
                     </ScrollBox>
-                    <GoButton onClick={() => navigate("/home/groups/main")}>
+                    <GoButton onClick={() => goMain()}>
                         ¡Adelante!
                     </GoButton>
                 </InfoBox>

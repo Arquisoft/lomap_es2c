@@ -1,3 +1,4 @@
+import { readCookie } from 'utils/CookieReader';
 import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
 export async function addUser(user: User2): Promise<boolean> {
@@ -21,12 +22,14 @@ export async function getUsers(): Promise<User2[]> {
 }
 
 export function getUserInSesion(): User {
-    return JSON.parse(window.localStorage.getItem('userInSession') ?? null) as User;
+    return JSON.parse(readCookie("userInSession") ?? null) as User;
 }
 
 export function logout() {
-    window.localStorage.removeItem('userInSession');
-    window.localStorage.setItem('isLogged', "false");
+    document.cookie = "isLogged=; path=/"
+    document.cookie = "userInSession=; path=/"
+    document.cookie = "isPodLogged=; path=/"
+    document.cookie = "userWebId=; path=/"
 }
 
 export async function signup(user: User): Promise<User> {
@@ -52,17 +55,15 @@ export async function login(user: User): Promise<User> {
         case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
-        case 200:
-            ; return setSessionUser(response);
+        case 200: return setSessionUser(response);
         default: throw new Error("Unexpected error");
     }
 }
 
 async function setSessionUser(response: Response): Promise<User> {
     let user = await response.json();
-    console.log(user)
-    window.localStorage.setItem('userInSession', JSON.stringify(user));
-    window.localStorage.setItem('isLogged', "true");
+    document.cookie = "isLogged=true; path=/"
+    document.cookie = "userInSession=" + JSON.stringify(user) + "; path=/"
     return user;
 }
 
@@ -97,6 +98,7 @@ export async function getMyFriends(user: User): Promise<User[]> {
 }
 
 export async function sendFriendRequest(user: User): Promise<String> {
+    console.log("llamando a añadir amigo1")
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/friendmanager/add', {
         method: 'POST',

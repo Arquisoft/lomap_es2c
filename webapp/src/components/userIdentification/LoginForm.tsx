@@ -9,7 +9,9 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
-import { login } from '../../api/api';
+import { getMyFriendRequests, getUserInSesion, login } from '../../api/api';
+import { handleErrors } from 'api/ErrorHandler';
+import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -72,9 +74,18 @@ export function Login() {
     //#region METODOS DE CLASE
     const onSubmit: SubmitHandler<User> = data => tryLogin(data);
 
+    const checkRequests = () => {
+        getMyFriendRequests(getUserInSesion()).then((reqs) => {
+            if (reqs.length > -1) temporalInfoMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+        })
+    }
+
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
             if (userApi != null) {
+                document.cookie = "notifications=; path=/"
+                //temporalSuccessMessage("La sesión se ha iniciado correctamente. " + getSaludo() + " <em>" + user.username + "</em>.");
+                //checkRequests();
                 navigate("/podlogin");
             }
         }).catch((e) => {
@@ -82,7 +93,7 @@ export function Login() {
         });
     }
 
-
+   
     const showSignup = () => {
         //Cambiar del Login a Singup component
         navigate("/signup");

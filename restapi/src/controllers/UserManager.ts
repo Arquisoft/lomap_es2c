@@ -13,6 +13,7 @@ interface UserManager {
     modificarPerfil: (user: User) => Promise<User>;
     listarDetalles: (user: User) => Promise<User>;
     buscarUsuario: (username: string) => Promise<User>;
+    modificarContrasena:(user:User,oldpsw:string,newpsw:string)=>Promise<User>;
 }
 
 
@@ -26,6 +27,33 @@ class UserManagerImpl implements UserManager {
     public buscarUsuario(username: string) {
         return buscarUsuarioPorUsername(username);
     }
+
+    async modificarContrasena(user: User, oldpsw: string, newpsw: string): Promise<User> {
+        const { uri, mongoose } = getBD();
+        try {
+            await mongoose.connect(uri);
+        } catch {
+            throw new Error("Error al conectarse con la base de datos.")
+        }
+        let userBd
+        try {
+
+            userBd = await UserSchema.findOne({ username: user.username }, { _id: 0, __v: 0}) as User;
+        } catch {
+            throw new Error("El usuario no se encuentra")
+        }
+
+        if(await bcrypt.compare(oldpsw, userBd.password)){
+            console.log(await bcrypt.compare(oldpsw, userBd.password))
+            userBd.password=await bcrypt.hash(newpsw, 10)
+            await repo.Repository.findOneAndUpdatePassword(userBd)
+
+        }else{
+            throw new Error("La contraseña antigua era incorrecta")
+        }
+        //userBd.password=""
+        return userBd;
+    }
 }
 
 
@@ -35,13 +63,14 @@ async function buscarUsuarioPorUsername(username: string) {
     try {
         await mongoose.connect(uri);
     } catch {
-        return new UserImpl("bderror", "", "");
+        throw new Error("Error al conectarse con la base de datos.")
     }
 
     let resultado: User;
 
     try {
         resultado = await UserSchema.findOne({ username: username }, { _id: 0, __v: 0 }) as User;
+        resultado.password="";
     } catch {
         throw new Error("Error al conectarse con la base de datos.")
     }
@@ -49,9 +78,6 @@ async function buscarUsuarioPorUsername(username: string) {
     if (resultado == null) {
         throw new Error("El usuario no existe.")
     }
-
-
-
     return resultado;
 
 }
@@ -77,8 +103,11 @@ async function modificarUsuario(user: User) {
     */
 
     let resultado: User;
-    resultado = await repo.Repository.findOneAndUpdate(user)
-
+    try{
+        resultado = await repo.Repository.findOneAndUpdate(user)
+    }catch(err){
+        throw new Error("Error al conectarse con la base de datos.");
+    }
     /*
     try {
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID });
@@ -88,7 +117,7 @@ async function modificarUsuario(user: User) {
 
     mongoose.connection.close();
     */
-
+    resultado.password="";
     return resultado;
 
 }
@@ -103,3 +132,6 @@ async function prueba() {
 
 
 }*/
+
+//let a=new UserManagerImpl();
+//a.modificarContrasena(new UserImpl("security","","",""),"12345A...","hola").then(a=>console.log(a));
