@@ -79,7 +79,7 @@ export default function AddGroupForm() {
 
     const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
         console.log(session)
-        new MapManager().crearGrupo(data, session)
+        new MapManager().crearGrupo(data.groupName, session)
     }
 
     const navigate = useNavigate()
