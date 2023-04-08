@@ -111,7 +111,7 @@ export function HomePage() {
     const goMain = () => {
         navigate("/home/groups/main")
         if (getUserInSesion() != null) {
-            checkRequests(getUserInSesion())
+            //checkRequests(getUserInSesion())
         }
     }
 

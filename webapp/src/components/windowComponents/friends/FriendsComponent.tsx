@@ -1,4 +1,4 @@
-import { Divider, Tooltip } from '@mui/material'
+import { Box, Divider, Tooltip } from '@mui/material'
 import React, { createRef, useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
@@ -21,6 +21,12 @@ import { getUserInSesion, deleteFriendApi } from 'api/api';
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
+})
+
+const ScrollBox = styled(Box)({
+    maxHeight: '60vh',
+    overflow: 'auto',
+    scrollbarColor: 'black white'
 })
 
 
@@ -128,7 +134,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                 </Collapse>
                             </React.Fragment>)
                     })}
-                </>, props.daddy.current)
+                </ >, props.daddy.current)
         } catch (e: any) { }
     })
     return <></>
