@@ -52,7 +52,7 @@ const CSSButton = styled(Button)({
 const CSSTextField = styled(TextField)({
     marginBottom: '0.8em',
     '& label.Mui-focused': {
-        color: '#1f4a21',
+        color: '#81c784',
     },
     '& .MuiInput-underline:after': {
         borderBottomColor: '#1f4a21',
@@ -65,7 +65,7 @@ const CSSTextField = styled(TextField)({
             borderColor: '#1f4a21',
         },
         '&.Mui-focused fieldset': {
-            borderColor: '#1f4a21',
+            borderColor: '#81c784',
         },
     }, '.MuiFormHelperText-root': {
         color: 'red !important',
@@ -76,11 +76,6 @@ const CoordinatesBox = styled(Box)({
    display: 'flex',
    flexDirection: 'row',
 })
-
-const ReviewBox = styled(Box)({
-    display: 'grid',
-    gridTemplateColumns: '6fr 1fr 3fr',
- })
 
 
 const LegendTypography = styled(Typography)({
@@ -145,20 +140,54 @@ export function RadioGroupRating() {
         />
     );
 }
-
+type Place = {
+    nombre: string,
+    categoria: string,
+    latitud: string,
+    longitud: string,
+    puntuacion: string
+}
 export default function AddPlaceForm() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = (data: any) => console.log(data);
-
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
 
     const [category, setCategory] = useState('');
+    const [score, setScore] = useState(4);
 
-    const handleChange = (event: SelectChangeEvent) => {
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const onSubmit = (data: any) => {
+        if(data.longitude == null){
+            data.longitude = lng;
+        }
+        if(data.latitude == null){
+            data.latitude = lat;
+        }
+
+        let p:Place = {
+            nombre: data.placename,
+            categoria: category,
+            latitud: data.latitude as string,
+            longitud: data.longitude as string,
+            puntuacion: score.toString()
+        }
+        
+        console.log(p)
+    };
+
+    
+    const handleCategoryChange = (event: SelectChangeEvent) => {
       setCategory(event.target.value as string);
     };
 
+    
+    const handleScoreChange = (event: any, value: number | null) => {
+        if (value !== null) {
+            setScore(value);
+        }
+    };
+
+    console.log(category)
+    console.log(score)
 
     return (
         <>
@@ -168,7 +197,7 @@ export default function AddPlaceForm() {
                         Mis grupos
                     </Link>
                     <Typography color="inherit">{id}</Typography>
-                    <Typography color="text.primary">Nuevo grupo</Typography>
+                    <Typography color="text.primary">Nuevo lugar</Typography>
                 </Breadcrumbs>
             </div>
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -187,15 +216,15 @@ export default function AddPlaceForm() {
                         helperText={errors.placename ? 'Nombre inválido' : ''}
 
                     />
-                    <FormControl sx={{mt: '1.2em', mb: '1.2em', maxHeight: "50em", overflow: "none" }} fullWidth>
-                    <InputLabel sx={{mt: '0.2em'}} htmlFor="grouped-select">Categoría</InputLabel>
+                    <FormControl sx={{mb: '0.8em', maxHeight: "50em", overflow: "none" }} fullWidth>
+                    <InputLabel htmlFor="grouped-select">Categoría</InputLabel>
                     <Select
                         value={category}
                         defaultValue="" 
                         placeholder='Categoría'
                         id="grouped-select" 
                         label="Categoría"
-                        onChange={handleChange}
+                        onChange={handleCategoryChange}
                         fullWidth
                     >
                         {PlaceCategories.map(({ name, categories }) => (
@@ -217,7 +246,6 @@ export default function AddPlaceForm() {
                         placeholder="Longitud"
                         disabled={lng ? true : false}
                         type="number"
-                        
                         {...register("longitude")}
                         helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
                     />
@@ -228,17 +256,17 @@ export default function AddPlaceForm() {
                     placeholder="Latitud"
                     disabled={lat ? true : false}
                     type="number"
-                    
                     {...register("latitude")}
                     helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
                 />
                  </CoordinatesBox>
                  
-                 <ReviewBox>
+              
                  <Box>
                 <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
 
                 <textarea
+                    id="review"
                     placeholder="Reseña..."
                     style={{ width: '98.7%', height: '7vh', resize: 'none'}}
                     {...register("review-AP", { required: true, maxLength: 150 })} />
@@ -246,9 +274,16 @@ export default function AddPlaceForm() {
                 </Box>
                 <Box sx={{ gridColumn: 3}}>
                 <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
-                <RadioGroupRating />
+                <StyledRating
+                    name="highlight-selected-only"
+                    defaultValue={4}
+                    IconContainerComponent={IconContainer}
+                    getLabelText={(value: number) => customIcons[value].label}
+                    highlightSelectedOnly
+                    onChange={handleScoreChange}
+                />
                 </Box>
-                </ReviewBox>
+              
                 <CSSButton
                     sx={{ mt: "1.2em" }}
                     variant="contained"

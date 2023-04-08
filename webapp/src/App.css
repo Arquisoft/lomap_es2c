@@ -114,3 +114,8 @@ a {
     height: 5vh;
     align-content: center !important;
 }
+
+
+#review:focus {
+   border-color: #81c784 !important;
+}
