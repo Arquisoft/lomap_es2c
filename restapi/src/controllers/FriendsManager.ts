@@ -17,17 +17,17 @@ export interface FriendManager {
 }
 
 export class FriendManagerImpl implements FriendManager {
-    pendiente = 0;
-    rechazado = -1;
-    aceptado = 1;
+    public static pendiente = 0;
+    public static rechazado = -1;
+    public static aceptado = 1;
 
     async listarAmigos(user: User): Promise<User[]> {
         const { uri, mongoose } = Repository.getBD();
         const session = await mongoose.startSession()
         let ret: User[] = [];
         await session.withTransaction(async () => {
-            let resultado = await FriendshipSchema.find({ sender: user.username, status: this.aceptado }, { receiver: 1, _id: 0 }) as FriendRequest[];
-            let resultado2 = await FriendshipSchema.find({ receiver: user.username, status: this.aceptado }, { sender: 1, _id: 0 }) as FriendRequest[];
+            let resultado = await FriendshipSchema.find({ sender: user.username, status: FriendManagerImpl.aceptado }, { receiver: 1, _id: 0 }) as FriendRequest[];
+            let resultado2 = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.aceptado }, { sender: 1, _id: 0 }) as FriendRequest[];
             let resultadoFinal = resultado.concat(resultado2)
 
             let amigosString = [];
@@ -54,17 +54,35 @@ export class FriendManagerImpl implements FriendManager {
     }
 
     async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
-        const { uri, mongoose } = Repository.getBD();
+        let cond=null;
+        const { uri, mongoose } = FriendManagerImpl.getBD();
+        const session = await mongoose.startSession()
+        await session.withTransaction(async ():Promise<void> => {
+            cond=await FriendshipSchema.exists({
+                    sender: new String(de.username),
+                    receiver: new String(a.username)
+                }
+            );
 
-        const userSchema = new FriendshipSchema({
-            sender: new String(de.username),
-            receiver: new String(a.username),
-            status: this.pendiente
-        });
-        await Repository.OpenConnection(uri, mongoose);
-        await userSchema.save();
-        await Repository.CloseConnection(mongoose)
-        return new FriendRequest(de.username, a.username, this.pendiente);
+        console.log(cond)
+            if (cond!=null){
+                throw new Error("La solicitud de amistas/amistad ya existe")
+                return null
+            }
+            const userSchema = new FriendshipSchema({
+                sender: new String(de.username),
+                receiver: new String(a.username),
+                status: FriendManagerImpl.pendiente
+            });
+            await userSchema.save();
+            await session.commitTransaction()
+        }).catch((error: any) => {
+            session.abortTransaccion();
+        })
+
+            return new FriendRequest(de.username, a.username, FriendManagerImpl.pendiente);
+
+
     }
 
     async actualizarSolicitud(solicitud: FriendRequest, status: number): Promise<FriendRequest> {
@@ -74,16 +92,16 @@ export class FriendManagerImpl implements FriendManager {
     }
 
     async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: this.aceptado }) as FriendRequest;
+        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.aceptado }) as FriendRequest;
         return resultado;
     }
     async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: this.rechazado }) as FriendRequest;
+        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.rechazado }) as FriendRequest;
         return resultado;
 
     }
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
-        let resultado = await FriendshipSchema.find({ receiver: user.username, status: this.pendiente }) as FriendRequest[];
+        let resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
         return resultado;
     }
     async eliminarAmigo(amigo1: User, amigo2: User): Promise<boolean> {
@@ -92,14 +110,32 @@ export class FriendManagerImpl implements FriendManager {
         let resultado1 = null
         let resultado2 = null
         await session.withTransaction(async () => {
-            resultado1 = await FriendshipSchema.deleteMany({ sender: amigo1.username, receiver: amigo2.username, status: this.aceptado });
-            resultado2 = await FriendshipSchema.deleteMany({ sender: amigo2.username, receiver: amigo1.username, status: this.aceptado });
+            resultado1 = await FriendshipSchema.deleteMany({ sender: amigo1.username, receiver: amigo2.username, status: FriendManagerImpl.aceptado });
+            resultado2 = await FriendshipSchema.deleteMany({ sender: amigo2.username, receiver: amigo1.username, status: FriendManagerImpl.aceptado });
             await session.commitTransaction();
         }).catch((error: any) => {
             session.abortTransaccion();
             throw new Error("Error al conectarse con la base de datos")
         })
         return true;
+    }
+
+    private static getBD() {
+        const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
+        const mongoose = require('mongoose');
+        mongoose.set('strictQuery', true);
+        return { uri, mongoose };
+    }
+    private static async OpenConnection(uri: string, mongoose: any){
+        try {
+            await mongoose.connect(uri);
+        }catch{
+            throw new Error("Error al conectarse con la base de datos")
+        }
+    }
+
+    private static async CloseConnection(mongoose: any) {
+        mongoose.connection.close();
     }
 }
 //let a = new FriendManagerImpl();

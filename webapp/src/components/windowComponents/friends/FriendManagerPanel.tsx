@@ -57,8 +57,10 @@ export const FriendManagerPanel = (props: { session: any }) => {
 
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
+        console.log("hola")
         await getMyFriends(user).then(function (friends) {
             for (let i = 0; i < friends.length; i++) {
+                console.log(friends[i].username)
                 let friendGroups: Group[] = []
                 new PodManager().getGroups(props.session()).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
