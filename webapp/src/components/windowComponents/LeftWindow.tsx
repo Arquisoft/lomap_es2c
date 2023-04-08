@@ -11,6 +11,8 @@ import { showError } from '../../utils/fieldsValidation';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
 import MapIcon from '@mui/icons-material/Map';
+import { useDispatch } from 'react-redux';
+import { addPlaceMarker } from 'utils/redux/action';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
@@ -53,6 +55,12 @@ export function LeftWindow(props: Props) {
 
     const [value, setValue] = React.useState(mainop);
 
+    const dispatch = useDispatch();
+
+    const handleClick = () => {
+        dispatch(addPlaceMarker(false))
+    }
+
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         navigate("/home/" + newValue + "/main")
         setValue(newValue);
@@ -61,7 +69,7 @@ export function LeftWindow(props: Props) {
 
 
     return (
-        <Window>
+        <Window onClick={handleClick}>
             <ThemeProvider theme={theme}>
                 <MyTabContext value={mainop} theme={theme}>
                     <MyTabs

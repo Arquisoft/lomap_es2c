@@ -1,3 +1,4 @@
+import L from 'leaflet';
 import { MarkerData } from "shared/shareddtypes";
 
 
@@ -17,4 +18,22 @@ interface ClearMarkersAction {
 
 export const clearMarkers = (): ClearMarkersAction => ({
   type: 'markers/clearMarkers',
+});
+
+interface AddPlaceMarkerAction {
+  type: 'markers/addPlaceMarker';
+  payload: boolean;
+}
+
+export const addPlaceMarker = (show: boolean): AddPlaceMarkerAction => ({
+  type: 'markers/addPlaceMarker',
+  payload: show,
+});
+
+interface ClearAddPlaceMarkerAction {
+  type: 'markers/clearAddPlaceMarker';
+}
+
+export const clearAddPlaceMarker = (): ClearAddPlaceMarkerAction => ({
+  type: 'markers/clearAddPlaceMarker'
 });

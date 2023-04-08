@@ -1,12 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import L from 'leaflet';
 import { MarkerData } from 'shared/shareddtypes';
 
 interface MarkersState {
   markers: MarkerData[];
+  addPlaceMarker: boolean;
 }
 
 const initialState: MarkersState = {
   markers: [],
+  addPlaceMarker: false ,
 };
 
 const markersSlice = createSlice({
@@ -18,7 +21,12 @@ const markersSlice = createSlice({
     },
     clearMarkers(state) {
       state.markers = [];
+    }, addPlaceMarker(state, action: PayloadAction<boolean>){
+      state.addPlaceMarker = action.payload;
     },
+    clearAddPlaceMarker(state) {
+      state.addPlaceMarker = null;
+    }
   },
 });
 

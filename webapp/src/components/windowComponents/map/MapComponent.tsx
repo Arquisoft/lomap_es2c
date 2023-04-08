@@ -4,6 +4,7 @@ import L from 'leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'utils/redux/store';
+import { addPlaceMarker } from 'utils/redux/action';
 
 const center = {
     lat: 50.8504500,
@@ -24,7 +25,7 @@ const markers: MarkerData[] = [
 ];
 
 
-function AddPlace(): any {
+function AddPlace(props:any): any {
 
     const [marker, setMarker] = useState(new L.Marker(center))
     const [lat, setLatitude] = useState("Latitud:")
@@ -32,11 +33,14 @@ function AddPlace(): any {
     const navigate = useNavigate()
     const map = useMap()
     const { op, id } = useParams()
+    const dispatch = useDispatch();
+
 
     let nMarker: L.Marker = null;
 
     useMapEvents({
         click(e) {
+            dispatch(addPlaceMarker(true))
             if (op == 'addplace') {
                 setLatitude(e.latlng.lat.toString());
                 setLongitude(e.latlng.lng.toString());
@@ -55,6 +59,11 @@ function AddPlace(): any {
         }
     })
 
+    if(!props.showAdd){
+        if(marker !== null)
+            marker.remove();
+    }
+
     return null;
 }
 
@@ -65,8 +74,19 @@ interface Props {
 export const MapComponent = (props: Props) => {
 
     const markers = useSelector((state: RootState) => state.markers.markers);
+
+    const showAdd = useSelector((state: RootState) => state.markers.addPlaceMarker);
+
     console.log("en el mapa")
     console.log(markers)
+
+    const { groupid } = useParams();
+    const navigate = useNavigate();
+
+    const handleMarkerClick = (name: string) => {
+        navigate(`/home/groups/showplace/${groupid}${name ? `/${name}` : ''}`);
+      };
+
 
     return (
         <MapContainer center={center} zoom={13} scrollWheelZoom={true}>
@@ -75,11 +95,11 @@ export const MapComponent = (props: Props) => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {markers.map(({ position, name }) => (
-                <Marker position={position} key={name}>
+                <Marker position={position} key={name} eventHandlers={{ click: () => handleMarkerClick(name) }}>
                     <Popup>{name}</Popup>
                 </Marker>
             ))}
-            <AddPlace />
+            <AddPlace showAdd={showAdd}/>
         </MapContainer>
     );
 

@@ -157,14 +157,14 @@ const places: Place[] = [
 ]
 
 export default function ShowPlace() {
-    const { groupid, placeid } = useParams();
+    const { groupid, lat } = useParams();
     const navigate = useNavigate()
 
     console.log("   PARAMETROOOOOS  ")
     console.log(groupid)
-    console.log(placeid)
+    console.log(lat)
 
-    let place: Place = places.find((p) => p.nombre == placeid) //findPlaceByName(props.name)
+    let place: Place = places.find((p) => p.nombre == lat) //findPlaceByName(props.name)
     
    
     return (
@@ -223,7 +223,7 @@ export default function ShowPlace() {
                 <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
                 <StyledRating
                     name="highlight-selected-only"
-                    defaultValue={parseInt(place.puntuacion,10)}
+                    value={parseInt(place.puntuacion,10)}
                     IconContainerComponent={IconContainer}
                     getLabelText={(value: number) => customIcons[value].label}
                     highlightSelectedOnly
