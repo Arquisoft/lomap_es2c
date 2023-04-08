@@ -8,7 +8,7 @@ import api from "./api";
 const app: Application = express();
 const port: number = 5000;
 
-//const db = require('./src/persistence/DataBase')
+const db = require('./src/persistence/DataBase')
 //require("./src/controllers/FriendsManager")
 //require("./src/controllers/UserManager")
 

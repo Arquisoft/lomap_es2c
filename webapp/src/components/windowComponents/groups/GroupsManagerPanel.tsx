@@ -7,7 +7,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MapIcon from '@mui/icons-material/Map';
-import { getMyGroups, getUserInSesion } from '../../../api/api';
+import { getUserInSesion } from '../../../api/api';
 import { Group, User } from '../../../shared/shareddtypes';
 import AddIcon from '@mui/icons-material/Add';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
@@ -20,6 +20,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
+import { useSession } from '@inrupt/solid-ui-react';
+import PodManager from '../../../podManager/PodManager'
+import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
+import { Groups } from './GroupsComponent';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -41,18 +45,19 @@ const HorizontalDivider = styled(Divider)({
 
 export const GroupsManagerPanel = () => {
 
+    const { session } = useSession()
+
     const ref = useRef<HTMLDivElement>(null);
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        let user = getUserInSesion();
-        await getMyGroups(user).then(function (groups) {
+        await new PodManager().getGroups(session).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
         })
 
-        myGroups.push({
+        /*myGroups.push({
             "name": "Bares favoritos",
             "places": [{
                 nombre: "El Rincón de Juan",
@@ -139,7 +144,7 @@ export const GroupsManagerPanel = () => {
                 reviewScore: "4.7",
                 date: "2022-06-01"
               }]
-        })
+        })*/
         return myGroups;
     }
 
@@ -190,99 +195,4 @@ export const GroupsManagerPanel = () => {
             }
         </ >
     )
-}
-
-const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
-
-    const navigate = useNavigate()
-
-    const [open, setOpen] = React.useState("");
-
-    const deleteGroup = (group: Group) => {
-        alert("eliminar grupo " + group);
-    }
-
-    const addPlace = (group: Group) => {
-        navigate("/home/groups/addplace/" + group.nombre)
-    }
-
-    const generateOpen = (elems: number) => {
-        let str = ""
-        for (let i = 0; i < elems; i++) {
-            str += '0';
-        }
-        return str;
-    }
-
-    const handleClick = (item: number) => {
-        let c = open.charAt(item) == '0' ? '1' : '0';
-        let newOpen = ""
-        for (let i = 0; i < open.length; i++) {
-            newOpen += (i == item ? c : open.charAt(i));
-        }
-        setOpen(newOpen)
-    }
-
-    const isOpen = (item: number) => {
-        let c = open.charAt(item);
-        if (c != '0' && c != '1') return false;
-        return open.charAt(item) == '0' ? false : true;
-    }
-
-    const mostrarGrupo = (group: Group) => {
-        navigate("/home/groups/main/" + group.name)
-        alert("Se muestra el grupo " + group.name)
-    }
-
-    props.groups.then((grps: Group[]) => {
-        if (open.length != grps.length) setOpen(generateOpen(grps.length))
-        render(
-            <>
-                {grps.map((group, i) => {
-                    return (
-                        <React.Fragment key={i}>
-                            < ListItemButton >
-                                <ListItemIcon>
-                                    <MapIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={group.name} onClick={() => mostrarGrupo(group)} />
-                                {isOpen(i) ?
-
-                                    <ExpandLess onClick={() => { handleClick(i) }} />
-                                    :
-
-                                    <ExpandMore onClick={() => { handleClick(i) }} />
-                                }
-                                <VerticalDivider orientation='vertical' flexItem />
-                                <Box sx={{ ml: "0.8em" }}>
-                                    <AddLocationIcon onClick={() => addPlace(group)} htmlColor="#81c784" />
-                                </Box>
-                                <VerticalDivider orientation='vertical' flexItem />
-                                <Tooltip title="Delete group" sx={{ ml: "0.6em" }}>
-                                    <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
-                                </Tooltip>
-                            </ListItemButton>
-                            <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>
-                                <List component="div" disablePadding>
-                                    {group.places.map((place, j) => {
-                                        return (
-                                            <React.Fragment key={i + "-" + j}>
-                                                <ListItemButton sx={{ pl: 4 }}>
-                                                    <ListItemIcon>
-                                                        <PlaceIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={place.nombre} />
-                                                    <SentimentSatisfiedAltIcon htmlColor="green" />
-                                                </ListItemButton>
-                                            </React.Fragment>
-                                        )
-                                    })}
-                                </List>
-                            </Collapse>
-                        </React.Fragment>
-                    )
-                })}
-            </>, props.daddy.current)
-    })
-    return <></>
 }

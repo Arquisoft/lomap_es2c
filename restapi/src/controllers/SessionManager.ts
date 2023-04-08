@@ -57,14 +57,9 @@ class UserSesionManager implements SesionManager {
                 return usuarioEncontrado;
             }
             throw new Error("Contraseña incorrecta")
-            user.username = "passwordNotFound";
-            return user;
-        }else{
+        } else {
             throw new Error("Usuario no encontrado")
         }
-        user.username = "userNotFound";
-        // console.log("Usuario no encontrado");
-        return user
     }
 
 
@@ -74,10 +69,10 @@ class UserSesionManager implements SesionManager {
         mongoose.set('strictQuery', true);
         return { uri, mongoose };
     }
-    private static async OpenConnection(uri: string, mongoose: any){
+    private static async OpenConnection(uri: string, mongoose: any) {
         try {
             await mongoose.connect(uri);
-        }catch{
+        } catch {
             throw new Error("Error al conectarse con la base de datos")
         }
     }

@@ -12,9 +12,6 @@ import { User } from 'shared/shareddtypes';
 import Swal from 'sweetalert2';
 import { useNavigate, useParams } from 'react-router-dom';
 import { readCookie } from 'utils/CookieReader';
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
-import { getUserInSesion } from 'api/api';
-import Swal from 'sweetalert2';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -39,13 +36,13 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function HomeViewLogged(props: { welcome: string }) {
+export default function HomeViewLogged() {
 
     const { session } = useSession();
     const navigate = useNavigate();
     const { welcome } = useParams();
 
-    if(session.info.webId)
+    if (session.info.webId)
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
 
     const getSaludo = () => {
@@ -66,7 +63,7 @@ export default function HomeViewLogged(props: { welcome: string }) {
     const checkWebId = () => {
         let user: User = getUserInSesion();
         setTimeout(() => {
-            if(user.webID != readCookie("userWebId") ){
+            if (user.webID != readCookie("userWebId")) {
                 Swal.fire({
                     title: "Actualizar webId",
                     text: "El webId con el que has iniciado sesión no coincide con el vinculado a su perfil, ¿desea actualizarlo?",
@@ -93,18 +90,13 @@ export default function HomeViewLogged(props: { welcome: string }) {
             }
 
         }, 3000);
-        
+
     }
 
     useEffect(() => {
-        if(welcome)
+        if (welcome)
             checkWebId();
-      }, []); 
-    
-    
-    if (props.welcome == "true") {
-        checkwebid()
-    }
+    }, []);
 
     return (
 

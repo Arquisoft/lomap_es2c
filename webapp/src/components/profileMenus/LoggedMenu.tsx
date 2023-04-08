@@ -63,7 +63,6 @@ function LogedMenu() {
     const getProfile = async () => {
         closeUserMenu();
         let user = await searchUserByUsername(userInSession);
-        console.log("loooog")
         Swal.fire({
             title: 'Mi perfil',
             html: ` <label for="webid-gp" class="swal2-label">WebID: </label>
@@ -108,14 +107,15 @@ function LogedMenu() {
         closeUserMenu();
         let oldpsw: string;
         let newpsw: string;
+        let follow: boolean = false;
         Swal.fire({
             title: 'Cambiar contraseña',
             html: `<label for="opassword-ep" class="swal2-label">Contraseña actual: </label>
                     <input type="password" id="opassword-ep" class="swal2-input" placeholder="Contraseña actual" {...register("password")}>
                     <label for="password-ep" class="swal2-label">Nueva contraseña: </label>
-                    <input type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
+                    <input required type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
                     <label for="rpassword-ep" class="swal2-label">Confirmar nueva contraseña: </label>
-                    <input type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
+                    <input required type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
                     `,
 
             confirmButtonText: 'Cambiar contraseña',
@@ -135,24 +135,30 @@ function LogedMenu() {
                         let oldPassword = (Swal.getPopup().querySelector('#opassword-ep') as HTMLInputElement).value
                         oldpsw = oldPassword;
                         newpsw = pass;
+                        follow = true;
                     }
                     else {
                         fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", showEdit);
+                        follow = false;
 
                     }
                 }).catch(e => {
-
+                    follow = false;
+                    console.log("CATCH")
+                    console.log(follow);
                     let errorMessage = (e as string)
                     fieldsValidation.showError("No se ha podido actualizar la contraseña", errorMessage, showEdit);
                 })
 
             }
         }).then(async (result) => {
-            if (result.isConfirmed) {
-                await handleErrors(() => editPassword(oldpsw, newpsw), () => {
-                    Swal.close();
+            console.log(follow)
+            if (result.isConfirmed && follow) {
+                editPassword(oldpsw, newpsw).then(() => {
+                    temporalSuccessMessage("Contraseña editada correctamente.")
+                }).catch((e) => {
+                    fieldsValidation.showError("No se actualizó la contraseña", e.message, showEdit)
                 })
-                temporalSuccessMessage("Contraseña editada correctamente.")
             } else if (result.isDenied) {
                 showEditNoPss();
             }

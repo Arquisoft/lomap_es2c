@@ -16,6 +16,7 @@ import { render } from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { getUserInSesion, deleteFriendApi } from 'api/api';
 
 
 const VerticalDivider = styled(Divider)({
@@ -55,9 +56,10 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     }
 
     const deleteFriend = (friend: User) => {
-        alert("eliminar amigo " + friend);
-        props.refresh()
-        temporalSuccessMessage("Tú amigo <em>" + friend.username + "</em> ha sido eliminado correctamente.");
+        deleteFriendApi(friend).then(() => {
+            props.refresh()
+            temporalSuccessMessage("Tú amigo <em>" + friend.username + "</em> ha sido eliminado correctamente.");
+        });
     }
 
     const showFriendProfile = async (user: User) => {
@@ -116,7 +118,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                                             <ListItemIcon>
                                                                 <MapIcon />
                                                             </ListItemIcon>
-                                                            <ListItemText primary={group.nombre} />
+                                                            <ListItemText primary={group.name} />
                                                         </ListItemButton>
                                                     </Tooltip>
                                                 </React.Fragment>

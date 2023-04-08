@@ -12,6 +12,8 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import * as fieldsValidation from '../../../utils/fieldsValidation';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useSession } from '@inrupt/solid-ui-react';
+import { MapManager } from 'podManager/MapManager';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -69,11 +71,13 @@ export default function AddGroupForm() {
     const schema = fieldsValidation.groupValidation;
     type GroupSchema = yup.InferType<typeof schema>;
 
+    const { session } = useSession()
+
     const { register, handleSubmit, formState: { errors } } = useForm<GroupSchema>({
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<GroupSchema> = (data: any) => console.log(data);
+    const onSubmit: SubmitHandler<GroupSchema> = (data: any) => new MapManager().crearGrupo(data, session)
 
 
     const navigate = useNavigate()
