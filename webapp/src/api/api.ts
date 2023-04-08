@@ -64,8 +64,6 @@ async function setSessionUser(response: Response): Promise<User> {
     let user = await response.json();
     document.cookie = "isLogged=true; path=/"
     document.cookie = "userInSession=" + JSON.stringify(user) + "; path=/"
-    document.cookie = "isPodLogged=; path=/"
-    document.cookie = "userWebId=; path=/"
     return user;
 }
 

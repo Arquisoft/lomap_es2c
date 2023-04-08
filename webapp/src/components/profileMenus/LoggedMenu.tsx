@@ -18,6 +18,9 @@ import * as fieldsValidation from '../../utils/fieldsValidation';
 import { handleErrors } from 'api/ErrorHandler';
 import { User } from 'shared/shareddtypes';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import {
+    LogoutButton
+} from "@inrupt/solid-ui-react";
 
 //#region DEFINICION DE COMPONENTES STYLED
 
