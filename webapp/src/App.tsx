@@ -13,9 +13,21 @@ import { AuthCheckerNoLogged } from 'checkers/AuthCheckerNoLogged';
 import PodView from 'views/PodView';
 import { SessionProvider, useSession } from "@inrupt/solid-ui-react";
 import { useState } from 'react';
+import flatted from 'flatted';
 
 function App(): JSX.Element {
-    const [session, setSession] = useState<any>()
+    let session: any = null;
+    const setSession = (s: any) => {
+        session = s;
+        //window.localStorage.setItem("session", flatted.stringify(session))
+        console.log("App")
+        console.log(s)
+    }
+    const getSession = (): any => {
+        console.log("get")
+        console.log(session)
+        return session
+    }
     return (
         <SessionProvider sessionId={session?.info.sessionId as string}>
             <BrowserRouter>
@@ -28,7 +40,7 @@ function App(): JSX.Element {
                     ?lat = [optional lat to add from map]
                     ?lon = [optional lon to add from map]
                 */}
-                    <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthPodChecker><LoggedView session={session} /></AuthPodChecker>} />
+                    <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthPodChecker><LoggedView session={getSession} /></AuthPodChecker>} />
                     <Route path='/login' element={<AuthCheckerNoLogged> <LoginView /></AuthCheckerNoLogged>} />
                     <Route path='/home/:welcome?' element={<AuthPodChecker><HomeViewLogged setSession={setSession} /></AuthPodChecker>} />
                     <Route path='/signup' element={<AuthCheckerNoLogged> <SignupView /></AuthCheckerNoLogged>} />

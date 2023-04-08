@@ -11,7 +11,7 @@ class MapManager {
 
     async verMapaDe(user: User, session: Session): Promise<Group[]> {
         let grupos = await this.pod.getGroups(session)
-
+        console.log("Puede")
         return grupos
     }
 
@@ -32,8 +32,8 @@ class MapManager {
             places: []
         };
 
+        console.log(session)
         await this.pod.saveGroup(session, grupo)
-
         return grupo;
     }
 

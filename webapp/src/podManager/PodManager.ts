@@ -222,6 +222,7 @@ class PodManager {
 
     async saveGroup(session: Session, group: Group): Promise<void> {
         try {
+            console.log(session)
             let url = session.info.webId.replace("card#me", "public") + "/groups";
             let groups = await this.getGroups(session);
 
@@ -270,6 +271,7 @@ class PodManager {
     }
 
     async getGroups(session: Session): Promise<Group[]> {
+        console.log(session)
         let url = session.info.webId.replace("card#me", "public") + "/groups"
 
         try {

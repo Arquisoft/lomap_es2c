@@ -42,9 +42,7 @@ const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
 
-export const FriendManagerPanel = () => {
-
-    const { session } = useSession()
+export const FriendManagerPanel = (props: { session: any }) => {
 
     const [url, setUrl] = useState("../testUser.jfif");
 
@@ -62,7 +60,7 @@ export const FriendManagerPanel = () => {
         await getMyFriends(user).then(function (friends) {
             for (let i = 0; i < friends.length; i++) {
                 let friendGroups: Group[] = []
-                new PodManager().getGroups(session).then(function (groups) {
+                new PodManager().getGroups(props.session()).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
                         friendGroups.push(groups[j]);
                 })

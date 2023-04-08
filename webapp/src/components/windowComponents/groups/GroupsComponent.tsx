@@ -28,16 +28,14 @@ const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
 })
 
-export const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
-
-    const { session } = useSession()
+export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: any }) => {
 
     const navigate = useNavigate()
 
     const [open, setOpen] = React.useState("");
 
     const deleteGroup = (group: Group) => {
-        new PodManager().deleteGroup(session, group)
+        new PodManager().deleteGroup(props.session, group)
     }
 
     const addPlace = (group: Group) => {

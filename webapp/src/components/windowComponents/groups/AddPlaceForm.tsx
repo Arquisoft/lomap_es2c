@@ -17,7 +17,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useState } from 'react';
-import PlaceCategories  from './PlaceCategories';
+import PlaceCategories from './PlaceCategories';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -73,8 +73,8 @@ const CSSTextField = styled(TextField)({
 });
 
 const CoordinatesBox = styled(Box)({
-   display: 'flex',
-   flexDirection: 'row',
+    display: 'flex',
+    flexDirection: 'row',
 })
 
 
@@ -147,7 +147,7 @@ type Place = {
     longitud: string,
     puntuacion: string
 }
-export default function AddPlaceForm() {
+export default function AddPlaceForm(props: { session: any }) {
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
 
@@ -156,30 +156,30 @@ export default function AddPlaceForm() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = (data: any) => {
-        if(data.longitude == null){
+        if (data.longitude == null) {
             data.longitude = lng;
         }
-        if(data.latitude == null){
+        if (data.latitude == null) {
             data.latitude = lat;
         }
 
-        let p:Place = {
+        let p: Place = {
             nombre: data.placename,
             categoria: category,
             latitud: data.latitude as string,
             longitud: data.longitude as string,
             puntuacion: score.toString()
         }
-        
+
         console.log(p)
     };
 
-    
+
     const handleCategoryChange = (event: SelectChangeEvent) => {
-      setCategory(event.target.value as string);
+        setCategory(event.target.value as string);
     };
 
-    
+
     const handleScoreChange = (event: any, value: number | null) => {
         if (value !== null) {
             setScore(value);
@@ -205,85 +205,85 @@ export default function AddPlaceForm() {
                     sx={{ mt: "0.5em", mb: "0.5em" }}>
                     Añadir lugar
                 </CSSTypography>
-                
-                    <CSSTextField
-                        id="placename-AP"
-                        variant="outlined"
-                        label="Nombre del lugar"
-                        placeholder="Nombre del lugar"
-                        fullWidth
-                        {...register("placename")}
-                        helperText={errors.placename ? 'Nombre inválido' : ''}
 
-                    />
-                    <FormControl sx={{mb: '0.8em', maxHeight: "50em", overflow: "none" }} fullWidth>
+                <CSSTextField
+                    id="placename-AP"
+                    variant="outlined"
+                    label="Nombre del lugar"
+                    placeholder="Nombre del lugar"
+                    fullWidth
+                    {...register("placename")}
+                    helperText={errors.placename ? 'Nombre inválido' : ''}
+
+                />
+                <FormControl sx={{ mb: '0.8em', maxHeight: "50em", overflow: "none" }} fullWidth>
                     <InputLabel htmlFor="grouped-select">Categoría</InputLabel>
                     <Select
                         value={category}
-                        defaultValue="" 
+                        defaultValue=""
                         placeholder='Categoría'
-                        id="grouped-select" 
+                        id="grouped-select"
                         label="Categoría"
                         onChange={handleCategoryChange}
                         fullWidth
                     >
                         {PlaceCategories.map(({ name, categories }) => (
-                        [
-                            <ListSubheader key={name}>{name}</ListSubheader>,
-                            ...categories.map((category) => (
-                            <MenuItem key={category+name} value={category}>
-                                {category}
-                            </MenuItem>
-                            )),
-                        ]
+                            [
+                                <ListSubheader key={name}>{name}</ListSubheader>,
+                                ...categories.map((category) => (
+                                    <MenuItem key={category + name} value={category}>
+                                        {category}
+                                    </MenuItem>
+                                )),
+                            ]
                         ))}
                     </Select>
-                    </FormControl>
-                    <CoordinatesBox>
+                </FormControl>
+                <CoordinatesBox>
                     <CSSTextField
                         id="longitude-AP"
-                        label={lng ? ("Longitud: " + lng.toString().substring(0,8)) : "Longitud"}
+                        label={lng ? ("Longitud: " + lng.toString().substring(0, 8)) : "Longitud"}
                         placeholder="Longitud"
                         disabled={lng ? true : false}
                         type="number"
                         {...register("longitude")}
                         helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
                     />
-               
-                <CSSTextField
-                    id="latitude-AP"
-                    label={lat ? ("Latitud: " + lat.toString().substring(0,9)) : "Latitud"}
-                    placeholder="Latitud"
-                    disabled={lat ? true : false}
-                    type="number"
-                    {...register("latitude")}
-                    helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
-                />
-                 </CoordinatesBox>
-                 
-              
-                 <Box>
-                <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
 
-                <textarea
-                    id="review"
-                    placeholder="Reseña..."
-                    style={{ width: '98.7%', height: '7vh', resize: 'none'}}
-                    {...register("review-AP", { required: true, maxLength: 150 })} />
+                    <CSSTextField
+                        id="latitude-AP"
+                        label={lat ? ("Latitud: " + lat.toString().substring(0, 9)) : "Latitud"}
+                        placeholder="Latitud"
+                        disabled={lat ? true : false}
+                        type="number"
+                        {...register("latitude")}
+                        helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
+                    />
+                </CoordinatesBox>
+
+
+                <Box>
+                    <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
+
+                    <textarea
+                        id="review"
+                        placeholder="Reseña..."
+                        style={{ width: '98.7%', height: '7vh', resize: 'none' }}
+                        {...register("review-AP", { required: true, maxLength: 150 })} />
 
                 </Box>
-                <Box sx={{ gridColumn: 3}}>
-                <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
-                <StyledRating
-                    name="highlight-selected-only"
-                    defaultValue={4}
-                    IconContainerComponent={IconContainer}
-                    getLabelText={(value: number) => customIcons[value].label}
-                    highlightSelectedOnly
-                    onChange={handleScoreChange}
-                />
+                <Box sx={{ gridColumn: 3 }}>
+                    <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
+                    <StyledRating
+                        name="highlight-selected-only"
+                        defaultValue={4}
+                        IconContainerComponent={IconContainer}
+                        getLabelText={(value: number) => customIcons[value].label}
+                        highlightSelectedOnly
+                        onChange={handleScoreChange}
+                    />
                 </Box>
-              
+
                 <CSSButton
                     sx={{ mt: "1.2em" }}
                     variant="contained"

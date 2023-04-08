@@ -24,6 +24,7 @@ import { useSession } from '@inrupt/solid-ui-react';
 import PodManager from '../../../podManager/PodManager'
 import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
 import { Groups } from './GroupsComponent';
+import { MapManager } from 'podManager/MapManager';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -43,15 +44,13 @@ const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
 
-export const GroupsManagerPanel = () => {
-
-    const { session } = useSession()
+export const GroupsManagerPanel = (props: { session: () => Session }) => {
 
     const ref = useRef<HTMLDivElement>(null);
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await new PodManager().getGroups(session).then(function (groups) {
+        await new MapManager().verMapaDe(null, props.session()).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
@@ -177,17 +176,17 @@ export const GroupsManagerPanel = () => {
                     >
                         <ScrollBox>
                             <Box ref={ref}>
-                                <Groups groups={groups} daddy={ref} />
+                                <Groups groups={groups} daddy={ref} session={props.session} />
                             </Box>
                         </ScrollBox>
                     </List >
                 </>
                 :
                 (op == "addgroup" ?
-                    <AddGroupForm />
+                    <AddGroupForm session={props.session} />
                     :
                     (op == "addplace" ?
-                        <AddPlaceForm />
+                        <AddPlaceForm session={props.session} />
                         :
                         <ErrorPage></ErrorPage>
                     )

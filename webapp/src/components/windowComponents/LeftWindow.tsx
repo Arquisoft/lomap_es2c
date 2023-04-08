@@ -14,6 +14,7 @@ import MapIcon from '@mui/icons-material/Map';
 import { getMyFriendRequests, getUserInSesion } from 'api/api';
 import { temporalInfoMessage } from 'utils/MessageGenerator';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
+import { Session } from '@inrupt/solid-client-authn-browser';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
@@ -40,7 +41,7 @@ const theme = createTheme({
     }
 });
 
-export function LeftWindow() {
+export function LeftWindow(props: { session: () => Session }) {
 
     const { mainop } = useParams()
 
@@ -69,11 +70,11 @@ export function LeftWindow() {
                         <Tab value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
                     </MyTabs>
                     <TabPanel value="groups">
-                        <GroupsManagerPanel />
+                        <GroupsManagerPanel session={props.session} />
 
                     </TabPanel>
                     <TabPanel value="friends">
-                        <FriendManagerPanel />
+                        <FriendManagerPanel session={props.session} />
                     </TabPanel>
                 </MyTabContext>
             </ThemeProvider>
