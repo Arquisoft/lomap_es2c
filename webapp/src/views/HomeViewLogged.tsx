@@ -41,8 +41,8 @@ export default function HomeViewLogged() {
     const { session } = useSession();
     const navigate = useNavigate();
 
-    
-    document.cookie = "userWebId=" + session.info.webId + "; path=/"
+    if(session.info.webId)
+        document.cookie = "userWebId=" + session.info.webId + "; path=/"
 
     const getSaludo = () => {
         let now = new Date();
