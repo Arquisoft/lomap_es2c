@@ -20,6 +20,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
+import ShowPlace from './ShowPlace';
+import { useDispatch } from 'react-redux';
+import { addMarkers, clearMarkers } from 'utils/redux/action';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -39,7 +42,36 @@ const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
 
-export const GroupsManagerPanel = () => {
+
+type MarkerData = {
+    position: [number, number];
+    name: string;
+};
+type Place = {
+    nombre: string,
+    categoria: string,
+    latitud: string,
+    longitud: string,
+    puntuacion: string,
+    comentario: string
+}
+
+const places: Place[] = [
+    {nombre: "Bar de Pepe", categoria:"Bar", latitud:"50.862545", longitud:"4.32321", puntuacion:"3", comentario:"Review del bar de Pepe"},
+    {nombre: "Restaurante 1", categoria:"Restaurante", latitud:"50.962545", longitud:"4.42321", puntuacion:"4", comentario:"Review del restaurante 1"},
+    {nombre: "Tienda 1", categoria:"Tienda", latitud:"50.782545", longitud:"4.37321", puntuacion:"5", comentario:"Review de la tienda 1"},
+]
+
+const placeMarkers: MarkerData[] = places.map(({ latitud, longitud, nombre }) => ({
+    position: [parseFloat(latitud), parseFloat(longitud)],
+    name: nombre
+  }));
+
+  interface Props {
+    markers: MarkerData[];
+  }
+
+export const GroupsManagerPanel = (props: Props) => {
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -107,7 +139,7 @@ export const GroupsManagerPanel = () => {
                     >
                         <ScrollBox>
                             <Box ref={ref}>
-                                <Groups groups={groups} daddy={ref} />
+                                <Groups groups={groups} daddy={ref} markers={props.markers} />
                             </Box>
                         </ScrollBox>
                     </List >
@@ -119,7 +151,11 @@ export const GroupsManagerPanel = () => {
                     (op == "addplace" ?
                         <AddPlaceForm />
                         :
+                        (op == "showplace" ?
+                        <ShowPlace />
+                        :
                         <ErrorPage></ErrorPage>
+                    )
                     )
                 )
             }
@@ -127,9 +163,10 @@ export const GroupsManagerPanel = () => {
     )
 }
 
-const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
+const Groups = (props: { groups: Promise<Group[]>, daddy: any, markers: MarkerData[]}) => {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch();
 
     const [open, setOpen] = React.useState("");
 
@@ -165,8 +202,12 @@ const Groups = (props: { groups: Promise<Group[]>, daddy: any }) => {
     }
 
     const mostrarGrupo = (group: Group) => {
-        navigate("/home/groups/main/" + group.nombre)
+        const newMarkers = placeMarkers;
+        dispatch(clearMarkers());
+        console.log(newMarkers)
+        dispatch(addMarkers(newMarkers));
         alert("Se muestra el grupo " + group.nombre)
+        
     }
 
     props.groups.then((grps: Group[]) => {

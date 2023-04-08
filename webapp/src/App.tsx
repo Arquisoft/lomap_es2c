@@ -12,10 +12,13 @@ import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
 import { AuthPodChecker } from 'auth/AuthPodChecker';
 import PodView from 'views/PodView';
 import { SessionProvider, useSession } from "@inrupt/solid-ui-react";
+import { Provider } from 'react-redux';
+import store from 'utils/redux/store';
 
 function App(): JSX.Element {
     const { session } = useSession(); 
     return (
+        <Provider store={store}>
         <SessionProvider sessionId={session?.info.sessionId as string}>
         <BrowserRouter>
             <Routes>
@@ -36,6 +39,7 @@ function App(): JSX.Element {
             </Routes>
         </BrowserRouter>
         </SessionProvider>
+        </Provider>
     );
 }
 

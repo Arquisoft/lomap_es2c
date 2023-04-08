@@ -36,8 +36,16 @@ const theme = createTheme({
         },
     }
 });
+type MarkerData = {
+    position: [number, number];
+    name: string;
+};
 
-export function LeftWindow() {
+interface Props {
+    markers: MarkerData[];
+  }
+
+export function LeftWindow(props: Props) {
 
     const { mainop } = useParams()
 
@@ -68,7 +76,7 @@ export function LeftWindow() {
                         <Tab value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
                     </MyTabs>
                     <TabPanel value="groups">
-                        <GroupsManagerPanel />
+                        <GroupsManagerPanel markers={props.markers} />
 
                     </TabPanel>
                     <TabPanel value="friends">

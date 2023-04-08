@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'utils/redux/store';
 
 const center = {
     lat: 50.8504500,
@@ -58,7 +58,15 @@ function AddPlace(): any {
     return null;
 }
 
-export const MapComponent = () => {
+interface Props {
+    markers: MarkerData[];
+  }
+
+export const MapComponent = (props: Props) => {
+
+    const markers = useSelector((state: RootState) => state.markers.markers);
+    console.log("en el mapa")
+    console.log(markers)
 
     return (
         <MapContainer center={center} zoom={13} scrollWheelZoom={true}>

@@ -65,3 +65,9 @@ export interface FriendRequest {
 }
 export interface Group { }
 export interface Place { }
+
+export type MarkerData = {
+    position: [number, number];
+    name: string;
+};
+
