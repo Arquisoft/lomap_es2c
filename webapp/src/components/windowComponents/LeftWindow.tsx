@@ -5,18 +5,28 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import { styled } from '@mui/material/styles';
 import { createTheme, Tabs, ThemeProvider } from '@mui/material';
-import { MapsManagerPanel } from './groups/MapsManagerPanel';
+import { GroupsManagerPanel } from './groups/GroupsManagerPanel';
 import { FriendManagerPanel } from './friends/FriendManagerPanel';
 import { showError } from '../../utils/fieldsValidation';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GroupIcon from '@mui/icons-material/Group';
+import MapIcon from '@mui/icons-material/Map';
+import { getMyFriendRequests, getUserInSesion } from 'api/api';
+import { temporalInfoMessage } from 'utils/MessageGenerator';
+import { ErrorPage } from 'components/mainComponents/ErrorPage';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
-    minWidth: '25vw',
+    width: '30vw',
+    height: '78.2vh'
 })
 
 const MyTabContext = styled(TabContext)({
-    color: '#1f4a21'
+    color: '#1f4a21',
+})
+
+const MyTabs = styled(Tabs)({
+    height: '8vh',
 })
 
 const theme = createTheme({
@@ -43,13 +53,11 @@ export function LeftWindow() {
         setValue(newValue);
     };
 
-
-
     return (
         <Window>
             <ThemeProvider theme={theme}>
                 <MyTabContext value={mainop} theme={theme}>
-                    <Tabs
+                    <MyTabs
                         variant="fullWidth"
                         value={value}
                         onChange={handleChange}
@@ -57,11 +65,11 @@ export function LeftWindow() {
                         indicatorColor="primary"
                         aria-label="secondary tabs example"
                     >
-                        <Tab value="groups" label="My maps" />
-                        <Tab value="friends" label="My friends" />
-                    </Tabs>
+                        <Tab value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
+                        <Tab value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
+                    </MyTabs>
                     <TabPanel value="groups">
-                        <MapsManagerPanel />
+                        <GroupsManagerPanel />
 
                     </TabPanel>
                     <TabPanel value="friends">

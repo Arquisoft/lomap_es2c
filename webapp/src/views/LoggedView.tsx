@@ -4,7 +4,7 @@ import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
-import { MapPage } from '../components/mainComponents/MapPage';
+import { MainPage } from '../components/mainComponents/MainPage';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -25,14 +25,14 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function LoggedView() {
+export default function LoggedView(props: { session: any }) {
 
     return (
 
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header logged={true} /></MyPaper>
-            <MapPage />
+            <MainPage />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion
