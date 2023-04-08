@@ -5,13 +5,16 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ImgCarrusel from './ImgCarrusel';
+import { getMyFriendRequests, getUserInSesion } from 'api/api';
+import { temporalInfoMessage } from 'utils/MessageGenerator';
+import { User } from 'shared/shareddtypes';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
     display: 'grid',
     gridTemplateColumns: 'repeat(5,1fr)',
     gridTemplateRows: 'repeat(4,1fr)',
-    margin: '3em',
+    margin: '2.5em',
     rowGap: '2em',
     columnGap: '3em',
     textAlign: 'center',
@@ -25,7 +28,7 @@ const TextBox = styled(Box)({
     color: "white",
     fontFamily: 'Calibri',
     fontWeight: 'lighter',
-    fontSize: '1.2em',
+    fontSize: '1.1em',
     backgroundColor: '#81c784',
     width: '100%',
     height: '100%',
@@ -43,7 +46,7 @@ const InfoBox = styled(Box)({
     color: "white",
     fontFamily: 'Calibri',
     fontWeight: 'lighter',
-    fontSize: '1.1em',
+    fontSize: '1em',
     backgroundColor: '#81c784',
     width: '100%',
     height: '100%',
@@ -60,10 +63,10 @@ const MainBox = styled(Box)({
 })
 
 const ScrollBox = styled(Box)({
-    maxHeight: '60vh',
+    maxHeight: '50vh',
     overflow: 'auto',
     scrollbarColor: 'black white',
-    padding: '0em 1em 0em',
+    padding: '0em 0.9em 0em',
 })
 
 const TitleBox = styled(Box)({
@@ -78,7 +81,22 @@ const GoButton = styled(Button)({
     alignSelf: 'center',
     backgroundColor: '#1f4a21',
     color: 'white',
-    marginBottom: '0.5em'
+    marginBottom: '0.4em',
+    '&:hover': {
+        backgroundColor: '#1f4a21',
+        color: 'white',
+        borderColor: '#0062cc',
+        boxShadow: 'none',
+    },
+    '&:active': {
+        boxShadow: 'none',
+        color: 'white',
+        backgroundColor: '#1f4a21',
+        borderColor: '#005cbf',
+    },
+    '&:focus': {
+        boxShadow: '0 0 0 0.2rem #1f4a21',
+    },
 })
 //#endregion
 
@@ -88,6 +106,19 @@ export function HomePage() {
 
     const goSignup = () => {
         navigate("/signup")
+    }
+
+    const goMain = () => {
+        navigate("/home/groups/main")
+        if (getUserInSesion() != null) {
+            checkRequests(getUserInSesion())
+        }
+    }
+
+    const checkRequests = (user: User) => {
+        getMyFriendRequests(user).then((reqs) => {
+            if (reqs.length > 0) temporalInfoMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+        })
     }
 
     return (
@@ -112,7 +143,7 @@ export function HomePage() {
                     <ScrollBox>
                         <ImgCarrusel />
                     </ScrollBox>
-                    <GoButton onClick={() => navigate("/home/groups/main")}>
+                    <GoButton onClick={() => goMain()}>
                         ¡Adelante!
                     </GoButton>
                 </InfoBox>

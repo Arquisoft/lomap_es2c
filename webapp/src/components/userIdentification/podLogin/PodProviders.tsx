@@ -5,14 +5,14 @@ type PodProvider = {
     url: string,
 };
 
-export function GetProviders():Array<PodProvider> {
-        return [
-            {
-                name: "Inrupt",
-                url: "https://inrupt.net/",
-            },
-        ];
-    
+export function GetProviders(): Array<PodProvider> {
+    return [
+        {
+            name: "Inrupt",
+            url: "https://inrupt.net/",
+        },
+    ];
+
 }
 
 export default GetProviders;

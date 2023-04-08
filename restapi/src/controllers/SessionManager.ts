@@ -1,7 +1,8 @@
 import UserSchema from "../entities/UserSchema";
 import { User, SesionManager } from "../facade";
 export { UserSesionManager };
-
+import * as repo from "../persistence/Repository"
+import mongoose from "mongoose";
 const sessionStorage = require('sessionstorage-for-nodejs')
 const bcrypt = require("bcryptjs");
 
@@ -21,15 +22,15 @@ class UserSesionManager implements SesionManager {
     }
 
     async registrarse(usuario: User): Promise<User> {
-        // this.userInSession = usuario;
-        sessionStorage.setItem('userInSession', JSON.stringify(usuario));
-        const usuarioSchema = new UserSchema({
-            username: usuario.username,
-            webID: usuario.webID,
-            password: await bcrypt.hash(usuario.password, this.rondasDeEncriptacion)
-        });
+        let usuarioEncontrado = await repo.Repository.findOne(usuario)
+        console.log(usuarioEncontrado)
+        if (usuarioEncontrado.username != "notfound") {
+            usuario.username = "userRepeated"
+            return usuario
+        }
 
-        await usuarioSchema.save();
+
+        repo.Repository.save(usuario, this.rondasDeEncriptacion)
         return usuario;
     }
 
@@ -42,25 +43,42 @@ class UserSesionManager implements SesionManager {
     }
 
     async iniciarSesion(user: User): Promise<User> {
+        const { uri, mongoose } = UserSesionManager.getBD();
+        await UserSesionManager.OpenConnection(uri, mongoose);
+
+
         let usuarioEncontrado = await UserSchema.findOne({
             username: user.username
             //password: user.password
-        });
-
+        }) as User;
+        await UserSesionManager.CloseConnection(mongoose)
         if (usuarioEncontrado != null) {
-            console.log(user.password + "-" + usuarioEncontrado.password)
             if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
-                // this.userInSession = usuarioEncontrado
-                console.log("What: " + usuarioEncontrado)
-                sessionStorage.setItem('userInSession', JSON.stringify(usuarioEncontrado));
-                return user;
+                return usuarioEncontrado;
             }
-            user.username = "passwordNotFound";
-            return user;
+            throw new Error("Contraseña incorrecta")
+        } else {
+            throw new Error("Usuario no encontrado")
         }
-        user.username = "userNotFound";
-        // console.log("Usuario no encontrado");
-        return user
+    }
+
+
+    private static getBD() {
+        const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
+        const mongoose = require('mongoose');
+        mongoose.set('strictQuery', true);
+        return { uri, mongoose };
+    }
+    private static async OpenConnection(uri: string, mongoose: any) {
+        try {
+            await mongoose.connect(uri);
+        } catch {
+            throw new Error("Error al conectarse con la base de datos")
+        }
+    }
+
+    private static async CloseConnection(mongoose: any) {
+        mongoose.connection.close();
     }
 
 }

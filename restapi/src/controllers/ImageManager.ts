@@ -1,19 +1,17 @@
 const cloudinary = require('cloudinary').v2;
-
-// Return "https" URLs by setting secure: true
 cloudinary.config({
-    secure: true
+    cloud_name: "dlemjid7n",
+    api_key: "467962783828192",
+    api_secret: "b-xgn8LNDXiSUaT-iuX0IQZAZvQ"
 });
+module.exports={
 
-// Log the configuration
-console.log(cloudinary.config());
-
-const uploadImage = async (imagePath:String) => {
+ uploadImage : async (imagePath:string,name :string):Promise<string> => {
 
     // Use the uploaded file's name as the asset's public ID and
     // allow overwriting the asset with new versions
     const options = {
-        use_filename: true,
+        public_id:name,
         unique_filename: false,
         overwrite: true,
     };
@@ -26,4 +24,13 @@ const uploadImage = async (imagePath:String) => {
     } catch (error) {
         console.error(error);
     }
-};
+},
+
+ getImageURL:async (public_id:string,width:number,height:number):Promise<string>=>{
+    const url = cloudinary.url(public_id, {
+        width: width,
+        height: height,
+        Crop: 'fill'
+    });
+    return url;
+}}

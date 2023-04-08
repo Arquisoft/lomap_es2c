@@ -9,12 +9,19 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { editUserDetails, getUserDetails, getUserInSesion, logout } from '../../api/api';
+import { editPassword, editUserDetails, getMyFriendRequests, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
+import { handleErrors } from 'api/ErrorHandler';
+import { User } from 'shared/shareddtypes';
+import { NotificationManager, temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { Divider } from '@mui/material';
+import {
+    LogoutButton
+} from "@inrupt/solid-ui-react";
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -25,6 +32,9 @@ const BoxProfile = styled(Box)({
     columnGap: '2em'
 })
 
+const VerticalDivider = styled(Divider)({
+    padding: '0em 0.4em 0em'
+})
 
 const MyMenu = styled(Menu)({
     marginTop: '3em',
@@ -35,7 +45,7 @@ const MyMenu = styled(Menu)({
 //#region DEFINICION DE COMPONENTES PERSONALIZADOS
 
 function LoginInformation(props: any) {
-    return <b><p>Se ha iniciado sesión como {props.name}</p></b>;
+    return <b><p>{props.name}</p></b>;
 }
 //#endregion
 function LogedMenu() {
@@ -45,20 +55,20 @@ function LogedMenu() {
 
     const editSchema = fieldsValidation.editProfileValidation;
 
+    const [userInSession, setUser] = useState(getUserInSesion().username)
+
 
     //#region METODOS DE CLASE
 
     const getProfile = async () => {
         closeUserMenu();
-        let user = await getUserDetails(getUserInSesion());
+        let user = await searchUserByUsername(userInSession);
         Swal.fire({
             title: 'Mi perfil',
-            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + user.username + `>
-                    <label for="webid-gp" class="swal2-label">WebID: </label>
+            html: ` <label for="webid-gp" class="swal2-label">WebID: </label>
                     <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="Biografía..."></textarea>`,
+                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Editar perfil',
             confirmButtonColor: '#81c784',
             focusConfirm: false,
@@ -95,15 +105,17 @@ function LogedMenu() {
 
     async function showEdit(): Promise<void> {
         closeUserMenu();
-        let user = await getUserDetails(getUserInSesion());
+        let oldpsw: string;
+        let newpsw: string;
+        let follow: boolean = false;
         Swal.fire({
             title: 'Cambiar contraseña',
             html: `<label for="opassword-ep" class="swal2-label">Contraseña actual: </label>
                     <input type="password" id="opassword-ep" class="swal2-input" placeholder="Contraseña actual" {...register("password")}>
                     <label for="password-ep" class="swal2-label">Nueva contraseña: </label>
-                    <input type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
+                    <input required type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
                     <label for="rpassword-ep" class="swal2-label">Confirmar nueva contraseña: </label>
-                    <input type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
+                    <input required type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
                     `,
 
             confirmButtonText: 'Cambiar contraseña',
@@ -121,28 +133,32 @@ function LogedMenu() {
 
                     if (fieldsValidation.checkPasswords(pass, confirmPass)) {
                         let oldPassword = (Swal.getPopup().querySelector('#opassword-ep') as HTMLInputElement).value
-
-                        if (oldPassword === oldPassword) { // Comprobar con la guardada en la BD
-                            user = { username: user.username, webID: user.webID, password: pass };
-                            return user;
-                        } else {
-                            fieldsValidation.showError("No se ha podido actualizar la contraseña", "Contraseña actual incorrecta", showEdit);
-                        }
+                        oldpsw = oldPassword;
+                        newpsw = pass;
+                        follow = true;
                     }
                     else {
                         fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", showEdit);
+                        follow = false;
 
                     }
                 }).catch(e => {
-
+                    follow = false;
+                    console.log("CATCH")
+                    console.log(follow);
                     let errorMessage = (e as string)
                     fieldsValidation.showError("No se ha podido actualizar la contraseña", errorMessage, showEdit);
                 })
 
             }
         }).then(async (result) => {
-            if (result.isConfirmed) {
-                await editUserDetails(user);
+            console.log(follow)
+            if (result.isConfirmed && follow) {
+                editPassword(oldpsw, newpsw).then(() => {
+                    temporalSuccessMessage("Contraseña editada correctamente.")
+                }).catch((e) => {
+                    fieldsValidation.showError("No se actualizó la contraseña", e.message, showEdit)
+                })
             } else if (result.isDenied) {
                 showEditNoPss();
             }
@@ -151,15 +167,13 @@ function LogedMenu() {
 
     async function showEditNoPss(): Promise<void> {
         closeUserMenu();
-        let user = await getUserDetails(getUserInSesion());
+        let edited = true;
+        let user = await searchUserByUsername(userInSession);
         Swal.fire({
             title: 'Edita tu perfil',
-            html: ` <label for="name-ep" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-ep" class="swal2-input" placeholder=` + user.username + `>
-                    <label for="webid-ep" class="swal2-label">WebID: </label>
-                    <input type="text" id="webid-ep" class="swal2-input" placeholder=` + user.webID + `>
+            html: ` 
                     <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="Biografía..."></textarea>`,
+                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Editar',
             denyButtonText: 'Cambiar contraseña',
             showDenyButton: true,
@@ -171,29 +185,20 @@ function LogedMenu() {
             imageHeight: 200,
             imageAlt: 'Foto de perfil actual',
             preConfirm: () => {
-                let name = (Swal.getPopup().querySelector('#name-ep') as HTMLInputElement).value
-                let webid = (Swal.getPopup().querySelector('#webid-ep') as HTMLInputElement).value
                 let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
 
-                if (!name && !webid && !biography) {
+                if (!biography) {
+                    edited = false;
                     showQuestion();
                 } else {
-
-                    if (!name)
-                        name = user.username as string;
-
-                    if (!webid)
-                        webid = user.webID as string;
-
+                    edited = true;
                     if (!biography)
                         biography = "..."; // Cambiarlo por user.biography
 
                     editSchema.validate({
-                        username: name,
-                        webID: webid,
                         biography: biography
                     }).then(() => {
-                        user = { username: name, webID: webid, password: user.password }
+                        user = { username: user.username, webID: user.webID, password: user.password, description: biography, img: user.img }
                         return user;
                     }).catch(e => {
                         let errorMessage = (e as string)
@@ -202,21 +207,30 @@ function LogedMenu() {
                 }
             }
         }).then(async (result) => {
-            if (result.isConfirmed) {
-                await editUserDetails(user);
+            if (result.isConfirmed && edited) {
+                await editUserDetails(user)
+                temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
             } else if (result.isDenied) {
                 showEdit();
             }
         })
     }
 
-
-    const goLogout = () => {
+    const goLogout = (user: User) => {
         closeUserMenu();
         logout();
-        //var state = FactoryLoMap.getSesionManager().cerrarSesion();
         navigate("/");
-        //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
+        temporalSuccessMessage("La sesión se ha cerrado correctamente. " + getDespedida() + " <em>" + user.username + "</em>.");
+    }
+
+    const getDespedida = () => {
+        let now = new Date();
+        let hours = now.getHours();
+        if (hours >= 6 && hours < 8) return "Hasta luego, qué tenga usted un buen día";
+        if (hours >= 8 && hours < 12) return "Le echaremos de menos, ojalá verle de vuelta";
+        if (hours >= 12 && hours < 20) return "Adiós, o como dirían los italianos <em>chao</em>";
+        if (hours >= 20 || hours == 0) return "Buenas noches, que duerma usted bien";
+        if (hours >= 0 && hours < 6) return "¿Qué hacía todavía despierto? Buenas noches";
     }
 
     const closeUserMenu = () => {
@@ -227,27 +241,23 @@ function LogedMenu() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const getUsername = () => {
-        let user = getUserInSesion();
-        setUsername(user.username)
-    }
-
     //#endregion
 
     //#region HOOKS
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
-    const [url, setUrl] = useState("../testUser.jfif");
+    const [url, setUrl] = useState("testUser.jfif");
     const [username, setUsername] = useState<String>("");
-
     //#endregion
 
 
     return (
 
         //#region COMPONENTE
-        <BoxProfile onLoad={getUsername}>
-            <LoginInformation name={username} />
+        <BoxProfile>
+            <NotificationManager />
+            <VerticalDivider orientation='vertical' flexItem />
+            <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar alt="Remy Sharp" src={url} />
@@ -274,7 +284,7 @@ function LogedMenu() {
                 <MenuItem key={uuid()} onClick={showEditNoPss}>
                     <EditIcon /> Edit profile
                 </MenuItem>
-                <MenuItem key={uuid()} onClick={goLogout}>
+                <MenuItem key={uuid()} onClick={() => goLogout(getUserInSesion())}>
                     <LogoutIcon /> Logout
                 </MenuItem>
             </MyMenu>
