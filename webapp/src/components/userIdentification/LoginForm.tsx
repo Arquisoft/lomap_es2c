@@ -10,7 +10,6 @@ import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
 import { login } from '../../api/api';
-import { handleErrors } from 'api/ErrorHandler';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
