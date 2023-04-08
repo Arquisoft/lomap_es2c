@@ -31,7 +31,12 @@ api.post(
         let name = req.body.name;
         let email = req.body.email;
         let user: User = { name: name, email: email }
-        users.push(user);
+        try{
+        users.push(user);}
+        catch(err){
+            return res.status(404).send({ error: err.toString() })
+
+        }
         return res.sendStatus(200);
     }
 );
@@ -89,14 +94,25 @@ api.post(
 
 
 api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Response> => {
-    let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
-    return res.status(200).send(user);
+
+    try {
+        let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
+        return res.status(200).send(user);
+    }catch(err){
+        return res.status(404).send({ error: err.toString() })
+
+    }
 })
 
 api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
+    try{
     let userRes = await fac.FactoryLoMap.getSesionManager().registrarse(user);
     return res.status(200).send(userRes);
+    }catch(err){
+        return res.status(404).send({ error: err.toString() })
+
+    }
 })
 
 api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Response> => {
@@ -104,22 +120,13 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
     let userRes
     try {
          userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
+        return res.status(200).send(userRes);
     }catch(err){
             return res.status(404).send({ error: err.toString() })
 
     }
 
 
-    if (userRes.username == "passwordNotFound") {
-        return res.status(506).send("Contraseña errónea")
-    } else if (userRes.username == "userNotFound") {
-        return res.status(507).send("Usuario no encontrado")
-    }
-    else {
-        return res.status(200).send(userRes);
-
-    }
-    //IF / ELSES CON CADA POSIBLE ERROR Y EL STATUS ASOCIADO
 })
 
 api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {

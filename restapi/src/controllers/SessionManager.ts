@@ -56,6 +56,7 @@ class UserSesionManager implements SesionManager {
             if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
                 return usuarioEncontrado;
             }
+            throw new Error("Contraseña incorrecta")
             user.username = "passwordNotFound";
             return user;
         }else{
