@@ -1,4 +1,4 @@
-import { MapManagerImpl } from './controllers/MapManager';
+
 import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { Place } from './entities/Place';
@@ -6,10 +6,8 @@ import { FriendManager, FriendManagerImpl } from './controllers/FriendsManager'
 
 
 export interface SesionManager {
-    cerrarSesion: () => boolean;
     iniciarSesion: (usuario: User) => Promise<User>;
     registrarse: (usuario: User) => Promise<User>;
-    usuarioEnSesion: () => User;
 }
 
 //TODOS LOS BOOLEAN QUE DEVUELVEN LOS MÉTODOS SON ÚNICAMENTE PARA NOTIFICAR EL RESULTADO DE LA OPERACION
@@ -40,7 +38,6 @@ export interface PODManager {
 //#region INTERFACES AUXILIARES
 
 export class FactoryLoMap {
-    static getMapManager: () => MapManager;
 
     static getFriendManager(): FriendManager {
         return new FriendManagerImpl();
