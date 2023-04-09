@@ -11,18 +11,6 @@ interface User {
     email: string;
 }
 
-//This is not a restapi as it mantains state, but it is here for
-//simplicity. A database should be used instead.
-let users: Array<User> = [];
-
-api.get(
-    "/users/list",
-    async (req: Request, res: Response): Promise<Response> => {
-        return res.status(200).send(users);
-    }
-);
-
-
 
 api.get(
     "/usermanager/find/username",
@@ -37,22 +25,6 @@ api.get(
     }
 );
 
-//ya no se usa
-api.post(
-    "/usermanager/details", async (req: Request, res: Response): Promise<Response> => {
-        let user = req.body.user;
-        let u = await fac.FactoryLoMap.getUserManager().listarDetalles(user);
-        if (u.username == "notfound") {
-            return res.status(404).send({ error: "El usuario no existe." });
-        } else if (u.username == "bderror") {
-            return res.status(500).send({ error: "Error en la conexión con la base de datos" });
-        }
-        else {
-            return res.status(200).send(u);
-        }
-    }
-);
-
 api.post(
     "/usermanager/edit",
     async (req: Request, res: Response): Promise<Response> => {
@@ -62,30 +34,8 @@ api.post(
         } catch (err) {
             return res.status(404).send({ error: err.toString() })
         }
-        /*if (u.username == "notfound") {
-        return res.status(407).json("Usuario no encontrado");
-        } else if (u.username == "bderror") {
-        return res.status(408).json("Error en la conexión con la base de datos");
-        }
-        else {
-        return res.status(200).send(u);
-        }*/
     }
 );
-
-
-
-
-api.get("/sesionmanager/user", async (req: Request, res: Response): Promise<Response> => {
-
-    try {
-        let user = fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
-        return res.status(200).send(user);
-    } catch (err) {
-        return res.status(404).send({ error: err.toString() })
-
-    }
-})
 
 api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
@@ -109,24 +59,6 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
 
 
 })
-
-api.post("/mapmanager/usermap", async (req: Request, res: Response): Promise<Response> => {
-    let userRes = await fac.FactoryLoMap.getSesionManager().usuarioEnSesion();
-    return res.status(200).send(userRes);
-})
-/*
-api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
-    let user = req.body.user;
-    let friends = null
-    //try{
-        friends= await fac.FactoryLoMap.getFriendManager().listarAmigos(user).then(a=>{return res.status(200).send(a)}).catch(err=>res.status(404).send(err.toString() ))
-    //} catch (err) {
-       return res.status(404)
-    //}
-    //return res.status(200).send("friends");
-})*/
-
-
 
 api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
