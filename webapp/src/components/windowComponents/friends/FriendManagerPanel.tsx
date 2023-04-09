@@ -20,9 +20,9 @@ import { useSession } from '@inrupt/solid-ui-react';
 import PodManager from 'podManager/PodManager';
 
 const ScrollBox = styled(Box)({
-    maxHeight: '60vh',
+    maxHeight: '50vh',
     overflow: 'auto',
-    scrollbarColor: 'black white'
+    scrollbarColor: 'black white',
 })
 
 const AddFriendBox = styled(Box)({
@@ -62,7 +62,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
             for (let i = 0; i < friends.length; i++) {
                 console.log(friends[i].username)
                 let friendGroups: Group[] = []
-                new PodManager().getGroups(props.session()).then(function (groups) {
+                new PodManager().getGroups(props.session).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
                         friendGroups.push(groups[j]);
                 })

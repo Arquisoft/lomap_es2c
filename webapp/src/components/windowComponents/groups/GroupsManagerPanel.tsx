@@ -27,7 +27,7 @@ import { Groups } from './GroupsComponent';
 import { MapManager } from 'podManager/MapManager';
 
 const ScrollBox = styled(Box)({
-    maxHeight: '60vh',
+    maxHeight: '50vh',
     overflow: 'auto',
     scrollbarColor: 'black white'
 })
@@ -44,13 +44,13 @@ const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
 
-export const GroupsManagerPanel = (props: { session: () => Session }) => {
+export const GroupsManagerPanel = (props: { session: any }) => {
 
     const ref = useRef<HTMLDivElement>(null);
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await new MapManager().verMapaDe(null, props.session()).then(function (groups) {
+        await new MapManager().verMapaDe(null, props.session).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
@@ -165,21 +165,21 @@ export const GroupsManagerPanel = (props: { session: () => Session }) => {
                         <ListItemText primary="Añadir grupo" />
                     </AddItem>
                     <HorizontalDivider light color="#81c784" />
-                    <List
-                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        aria-labelledby="nested-list-subheader"
-                        subheader={
-                            <ListSubheader component="div" id="nested-list-subheader">
-                                Tus grupos de mapas
-                            </ListSubheader>
-                        }
-                    >
-                        <ScrollBox>
+                    <ScrollBox>
+                        <List
+                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                            aria-labelledby="nested-list-subheader"
+                            subheader={
+                                <ListSubheader component="div" id="nested-list-subheader">
+                                    Tus grupos de mapas
+                                </ListSubheader>
+                            }
+                        >
                             <Box ref={ref}>
                                 <Groups groups={groups} daddy={ref} session={props.session} />
                             </Box>
-                        </ScrollBox>
-                    </List >
+                        </List >
+                    </ScrollBox>
                 </>
                 :
                 (op == "addgroup" ?

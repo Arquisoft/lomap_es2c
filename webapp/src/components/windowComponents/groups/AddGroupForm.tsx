@@ -68,7 +68,7 @@ const CSSTextField = styled(TextField)({
 
 
 
-export default function AddGroupForm(props: { session: () => Session }) {
+export default function AddGroupForm(props: { session: any }) {
 
     const schema = fieldsValidation.groupValidation;
     type GroupSchema = yup.InferType<typeof schema>;
@@ -78,8 +78,7 @@ export default function AddGroupForm(props: { session: () => Session }) {
     });
 
     const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
-        console.log(props.session())
-        new MapManager().crearGrupo(data.groupName, props.session()).then((grupo: Group) => {
+        new MapManager().crearGrupo(data.groupName, props.session).then((grupo: Group) => {
             temporalSuccessMessage("Grupo " + grupo.name + " creado correctamente. ¡A añadir lugares se ha dicho!");
         })
     }

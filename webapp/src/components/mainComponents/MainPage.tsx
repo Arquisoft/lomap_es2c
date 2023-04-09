@@ -6,6 +6,7 @@ import { MapComponent } from '../windowComponents/map/MapComponent';
 import { useParams } from 'react-router-dom';
 import { ErrorPage } from './ErrorPage';
 import { Session } from '@inrupt/solid-client-authn-browser';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const MapContainer = styled(Container)({
     display: 'flex',
@@ -16,15 +17,18 @@ const MapContainer = styled(Container)({
 
 })
 
-export function MainPage(props: { session: () => Session }) {
+export function MainPage() {
 
     const { mainop } = useParams()
+    const { session } = useSession();
+    console.log("MAIN PAGE")
+    console.log(session)
 
     return (
         <>
             {mainop == "groups" || mainop == "friends" ?
                 <MapContainer disableGutters>
-                    <LeftWindow session={props.session} />
+                    <LeftWindow session={session} />
                     <MapComponent />
                 </MapContainer>
                 :

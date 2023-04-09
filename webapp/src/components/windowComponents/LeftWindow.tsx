@@ -41,7 +41,7 @@ const theme = createTheme({
     }
 });
 
-export function LeftWindow(props: { session: () => Session }) {
+export function LeftWindow(props: { session: any }) {
 
     const { mainop } = useParams()
 

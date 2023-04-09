@@ -54,18 +54,17 @@ export class FriendManagerImpl implements FriendManager {
     }
 
     async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
-        let cond=null;
+        let cond = null;
         const { uri, mongoose } = FriendManagerImpl.getBD();
         const session = await mongoose.startSession()
-        await session.withTransaction(async ():Promise<void> => {
-            cond=await FriendshipSchema.exists({
-                    sender: new String(de.username),
-                    receiver: new String(a.username)
-                }
+        await session.withTransaction(async (): Promise<void> => {
+            cond = await FriendshipSchema.exists({
+                sender: new String(de.username),
+                receiver: new String(a.username)
+            }
             );
 
-        console.log(cond)
-            if (cond!=null){
+            if (cond != null) {
                 throw new Error("La solicitud de amistas/amistad ya existe")
                 return null
             }
@@ -80,28 +79,52 @@ export class FriendManagerImpl implements FriendManager {
             session.abortTransaccion();
         })
 
-            return new FriendRequest(de.username, a.username, FriendManagerImpl.pendiente);
+        return new FriendRequest(de.username, a.username, FriendManagerImpl.pendiente);
 
 
     }
 
     async actualizarSolicitud(solicitud: FriendRequest, status: number): Promise<FriendRequest> {
         solicitud.status = status;
+        const { uri, mongoose } = Repository.getBD();
+        await Repository.OpenConnection(uri, mongoose)
         const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver, status: 0 }, { status: solicitud.status }) as FriendRequest;
+        await Repository.CloseConnection(mongoose)
         return resultado;
     }
 
     async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.aceptado }) as FriendRequest;
+        const { uri, mongoose } = Repository.getBD();
+        await Repository.OpenConnection(uri, mongoose)
+        let resultado;
+        try {
+            resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.aceptado }) as FriendRequest;
+        } finally {
+            await Repository.CloseConnection(mongoose)
+        }
         return resultado;
     }
     async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.rechazado }) as FriendRequest;
+        const { uri, mongoose } = Repository.getBD();
+        await Repository.OpenConnection(uri, mongoose)
+        let resultado;
+        try {
+            resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.rechazado }) as FriendRequest;
+        } finally {
+            await Repository.CloseConnection(mongoose)
+        }
         return resultado;
 
     }
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
-        let resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
+        const { uri, mongoose } = Repository.getBD();
+        await Repository.OpenConnection(uri, mongoose)
+        let resultado;
+        try {
+            resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
+        } finally {
+            await Repository.CloseConnection(mongoose)
+        }
         return resultado;
     }
     async eliminarAmigo(amigo1: User, amigo2: User): Promise<boolean> {
@@ -126,16 +149,16 @@ export class FriendManagerImpl implements FriendManager {
         mongoose.set('strictQuery', true);
         return { uri, mongoose };
     }
-    private static async OpenConnection(uri: string, mongoose: any){
+    private async OpenConnection(uri: string, mongoose: any) {
         try {
             await mongoose.connect(uri);
-        }catch{
+        } catch {
             throw new Error("Error al conectarse con la base de datos")
         }
     }
 
     private static async CloseConnection(mongoose: any) {
-        mongoose.connection.close();
+        await mongoose.connection.close();
     }
 }
 //let a = new FriendManagerImpl();

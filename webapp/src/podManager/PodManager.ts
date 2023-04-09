@@ -271,6 +271,7 @@ class PodManager {
     }
 
     async getGroups(session: Session): Promise<Group[]> {
+        console.log("MANAGER")
         console.log(session)
         let url = session.info.webId.replace("card#me", "public") + "/groups"
 

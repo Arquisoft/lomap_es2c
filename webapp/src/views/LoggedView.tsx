@@ -25,13 +25,13 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function LoggedView(props: { session: () => any }) {
+export default function LoggedView() {
 
     return (
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header logged={true} /></MyPaper>
-            <MainPage session={props.session} />
+            <MainPage />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

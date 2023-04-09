@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -37,18 +37,15 @@ const MyPaper2 = styled(Paper)({
 })
 //#endregion
 
-export default function HomeViewLogged(props: { setSession: any }) {
+export default function HomeViewLogged() {
 
     const navigate = useNavigate();
     const { welcome } = useParams();
     const { session } = useSession();
 
     if (session.info.webId) {
-        props.setSession(session)
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
     }
-
-
 
     const getSaludo = () => {
         let now = new Date();
@@ -68,7 +65,7 @@ export default function HomeViewLogged(props: { setSession: any }) {
     const checkWebId = () => {
         let user: User = getUserInSesion();
         setTimeout(() => {
-            if (user.webID != readCookie("userWebId")) {
+            if (user.webID !== readCookie("userWebId")) {
                 Swal.fire({
                     title: "Actualizar webId",
                     text: "El webId con el que has iniciado sesión no coincide con el vinculado a su perfil, ¿desea actualizarlo?",
@@ -84,7 +81,6 @@ export default function HomeViewLogged(props: { setSession: any }) {
                         updatedUser.webID = session.info.webId;
                         editUserDetails(updatedUser);
                         saludo();
-                        Swal.close();
                     } else {
                         logout();
                         navigate("/login")
@@ -92,6 +88,7 @@ export default function HomeViewLogged(props: { setSession: any }) {
                 })
             } else {
                 saludo();
+                document.cookie = "sameWebId=true; path=/"
             }
 
         }, 3000);
@@ -99,7 +96,7 @@ export default function HomeViewLogged(props: { setSession: any }) {
     }
 
     useEffect(() => {
-        if (welcome)
+        if (welcome && readCookie("sameWebId") !== "true")
             checkWebId();
     }, []);
 

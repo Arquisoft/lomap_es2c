@@ -7,6 +7,7 @@ const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=t
 
 mongoose.connect(uri).then(() => {
     console.log("Database succesfully connected")
+    mongoose.connection.close();
 }).catch((err) => {
     console.error(err);
 });
