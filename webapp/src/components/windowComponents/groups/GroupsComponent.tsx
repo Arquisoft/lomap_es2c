@@ -8,7 +8,12 @@ import ListItemText from '@mui/material/ListItemText';
 import MapIcon from '@mui/icons-material/Map';
 import { Group } from '../../../shared/shareddtypes';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -114,6 +119,19 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
     }
 
+
+    const getScoreIcon = (place: Place) => {
+        switch (place.reviewScore) {
+            case "-1": return (<SentimentNeutralIcon color="info" />)
+            case "1": return (<SentimentVeryDissatisfiedIcon color="error" />)
+            case "2": return (<SentimentDissatisfiedIcon color="error" />)
+            case "3": return (<SentimentSatisfiedIcon color="warning" />)
+            case "4": return (<SentimentSatisfiedAltIcon color="success" />)
+            case "5": return (<SentimentVerySatisfiedIcon color="success" />)
+            default: return (<SentimentVerySatisfiedIcon color="success" />)
+        }
+    }
+
     props.groups.then((grps: Group[]) => {
         if (open.length != grps.length) setOpen(generateOpen(grps.length))
         render(
@@ -154,7 +172,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                                                         <PlaceIcon />
                                                     </ListItemIcon>
                                                     <ListItemText primary={place.nombre} />
-                                                    <SentimentSatisfiedAltIcon htmlColor="green" />
+                                                    {getScoreIcon(place)}
                                                 </ListItemButton>
                                             </React.Fragment>
                                         )

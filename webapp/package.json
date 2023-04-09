@@ -32,6 +32,7 @@
         "flatted": "^3.2.7",
         "jsonld": "^8.1.1",
         "leaflet": "^1.9.3",
+        "lodash": "^4.17.21",
         "node-sessionstorage": "^1.0.0",
         "react": "^17.0.2",
         "react-async": "^10.0.1",

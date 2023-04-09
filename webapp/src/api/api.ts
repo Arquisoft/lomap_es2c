@@ -31,6 +31,8 @@ export function logout() {
     document.cookie = "userInSession=; path=/"
     document.cookie = "isPodLogged=; path=/"
     document.cookie = "userWebId=; path=/"
+    document.cookie = "session=; path=/"
+    document.cookie = "sameWebId=; path=/"
 }
 
 export async function signup(user: User): Promise<User> {
@@ -87,7 +89,7 @@ export async function getMyFriends(user: User): Promise<User[]> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'user': user })
     });
-    console.log("webapp"+await response)
+    console.log("webapp" + await response)
     return await response.json()
 }
 

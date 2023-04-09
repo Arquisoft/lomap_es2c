@@ -76,11 +76,6 @@ export class Repository {
     }
 
 
-
-
-
-
-
     public static async OpenConnection(uri: string, mongoose: any) {
         try {
             await mongoose.connect(uri);
@@ -90,7 +85,7 @@ export class Repository {
     }
 
     public static async CloseConnection(mongoose: any) {
-        mongoose.connection.close();
+        await mongoose.connection.close();
     }
 
     public static getBD() {
