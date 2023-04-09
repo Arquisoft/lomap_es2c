@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import { Friend, FriendRequest, Group, User } from '../../../shared/shareddtypes';
-import { getMyFriendRequests, getMyFriends, getMyGroups, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
+import { getMyFriendRequests, getMyFriends, getUserInSesion, searchUserByUsername, sendFriendRequest } from '../../../api/api';
 import AddIcon from '@mui/icons-material/Add';
 import { AccountCircle } from '@mui/icons-material';
 import { useRef } from 'react';
@@ -15,7 +15,9 @@ import { FriendRequestsComponent } from './FriendRequestsComponent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
 import { useForm, SubmitHandler } from "react-hook-form";
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { useSession } from '@inrupt/solid-ui-react';
+import PodManager from 'podManager/PodManager';
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -40,7 +42,7 @@ const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
 
-export const FriendManagerPanel = () => {
+export const FriendManagerPanel = (props: { session: any }) => {
 
     const [url, setUrl] = useState("../testUser.jfif");
 
@@ -55,11 +57,12 @@ export const FriendManagerPanel = () => {
 
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
+        console.log("hola")
         await getMyFriends(user).then(function (friends) {
-            console.log(friends.length)
             for (let i = 0; i < friends.length; i++) {
+                console.log(friends[i].username)
                 let friendGroups: Group[] = []
-                getMyGroups(friends[i]).then(function (groups) {
+                new PodManager().getGroups(props.session()).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
                         friendGroups.push(groups[j]);
                 })
@@ -75,7 +78,6 @@ export const FriendManagerPanel = () => {
     const [friends, setFriends] = useState<Promise<Friend[]>>(userFriends());
 
     const userFriendRequests = async (): Promise<FriendRequest[]> => {
-
         let myFriendRequests: FriendRequest[] = [];
         let user = getUserInSesion();
         await getMyFriendRequests(user).then((friendRequests) => {

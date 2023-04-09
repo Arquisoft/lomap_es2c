@@ -67,11 +67,7 @@ function AddPlace(props:any): any {
     return null;
 }
 
-interface Props {
-    markers: MarkerData[];
-  }
-
-export const MapComponent = (props: Props) => {
+export const MapComponent = () => {
 
     const markers = useSelector((state: RootState) => state.markers.markers);
 

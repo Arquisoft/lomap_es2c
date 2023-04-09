@@ -5,6 +5,9 @@ import { LeftWindow } from '../windowComponents/LeftWindow'
 import { MapComponent } from '../windowComponents/map/MapComponent';
 import { useSelector } from 'react-redux';
 import { RootState } from 'utils/redux/store';
+import { useParams } from 'react-router-dom';
+import { ErrorPage } from './ErrorPage';
+import { Session } from '@inrupt/solid-client-authn-browser';
 
 const MapContainer = styled(Container)({
     display: 'flex',
@@ -15,13 +18,19 @@ const MapContainer = styled(Container)({
 
 })
 
-export function MainPage() {
-    const markers = useSelector((state: RootState) => state.markers.markers);
-    
+export function MainPage(props: { session: () => Session }) {
+    const { mainop } = useParams()
+
     return (
-        <MapContainer disableGutters>
-            <LeftWindow markers={markers}/>
-            <MapComponent markers={markers} />
-        </MapContainer>
+        <>
+            {mainop == "groups" || mainop == "friends" ?
+                <MapContainer disableGutters>
+                    <LeftWindow session={props.session} />
+                    <MapComponent />
+                </MapContainer>
+                :
+                <ErrorPage />
+            }
+        </>
     )
 }

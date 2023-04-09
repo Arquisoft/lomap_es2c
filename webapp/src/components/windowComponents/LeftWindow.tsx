@@ -13,6 +13,10 @@ import GroupIcon from '@mui/icons-material/Group';
 import MapIcon from '@mui/icons-material/Map';
 import { useDispatch } from 'react-redux';
 import { addPlaceMarker } from 'utils/redux/action';
+import { getMyFriendRequests, getUserInSesion } from 'api/api';
+import { temporalInfoMessage } from 'utils/MessageGenerator';
+import { ErrorPage } from 'components/mainComponents/ErrorPage';
+import { Session } from '@inrupt/solid-client-authn-browser';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
@@ -43,11 +47,7 @@ type MarkerData = {
     name: string;
 };
 
-interface Props {
-    markers: MarkerData[];
-  }
-
-export function LeftWindow(props: Props) {
+export function LeftWindow(props: { session: () => Session }) {
 
     const { mainop } = useParams()
 
@@ -66,8 +66,6 @@ export function LeftWindow(props: Props) {
         setValue(newValue);
     };
 
-
-
     return (
         <Window onClick={handleClick}>
             <ThemeProvider theme={theme}>
@@ -84,11 +82,11 @@ export function LeftWindow(props: Props) {
                         <Tab value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
                     </MyTabs>
                     <TabPanel value="groups">
-                        <GroupsManagerPanel markers={props.markers} />
+                        <GroupsManagerPanel session={props.session} />
 
                     </TabPanel>
                     <TabPanel value="friends">
-                        <FriendManagerPanel />
+                        <FriendManagerPanel session={props.session} />
                     </TabPanel>
                 </MyTabContext>
             </ThemeProvider>

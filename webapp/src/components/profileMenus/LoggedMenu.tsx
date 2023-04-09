@@ -9,7 +9,7 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
+import { editPassword, editUserDetails, getMyFriendRequests, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,7 +17,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import { handleErrors } from 'api/ErrorHandler';
 import { User } from 'shared/shareddtypes';
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { NotificationManager, temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { Divider } from '@mui/material';
 import {
     LogoutButton
 } from "@inrupt/solid-ui-react";
@@ -31,6 +32,9 @@ const BoxProfile = styled(Box)({
     columnGap: '2em'
 })
 
+const VerticalDivider = styled(Divider)({
+    padding: '0em 0.4em 0em'
+})
 
 const MyMenu = styled(Menu)({
     marginTop: '3em',
@@ -41,7 +45,7 @@ const MyMenu = styled(Menu)({
 //#region DEFINICION DE COMPONENTES PERSONALIZADOS
 
 function LoginInformation(props: any) {
-    return <b><p>Se ha iniciado sesión como {props.name}</p></b>;
+    return <b><p>{props.name}</p></b>;
 }
 //#endregion
 function LogedMenu() {
@@ -59,7 +63,6 @@ function LogedMenu() {
     const getProfile = async () => {
         closeUserMenu();
         let user = await searchUserByUsername(userInSession);
-        console.log("loooog")
         Swal.fire({
             title: 'Mi perfil',
             html: ` <label for="webid-gp" class="swal2-label">WebID: </label>
@@ -104,14 +107,15 @@ function LogedMenu() {
         closeUserMenu();
         let oldpsw: string;
         let newpsw: string;
+        let follow: boolean = false;
         Swal.fire({
             title: 'Cambiar contraseña',
             html: `<label for="opassword-ep" class="swal2-label">Contraseña actual: </label>
                     <input type="password" id="opassword-ep" class="swal2-input" placeholder="Contraseña actual" {...register("password")}>
                     <label for="password-ep" class="swal2-label">Nueva contraseña: </label>
-                    <input type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
+                    <input required type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
                     <label for="rpassword-ep" class="swal2-label">Confirmar nueva contraseña: </label>
-                    <input type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
+                    <input required type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
                     `,
 
             confirmButtonText: 'Cambiar contraseña',
@@ -131,24 +135,30 @@ function LogedMenu() {
                         let oldPassword = (Swal.getPopup().querySelector('#opassword-ep') as HTMLInputElement).value
                         oldpsw = oldPassword;
                         newpsw = pass;
+                        follow = true;
                     }
                     else {
                         fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", showEdit);
+                        follow = false;
 
                     }
                 }).catch(e => {
-
+                    follow = false;
+                    console.log("CATCH")
+                    console.log(follow);
                     let errorMessage = (e as string)
                     fieldsValidation.showError("No se ha podido actualizar la contraseña", errorMessage, showEdit);
                 })
 
             }
         }).then(async (result) => {
-            if (result.isConfirmed) {
-                await handleErrors(() => editPassword(oldpsw, newpsw), () => {
-                    Swal.close();
+            console.log(follow)
+            if (result.isConfirmed && follow) {
+                editPassword(oldpsw, newpsw).then(() => {
+                    temporalSuccessMessage("Contraseña editada correctamente.")
+                }).catch((e) => {
+                    fieldsValidation.showError("No se actualizó la contraseña", e.message, showEdit)
                 })
-                temporalSuccessMessage("Contraseña editada correctamente.")
             } else if (result.isDenied) {
                 showEditNoPss();
             }
@@ -231,11 +241,6 @@ function LogedMenu() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const getUsername = () => {
-        let user = getUserInSesion();
-        setUsername(user.username)
-    }
-
     //#endregion
 
     //#region HOOKS
@@ -250,6 +255,8 @@ function LogedMenu() {
 
         //#region COMPONENTE
         <BoxProfile>
+            <NotificationManager />
+            <VerticalDivider orientation='vertical' flexItem />
             <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>

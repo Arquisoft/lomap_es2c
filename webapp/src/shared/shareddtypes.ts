@@ -8,13 +8,24 @@ export interface User {
 
 export interface Group {
     places: Place[]
-    nombre: String
+    name: string
 }
 
 export interface Place {
-    latitude: String
-    longitud: String
-    nombre: String
+    latitude: string
+    longitude: string
+    nombre: string
+    category: string
+    description: string
+    comments: Comment[]
+    reviewScore: string
+    date: string
+}
+
+export interface Comment {
+    author: string
+    comment: string
+    date: string
 }
 
 export type User2 = {

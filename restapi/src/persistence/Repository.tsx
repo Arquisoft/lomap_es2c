@@ -59,7 +59,29 @@ export class Repository {
         return resultado
     }
 
-    private static async OpenConnection(uri: string, mongoose: any) {
+    static async findOneAndUpdatePassword(user: User) {
+
+        const { uri, mongoose } = Repository.getBD();
+
+        await Repository.OpenConnection(uri, mongoose);
+
+        let resultado: User;
+
+        resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { password: user.password }, { new: true });
+
+
+        await Repository.CloseConnection(mongoose)
+        console.log(resultado)
+        return resultado
+    }
+
+
+
+
+
+
+
+    public static async OpenConnection(uri: string, mongoose: any) {
         try {
             await mongoose.connect(uri);
         } catch {
@@ -67,11 +89,11 @@ export class Repository {
         }
     }
 
-    private static async CloseConnection(mongoose: any) {
+    public static async CloseConnection(mongoose: any) {
         mongoose.connection.close();
     }
 
-    private static getBD() {
+    public static getBD() {
         const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
         const mongoose = require('mongoose');
         mongoose.set('strictQuery', true);

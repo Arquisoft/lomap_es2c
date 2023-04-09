@@ -12,12 +12,20 @@ class MapManagerImpl implements MapManager {
     pod: PODManager;
 
     async verMapaDe(user: User): Promise<Group[]> {
-        let usuarioEncontrado = await UserSchema.findOne({
-            username: user.username
-        });
-
-        let grupos = this.pod.getGrupos(usuarioEncontrado.webID)
-
+        let usuarioEncontrado
+        try {
+            usuarioEncontrado = await UserSchema.findOne({
+                username: user.username
+            });
+        }catch{
+            throw new Error("Error en la base de datos")
+        }
+        let grupos
+        try{
+         grupos = this.pod.getGrupos(usuarioEncontrado.webID)
+        }catch{
+            throw new Error("Error en los pods")
+        }
         return grupos
     }
 
@@ -32,16 +40,18 @@ class MapManagerImpl implements MapManager {
     }
 
 
-    crearGrupo(nombre: String): Group {
+    crearGrupo(nombre: string): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User
 
         const grupo: Group = {
             name: nombre.toString(),
             places: []
         };
-
-        this.pod.guardarGrupo(user.webID, grupo)
-
+        try {
+            this.pod.guardarGrupo(user.webID, grupo)
+        }catch{
+            throw new Error("Error en los pods")
+        }
         return grupo;
     }
 
@@ -64,9 +74,11 @@ class MapManagerImpl implements MapManager {
         if (lugarIndex !== -1) {
             grupo.places.splice(lugarIndex, 1);
         }
-
+    try{
         this.pod.guardarGrupo(user.webID, grupo)
-
+    }catch{
+        throw new Error("Error en los pods")
+    }
         return grupo;
     }
 
@@ -79,9 +91,11 @@ class MapManagerImpl implements MapManager {
 
     editarGrupo(grupo: Group): Group {
         let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
-
+        try{
         this.pod.guardarGrupo(user.webID, grupo);
-
+        }catch{
+            throw new Error("Error en los pods")
+        }
         return grupo;
     }
 

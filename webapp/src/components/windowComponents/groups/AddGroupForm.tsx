@@ -12,6 +12,10 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import * as fieldsValidation from '../../../utils/fieldsValidation';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { MapManager } from 'podManager/MapManager';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { Group } from 'shared/shareddtypes';
+import { Session } from '@inrupt/solid-client-authn-browser';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -64,7 +68,7 @@ const CSSTextField = styled(TextField)({
 
 
 
-export default function AddGroupForm() {
+export default function AddGroupForm(props: { session: () => Session }) {
 
     const schema = fieldsValidation.groupValidation;
     type GroupSchema = yup.InferType<typeof schema>;
@@ -73,8 +77,12 @@ export default function AddGroupForm() {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<GroupSchema> = (data: any) => console.log(data);
-
+    const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
+        console.log(props.session())
+        new MapManager().crearGrupo(data.groupName, props.session()).then((grupo: Group) => {
+            temporalSuccessMessage("Grupo " + grupo.name + " creado correctamente. ¡A añadir lugares se ha dicho!");
+        })
+    }
 
     const navigate = useNavigate()
 
@@ -84,7 +92,7 @@ export default function AddGroupForm() {
                 <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
                     Mis grupos
                 </Link>
-                <Typography color="text.primary">Nuevo grupo</Typography>
+                <Typography color="black">Nuevo grupo</Typography>
             </Breadcrumbs>
         </div>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>

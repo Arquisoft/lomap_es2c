@@ -2,7 +2,8 @@ import { readCookie } from 'utils/CookieReader';
 import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
 export async function addUser(user: User2): Promise<boolean> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    const apiEndPoint =
+        process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/users/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -52,7 +53,7 @@ export async function login(user: User): Promise<User> {
     });
     //The objects returned by the api are directly convertible to User objects
     switch (response.status) {
-        case 505: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 404: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
         case 200: return setSessionUser(response);
@@ -78,26 +79,20 @@ export async function editUserDetails(user: User): Promise<User> {
     return setSessionUser(response);
 }
 
-export async function getMyGroups(user: User): Promise<Group[]> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    // let response = await fetch(apiEndPoint + '/mapmanager/usermap', {
-    //   method: 'POST',
-    //  headers: { 'Content-Type': 'application/json' },
-    // body: JSON.stringify({ 'user': user })
-    //});
-    return []
-}
 export async function getMyFriends(user: User): Promise<User[]> {
+    console.log("empieza")
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/friendmanager/friends', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'user': user })
     });
-    return response.json()
+    console.log("webapp"+await response)
+    return await response.json()
 }
 
 export async function sendFriendRequest(user: User): Promise<String> {
+
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/friendmanager/add', {
         method: 'POST',
@@ -109,7 +104,6 @@ export async function sendFriendRequest(user: User): Promise<String> {
 
 export async function searchUserByUsername(username: string): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api';
-
     try {
         let response = await fetch(`${apiEndPoint}/usermanager/searchUserByUsername?username=${username}`, { method: 'GET' })
             .then(async (res) => {
@@ -117,17 +111,15 @@ export async function searchUserByUsername(username: string): Promise<User> {
                     let e = await res.json();
                     throw new Error(e.error.toString());
                 }
-
                 return res
             }).then((user) => {
                 return user.json();
             })
-
         return response
+
     } catch (error) {
         throw error
     }
-
 }
 
 export async function updateRequest(req: FriendRequest, status: number) {
@@ -168,14 +160,10 @@ export async function editPassword(oldpss: String, newpss: String): Promise<User
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'oldpss': oldpss, 'newpss': newpss, 'user': getUserInSesion() })
     });
-    console.log(oldpss + "-" + newpss)
-    let user = { 'username': 'editpss', 'webID': 'editpss', 'description': 'editpss', 'img': 'editpss', 'password': '..' }
-    window.localStorage.setItem('userInSession', JSON.stringify(user));
-    window.localStorage.setItem('isLogged', "true");
-    return user
+    return response.json()
 }
 
-export async function deleteFriend(friend: User): Promise<FriendRequest> {
+export async function deleteFriendApi(friend: User): Promise<FriendRequest> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/friendmanager/deletefriend', {
         method: 'POST',

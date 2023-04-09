@@ -6,7 +6,6 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
-import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -15,14 +14,8 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useState } from 'react';
-import PlaceCategories  from './PlaceCategories';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import ListSubheader from '@mui/material/ListSubheader';
-import FormControl from '@mui/material/FormControl';
-import { group } from 'console';
+import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
+
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -156,7 +149,7 @@ const places: Place[] = [
     {nombre: "Tienda 1", categoria:"Tienda", latitud:"50.782545", longitud:"4.37321", puntuacion:"5", comentario:"Review de la tienda 1"},
 ]
 
-export default function ShowPlace() {
+export default function ShowPlace (props: { session: () => Session }) {
     const { id, lat } = useParams();
     const navigate = useNavigate()
 
