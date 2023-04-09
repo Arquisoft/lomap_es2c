@@ -15,7 +15,7 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
-
+import { Place, Comment } from '../../../shared/shareddtypes'
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -134,19 +134,15 @@ export function RadioGroupRating() {
         />
     );
 }
-type Place = {
-    nombre: string,
-    categoria: string,
-    latitud: string,
-    longitud: string,
-    puntuacion: string,
-    comentario: string
-}
+
+const comments: Comment[] = [
+    {author:"security", date:"10/04/2023", comment:"Review del bar de Pepe"}
+]
 
 const places: Place[] = [
-    {nombre: "Bar de Pepe", categoria:"Bar", latitud:"50.862545", longitud:"4.32321", puntuacion:"3", comentario:"Review del bar de Pepe"},
-    {nombre: "Restaurante 1", categoria:"Restaurante", latitud:"50.962545", longitud:"4.42321", puntuacion:"4", comentario:"Review del restaurante 1"},
-    {nombre: "Tienda 1", categoria:"Tienda", latitud:"50.782545", longitud:"4.37321", puntuacion:"5", comentario:"Review de la tienda 1"},
+    {nombre: "Bar de Pepe", category:"Bar", latitude:"50.862545", longitude:"4.32321", reviewScore:"3", comments:comments, description:"", date:"10/10/2023"},
+    {nombre: "Restaurante 1", category:"Restaurante", latitude:"50.962545", longitude:"4.42321", reviewScore:"4",comments:comments, description:"", date:"10/10/2023"},
+    {nombre: "Tienda 1", category:"Tienda", latitude:"50.782545", longitude:"4.37321", reviewScore:"5", comments:comments, description:"", date:"10/10/2023"},
 ]
 
 export default function ShowPlace (props: { session: () => Session }) {
@@ -154,7 +150,7 @@ export default function ShowPlace (props: { session: () => Session }) {
     const navigate = useNavigate()
 
 
-    let place: Place = places.find((p) => p.nombre == lat) //findPlaceByName(props.name)
+    let place: Place = places.find((p) => p.nombre == lat) //findPlaceByName(lat)
     
    
     return (
@@ -184,14 +180,14 @@ export default function ShowPlace (props: { session: () => Session }) {
                     <CoordinatesBox>
                     <CSSTextField
                         id="longitude-SP"
-                        value={("Longitud: " + place.longitud.toString().substring(0,8))}
+                        value={("Longitud: " + place.longitude.toString().substring(0,8))}
                         placeholder="Longitud"
                         disabled
 
                     />
                     <CSSTextField
                         id="latitude-SP"
-                        value={("Latitud: " + place.latitud.toString().substring(0,8))}
+                        value={("Latitud: " + place.latitude.toString().substring(0,8))}
                         placeholder="Latitud"
                         disabled
                     />
@@ -203,7 +199,7 @@ export default function ShowPlace (props: { session: () => Session }) {
 
                 <textarea
                     id="review-SP"
-                    placeholder={place.comentario}
+                    placeholder={place.comments[0] ? place.comments[0].comment : "Sin reseña"}
                     style={{ width: '98.7%', height: '7vh', resize: 'none'}}
                     disabled
                 />
@@ -213,7 +209,7 @@ export default function ShowPlace (props: { session: () => Session }) {
                 <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
                 <StyledRating
                     name="highlight-selected-only"
-                    value={parseInt(place.puntuacion,10)}
+                    value={parseInt(place.reviewScore,10) > 5 ? 5 : parseInt(place.reviewScore,10)}
                     IconContainerComponent={IconContainer}
                     getLabelText={(value: number) => customIcons[value].label}
                     highlightSelectedOnly

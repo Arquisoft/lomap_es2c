@@ -20,6 +20,7 @@ import PodManager from '../../../podManager/PodManager'
 import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
 import { useDispatch } from 'react-redux';
 import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
+import { Place, Comment, MarkerData } from '../../../shared/shareddtypes'
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
@@ -133,26 +134,18 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
 // Para probar sin pods
 
-type MarkerData = {
-    position: [number, number];
-    name: string;
-};
-type Place = {
-    nombre: string,
-    categoria: string,
-    latitud: string,
-    longitud: string,
-    puntuacion: string,
-    comentario: string
-}
 
-const places: Place[] = [
-    {nombre: "Bar de Pepe", categoria:"Bar", latitud:"50.862545", longitud:"4.32321", puntuacion:"3", comentario:"Review del bar de Pepe"},
-    {nombre: "Restaurante 1", categoria:"Restaurante", latitud:"50.962545", longitud:"4.42321", puntuacion:"4", comentario:"Review del restaurante 1"},
-    {nombre: "Tienda 1", categoria:"Tienda", latitud:"50.782545", longitud:"4.37321", puntuacion:"5", comentario:"Review de la tienda 1"},
+const comments: Comment[] = [
+    {author:"security", date:"10/04/2023", comment:"Review del bar de Pepe"}
 ]
 
-const placeMarkers: MarkerData[] = places.map(({ latitud, longitud, nombre }) => ({
-    position: [parseFloat(latitud), parseFloat(longitud)],
+const places: Place[] = [
+    {nombre: "Bar de Pepe", category:"Bar", latitude:"50.862545", longitude:"4.32321", reviewScore:"3", comments:comments, description:"", date:"10/10/2023"},
+    {nombre: "Restaurante 1", category:"Restaurante", latitude:"50.962545", longitude:"4.42321", reviewScore:"4",comments:comments, description:"", date:"10/10/2023"},
+    {nombre: "Tienda 1", category:"Tienda", latitude:"50.782545", longitude:"4.37321", reviewScore:"5", comments:comments, description:"", date:"10/10/2023"},
+]
+
+const placeMarkers: MarkerData[] = places.map(({ latitude, longitude, nombre }) => ({
+    position: [parseFloat(latitude), parseFloat(longitude)],
     name: nombre
   }));
