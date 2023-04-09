@@ -58,10 +58,10 @@ export default function PodLogin() {
 
 
     const handleLogin = async () => {
-        /*handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {
+        handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {
             console.log("REDIRECT")
             console.log(s)
-        })*/
+        })
         document.cookie = "isPodLogged=true; path=/"
         document.cookie = "sameWebId=false; path=/"
     };

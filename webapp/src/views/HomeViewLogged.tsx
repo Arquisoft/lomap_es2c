@@ -46,8 +46,6 @@ export default function HomeViewLogged() {
  
     
     if (session.info.webId) {
-        console.log(session)
-        console.log(session.info.webId)
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
     }
 

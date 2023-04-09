@@ -22,6 +22,7 @@ import { Provider } from 'react-redux';
 function App(): JSX.Element {
     const [session, setSession] = useState<any>(null)
     handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {
+        setSession(s)
     })
     return (
         <Provider store={store}>
