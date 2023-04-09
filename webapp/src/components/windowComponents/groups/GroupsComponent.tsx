@@ -110,8 +110,6 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                 name: place.nombre })
         })
 
-        console.log(groupMarkers[0])
-
         dispatch(addMarkers(groupMarkers)); // Se muestran los nuevos marcadores
 
     }

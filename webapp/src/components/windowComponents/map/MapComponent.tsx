@@ -75,8 +75,6 @@ export const MapComponent = () => {
 
     const groupid = useSelector((state: RootState) => state.markers.groupName);
 
-    console.log("en el mapa")
-    console.log(markers[1].name)
     const navigate = useNavigate();
 
     const handleMarkerClick = (name: string) => {
