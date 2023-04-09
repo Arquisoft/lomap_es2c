@@ -79,7 +79,9 @@ export default function AddGroupForm(props: { session: () => Session }) {
 
     const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
         console.log(props.session())
+        
         new MapManager().crearGrupo(data.groupName, props.session()).then((grupo: Group) => {
+            navigate("/home/groups/main")
             temporalSuccessMessage("Grupo " + grupo.name + " creado correctamente. ¡A añadir lugares se ha dicho!");
         })
     }

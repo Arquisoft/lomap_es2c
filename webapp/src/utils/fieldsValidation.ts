@@ -54,7 +54,7 @@ export const passwordValidation = yup.object({
 
 
 export const groupValidation = yup.object({
-    groupName: yup.string().matches(/^[A-Za-z0-9]+$/, "El nombre debe de empezar por una letra")
+    groupName: yup.string().matches(/^[a-zA-Z0-9\s]+$/g, "El nombre no puede contener caracteres especiales")
         .min(3, "El nombre debe de tener entre 3 y 30 caracteres")
         .max(30, "El nombre debe de tener entre 3 y 30 caracteres")
         .required()
