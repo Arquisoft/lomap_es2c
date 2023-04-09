@@ -5,17 +5,31 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import { styled } from '@mui/material/styles';
 import { createTheme, Tabs, ThemeProvider } from '@mui/material';
-import { MapsManagerPanel } from './MapsManagerPanel';
-import { FriendManagerPanel } from './FriendManagerPanel';
+import { GroupsManagerPanel } from './groups/GroupsManagerPanel';
+import { FriendManagerPanel } from './friends/FriendManagerPanel';
 import { showError } from '../../utils/fieldsValidation';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import GroupIcon from '@mui/icons-material/Group';
+import MapIcon from '@mui/icons-material/Map';
+import { useDispatch } from 'react-redux';
+import { addPlaceMarker } from 'utils/redux/action';
+import { getMyFriendRequests, getUserInSesion } from 'api/api';
+import { temporalInfoMessage } from 'utils/MessageGenerator';
+import { ErrorPage } from 'components/mainComponents/ErrorPage';
+import { Session } from '@inrupt/solid-client-authn-browser';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
-    minWidth: '25vw',
+    width: '30vw',
+    height: '78.2vh'
 })
 
 const MyTabContext = styled(TabContext)({
-    color: '#1f4a21'
+    color: '#1f4a21',
+})
+
+const MyTabs = styled(Tabs)({
+    height: '8vh',
 })
 
 const theme = createTheme({
@@ -28,20 +42,35 @@ const theme = createTheme({
         },
     }
 });
+type MarkerData = {
+    position: [number, number];
+    name: string;
+};
 
-export function LeftWindow() {
+export function LeftWindow(props: { session: any }) {
 
-    const [value, setValue] = React.useState('1');
+    const { mainop } = useParams()
+
+    const navigate = useNavigate()
+
+    const [value, setValue] = React.useState(mainop);
+
+    const dispatch = useDispatch();
+
+    const handleClick = () => {
+        dispatch(addPlaceMarker(false))
+    }
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        navigate("/home/" + newValue + "/main")
         setValue(newValue);
     };
 
     return (
-        <Window>
+        <Window onClick={handleClick}>
             <ThemeProvider theme={theme}>
-                <MyTabContext value={value} theme={theme}>
-                    <Tabs
+                <MyTabContext value={mainop} theme={theme}>
+                    <MyTabs
                         variant="fullWidth"
                         value={value}
                         onChange={handleChange}
@@ -49,14 +78,15 @@ export function LeftWindow() {
                         indicatorColor="primary"
                         aria-label="secondary tabs example"
                     >
-                        <Tab value="1" label="My maps" />
-                        <Tab value="2" label="My friends" />
-                    </Tabs>
-                    <TabPanel value="1">
-                        <MapsManagerPanel />
+                        <Tab value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
+                        <Tab value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
+                    </MyTabs>
+                    <TabPanel value="groups">
+                        <GroupsManagerPanel session={props.session} />
+
                     </TabPanel>
-                    <TabPanel value="2">
-                        <FriendManagerPanel />
+                    <TabPanel value="friends">
+                        <FriendManagerPanel session={props.session} />
                     </TabPanel>
                 </MyTabContext>
             </ThemeProvider>

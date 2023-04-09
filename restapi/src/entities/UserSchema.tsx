@@ -14,6 +14,14 @@ const userSchema = new Schema(
         password: {
             type: String,
             required: true
+        },
+        img: {
+            type: String,
+            required: false
+        },
+        description: {
+            type: String,
+            required: false
         }
 
     }

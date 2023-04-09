@@ -14,6 +14,7 @@ export function showError(errorTitle: string, errorMessage: string, f: () => any
 }
 
 export function checkPasswords(pass: String, confirmPass: String) {
+    if (pass == null || typeof (pass) == 'undefined' || pass.trim().length == 0) return false;
     return confirmPass === pass
 }
 
@@ -49,3 +50,12 @@ export const editProfileValidation = yup.object({
 export const passwordValidation = yup.object({
     password: passwordConstraints
 }).required();
+
+
+
+export const groupValidation = yup.object({
+    groupName: yup.string().matches(/^[a-zA-Z0-9\s]+$/g, "El nombre no puede contener caracteres especiales")
+        .min(3, "El nombre debe de tener entre 3 y 30 caracteres")
+        .max(30, "El nombre debe de tener entre 3 y 30 caracteres")
+        .required()
+});

@@ -3,13 +3,18 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import ImgCarrusel from './ImgCarrusel';
+import { getMyFriendRequests, getUserInSesion } from 'api/api';
+import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { User } from 'shared/shareddtypes';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
     display: 'grid',
     gridTemplateColumns: 'repeat(5,1fr)',
     gridTemplateRows: 'repeat(4,1fr)',
-    margin: '3em',
+    margin: '2.5em',
     rowGap: '2em',
     columnGap: '3em',
     textAlign: 'center',
@@ -23,7 +28,7 @@ const TextBox = styled(Box)({
     color: "white",
     fontFamily: 'Calibri',
     fontWeight: 'lighter',
-    fontSize: '1.2em',
+    fontSize: '1.1em',
     backgroundColor: '#81c784',
     width: '100%',
     height: '100%',
@@ -35,23 +40,7 @@ const TextBox = styled(Box)({
 
 const InfoBox = styled(Box)({
     gridColumn: '4/6',
-    gridRow: '1/3',
-    justifySelf: 'center',
-    alignSelf: 'center',
-    color: "white",
-    fontFamily: 'Calibri',
-    fontWeight: 'lighter',
-    fontSize: '1.1em',
-    backgroundColor: '#81c784',
-    width: '100%',
-    height: '100%',
-    textAlign: 'justify',
-    paddingTop: '0.85em',
-})
-
-const ImgBox = styled(Box)({
-    gridColumn: '4/6',
-    gridRow: '3/5',
+    gridRow: '1/5',
     justifySelf: 'center',
     alignSelf: 'center',
     color: "white",
@@ -61,13 +50,53 @@ const ImgBox = styled(Box)({
     backgroundColor: '#81c784',
     width: '100%',
     height: '100%',
-    textAlign: 'center',
+    textAlign: 'justify',
     paddingTop: '0.85em',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
 })
 
 const MainBox = styled(Box)({
     display: 'flex',
     justifyContent: 'center',
+})
+
+const ScrollBox = styled(Box)({
+    maxHeight: '50vh',
+    overflow: 'auto',
+    scrollbarColor: 'black white',
+    padding: '0em 0.9em 0em',
+})
+
+const TitleBox = styled(Box)({
+    textAlign: 'center',
+    justifyContent: 'center',
+    fontSize: '1.2em'
+})
+
+const GoButton = styled(Button)({
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#1f4a21',
+    color: 'white',
+    marginBottom: '0.4em',
+    '&:hover': {
+        backgroundColor: '#1f4a21',
+        color: 'white',
+        borderColor: '#0062cc',
+        boxShadow: 'none',
+    },
+    '&:active': {
+        boxShadow: 'none',
+        color: 'white',
+        backgroundColor: '#1f4a21',
+        borderColor: '#005cbf',
+    },
+    '&:focus': {
+        boxShadow: '0 0 0 0.2rem #1f4a21',
+    },
 })
 //#endregion
 
@@ -76,7 +105,20 @@ export function HomePage() {
     const navigate = useNavigate();
 
     const goSignup = () => {
-        navigate("signup")
+        navigate("/signup")
+    }
+
+    const goMain = () => {
+        navigate("/home/groups/main")
+        if (getUserInSesion() != null) {
+            checkRequests(getUserInSesion())
+        }
+    }
+
+    const checkRequests = (user: User) => {
+        getMyFriendRequests(user).then((reqs) => {
+            if (reqs.length > -1) temporalSuccessMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+        })
     }
 
     return (
@@ -95,11 +137,16 @@ export function HomePage() {
                     </p>
                 </TextBox>
                 <InfoBox>
+                    <TitleBox>
+                        Descubre LoMap
+                    </TitleBox>
+                    <ScrollBox>
+                        <ImgCarrusel />
+                    </ScrollBox>
+                    <GoButton onClick={() => goMain()}>
+                        ¡Adelante!
+                    </GoButton>
                 </InfoBox>
-                <ImgBox>
-                    <img width="90%" src="../bruselas.jfif" />
-                    <p>Conoce Bruselas de la mano de tus amigos</p>
-                </ImgBox>
             </HomeContainer >
         </MainBox>
         //#endregion
