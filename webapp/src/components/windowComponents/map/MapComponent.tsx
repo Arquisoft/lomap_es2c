@@ -76,7 +76,7 @@ export const MapComponent = () => {
     const groupid = useSelector((state: RootState) => state.markers.groupName);
 
     console.log("en el mapa")
-    console.log(markers)
+    console.log(markers[1].name)
     const navigate = useNavigate();
 
     const handleMarkerClick = (name: string) => {
@@ -90,9 +90,9 @@ export const MapComponent = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {markers.map(({ position, name }) => (
-                <Marker position={position} key={name} eventHandlers={{ click: () => handleMarkerClick(name) }}>
-                    <Popup>{name}</Popup>
+            {markers.map((marker) => (
+                <Marker position={marker.position} key={marker.name} eventHandlers={{ click: () => handleMarkerClick(marker.name) }}>
+                    <Popup>{marker.name}</Popup>
                 </Marker>
             ))}
             <AddPlace showAdd={showAdd}/>

@@ -16,12 +16,16 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PlaceCategories from './PlaceCategories';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
+import { Place, Comment, Group } from 'shared/shareddtypes';
+import { readCookie } from 'utils/CookieReader';
+import { getUserInSesion } from 'api/api';
+import { MapManager } from 'podManager/MapManager';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -140,19 +144,36 @@ export function RadioGroupRating() {
         />
     );
 }
-type Place = {
-    nombre: string,
-    categoria: string,
-    latitud: string,
-    longitud: string,
-    puntuacion: string
-}
+
 export default function AddPlaceForm(props: { session: any }) {
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
 
     const [category, setCategory] = useState('');
     const [score, setScore] = useState(4);
+
+    
+
+    let mapM = new MapManager();
+
+
+    const userGroups = async () => {
+        const groups = await mapM.verMapaDe(null, props.session());
+        return groups;
+      };
+      
+    const [groups, setGroups] = useState<Group[]>([]);
+    const [group, setGroup] = useState<Group>();
+      
+    const findGroup = async () => {
+        const grps = await userGroups();
+        const group = grps.find((g) => g.name === id);
+        setGroup(group);
+    };
+      
+      useEffect(() => {
+        findGroup();
+      }, []);
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = (data: any) => {
@@ -163,18 +184,36 @@ export default function AddPlaceForm(props: { session: any }) {
             data.latitude = lat;
         }
 
+        let comments: Comment[] = [{
+            comment: data.review,
+            date: getDate(),
+            author: getUserInSesion().username
+        }]
+
         let p: Place = {
             nombre: data.placename,
-            categoria: category,
-            latitud: data.latitude as string,
-            longitud: data.longitude as string,
-            puntuacion: score.toString()
+            category: category,
+            latitude: data.latitude as string,
+            longitude: data.longitude as string,
+            reviewScore: score.toString(),
+            description: "",
+            date: getDate(),
+            comments,
         }
 
         console.log(p)
+        console.log("GRUPO AL Q SE AÑADE --> " + group.name)
+
+        mapM.añadirLugarAGrupo(p, group, props.session())
     };
 
-
+    const getDate = (): string => {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        return `${day}/${month}/${year}`;
+    }
     const handleCategoryChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value as string);
     };
@@ -245,8 +284,7 @@ export default function AddPlaceForm(props: { session: any }) {
                         label={lng ? ("Longitud: " + lng.toString().substring(0, 8)) : "Longitud"}
                         placeholder="Longitud"
                         disabled={lng ? true : false}
-                        type="number"
-                        {...register("longitude")}
+                        {...register("longitude", {min:-180, max:180})}
                         helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
                     />
 
@@ -255,8 +293,7 @@ export default function AddPlaceForm(props: { session: any }) {
                         label={lat ? ("Latitud: " + lat.toString().substring(0, 9)) : "Latitud"}
                         placeholder="Latitud"
                         disabled={lat ? true : false}
-                        type="number"
-                        {...register("latitude")}
+                        {...register("latitude", {min:-90, max:90})}
                         helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
                     />
                 </CoordinatesBox>

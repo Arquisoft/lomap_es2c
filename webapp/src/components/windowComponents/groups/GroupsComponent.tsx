@@ -95,10 +95,22 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
         const groupPlaces = new MapManager().mostrarGrupo(group, props.session());
         
+        console.log(groupPlaces)
+
+        /*
         const groupMarkers : MarkerData[] = groupPlaces.map(({ latitude, longitude, nombre }) => ({
             position: [parseFloat(latitude), parseFloat(longitude)],
             name: nombre
-        })); 
+        })); */
+
+        const groupMarkers : MarkerData[] = [];
+        groupPlaces.forEach((place) => {
+            groupMarkers.push({
+                position: [parseFloat(place.latitude), parseFloat(place.longitude)],
+                name: place.nombre })
+        })
+
+        console.log(groupMarkers[0])
 
         dispatch(addMarkers(groupMarkers)); // Se muestran los nuevos marcadores
 
