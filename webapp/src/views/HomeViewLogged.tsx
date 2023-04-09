@@ -43,7 +43,11 @@ export default function HomeViewLogged() {
     const { welcome } = useParams();
     const { session } = useSession();
 
+ 
+    
     if (session.info.webId) {
+        console.log(session)
+        console.log(session.info.webId)
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
     }
 

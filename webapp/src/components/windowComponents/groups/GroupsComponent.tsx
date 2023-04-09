@@ -98,7 +98,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
         dispatch(setGroupMarker(group.name as string)) // Se asigna el nombre del grupo que se va a mostrar
 
-        const groupPlaces = new MapManager().mostrarGrupo(group, props.session());
+        const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
         
         console.log(groupPlaces)
 
