@@ -18,7 +18,7 @@ import { MapManager } from 'podManager/MapManager';
 import ShowPlace from './ShowPlace';
 
 const ScrollBox = styled(Box)({
-    maxHeight: '50vh',
+    maxHeight: '60vh',
     overflow: 'auto',
     scrollbarColor: 'black white'
 })
