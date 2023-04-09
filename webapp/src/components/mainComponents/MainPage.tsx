@@ -21,14 +21,18 @@ const MapContainer = styled(Container)({
 
 export function MainPage() {
 
-    const { mainop } = useParams()
+    const { mainop, op } = useParams()
     const { session } = useSession();
     console.log("MAIN PAGE")
     console.log(session)
 
     return (
         <>
-            {mainop == "groups" || mainop == "friends" ?
+            {mainop == "groups" || mainop == "friends"
+                || op == "addplace" || op == "addgroup"
+                || op == "requests" || op == "showplace"
+                || op == "main"
+                ?
                 <MapContainer disableGutters>
                     <LeftWindow session={session} />
                     <MapComponent />

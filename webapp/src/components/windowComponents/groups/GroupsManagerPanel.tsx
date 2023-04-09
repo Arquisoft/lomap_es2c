@@ -79,7 +79,7 @@ export const GroupsManagerPanel = (props: { session: any }) => {
                             }
                         >
                             <Box ref={ref}>
-                                <Groups groups={groups} daddy={ref} session={props.session} />
+                                <Groups groups={groups} daddy={ref} session={props.session} refresh={() => setGroups(userGroups)} />
                             </Box>
                         </List >
                     </ScrollBox>
@@ -92,10 +92,10 @@ export const GroupsManagerPanel = (props: { session: any }) => {
                         <AddPlaceForm session={props.session} />
                         :
                         (op == "showplace" ?
-                        <ShowPlace session={props.session} />
-                        :
-                        <ErrorPage></ErrorPage>
-                    )
+                            <ShowPlace session={props.session} />
+                            :
+                            <ErrorPage></ErrorPage>
+                        )
                     )
                 )
             }

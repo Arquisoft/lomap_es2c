@@ -27,12 +27,14 @@ import { useDispatch } from 'react-redux';
 import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { Place, Comment, MarkerData } from '../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import Swal from 'sweetalert2';
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
 })
 
-export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: any }) => {
+export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: any, refresh: any }) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate()
@@ -43,7 +45,28 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
 
     const deleteGroup = (group: Group) => {
-        new PodManager().deleteGroup(props.session, group)
+        showQuestion(group)
+    }
+
+    const showQuestion = (group: Group) => {
+        Swal.fire({
+            title: "Eliminar grupo",
+            html: `<p>¿Esta seguro de que quieres eliminar el grupo <em><b> ${group.name}</b></em>?</p>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#81c784',
+            cancelButtonColor: 'grey',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Volver'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                new PodManager().deleteGroup(props.session, group);
+                temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
+                props.refresh();
+            } else {
+                Swal.close();
+            }
+        })
     }
 
     const addPlace = (group: Group) => {
@@ -73,23 +96,23 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
         return open.charAt(item) == '0' ? false : true;
     }
 
-/* SIN USAR POD
-    const mostrarGrupo = (group: Group) => {
-        const newMarkers = placeMarkers;
-
-        dispatch(clearMarkers());
-        
-        dispatch(setGroupMarker(group.name as string))
-       
-        alert("Se muestra el grupo " + group.name)
-        if(group.name == 'aaa'){
-            dispatch(addMarkers([{position:[40.326565,4.32236], name:"paula"}]))
-        } else {
-            console.log(newMarkers)
-            dispatch(addMarkers(newMarkers));
+    /* SIN USAR POD
+        const mostrarGrupo = (group: Group) => {
+            const newMarkers = placeMarkers;
+     
+            dispatch(clearMarkers());
+            
+            dispatch(setGroupMarker(group.name as string))
+           
+            alert("Se muestra el grupo " + group.name)
+            if(group.name == 'aaa'){
+                dispatch(addMarkers([{position:[40.326565,4.32236], name:"paula"}]))
+            } else {
+                console.log(newMarkers)
+                dispatch(addMarkers(newMarkers));
+            }
         }
-    }
-    */
+        */
 
     const mostrarGrupo = (group: Group) => {
         setSelectecGroup(group.name)
@@ -99,7 +122,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
         dispatch(setGroupMarker(group.name as string)) // Se asigna el nombre del grupo que se va a mostrar
 
         const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
-        
+
         console.log(groupPlaces)
 
         /*
@@ -108,14 +131,17 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
             name: nombre
         })); */
 
-        const groupMarkers : MarkerData[] = [];
+        const groupMarkers: MarkerData[] = [];
         groupPlaces.forEach((place) => {
             groupMarkers.push({
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
-                name: place.nombre })
+                name: place.nombre
+            })
         })
 
         dispatch(addMarkers(groupMarkers)); // Se muestran los nuevos marcadores
+
+        temporalSuccessMessage("Mostrando el grupo <em><b>" + group.name + "</em></b>.");
 
     }
 
@@ -140,8 +166,8 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                     return (
                         <React.Fragment key={i}>
                             < ListItemButton sx={{
-                                        backgroundColor: selectedGroup === group.name ? '#DFF3CC' : 'inherit'
-                                    }}>
+                                backgroundColor: selectedGroup === group.name ? '#DFF3CC' : 'inherit'
+                            }}>
                                 <ListItemIcon>
                                     <MapIcon />
                                 </ListItemIcon>
@@ -172,6 +198,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                                                         <PlaceIcon />
                                                     </ListItemIcon>
                                                     <ListItemText primary={place.nombre} />
+                                                    {console.log(place)}
                                                     {getScoreIcon(place)}
                                                 </ListItemButton>
                                             </React.Fragment>
@@ -191,16 +218,16 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
 
 const comments: Comment[] = [
-    {author:"security", date:"10/04/2023", comment:"Review del bar de Pepe"}
+    { author: "security", date: "10/04/2023", comment: "Review del bar de Pepe" }
 ]
 
 const places: Place[] = [
-    {nombre: "Bar de Pepe", category:"Bar", latitude:"50.862545", longitude:"4.32321", reviewScore:"3", comments:comments, description:"", date:"10/10/2023"},
-    {nombre: "Restaurante 1", category:"Restaurante", latitude:"50.962545", longitude:"4.42321", reviewScore:"4",comments:comments, description:"", date:"10/10/2023"},
-    {nombre: "Tienda 1", category:"Tienda", latitude:"50.782545", longitude:"4.37321", reviewScore:"5", comments:comments, description:"", date:"10/10/2023"},
+    { nombre: "Bar de Pepe", category: "Bar", latitude: "50.862545", longitude: "4.32321", reviewScore: "3", comments: comments, description: "", date: "10/10/2023" },
+    { nombre: "Restaurante 1", category: "Restaurante", latitude: "50.962545", longitude: "4.42321", reviewScore: "4", comments: comments, description: "", date: "10/10/2023" },
+    { nombre: "Tienda 1", category: "Tienda", latitude: "50.782545", longitude: "4.37321", reviewScore: "5", comments: comments, description: "", date: "10/10/2023" },
 ]
 
 const placeMarkers: MarkerData[] = places.map(({ latitude, longitude, nombre }) => ({
     position: [parseFloat(latitude), parseFloat(longitude)],
     name: nombre
-  }));
+}));

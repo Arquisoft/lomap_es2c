@@ -26,6 +26,7 @@ import { Place, Comment, Group } from 'shared/shareddtypes';
 import { readCookie } from 'utils/CookieReader';
 import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -152,38 +153,35 @@ export default function AddPlaceForm(props: { session: any }) {
     const [category, setCategory] = useState('');
     const [score, setScore] = useState(4);
 
-    
+
 
     let mapM = new MapManager();
 
 
     const userGroups = async () => {
-        const groups = await mapM.verMapaDe(null, props.session());
+        const groups = await mapM.verMapaDe(null, props.session);
         return groups;
-      };
-      
+    };
+
     const [groups, setGroups] = useState<Group[]>([]);
     const [group, setGroup] = useState<Group>();
-      
+
     const findGroup = async () => {
         const grps = await userGroups();
         const group = grps.find((g) => g.name === id);
         setGroup(group);
     };
-      
-      useEffect(() => {
+
+    useEffect(() => {
         findGroup();
-      }, []);
+    }, []);
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = (data: any) => {
-        if (data.longitude == null) {
-            data.longitude = lng;
-        }
-        if (data.latitude == null) {
-            data.latitude = lat;
-        }
-
+        console.log(data.longitude + "-" + lng)
+        console.log(data.latitude + "-" + lat)
+        let longitude = data.longitude == "" ? lng : data.longitude;
+        let latitude = data.latitude == "" ? lat : data.latitude;
         let comments: Comment[] = [{
             comment: data.review,
             date: getDate(),
@@ -193,18 +191,17 @@ export default function AddPlaceForm(props: { session: any }) {
         let p: Place = {
             nombre: data.placename,
             category: category,
-            latitude: data.latitude as string,
-            longitude: data.longitude as string,
+            latitude: latitude as string,
+            longitude: longitude as string,
             reviewScore: score.toString(),
             description: "",
             date: getDate(),
             comments,
         }
 
-        console.log(p)
-        console.log("GRUPO AL Q SE AÑADE --> " + group.name)
-
-        mapM.añadirLugarAGrupo(p, group, props.session())
+        mapM.añadirLugarAGrupo(p, group, props.session)
+        temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
+        navigate("/home/groups/main")
     };
 
     const getDate = (): string => {
@@ -284,7 +281,7 @@ export default function AddPlaceForm(props: { session: any }) {
                         label={lng ? ("Longitud: " + lng.toString().substring(0, 8)) : "Longitud"}
                         placeholder="Longitud"
                         disabled={lng ? true : false}
-                        {...register("longitude", {min:-180, max:180})}
+                        {...register("longitude", { min: -180, max: 180 })}
                         helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
                     />
 
@@ -293,7 +290,7 @@ export default function AddPlaceForm(props: { session: any }) {
                         label={lat ? ("Latitud: " + lat.toString().substring(0, 9)) : "Latitud"}
                         placeholder="Latitud"
                         disabled={lat ? true : false}
-                        {...register("latitude", {min:-90, max:90})}
+                        {...register("latitude", { min: -90, max: 90 })}
                         helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
                     />
                 </CoordinatesBox>

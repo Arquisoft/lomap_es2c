@@ -71,8 +71,8 @@ const CSSTextField = styled(TextField)({
 });
 
 const CoordinatesBox = styled(Box)({
-   display: 'flex',
-   flexDirection: 'row',
+    display: 'flex',
+    flexDirection: 'row',
 })
 
 
@@ -140,131 +140,131 @@ export function RadioGroupRating() {
 }
 
 const comments: Comment[] = [
-    {author:"security", date:"10/04/2023", comment:"Review del bar de Pepe"}
+    { author: "security", date: "10/04/2023", comment: "Review del bar de Pepe" }
 ]
 
 const places: Place[] = [
-    {nombre: "Bar de Pepe", category:"Bar", latitude:"50.862545", longitude:"4.32321", reviewScore:"3", comments:comments, description:"", date:"10/10/2023"},
-    {nombre: "Restaurante 1", category:"Restaurante", latitude:"50.962545", longitude:"4.42321", reviewScore:"4",comments:comments, description:"", date:"10/10/2023"},
-    {nombre: "Tienda 1", category:"Tienda", latitude:"50.782545", longitude:"4.37321", reviewScore:"5", comments:comments, description:"", date:"10/10/2023"},
+    { nombre: "Bar de Pepe", category: "Bar", latitude: "50.862545", longitude: "4.32321", reviewScore: "3", comments: comments, description: "", date: "10/10/2023" },
+    { nombre: "Restaurante 1", category: "Restaurante", latitude: "50.962545", longitude: "4.42321", reviewScore: "4", comments: comments, description: "", date: "10/10/2023" },
+    { nombre: "Tienda 1", category: "Tienda", latitude: "50.782545", longitude: "4.37321", reviewScore: "5", comments: comments, description: "", date: "10/10/2023" },
 ]
 
-function PlaceComponent (props: any) {
+function PlaceComponent(props: any) {
 
     const navigate = useNavigate()
 
     let place = props.place;
-    let groupname = props.group.name;
+    let groupname = props.group;
 
     return (
-            <>
-                <div>
-                    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                        <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-                            Mis grupos
-                        </Link>
-                        <Typography color="inherit">{groupname}</Typography>
-                        <Typography color="text.primary">{place.nombre}</Typography>
-                    </Breadcrumbs>
-                </div>
-                <Box>
-                    <CSSTypography variant="body1" align="center"
-                        sx={{ mt: "0.5em", mb: "0.5em" }}>
-                        {place.nombre}
-                    </CSSTypography>
+        <>
+            <div>
+                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                        Mis grupos
+                    </Link>
+                    <Typography color="inherit">{groupname}</Typography>
+                    <Typography color="text.primary">{place.nombre}</Typography>
+                </Breadcrumbs>
+            </div>
+            <Box>
+                <CSSTypography variant="body1" align="center"
+                    sx={{ mt: "0.5em", mb: "0.5em" }}>
+                    {place.nombre}
+                </CSSTypography>
 
+                <CSSTextField
+                    id="placename-SP"
+                    variant="outlined"
+                    label="Categoría"
+                    value={place.nombre}
+                    fullWidth
+                />
+                <CoordinatesBox>
                     <CSSTextField
-                            id="placename-SP"
-                            variant="outlined"
-                            label="Categoría"
-                            value={place.nombre}
-                            fullWidth
-                        />
-                        <CoordinatesBox>
-                        <CSSTextField
-                            id="longitude-SP"
-                            value={("Longitud: " + place.longitude.toString().substring(0,8))}
-                            placeholder="Longitud"
-                            disabled
+                        id="longitude-SP"
+                        value={("Longitud: " + place.longitude.toString().substring(0, 8))}
+                        placeholder="Longitud"
+                        disabled
 
-                        />
-                        <CSSTextField
-                            id="latitude-SP"
-                            value={("Latitud: " + place.latitude.toString().substring(0,8))}
-                            placeholder="Latitud"
-                            disabled
-                        />
-                    </CoordinatesBox>
-                    
-                
-                    <Box>
+                    />
+                    <CSSTextField
+                        id="latitude-SP"
+                        value={("Latitud: " + place.latitude.toString().substring(0, 8))}
+                        placeholder="Latitud"
+                        disabled
+                    />
+                </CoordinatesBox>
+
+
+                <Box>
                     <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
 
                     <textarea
                         id="review-SP"
                         placeholder={place.comments[0] ? place.comments[0].comment : "Sin reseña"}
-                        style={{ width: '98.7%', height: '7vh', resize: 'none'}}
+                        style={{ width: '98.7%', height: '7vh', resize: 'none' }}
                         disabled
                     />
 
-                    </Box>
-                    <Box sx={{ gridColumn: 3}}>
+                </Box>
+                <Box sx={{ gridColumn: 3 }}>
                     <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
                     <StyledRating
                         name="highlight-selected-only"
-                        value={parseInt(place.reviewScore,10) > 5 ? 5 : parseInt(place.reviewScore,10)}
+                        value={parseInt(place.reviewScore, 10) > 5 ? 5 : parseInt(place.reviewScore, 10)}
                         IconContainerComponent={IconContainer}
                         getLabelText={(value: number) => customIcons[value].label}
                         highlightSelectedOnly
                         disabled
                     />
-                    </Box>
-                
                 </Box>
-            </>
-        );
+
+            </Box>
+        </>
+    );
 }
 
-function PlaceError (props: any) {
+function PlaceError(props: any) {
 
     const navigate = useNavigate()
     let groupname = props.group;
 
     return (
-            <>
-                <div>
-                    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                        <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-                            Mis grupos
-                        </Link>
-                        <Typography color="inherit">{groupname}</Typography>
-                        <Typography color="text.primary">{props.placename}</Typography>
-                    </Breadcrumbs>
-                </div>
-                <Box>
-                    <CSSTypography variant="body1" align="center"
-                        sx={{ mt: "0.5em", mb: "0.5em" }}>
-                        Ha ocurrido un error al intentar recuperar la información del lugar <em>{props.placename}</em>
-                    </CSSTypography>
+        <>
+            <div>
+                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                        Mis grupos
+                    </Link>
+                    <Typography color="inherit">{groupname}</Typography>
+                    <Typography color="text.primary">{props.placename}</Typography>
+                </Breadcrumbs>
+            </div>
+            <Box>
+                <CSSTypography variant="body1" align="center"
+                    sx={{ mt: "0.5em", mb: "0.5em" }}>
+                    Ha ocurrido un error al intentar recuperar la información del lugar <em>{props.placename}</em>
+                </CSSTypography>
 
-                </Box>
-            </>
-        );
+            </Box>
+        </>
+    );
 }
 
 
-export default function ShowPlace (props: { session: () => Session }) {
+export default function ShowPlace(props: { session: any }) {
     const { id, lat } = useParams();
     const navigate = useNavigate()
 
 
-    let place: Place = places.find((p) => p.nombre == lat) 
+    let place: Place = places.find((p) => p.nombre == lat)
 
     let mapM = new MapManager();
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await mapM.verMapaDe(null, props.session()).then(function (groups) {
+        await mapM.verMapaDe(null, props.session).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
@@ -278,8 +278,8 @@ export default function ShowPlace (props: { session: () => Session }) {
     }
 
     const checkPlace = async (group: Promise<Group>) => {
-        group.then((g) => 
-           setPodPlace(mapM.mostrarGrupo(g, props.session()).find((p) => p.nombre == lat))
+        group.then((g) =>
+            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lat))
         )
     }
 
@@ -287,7 +287,7 @@ export default function ShowPlace (props: { session: () => Session }) {
     const [group, setGroup] = useState<Promise<Group>>(filterGroups(groups))
     const [podPlace, setPodPlace] = useState<Place>(null);
 
-    
+
 
     const placeDoesntExist = () => {
         checkPlace(group)
@@ -295,12 +295,12 @@ export default function ShowPlace (props: { session: () => Session }) {
     }
 
     return (
-            <>
-                {placeDoesntExist() ? (
-                    <PlaceError placename={lat} group={id} />
-                ) : (
-                    <PlaceComponent place={podPlace} group={group} />
-                )}
-            </>  
-        )
+        <>
+            {placeDoesntExist() ? (
+                <PlaceError placename={lat} group={id} />
+            ) : (
+                <PlaceComponent place={podPlace} group={id} />
+            )}
+        </>
+    )
 }

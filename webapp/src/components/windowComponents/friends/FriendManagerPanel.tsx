@@ -134,7 +134,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
             imageAlt: 'Foto de perfil actual',
             preConfirm: () => {
                 sendFriendRequest(user).then(() => {
-                    temporalSuccessMessage("La solicitud de amistad a <em>" + user.username + "</em> ha sido enviada correctamente.")
+                    temporalSuccessMessage("La solicitud de amistad a <em><b>" + user.username + "</b></em> ha sido enviada correctamente.")
                 })
             }
         })
