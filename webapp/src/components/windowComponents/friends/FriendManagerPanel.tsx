@@ -39,6 +39,7 @@ const OptionsBox = styled(Box)({
 })
 
 const HorizontalDivider = styled(Divider)({
+    marginTop: "1.51em",
     width: '100%'
 })
 
@@ -150,6 +151,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
                     <NotificationsActiveIcon onClick={() => navigate("/home/friends/requests")} htmlColor={op == "requests" ? "#1f4a21" : "#81c784"} />
                 </Tooltip>
             </OptionsBox>
+            <HorizontalDivider light color="#81c784" />
             {op != "requests" ?
                 <>
                     <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -167,7 +169,6 @@ export const FriendManagerPanel = (props: { session: any }) => {
                             </Button>
                         </Tooltip>
                     </AddFriendBox>
-                    <HorizontalDivider light color="#81c784" />
                     <ScrollBox>
                         <List
                             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
@@ -186,7 +187,6 @@ export const FriendManagerPanel = (props: { session: any }) => {
                 </>
                 :
                 <>
-                    <HorizontalDivider light color="#81c784" />
                     <ScrollBox>
                         <List
                             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}

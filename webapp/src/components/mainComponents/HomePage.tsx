@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ImgCarrusel from './ImgCarrusel';
 import { getMyFriendRequests, getUserInSesion } from 'api/api';
-import { temporalInfoMessage } from 'utils/MessageGenerator';
+import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { User } from 'shared/shareddtypes';
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -111,13 +111,13 @@ export function HomePage() {
     const goMain = () => {
         navigate("/home/groups/main")
         if (getUserInSesion() != null) {
-            //checkRequests(getUserInSesion())
+            checkRequests(getUserInSesion())
         }
     }
 
     const checkRequests = (user: User) => {
         getMyFriendRequests(user).then((reqs) => {
-            if (reqs.length > 0) temporalInfoMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+            if (reqs.length > -1) temporalSuccessMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
         })
     }
 
