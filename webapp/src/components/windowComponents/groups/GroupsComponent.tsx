@@ -21,6 +21,7 @@ import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
 import { useDispatch } from 'react-redux';
 import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { Place, Comment, MarkerData } from '../../../shared/shareddtypes'
+import { MapManager } from 'podManager/MapManager';
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
@@ -32,6 +33,9 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
     const navigate = useNavigate()
 
     const [open, setOpen] = React.useState("");
+    const [selectedGroup, setSelectecGroup] = React.useState("");
+
+
 
     const deleteGroup = (group: Group) => {
         new PodManager().deleteGroup(props.session, group)
@@ -64,8 +68,10 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
         return open.charAt(item) == '0' ? false : true;
     }
 
+/* SIN USAR POD
     const mostrarGrupo = (group: Group) => {
         const newMarkers = placeMarkers;
+
         dispatch(clearMarkers());
         
         dispatch(setGroupMarker(group.name as string))
@@ -78,6 +84,25 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
             dispatch(addMarkers(newMarkers));
         }
     }
+    */
+
+    const mostrarGrupo = (group: Group) => {
+        setSelectecGroup(group.name)
+
+        dispatch(clearMarkers()); // Se eliminan los marcadores mostrados anteriormente
+
+        dispatch(setGroupMarker(group.name as string)) // Se asigna el nombre del grupo que se va a mostrar
+
+        const groupPlaces = new MapManager().mostrarGrupo(group, props.session());
+        
+        const groupMarkers : MarkerData[] = groupPlaces.map(({ latitude, longitude, nombre }) => ({
+            position: [parseFloat(latitude), parseFloat(longitude)],
+            name: nombre
+        })); 
+
+        dispatch(addMarkers(groupMarkers)); // Se muestran los nuevos marcadores
+
+    }
 
     props.groups.then((grps: Group[]) => {
         if (open.length != grps.length) setOpen(generateOpen(grps.length))
@@ -86,7 +111,9 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                 {grps.map((group, i) => {
                     return (
                         <React.Fragment key={i}>
-                            < ListItemButton >
+                            < ListItemButton sx={{
+                                        backgroundColor: selectedGroup === group.name ? '#DFF3CC' : 'inherit'
+                                    }}>
                                 <ListItemIcon>
                                     <MapIcon />
                                 </ListItemIcon>
