@@ -15,7 +15,11 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
-import { Place, Comment } from '../../../shared/shareddtypes'
+import { Place, Comment, Group } from '../../../shared/shareddtypes'
+import { MapManager } from 'podManager/MapManager';
+import { ErrorPage } from 'components/mainComponents/ErrorPage';
+import { useState } from 'react';
+import PodLogin from 'components/userIdentification/podLogin/Pod';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -145,79 +149,158 @@ const places: Place[] = [
     {nombre: "Tienda 1", category:"Tienda", latitude:"50.782545", longitude:"4.37321", reviewScore:"5", comments:comments, description:"", date:"10/10/2023"},
 ]
 
+function PlaceComponent (props: any) {
+
+    const navigate = useNavigate()
+
+    let place = props.place;
+    let groupname = props.group.name;
+
+    return (
+            <>
+                <div>
+                    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                            Mis grupos
+                        </Link>
+                        <Typography color="inherit">{groupname}</Typography>
+                        <Typography color="text.primary">{place.nombre}</Typography>
+                    </Breadcrumbs>
+                </div>
+                <Box>
+                    <CSSTypography variant="body1" align="center"
+                        sx={{ mt: "0.5em", mb: "0.5em" }}>
+                        {place.nombre}
+                    </CSSTypography>
+
+                    <CSSTextField
+                            id="placename-SP"
+                            variant="outlined"
+                            label="Categoría"
+                            value={place.nombre}
+                            fullWidth
+                        />
+                        <CoordinatesBox>
+                        <CSSTextField
+                            id="longitude-SP"
+                            value={("Longitud: " + place.longitude.toString().substring(0,8))}
+                            placeholder="Longitud"
+                            disabled
+
+                        />
+                        <CSSTextField
+                            id="latitude-SP"
+                            value={("Latitud: " + place.latitude.toString().substring(0,8))}
+                            placeholder="Latitud"
+                            disabled
+                        />
+                    </CoordinatesBox>
+                    
+                
+                    <Box>
+                    <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
+
+                    <textarea
+                        id="review-SP"
+                        placeholder={place.comments[0] ? place.comments[0].comment : "Sin reseña"}
+                        style={{ width: '98.7%', height: '7vh', resize: 'none'}}
+                        disabled
+                    />
+
+                    </Box>
+                    <Box sx={{ gridColumn: 3}}>
+                    <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
+                    <StyledRating
+                        name="highlight-selected-only"
+                        value={parseInt(place.reviewScore,10) > 5 ? 5 : parseInt(place.reviewScore,10)}
+                        IconContainerComponent={IconContainer}
+                        getLabelText={(value: number) => customIcons[value].label}
+                        highlightSelectedOnly
+                        disabled
+                    />
+                    </Box>
+                
+                </Box>
+            </>
+        );
+}
+
+function PlaceError (props: any) {
+
+    const navigate = useNavigate()
+    let groupname = props.group;
+
+    return (
+            <>
+                <div>
+                    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                        <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                            Mis grupos
+                        </Link>
+                        <Typography color="inherit">{groupname}</Typography>
+                        <Typography color="text.primary">{props.placename}</Typography>
+                    </Breadcrumbs>
+                </div>
+                <Box>
+                    <CSSTypography variant="body1" align="center"
+                        sx={{ mt: "0.5em", mb: "0.5em" }}>
+                        Ha ocurrido un error al intentar recuperar la información del lugar <em>{props.placename}</em>
+                    </CSSTypography>
+
+                </Box>
+            </>
+        );
+}
+
+
 export default function ShowPlace (props: { session: () => Session }) {
     const { id, lat } = useParams();
     const navigate = useNavigate()
 
 
-    let place: Place = places.find((p) => p.nombre == lat) //findPlaceByName(lat)
+    let place: Place = places.find((p) => p.nombre == lat) 
+
+    let mapM = new MapManager();
+
+    const userGroups = async () => {
+        let myGroups: Group[] = [];
+        await mapM.verMapaDe(null, props.session()).then(function (groups) {
+            for (let i = 0; i < groups.length; i++) {
+                myGroups.push(groups[i]);
+            }
+        })
+
+        return myGroups;
+    }
+
+    const filterGroups = async (groups: Promise<Group[]>) => {
+        return (await groups).find((g) => g.name == id)
+    }
+
+    const checkPlace = async (group: Promise<Group>) => {
+        group.then((g) => 
+           setPodPlace(mapM.mostrarGrupo(g, props.session()).find((p) => p.nombre == lat))
+        )
+    }
+
+    const [groups, setGroups] = useState<Promise<Group[]>>(userGroups)
+    const [group, setGroup] = useState<Promise<Group>>(filterGroups(groups))
+    const [podPlace, setPodPlace] = useState<Place>(null);
+
     
-   
+
+    const placeDoesntExist = () => {
+        checkPlace(group)
+        return podPlace === undefined || podPlace === null;
+    }
+
     return (
-        <>
-            <div>
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-                        Mis grupos
-                    </Link>
-                    <Typography color="inherit">{id}</Typography>
-                    <Typography color="text.primary">{place.nombre}</Typography>
-                </Breadcrumbs>
-            </div>
-            <Box>
-                <CSSTypography variant="body1" align="center"
-                    sx={{ mt: "0.5em", mb: "0.5em" }}>
-                    {place.nombre}
-                </CSSTypography>
-
-                   <CSSTextField
-                        id="placename-SP"
-                        variant="outlined"
-                        label="Categoría"
-                        value={place.nombre}
-                        fullWidth
-                    />
-                    <CoordinatesBox>
-                    <CSSTextField
-                        id="longitude-SP"
-                        value={("Longitud: " + place.longitude.toString().substring(0,8))}
-                        placeholder="Longitud"
-                        disabled
-
-                    />
-                    <CSSTextField
-                        id="latitude-SP"
-                        value={("Latitud: " + place.latitude.toString().substring(0,8))}
-                        placeholder="Latitud"
-                        disabled
-                    />
-                 </CoordinatesBox>
-                 
-              
-                 <Box>
-                <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
-
-                <textarea
-                    id="review-SP"
-                    placeholder={place.comments[0] ? place.comments[0].comment : "Sin reseña"}
-                    style={{ width: '98.7%', height: '7vh', resize: 'none'}}
-                    disabled
-                />
-
-                </Box>
-                <Box sx={{ gridColumn: 3}}>
-                <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
-                <StyledRating
-                    name="highlight-selected-only"
-                    value={parseInt(place.reviewScore,10) > 5 ? 5 : parseInt(place.reviewScore,10)}
-                    IconContainerComponent={IconContainer}
-                    getLabelText={(value: number) => customIcons[value].label}
-                    highlightSelectedOnly
-                    disabled
-                />
-                </Box>
-              
-            </Box>
-        </>
-    );
+            <>
+                {placeDoesntExist() ? (
+                    <PlaceError placename={lat} group={id} />
+                ) : (
+                    <PlaceComponent place={podPlace} group={group} />
+                )}
+            </>  
+        )
 }
