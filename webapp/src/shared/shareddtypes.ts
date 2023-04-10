@@ -1,7 +1,31 @@
 export interface User {
-    username: String
-    password: String
-    webID: String
+    username: string
+    password: string
+    webID: string
+    img: string
+    description: string
+}
+
+export interface Group {
+    places: Place[]
+    name: string
+}
+
+export interface Place {
+    latitude: string
+    longitude: string
+    nombre: string
+    category: string
+    description: string
+    comments: Comment[]
+    reviewScore: string
+    date: string
+}
+
+export interface Comment {
+    author: string
+    comment: string
+    date: string
 }
 
 export type User2 = {
@@ -40,6 +64,21 @@ export interface UserManager {
     listarDetalles: (user: User) => Promise<User>;
 }
 
-export interface FriendRequest { }
+export interface Friend {
+    user: User,
+    groups: Group[],
+}
+
+export interface FriendRequest {
+    receiver: string,
+    sender: string,
+    status: number,
+}
 export interface Group { }
 export interface Place { }
+
+export type MarkerData = {
+    position: [number, number];
+    name: string;
+};
+

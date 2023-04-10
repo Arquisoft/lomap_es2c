@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "uuid": "^9.0.0"
+    "@hookform/resolvers": "^2.9.11",
+    "uuid": "^9.0.0",
+    "yup": "^1.0.2"
   }
 }

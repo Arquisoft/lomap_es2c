@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -9,11 +9,8 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { User } from '../../shared/shareddtypes';
-import { getUserInSesion } from '../../api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
-
 const BoxProfile = styled(Box)({
     padding: '0em 1em 0em',
     display: 'flex',
@@ -25,31 +22,23 @@ const BoxProfile = styled(Box)({
 const MyMenu = styled(Menu)({
     marginTop: '3em',
 })
-
 //#endregion
 
-function LogedMenu() {
+export function NoLogedMenu() {
+
+    const navigate = useNavigate();
 
     //#region METODOS DE CLASE
-
-    const getProfile = () => {
+    const showLogin = () => {
         closeUserMenu();
-        //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
-        //Rellenar formulario read only 
+        navigate("/login")
+        //Redirect login view
     }
 
-    const editProfile = () => {
+    const showSignUp = () => {
         closeUserMenu();
-        //var user = FactoryLoMap.getSesionManager().usuarioEnSesion()
-        //Mostrar formulario editable con autogeneración de objeto User
-        //Redirigir a editar usuario, a su vez llamara a Factory.getUserManager().modificarPerfil(User)
-    }
-
-    const goLogout = () => {
-        closeUserMenu();
-        //var state = FactoryLoMap.getSesionManager().cerrarSesion();
-        navigate("/");
-        //Mostrar mensaje en función de si se cerro sesión correctamente o no, mostrar NoLoggedMenu
+        navigate("/signup")
+        //Redirect singup view
     }
 
     const closeUserMenu = () => {
@@ -59,30 +48,20 @@ function LogedMenu() {
     const openUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
-
-    const getUsername = () => {
-        getUserInSesion().then(function (userReq) {
-            setUsername(userReq.username)
-        });
-    }
-
     //#endregion
 
     //#region HOOKS
-    const navigate = useNavigate();
-    const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
-    const [url, setUrl] = useState("../testUser.jfif");
-    const [username, setUsername] = useState<String>("");
-
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     //#endregion
 
     return (
+
         //#region COMPONENTE
         <BoxProfile>
-            <b><p>Sesión iniciada como {getUsername()}{username}</p></b>
+
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
-                    <Avatar alt="Remy Sharp" src={url} />
+                    <Avatar src="/broken-image.jpg" />
                 </IconButton>
             </Tooltip>
             <MyMenu
@@ -100,20 +79,15 @@ function LogedMenu() {
                 open={Boolean(anchorElUser)}
                 onClose={closeUserMenu}
             >
-                <MenuItem key={uuid()} onClick={getProfile}>
-                    Profile
+                <MenuItem key={uuid()} onClick={showSignUp}>
+                    Sing Up
                 </MenuItem>
-                <MenuItem key={uuid()} onClick={editProfile}>
-                    Edit profile
-                </MenuItem>
-                <MenuItem key={uuid()} onClick={goLogout}>
-                    Logout
+                <MenuItem key={uuid()} onClick={showLogin}>
+                    Login
                 </MenuItem>
             </MyMenu>
         </BoxProfile>
-        //#endregion 
+        //#endregion
 
     )
 }
-
-export default LogedMenu;
