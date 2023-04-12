@@ -34,7 +34,12 @@ const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
 })
 
-export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: any, refresh: any }) => {
+const InfoBox = styled(Box)({
+    color: '#1f4a21',
+    textAlign: 'center'
+})
+
+export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: any, refresh: any, stopLoading: any }) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate()
@@ -60,9 +65,10 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
             cancelButtonText: 'Volver'
         }).then((result) => {
             if (result.isConfirmed) {
-                new PodManager().deleteGroup(props.session, group);
+                new PodManager().deleteGroup(props.session, group).then(() => {
+                    props.refresh();
+                });
                 temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
-                props.refresh();
             } else {
                 Swal.close();
             }
@@ -123,8 +129,6 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
         const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
 
-        console.log(groupPlaces)
-
         /*
         const groupMarkers : MarkerData[] = groupPlaces.map(({ latitude, longitude, nombre }) => ({
             position: [parseFloat(latitude), parseFloat(longitude)],
@@ -162,56 +166,65 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
         if (open.length != grps.length) setOpen(generateOpen(grps.length))
         render(
             <>
-                {grps.map((group, i) => {
-                    return (
-                        <React.Fragment key={i}>
-                            < ListItemButton sx={{
-                                backgroundColor: selectedGroup === group.name ? '#DFF3CC' : 'inherit'
-                            }}>
-                                <ListItemIcon>
-                                    <MapIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={group.name} onClick={() => mostrarGrupo(group)} />
-                                {isOpen(i) ?
+                {
+                    grps.length > 0 ?
+                        <React.Fragment key="group-render">
+                            {grps.map((group, i) => {
+                                return (
+                                    <React.Fragment key={i}>
+                                        < ListItemButton sx={{
+                                            backgroundColor: selectedGroup === group.name ? '#DFF3CC' : 'inherit'
+                                        }}>
+                                            <ListItemIcon>
+                                                <MapIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={group.name} onClick={() => mostrarGrupo(group)} />
+                                            {isOpen(i) ?
 
-                                    <ExpandLess onClick={() => { handleClick(i) }} />
-                                    :
+                                                <ExpandLess onClick={() => { handleClick(i) }} />
+                                                :
 
-                                    <ExpandMore onClick={() => { handleClick(i) }} />
-                                }
-                                <VerticalDivider orientation='vertical' flexItem />
-                                <Box sx={{ ml: "0.8em" }}>
-                                    <AddLocationIcon onClick={() => addPlace(group)} htmlColor="#81c784" />
-                                </Box>
-                                <VerticalDivider orientation='vertical' flexItem />
-                                <Tooltip title="Delete group" sx={{ ml: "0.6em" }}>
-                                    <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
-                                </Tooltip>
-                            </ListItemButton>
-                            <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>
-                                <List component="div" disablePadding>
-                                    {group.places.map((place, j) => {
-                                        return (
-                                            <React.Fragment key={i + "-" + j}>
-                                                <ListItemButton sx={{ pl: 4 }}>
-                                                    <ListItemIcon>
-                                                        <PlaceIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={place.nombre} />
-                                                    {console.log(place)}
-                                                    {getScoreIcon(place)}
-                                                </ListItemButton>
-                                            </React.Fragment>
-                                        )
-                                    })}
-                                </List>
-                            </Collapse>
+                                                <ExpandMore onClick={() => { handleClick(i) }} />
+                                            }
+                                            <VerticalDivider orientation='vertical' flexItem />
+                                            <Box sx={{ ml: "0.8em" }}>
+                                                <AddLocationIcon onClick={() => addPlace(group)} htmlColor="#81c784" />
+                                            </Box>
+                                            <VerticalDivider orientation='vertical' flexItem />
+                                            <Tooltip title="Delete group" sx={{ ml: "0.6em" }}>
+                                                <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
+                                            </Tooltip>
+                                        </ListItemButton>
+                                        <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>
+                                            <List component="div" disablePadding>
+                                                {group.places.map((place, j) => {
+                                                    return (
+                                                        <React.Fragment key={i + "-" + j}>
+                                                            <ListItemButton sx={{ pl: 4 }}>
+                                                                <ListItemIcon>
+                                                                    <PlaceIcon />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary={place.nombre} />
+                                                                {getScoreIcon(place)}
+                                                            </ListItemButton>
+                                                        </React.Fragment>
+                                                    )
+                                                })}
+                                            </List>
+                                        </Collapse>
+                                    </React.Fragment>
+                                )
+                            })}
                         </React.Fragment>
-                    )
-                })}
+                        :
+                        <InfoBox>
+                            <p><b>Aqui deberia haber grupos...</b></p><p>¡Venga, añade alguno!</p>
+                        </InfoBox>
+                }
             </>, props.daddy.current)
+        props.stopLoading()
     })
-    return <></>
+    return (<></>)
 }
 
 // Para probar sin pods

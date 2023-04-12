@@ -1,4 +1,4 @@
-import { Divider, Tooltip } from '@mui/material'
+import { Box, Divider, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -19,8 +19,18 @@ const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
 })
 
+const BoxCircularProgress = styled(Box)({
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center'
+})
 
-export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendRequest[]>, daddy: any, refresh: any, refreshFriends: any }) => {
+const InfoBox = styled(Box)({
+    color: '#1f4a21',
+    textAlign: 'center'
+})
+
+export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendRequest[]>, daddy: any, refresh: any, refreshFriends: any, stopLoading: any }) => {
 
     const [url, setUrl] = useState("../testUser.jfif");
 
@@ -57,14 +67,14 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
         updateRequest(request, -1)
         props.refresh();
         props.refreshFriends();
-        temporalSuccessMessage("Solicitud de amistad de <em>" + request.sender + "</em> rechazada correctamente.");
+        temporalSuccessMessage("Solicitud de amistad de <em><b>" + request.sender + "</b></em> rechazada correctamente.");
     }
 
     const acceptRequest = (request: FriendRequest) => {
         updateRequest(request, 1)
         props.refresh();
         props.refreshFriends();
-        temporalSuccessMessage("La solicitud de amistad de <em>" + request.sender + "</em> ha sido aceptada correctamente.");
+        temporalSuccessMessage("La solicitud de amistad de <em><b>" + request.sender + "</b></em> ha sido aceptada correctamente.");
     }
 
     props.friendRequests.then((frds: FriendRequest[]) => {
@@ -72,29 +82,38 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
         try {
             render(
                 <>
-                    {frds.map((request, i) => {
-                        console.log(request)
-                        return (
-                            <React.Fragment key={i}>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <Tooltip title="See friend profile">
-                                            <PersonIcon onClick={() => showFriendProfile(request.sender)} />
-                                        </Tooltip>
-                                    </ListItemIcon>
-                                    <ListItemText primary={request.sender} />
-                                    <Tooltip title="Decline request">
-                                        <CloseIcon onClick={() => declineRequest(request)} htmlColor="red" />
-                                    </Tooltip>
-                                    <VerticalDivider orientation='vertical' flexItem />
-                                    <Tooltip title="Accept request" sx={{ ml: "0.5em" }}>
-                                        <CheckIcon onClick={() => acceptRequest(request)} htmlColor="green" />
-                                    </Tooltip>
-                                </ListItemButton>
-                            </React.Fragment>)
-                    })}
+                    {frds.length > 0 ?
+                        <React.Fragment key="loaded">
+                            {frds.map((request, i) => {
+                                console.log(request)
+                                return (
+                                    <React.Fragment key={i}>
+                                        <ListItemButton>
+                                            <ListItemIcon>
+                                                <Tooltip title="See friend profile">
+                                                    <PersonIcon onClick={() => showFriendProfile(request.sender)} />
+                                                </Tooltip>
+                                            </ListItemIcon>
+                                            <ListItemText primary={request.sender} />
+                                            <Tooltip title="Decline request">
+                                                <CloseIcon onClick={() => declineRequest(request)} htmlColor="red" />
+                                            </Tooltip>
+                                            <VerticalDivider orientation='vertical' flexItem />
+                                            <Tooltip title="Accept request" sx={{ ml: "0.5em" }}>
+                                                <CheckIcon onClick={() => acceptRequest(request)} htmlColor="green" />
+                                            </Tooltip>
+                                        </ListItemButton>
+                                    </React.Fragment>)
+                            })}
+                        </React.Fragment>
+                        :
+                        <InfoBox>
+                            <p><b>No tienes solicitudes pendientes.</b></p><p>¿Ya añadiste a todos tus amigos?</p>
+                        </InfoBox>
+                    }
                 </>, props.daddy.current)
+            props.stopLoading()
         } catch (e: any) { }
     })
-    return <></>
+    return (<></>)
 }

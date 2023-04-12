@@ -20,7 +20,7 @@ api.get(
             const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
             return res.status(200).send(user);
         } catch (err) {
-            return res.status(404).send({ error: err.toString() })
+            return res.status(404).send(err.toString())
         }
     }
 );
@@ -32,7 +32,7 @@ api.post(
         try {
             let u = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
         } catch (err) {
-            return res.status(404).send({ error: err.toString() })
+            return res.status(404).send(err.toString())
         }
     }
 );
@@ -43,7 +43,7 @@ api.post("/sesionmanager/signup", async (req: Request, res: Response): Promise<R
         let userRes = await fac.FactoryLoMap.getSesionManager().registrarse(user);
         return res.status(200).send(userRes);
     } catch (err) {
-        return res.status(404).send({ error: err.toString() })
+        return res.status(404).send(err.toString())
     }
 })
 
@@ -54,7 +54,7 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
         userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
         return res.status(200).send(userRes);
     } catch (err) {
-        return res.status(404).send({ error: err.toString() })
+        return res.status(404).send(err.toString())
     }
 
 
@@ -63,11 +63,11 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
 api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let solicitudes = null
-    //try {
-    solicitudes = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user)
-    //} catch (err) {
-    //    return res.status(404).send({ error: err.toString() })
-    //}
+    try {
+        solicitudes = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user)
+    } catch (err) {
+        return res.status(404).send(err.toString())
+    }
     return res.status(200).send(solicitudes);
 })
 
@@ -79,7 +79,7 @@ api.post("/friendmanager/updaterequest/:status", async (req: Request, res: Respo
         r = await fac.FactoryLoMap.getFriendManager().actualizarSolicitud(fr, +status);
 
     } catch (err) {
-        return res.status(404).send({ error: err.toString() })
+        return res.status(404).send(err.toString())
     }
     return res.status(200).send(r);
 })
@@ -90,7 +90,7 @@ api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<
         let r = await fac.FactoryLoMap.getFriendManager().listarAmigos(user);
         return res.status(200).send(r);
     } catch (err) {
-        return res.status(404).send({ error: err.toString() })
+        return res.status(404).send(err.toString())
     }
 })
 
@@ -113,7 +113,7 @@ api.get(
             const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
             return res.status(200).json(user);
         } catch (err) {
-            return res.status(404).send({ error: err.toString() })
+            return res.status(404).send(err.toString())
         }
     }
 );

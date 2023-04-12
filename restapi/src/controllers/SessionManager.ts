@@ -16,26 +16,40 @@ class UserSesionManager implements SesionManager {
     }
 
     async registrarse(usuario: User): Promise<User> {
-        let usuarioEncontrado = await repo.Repository.findOne(usuario)
-        if (usuarioEncontrado.username != "notfound") {
-            usuario.username = "userRepeated"
-            return usuario
+        let usuarioEncontrado;
+        try {
+            usuarioEncontrado = await repo.Repository.findOne(usuario)
+        } catch (e: any) {
+            throw new Error("Ha ocurrido un fallo interno.");
         }
-        repo.Repository.save(usuario, this.rondasDeEncriptacion)
+        if (usuarioEncontrado != null) {
+            throw new Error("Ya existe el usuario");
+        }
+        try {
+            repo.Repository.save(usuario, this.rondasDeEncriptacion)
+        } catch (e: any) {
+            throw new Error("Ha ocurrido un fallo interno.");
+        }
         return usuario;
     }
 
     async iniciarSesion(user: User): Promise<User> {
-        let usuarioEncontrado = await UserSchema.findOne({
-            username: user.username
-        }) as User;
+        let usuarioEncontrado
+        try {
+            usuarioEncontrado = await UserSchema.findOne({
+                username: user.username
+            }) as User;
+        }
+        catch (e: any) {
+            throw new Error("Ha ocurrido un fallo interno.");
+        }
         if (usuarioEncontrado != null) {
             if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
                 return usuarioEncontrado;
             }
-            throw new Error("Contraseña incorrecta")
+            throw new Error("Las credenciales no coinciden")
         } else {
-            throw new Error("Usuario no encontrado")
+            throw new Error("Las credenciales no coinciden")
         }
     }
 

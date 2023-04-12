@@ -146,7 +146,7 @@ export function RadioGroupRating() {
     );
 }
 
-export default function AddPlaceForm(props: { session: any }) {
+export default function AddPlaceForm(props: { session: any, refresh: any }) {
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
 
@@ -199,9 +199,11 @@ export default function AddPlaceForm(props: { session: any }) {
             comments,
         }
 
-        mapM.añadirLugarAGrupo(p, group, props.session)
-        temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
-        navigate("/home/groups/main")
+        mapM.añadirLugarAGrupo(p, group, props.session).then(() => {
+            temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
+            navigate("/home/groups/main")
+            props.refresh()
+        })
     };
 
     const getDate = (): string => {

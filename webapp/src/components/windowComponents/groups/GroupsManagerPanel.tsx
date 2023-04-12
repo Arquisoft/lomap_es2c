@@ -1,4 +1,4 @@
-import { Box, Divider } from '@mui/material'
+import { Box, CircularProgress, Divider } from '@mui/material'
 import { useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -16,6 +16,14 @@ import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
 import { Groups } from './GroupsComponent';
 import { MapManager } from 'podManager/MapManager';
 import ShowPlace from './ShowPlace';
+import { Refresh } from '@mui/icons-material';
+
+const BoxCircularProgress = styled(Box)({
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    height: '30vh'
+})
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
@@ -36,6 +44,8 @@ const HorizontalDivider = styled(Divider)({
 })
 
 export const GroupsManagerPanel = (props: { session: any }) => {
+
+    const [loading, setLoading] = useState(true)
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -78,18 +88,23 @@ export const GroupsManagerPanel = (props: { session: any }) => {
                                 </ListSubheader>
                             }
                         >
+                            {loading &&
+                                <BoxCircularProgress>
+                                    <CircularProgress size={100} color="primary" />
+                                </BoxCircularProgress>
+                            }
                             <Box ref={ref}>
-                                <Groups groups={groups} daddy={ref} session={props.session} refresh={() => setGroups(userGroups)} />
+                                <Groups groups={groups} daddy={ref} session={props.session} stopLoading={() => setLoading(false)} refresh={() => setGroups(userGroups())} />
                             </Box>
                         </List >
                     </ScrollBox>
                 </>
                 :
                 (op == "addgroup" ?
-                    <AddGroupForm session={props.session} />
+                    <AddGroupForm session={props.session} refresh={() => setGroups(userGroups())} />
                     :
                     (op == "addplace" ?
-                        <AddPlaceForm session={props.session} />
+                        <AddPlaceForm session={props.session} refresh={() => setGroups(userGroups())} />
                         :
                         (op == "showplace" ?
                             <ShowPlace session={props.session} />

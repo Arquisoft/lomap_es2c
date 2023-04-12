@@ -11,14 +11,11 @@ class MapManager {
 
     async verMapaDe(user: User, session: Session): Promise<Group[]> {
         let grupos = await this.pod.getGroups(session)
-        console.log("Puede")
         return grupos
     }
 
     async añadirLugarAGrupo(lugar: Place, grupo: Group, session: Session): Promise<Group> {
         grupo.places.push(lugar)
-
-        console.log(1)
 
         await this.pod.updateGroup(session, grupo)
 
@@ -31,9 +28,11 @@ class MapManager {
             name: name,
             places: []
         };
-
-        console.log(session)
-        await this.pod.saveGroup(session, grupo)
+        await this.pod.saveGroup(session, grupo).catch((e: any) => {
+            throw new Error("Primer grupo creado")
+        }).finally(() => {
+            return grupo;
+        })
         return grupo;
     }
 

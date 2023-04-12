@@ -1,4 +1,4 @@
-import { Box, Button, Divider, TextField, Tooltip } from '@mui/material'
+import { Box, Button, CircularProgress, Divider, TextField, Tooltip } from '@mui/material'
 import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -43,7 +43,15 @@ const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
 
+const BoxCircularProgress = styled(Box)({
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center'
+})
+
 export const FriendManagerPanel = (props: { session: any }) => {
+
+    const [loading, setLoading] = useState(true)
 
     const [url, setUrl] = useState("../testUser.jfif");
 
@@ -58,10 +66,8 @@ export const FriendManagerPanel = (props: { session: any }) => {
 
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
-        console.log("hola")
         await getMyFriends(user).then(function (friends) {
             for (let i = 0; i < friends.length; i++) {
-                console.log(friends[i].username)
                 let friendGroups: Group[] = []
                 new PodManager().getGroups(props.session).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
@@ -73,6 +79,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
                 });
             }
         })
+        console.log(myFriends)
         return myFriends;
     }
 
@@ -179,8 +186,13 @@ export const FriendManagerPanel = (props: { session: any }) => {
                                 </ListSubheader>
                             }
                         >
+                            {loading &&
+                                <BoxCircularProgress>
+                                    <CircularProgress size={100} color="primary" />
+                                </BoxCircularProgress>
+                            }
                             <Box ref={ref}>
-                                <FriendsComponent friends={friends} daddy={ref} refresh={() => setFriends(userFriends())} />
+                                <FriendsComponent friends={friends} daddy={ref} refresh={() => setFriends(userFriends())} stopLoading={() => setLoading(false)} />
                             </Box>
                         </List>
                     </ScrollBox >
@@ -198,8 +210,13 @@ export const FriendManagerPanel = (props: { session: any }) => {
                                 </ListSubheader>
                             }
                         >
+                            {loading &&
+                                <BoxCircularProgress>
+                                    <CircularProgress size={100} color="primary" />
+                                </BoxCircularProgress>
+                            }
                             <Box ref={ref}>
-                                <FriendRequestsComponent friendRequests={friendRequests} daddy={ref} refresh={() => setFriendRequests(userFriendRequests())} refreshFriends={() => setFriends(userFriends())} />
+                                <FriendRequestsComponent friendRequests={friendRequests} daddy={ref} stopLoading={() => setLoading(false)} refresh={() => setFriendRequests(userFriendRequests())} refreshFriends={() => setFriends(userFriends())} />
                             </Box>
                         </List>
                     </ScrollBox >

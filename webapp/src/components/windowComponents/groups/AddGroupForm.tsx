@@ -16,6 +16,7 @@ import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Group } from 'shared/shareddtypes';
 import { Session } from '@inrupt/solid-client-authn-browser';
+import { GroupOutlined } from '@mui/icons-material';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -68,7 +69,7 @@ const CSSTextField = styled(TextField)({
 
 
 
-export default function AddGroupForm(props: { session: any }) {
+export default function AddGroupForm(props: { session: any, refresh: any }) {
 
     const schema = fieldsValidation.groupValidation;
     type GroupSchema = yup.InferType<typeof schema>;
@@ -80,7 +81,10 @@ export default function AddGroupForm(props: { session: any }) {
     const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
         new MapManager().crearGrupo(data.groupName, props.session).then((grupo: Group) => {
             navigate("/home/groups/main")
+            props.refresh()
             temporalSuccessMessage("Grupo <em><b>" + grupo.name + "</b></em> creado correctamente. ¡A añadir lugares se ha dicho!");
+        }).catch((e: any) => {
+            temporalSuccessMessage("Se ha creado todo correctamente en el POD. ¡A añadir grupos se ha dicho!");
         })
     }
 

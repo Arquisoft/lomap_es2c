@@ -20,14 +20,7 @@ export class Repository {
     static async findOne(user: User) {
 
         let resultado: User;
-        //try {
         resultado = await UserSchema.findOne({ username: user.username } ?? null) as User;
-        //} catch {
-        //  return new UserImpl("bderror", "", "");
-        //}
-
-        if (resultado == null) { return new UserImpl("notfound", "", "") };
-
 
         return resultado
     }
@@ -38,10 +31,6 @@ export class Repository {
 
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID, description: user.description, img: user.img }, { new: true });
 
-
-        if (resultado == null) { return new UserImpl("notfound", "", "") };
-
-        console.log(resultado)
         return resultado
     }
 
@@ -52,7 +41,6 @@ export class Repository {
 
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { password: user.password }, { new: true });
 
-        console.log(resultado)
         return resultado
     }
 

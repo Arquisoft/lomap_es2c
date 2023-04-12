@@ -94,8 +94,8 @@ export function Signup() {
     console.log(errors);
 
     const trySignup = (user: UserSchema) => {
-        if (user.username && user.webID && user.password) {
-            let newUser: User = { username: user.username, webID: user.webID, password: user.password, img: "", description: "" };
+        if (user.username && user.password) {
+            let newUser: User = { username: user.username, webID: "", password: user.password, img: "", description: "" };
             if (fieldsValidation.checkPasswords(pass, confirmPass)) {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
@@ -150,15 +150,6 @@ export function Signup() {
                     fullWidth
                     {...register("username")}
                     helperText={errors.username ? errors.username.message : ''}
-                />
-
-                <CSSTextField
-                    id="webidSU"
-                    label="WebID"
-                    placeholder="WebID"
-                    fullWidth
-                    {...register("webID")}
-                    helperText={errors.webID ? 'Debe introducir un WebID válido' : ''}
                 />
 
                 <CSSTextField

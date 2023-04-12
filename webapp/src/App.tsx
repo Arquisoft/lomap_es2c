@@ -21,31 +21,32 @@ import { Provider } from 'react-redux';
 
 function App(): JSX.Element {
     const [session, setSession] = useState<any>(null)
-    handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {
-        if (s !== undefined) setSession(s)
-    })
+    if (readCookie("isPodLogged") == "true")
+        handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {
+            if (s !== undefined) setSession(s)
+        })
     return (
         <Provider store={store}>
-        <SessionProvider sessionId={session?.sessionId as string}>
-            <BrowserRouter>
-                <Routes>
-                    <Route path='/' element={<AuthCheckerNoLogged> <HomeView /> </AuthCheckerNoLogged>} />
-                    {/* 
+            <SessionProvider sessionId={session?.sessionId as string}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path='/' element={<AuthCheckerNoLogged> <HomeView /> </AuthCheckerNoLogged>} />
+                        {/* 
                     mainop = [groups/friends]
                     ?op = [groupView (addplace, addgroup, main)/friendName]
                     ?id = [shownGroupName]
                     ?lat = [optional lat to add from map]
                     ?lon = [optional lon to add from map]
                 */}
-                    <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthPodChecker><LoggedView /></AuthPodChecker>} />
-                    <Route path='/login' element={<AuthCheckerNoLogged> <LoginView /></AuthCheckerNoLogged>} />
-                    <Route path='/home/:welcome?' element={<AuthPodChecker><HomeViewLogged /></AuthPodChecker>} />
-                    <Route path='/signup' element={<AuthCheckerNoLogged> <SignupView /></AuthCheckerNoLogged>} />
-                    <Route path='/podlogin' element={<AuthChecker><PodView /></AuthChecker>} />
-                    <Route path='*' element={<NoFound />} />
-                </Routes>
-            </BrowserRouter>
-        </SessionProvider>
+                        <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthPodChecker><LoggedView /></AuthPodChecker>} />
+                        <Route path='/login' element={<AuthCheckerNoLogged> <LoginView /></AuthCheckerNoLogged>} />
+                        <Route path='/home/:welcome?' element={<AuthPodChecker><HomeViewLogged /></AuthPodChecker>} />
+                        <Route path='/signup' element={<AuthCheckerNoLogged> <SignupView /></AuthCheckerNoLogged>} />
+                        <Route path='/podlogin' element={<AuthChecker><PodView /></AuthChecker>} />
+                        <Route path='*' element={<NoFound />} />
+                    </Routes>
+                </BrowserRouter>
+            </SessionProvider>
         </Provider>
     );
 }

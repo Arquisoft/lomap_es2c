@@ -117,7 +117,7 @@ export function HomePage() {
 
     const checkRequests = (user: User) => {
         getMyFriendRequests(user).then((reqs) => {
-            if (reqs.length > -1) temporalSuccessMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+            if (reqs.length > 0) temporalSuccessMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
         })
     }
 

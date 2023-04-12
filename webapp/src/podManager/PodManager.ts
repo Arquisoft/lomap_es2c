@@ -12,7 +12,6 @@ class PodManager {
 
     // podUrl must be correct for the moment
     async savePlace(session: Session, place: Place): Promise<void> {
-        console.log(session)
         try {
             let url = session.info.webId.replace("card#me", "public") + "/places";
             let places = await this.getPlaces(session);
@@ -51,7 +50,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Lugar añadido");
         } catch (error) {
             console.log(error);
         }
@@ -95,7 +93,6 @@ class PodManager {
 
     async updateGroup(session: Session, group: Group): Promise<void> {
         try {
-            console.log(2)
 
             let url = session.info.webId.replace("card#me", "public") + "/groups";
             let groups = await this.getGroups(session);
@@ -103,8 +100,6 @@ class PodManager {
             groups.forEach((gr: Group) => {
                 console.log(gr)
             })
-
-            console.log(group)
 
             // Buscar el índice del grupo existente
             const groupIndex = groups.findIndex((oldGroup) => group.name == oldGroup.name);
@@ -222,7 +217,6 @@ class PodManager {
 
     async saveGroup(session: Session, group: Group): Promise<void> {
         try {
-            console.log(session)
             let url = session.info.webId.replace("card#me", "public") + "/groups";
             let groups = await this.getGroups(session);
 
@@ -271,8 +265,6 @@ class PodManager {
     }
 
     async getGroups(session: Session): Promise<Group[]> {
-        console.log("MANAGER")
-        console.log(session)
         let url = session.info.webId.replace("card#me", "public") + "/groups"
 
         try {
