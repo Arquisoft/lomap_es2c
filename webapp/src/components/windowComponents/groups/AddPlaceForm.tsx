@@ -201,7 +201,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
         mapM.añadirLugarAGrupo(p, group, props.session).then(() => {
             temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
-            navigate("/home/groups/main")
+            navigate("/home/groups/showgroup/" + group.name)
             props.refresh()
         })
     };
@@ -234,7 +234,9 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                     <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
                         Mis grupos
                     </Link>
-                    <Typography color="inherit">{id}</Typography>
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/showgroup/" + id)}>
+                        {id}
+                    </Link>
                     <Typography color="text.primary">Nuevo lugar</Typography>
                 </Breadcrumbs>
             </div>

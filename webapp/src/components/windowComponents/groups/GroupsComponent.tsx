@@ -67,8 +67,8 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
             if (result.isConfirmed) {
                 new PodManager().deleteGroup(props.session, group).then(() => {
                     props.refresh();
+                    temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
                 });
-                temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
             } else {
                 Swal.close();
             }
@@ -146,6 +146,8 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
         dispatch(addMarkers(groupMarkers)); // Se muestran los nuevos marcadores
 
         temporalSuccessMessage("Mostrando el grupo <em><b>" + group.name + "</em></b>.");
+
+        navigate("/home/groups/showgroup/" + group.name)
 
     }
 

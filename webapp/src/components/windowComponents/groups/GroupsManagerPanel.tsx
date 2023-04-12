@@ -17,6 +17,7 @@ import { Groups } from './GroupsComponent';
 import { MapManager } from 'podManager/MapManager';
 import ShowPlace from './ShowPlace';
 import { Refresh } from '@mui/icons-material';
+import { ShowGroup } from './ShowGroup';
 
 const BoxCircularProgress = styled(Box)({
     display: 'flex',
@@ -60,7 +61,7 @@ export const GroupsManagerPanel = (props: { session: any }) => {
         return myGroups;
     }
 
-    const [groups, setGroups] = useState<Promise<Group[]>>(userGroups)
+    const [groups, setGroups] = useState<Promise<Group[]>>(userGroups())
 
     const { op } = useParams()
 
@@ -109,11 +110,14 @@ export const GroupsManagerPanel = (props: { session: any }) => {
                         (op == "showplace" ?
                             <ShowPlace session={props.session} />
                             :
-                            <ErrorPage></ErrorPage>
+                            (op == "showgroup" ?
+                                <ShowGroup session={props.session} refresh={() => setGroups(userGroups())} />
+                                :
+                                <ErrorPage></ErrorPage>
+                            )
                         )
                     )
-                )
-            }
+                )}
         </ >
     )
 }
