@@ -183,14 +183,16 @@ function PlaceComponent(props: any) {
                 <CoordinatesBox>
                     <CSSTextField
                         id="longitude-SP"
-                        value={("Longitud: " + place.longitude.toString().substring(0, 8))}
+                        label="Longitud"
+                        value={(place.longitude.toString().substring(0, 8))}
                         placeholder="Longitud"
                         disabled
 
                     />
                     <CSSTextField
                         id="latitude-SP"
-                        value={("Latitud: " + place.latitude.toString().substring(0, 8))}
+                        label="Latitud"
+                        value={(place.latitude.toString().substring(0, 8))}
                         placeholder="Latitud"
                         disabled
                     />

@@ -13,6 +13,8 @@ export function showError(errorTitle: string, errorMessage: string, f: () => any
     });
 }
 
+// User validations
+
 export function checkPasswords(pass: String, confirmPass: String) {
     if (pass == null || typeof (pass) == 'undefined' || pass.trim().length == 0) return false;
     return confirmPass === pass
@@ -52,10 +54,25 @@ export const passwordValidation = yup.object({
 }).required();
 
 
-
+// Group validations
 export const groupValidation = yup.object({
-    groupName: yup.string().matches(/^[a-zA-Z0-9\s]+$/g, "El nombre no puede contener caracteres especiales")
+    groupName: yup.string().matches(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/g, "El nombre no puede contener caracteres especiales")
         .min(3, "El nombre debe de tener entre 3 y 30 caracteres")
         .max(30, "El nombre debe de tener entre 3 y 30 caracteres")
         .required()
+});
+
+// Place validations
+export const placeValidation = yup.object({
+    placename: yup.string().matches(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/g, "El nombre no puede contener caracteres especiales")
+        .min(3, "El nombre debe de tener entre 3 y 30 caracteres")
+        .max(30, "El nombre debe de tener entre 3 y 30 caracteres")
+        .required("Debes de introducir un nombre"),
+    longitude:yup.number().min(-90, "La longitud debe estar comprendida entre -180 y 180")
+        .max(90, "La longitud debe estar entre -180 y 180")
+        .required("La longitud es un campo obligatorio"),
+    latitude:yup.number().min(-90, "La latitud debe estar comprendida entre -90 y 90")
+        .max(90, "La latitud debe estar entre -90 y 90")
+        .required("La latitud es un campo obligatorio"),
+    review: yup.string().max(150, "La longitud máxima permitida es de 150 caracteres"),   
 });

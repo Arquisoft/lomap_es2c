@@ -23,10 +23,12 @@ import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
 import { Place, Comment, Group } from 'shared/shareddtypes';
-import { readCookie } from 'utils/CookieReader';
 import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import * as fieldsValidation from '../../../utils/fieldsValidation';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -157,7 +159,6 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
     let mapM = new MapManager();
 
-
     const userGroups = async () => {
         const groups = await mapM.verMapaDe(null, props.session);
         return groups;
@@ -176,7 +177,25 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         findGroup();
     }, []);
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const schema = fieldsValidation.placeValidation;
+    type PlaceShema = yup.InferType<typeof schema>;
+
+    const { register, setValue, handleSubmit, formState: { errors } } = useForm<PlaceShema>({
+        resolver: yupResolver(schema)
+    });
+
+    useEffect(() => {
+        if (lat !== null) {
+            setValue('latitude', parseFloat(lat));
+        }
+      }, [lat, setValue]);
+
+      useEffect(() => {
+        if (lng !== null) {
+            setValue('longitude', parseFloat(lng));
+        }
+      }, [lng, setValue]);
+
     const onSubmit = (data: any) => {
         console.log(data.review)
         let longitude = data.longitude == "" ? lng : data.longitude;
@@ -252,7 +271,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                     placeholder="Nombre del lugar"
                     fullWidth
                     {...register("placename")}
-                    helperText={errors.placename ? 'Nombre inválido' : ''}
+                    helperText={errors.placename ? errors.placename.message : ''}
 
                 />
                 <FormControl sx={{ mb: '0.8em', maxHeight: "50em", overflow: "none" }} fullWidth>
@@ -281,20 +300,22 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                 <CoordinatesBox>
                     <CSSTextField
                         id="longitude-AP"
-                        label={lng ? ("Longitud: " + lng.toString().substring(0, 8)) : "Longitud"}
+                        label="Longitud"
+                        value={lng ? lng : ''}
                         placeholder="Longitud"
                         disabled={lng ? true : false}
-                        {...register("longitude", { min: -180, max: 180 })}
-                        helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
+                        {...register("longitude")}
+                        helperText={errors.longitude ? errors.longitude.message : ''}
                     />
 
                     <CSSTextField
                         id="latitude-AP"
-                        label={lat ? ("Latitud: " + lat.toString().substring(0, 9)) : "Latitud"}
+                        label="Latitud"
+                        value={lat ? lat : ''}
                         placeholder="Latitud"
                         disabled={lat ? true : false}
-                        {...register("latitude", { min: -90, max: 90 })}
-                        helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
+                        {...register("latitude")}
+                        helperText={errors.latitude ? errors.latitude.message : ''}
                     />
                 </CoordinatesBox>
 
@@ -306,7 +327,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                         id="review-AP"
                         placeholder="Reseña..."
                         style={{ width: '98.7%', height: '7vh', resize: 'none' }}
-                        {...register("review", { required: true, maxLength: 150 })} />
+                        {...register("review")} />
 
                 </Box>
                 <Box sx={{ gridColumn: 3 }}>
