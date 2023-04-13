@@ -178,8 +178,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = (data: any) => {
-        console.log(data.longitude + "-" + lng)
-        console.log(data.latitude + "-" + lat)
+        console.log(data.review)
         let longitude = data.longitude == "" ? lng : data.longitude;
         let latitude = data.latitude == "" ? lat : data.latitude;
         let comments: Comment[] = [{
@@ -304,10 +303,10 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                     <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
 
                     <textarea
-                        id="review"
+                        id="review-AP"
                         placeholder="Reseña..."
                         style={{ width: '98.7%', height: '7vh', resize: 'none' }}
-                        {...register("review-AP", { required: true, maxLength: 150 })} />
+                        {...register("review", { required: true, maxLength: 150 })} />
 
                 </Box>
                 <Box sx={{ gridColumn: 3 }}>

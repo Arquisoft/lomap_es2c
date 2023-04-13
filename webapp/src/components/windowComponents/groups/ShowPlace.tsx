@@ -204,7 +204,7 @@ function PlaceComponent(props: any) {
                         id="review-SP"
                         placeholder={place.comments[0] ? place.comments[0].comment : "Sin reseña"}
                         style={{ width: '98.7%', height: '7vh', resize: 'none' }}
-                        disabled
+                        readOnly
                     />
 
                 </Box>
@@ -216,7 +216,7 @@ function PlaceComponent(props: any) {
                         IconContainerComponent={IconContainer}
                         getLabelText={(value: number) => customIcons[value].label}
                         highlightSelectedOnly
-                        disabled
+                        readOnly
                     />
                 </Box>
 
