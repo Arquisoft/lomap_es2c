@@ -6,7 +6,7 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -180,9 +180,17 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     const schema = fieldsValidation.placeValidation;
     type PlaceShema = yup.InferType<typeof schema>;
 
-    const { register, setValue, handleSubmit, formState: { errors } } = useForm<PlaceShema>({
-        resolver: yupResolver(schema)
+    const { register, control, setValue, handleSubmit, formState: { errors } } = useForm<PlaceShema>({
+        resolver: yupResolver(schema),
+        defaultValues: {
+            latitude: 0,
+            longitude: 0,
+          },
     });
+
+    const handleSetValue = (field:any, value:any) => {
+        setValue(field, value);
+      };
 
     useEffect(() => {
         if (lat !== null) {
@@ -298,24 +306,46 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                     </Select>
                 </FormControl>
                 <CoordinatesBox>
-                    <CSSTextField
-                        id="longitude-AP"
-                        label="Longitud"
-                        value={lng ? lng : ''}
-                        placeholder="Longitud"
-                        disabled={lng ? true : false}
-                        {...register("longitude")}
-                        helperText={errors.longitude ? errors.longitude.message : ''}
+                <Controller
+                        name="longitude"
+                        control={control}
+                        render={({ field }) => (
+                        <TextField
+                            {...field}
+                            label="Longitud"
+                            type="number"
+                            error={Boolean(errors.longitude)}
+                            helperText={errors.longitude?.message}
+                            inputProps={{
+                            step: 0.000001,
+                            min: -180,
+                            max: 180
+                            }}
+                            disabled={lng !== undefined ? true : false}
+                            onChange={(e) => handleSetValue(field.name, e.target.value)}
+                        />
+                        )}
                     />
 
-                    <CSSTextField
-                        id="latitude-AP"
-                        label="Latitud"
-                        value={lat ? lat : ''}
-                        placeholder="Latitud"
-                        disabled={lat ? true : false}
-                        {...register("latitude")}
-                        helperText={errors.latitude ? errors.latitude.message : ''}
+                <Controller
+                        name="latitude"
+                        control={control}
+                        render={({ field }) => (
+                        <TextField
+                            {...field}
+                            label="Latitud"
+                            type="number"
+                            error={Boolean(errors.latitude)}
+                            helperText={errors.latitude?.message}
+                            inputProps={{
+                            step: 0.000001,
+                            min: -90,
+                            max: 90
+                            }}
+                            disabled={lat !== undefined ? true : false}
+                            onChange={(e) => handleSetValue(field.name, e.target.value)}
+                        />
+                        )}
                     />
                 </CoordinatesBox>
 
