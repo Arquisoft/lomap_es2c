@@ -8,18 +8,14 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
 import { Place, Comment, Group } from '../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
-import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { useState } from 'react';
-import PodLogin from 'components/userIdentification/podLogin/Pod';
 import { CircularProgress } from '@mui/material';
 
 const CSSTypography = styled(Typography)({
@@ -27,7 +23,7 @@ const CSSTypography = styled(Typography)({
     fontSize: '1.3em',
     fontFamily: 'Calibri',
 });
-
+/*
 const CSSButton = styled(Button)({
     backgroundColor: "white",
     color: "#81c784",
@@ -48,6 +44,7 @@ const CSSButton = styled(Button)({
         boxShadow: '0 0 0 0.2rem #1f4a21',
     },
 });
+*/
 const CSSTextField = styled(TextField)({
     marginBottom: '0.8em',
     '& label.Mui-focused': {
@@ -126,9 +123,6 @@ const customIcons: {
         label: 'Very Satisfied',
     },
 };
-
-
-
 
 function IconContainer(props: IconContainerProps) {
     const { value, ...other } = props;

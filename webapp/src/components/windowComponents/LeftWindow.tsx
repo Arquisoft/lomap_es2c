@@ -7,16 +7,11 @@ import { styled } from '@mui/material/styles';
 import { createTheme, Tabs, ThemeProvider } from '@mui/material';
 import { GroupsManagerPanel } from './groups/GroupsManagerPanel';
 import { FriendManagerPanel } from './friends/FriendManagerPanel';
-import { showError } from '../../utils/fieldsValidation';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
 import MapIcon from '@mui/icons-material/Map';
 import { useDispatch } from 'react-redux';
 import { addPlaceMarker } from 'utils/redux/action';
-import { getMyFriendRequests, getUserInSesion } from 'api/api';
-import { temporalInfoMessage } from 'utils/MessageGenerator';
-import { ErrorPage } from 'components/mainComponents/ErrorPage';
-import { Session } from '@inrupt/solid-client-authn-browser';
 
 const Window = styled(Box)({
     backgroundColor: 'white',

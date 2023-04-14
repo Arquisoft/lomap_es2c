@@ -1,5 +1,5 @@
-import { Box, CircularProgress, Divider, Tooltip } from '@mui/material'
-import React, { createRef, useEffect, useState } from 'react'
+import { Box, Divider, Tooltip } from '@mui/material'
+import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -10,23 +10,18 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
-import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
+import { Friend, Group, User } from '../../../shared/shareddtypes';
 import CloseIcon from '@mui/icons-material/Close';
 import { render } from 'react-dom';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
-import { getUserInSesion, deleteFriendApi } from 'api/api';
+import { deleteFriendApi } from 'api/api';
+import { showError } from 'utils/fieldsValidation';
 
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
-})
-
-const BoxCircularProgress = styled(Box)({
-    display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center'
 })
 
 const InfoBox = styled(Box)({
@@ -85,7 +80,9 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                 deleteFriendApi(friend).then(() => {
                     props.refresh()
                     temporalSuccessMessage("Tú amigo <em><b>" + friend.username + "</b></em> ha sido eliminado correctamente.");
-                });
+                }).catch((err: any) => {
+                    showError("Error al eliminar al amigo " + friend.username + ".", err.toString(), Swal.close);
+                });;
             } else {
                 Swal.close();
             }

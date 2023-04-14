@@ -16,19 +16,17 @@ import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfi
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { render } from 'react-dom';
-import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
-import { useSession } from '@inrupt/solid-ui-react';
 import PodManager from '../../../podManager/PodManager'
-import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
 import { useDispatch } from 'react-redux';
 import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { Place, Comment, MarkerData } from '../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';
+import { showError } from 'utils/fieldsValidation';
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
@@ -46,8 +44,6 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
     const [open, setOpen] = React.useState("");
     const [selectedGroup, setSelectecGroup] = React.useState("");
-
-
 
     const deleteGroup = (group: Group) => {
         showQuestion(group)
@@ -68,7 +64,9 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                 new PodManager().deleteGroup(props.session, group).then(() => {
                     props.refresh();
                     temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
-                });
+                }).catch((err: any) => {
+                    showError("Error al eliminar el grupo " + group.name + ".", err.toString(), Swal.close);
+                });;
             } else {
                 Swal.close();
             }

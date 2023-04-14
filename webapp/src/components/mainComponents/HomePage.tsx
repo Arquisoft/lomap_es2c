@@ -1,4 +1,3 @@
-import React from 'react'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
@@ -6,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ImgCarrusel from './ImgCarrusel';
 import { getMyFriendRequests, getUserInSesion } from 'api/api';
-import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { temporalErrorMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { User } from 'shared/shareddtypes';
+import { showError } from 'utils/fieldsValidation';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
@@ -118,6 +118,8 @@ export function HomePage() {
     const checkRequests = (user: User) => {
         getMyFriendRequests(user).then((reqs) => {
             if (reqs.length > 0) temporalSuccessMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+        }).catch((err: any) => {
+            temporalErrorMessage("Error listando tus solicitudes de amistad. Algo va mal... Contacta con nosotros si sigue así.")
         })
     }
 

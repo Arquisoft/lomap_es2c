@@ -5,24 +5,18 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
-import { Friend, FriendRequest, Group, Place, User } from '../../../shared/shareddtypes';
-import { searchUserByUsername, sendFriendRequest, updateRequest } from '../../../api/api';
+import { FriendRequest } from '../../../shared/shareddtypes';
+import { searchUserByUsername, updateRequest } from '../../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
 import { render } from 'react-dom';
-import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import CheckIcon from '@mui/icons-material/Check';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import { showError } from 'utils/fieldsValidation';
 
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
-})
-
-const BoxCircularProgress = styled(Box)({
-    display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center'
 })
 
 const InfoBox = styled(Box)({
@@ -33,8 +27,6 @@ const InfoBox = styled(Box)({
 export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendRequest[]>, daddy: any, refresh: any, refreshFriends: any, stopLoading: any }) => {
 
     const [url, setUrl] = useState("../testUser.jfif");
-
-    const navigate = useNavigate()
 
     const [open, setOpen] = React.useState("");
 
@@ -48,33 +40,42 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
     }
 
     const showFriendProfile = async (user: string) => {
-        let usr = await searchUserByUsername(user);
-        Swal.fire({
-            title: 'Mi perfil',
-            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
-                    <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
-                    <label for="biography-gp" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
-            focusConfirm: false,
-            imageUrl: url,
-            imageWidth: 'auto',
-            imageHeight: 200,
-            imageAlt: 'Foto de perfil actual',
-        })
+        await searchUserByUsername(user).then((usr) => {
+            Swal.fire({
+                title: 'Mi perfil',
+                html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+                        <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
+                        <label for="biography-gp" class="swal2-label">Biografía: </label>
+                        <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
+                focusConfirm: false,
+                imageUrl: url,
+                imageWidth: 'auto',
+                imageHeight: 200,
+                imageAlt: 'Foto de perfil actual',
+            })
+        }).catch((err: any) => {
+            showError("Error mostrar el perfil de " + user + ".", err.toString(), Swal.close);
+        });
     }
 
     const declineRequest = (request: FriendRequest) => {
-        updateRequest(request, -1)
-        props.refresh();
-        props.refreshFriends();
-        temporalSuccessMessage("Solicitud de amistad de <em><b>" + request.sender + "</b></em> rechazada correctamente.");
+        updateRequest(request, -1).then((req) => {
+            props.refresh();
+            props.refreshFriends();
+            temporalSuccessMessage("Solicitud de amistad de <em><b>" + req.sender + "</b></em> rechazada correctamente.");
+        }).catch((err: any) => {
+            showError("Error al rechazar la solicitud de " + request.sender + ".", err.toString(), Swal.close);
+        });
     }
 
     const acceptRequest = (request: FriendRequest) => {
-        updateRequest(request, 1)
-        props.refresh();
-        props.refreshFriends();
-        temporalSuccessMessage("La solicitud de amistad de <em><b>" + request.sender + "</b></em> ha sido aceptada correctamente.");
+        updateRequest(request, 1).then((req) => {
+            props.refresh();
+            props.refreshFriends();
+            temporalSuccessMessage("La solicitud de amistad de <em><b>" + request.sender + "</b></em> ha sido aceptada correctamente.");
+        }).catch((err: any) => {
+            showError("Error al aceptar la solicitud de " + request.sender + ".", err.toString(), Swal.close);
+        });
     }
 
     props.friendRequests.then((frds: FriendRequest[]) => {

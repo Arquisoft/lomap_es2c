@@ -23,7 +23,6 @@ import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
 import { Place, Comment, Group } from 'shared/shareddtypes';
-import { readCookie } from 'utils/CookieReader';
 import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
@@ -153,17 +152,13 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     const [category, setCategory] = useState('');
     const [score, setScore] = useState(4);
 
-
-
     let mapM = new MapManager();
-
 
     const userGroups = async () => {
         const groups = await mapM.verMapaDe(null, props.session);
         return groups;
     };
 
-    const [groups, setGroups] = useState<Group[]>([]);
     const [group, setGroup] = useState<Group>();
 
     const findGroup = async () => {
@@ -217,15 +212,11 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         setCategory(event.target.value as string);
     };
 
-
     const handleScoreChange = (event: any, value: number | null) => {
         if (value !== null) {
             setScore(value);
         }
     };
-
-    console.log(category)
-    console.log(score)
 
     return (
         <>

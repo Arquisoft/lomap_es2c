@@ -56,8 +56,6 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
     } catch (err) {
         return res.status(404).send(err.toString())
     }
-
-
 })
 
 api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
@@ -65,10 +63,10 @@ api.post("/friendmanager/friendrequests", async (req: Request, res: Response): P
     let solicitudes = null
     try {
         solicitudes = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user)
+        return res.status(200).send(solicitudes);
     } catch (err) {
         return res.status(404).send(err.toString())
     }
-    return res.status(200).send(solicitudes);
 })
 
 api.post("/friendmanager/updaterequest/:status", async (req: Request, res: Response): Promise<Response> => {
@@ -77,11 +75,10 @@ api.post("/friendmanager/updaterequest/:status", async (req: Request, res: Respo
     let r = null
     try {
         r = await fac.FactoryLoMap.getFriendManager().actualizarSolicitud(fr, +status);
-
+        return res.status(200).send(r);
     } catch (err) {
         return res.status(404).send(err.toString())
     }
-    return res.status(200).send(r);
 })
 
 api.post("/friendmanager/friends", async (req: Request, res: Response): Promise<Response> => {
@@ -147,6 +144,5 @@ api.post(
         }
     }
 );
-
 
 export default api;

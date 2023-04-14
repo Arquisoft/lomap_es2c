@@ -90,13 +90,15 @@ body.swal2-shown>[aria-hidden="true"] {
     font-size: 1.2em;
 }
 
-a:visited, a:hover {
+a:visited,
+a:hover {
     color: #1f4a21;
 }
 
 a {
-    color:white;
+    color: white;
 }
+
 .swal-text-success,
 .swal-text-info {
     font-size: 1em !important;
@@ -108,6 +110,10 @@ a {
 
 .swal-text-info {
     color: "black";
+}
+
+.swal-text-error {
+    color: "red";
 }
 
 .swal-text-success {
@@ -124,5 +130,5 @@ a {
 
 
 #review:focus {
-   border-color: #81c784 !important;
+    border-color: #81c784 !important;
 }

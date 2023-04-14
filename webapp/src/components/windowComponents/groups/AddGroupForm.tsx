@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -15,8 +14,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Group } from 'shared/shareddtypes';
-import { Session } from '@inrupt/solid-client-authn-browser';
-import { GroupOutlined } from '@mui/icons-material';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',

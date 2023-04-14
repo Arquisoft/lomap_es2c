@@ -20,15 +20,15 @@ class UserSesionManager implements SesionManager {
         try {
             usuarioEncontrado = await repo.Repository.findOne(usuario)
         } catch (e: any) {
-            throw new Error("Ha ocurrido un fallo interno.");
+            throw new Error("Ha sucedido un error al crear la cuenta, vuelva a intentarlo más tarde.");
         }
         if (usuarioEncontrado != null) {
-            throw new Error("Ya existe el usuario");
+            throw new Error("El nombre de usuario que intenta introducir no esta disponible.");
         }
         try {
             repo.Repository.save(usuario, this.rondasDeEncriptacion)
         } catch (e: any) {
-            throw new Error("Ha ocurrido un fallo interno.");
+            throw new Error("Ha sucedido un error al crear la cuenta, vuelva a intentarlo más tarde.");
         }
         return usuario;
     }

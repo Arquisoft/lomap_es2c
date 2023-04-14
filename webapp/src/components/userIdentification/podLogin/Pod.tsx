@@ -1,8 +1,6 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import SForm from '../SesionForm';
-import { SelectChangeEvent } from '@mui/material/Select';
 import GetProviders from './PodProviders';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -13,7 +11,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { logout } from '../../../api/api';
 import {
     LoginButton,
-    SessionProvider,
     useSession,
 } from "@inrupt/solid-ui-react";
 import { useNavigate } from 'react-router-dom';

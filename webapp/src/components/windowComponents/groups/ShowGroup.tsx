@@ -1,13 +1,11 @@
-import { Box, Collapse, CircularProgress, Divider, Tooltip, Breadcrumbs, Typography } from '@mui/material'
+import { Box, CircularProgress, Divider, Tooltip, Breadcrumbs, Typography } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MapIcon from '@mui/icons-material/Map';
 import { Group } from '../../../shared/shareddtypes';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
@@ -16,16 +14,10 @@ import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfi
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
-import { ErrorPage } from 'components/mainComponents/ErrorPage';
-import AddLocationIcon from '@mui/icons-material/AddLocation';
-import { useSession } from '@inrupt/solid-ui-react';
 import PodManager from '../../../podManager/PodManager'
-import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
-import { useDispatch } from 'react-redux';
-import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
-import { Place, Comment, MarkerData } from '../../../shared/shareddtypes'
+import { Place } from '../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';
