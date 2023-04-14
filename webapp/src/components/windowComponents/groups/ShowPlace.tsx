@@ -20,6 +20,7 @@ import { MapManager } from 'podManager/MapManager';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { useState } from 'react';
 import PodLogin from 'components/userIdentification/podLogin/Pod';
+import { CircularProgress } from '@mui/material';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -69,6 +70,13 @@ const CSSTextField = styled(TextField)({
         color: 'red !important',
     }
 });
+
+const BoxCircularProgress = styled(Box)({
+    paddingTop: '8em',
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center'
+})
 
 const CoordinatesBox = styled(Box)({
     display: 'flex',
@@ -158,15 +166,6 @@ function PlaceComponent(props: any) {
 
     return (
         <>
-            <div>
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-                        Mis grupos
-                    </Link>
-                    <Typography color="inherit">{groupname}</Typography>
-                    <Typography color="text.primary">{place.nombre}</Typography>
-                </Breadcrumbs>
-            </div>
             <Box>
                 <CSSTypography variant="body1" align="center"
                     sx={{ mt: "0.5em", mb: "0.5em" }}>
@@ -232,15 +231,6 @@ function PlaceError(props: any) {
 
     return (
         <>
-            <div>
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-                        Mis grupos
-                    </Link>
-                    <Typography color="inherit">{groupname}</Typography>
-                    <Typography color="text.primary">{props.placename}</Typography>
-                </Breadcrumbs>
-            </div>
             <Box>
                 <CSSTypography variant="body1" align="center"
                     sx={{ mt: "0.5em", mb: "0.5em" }}>
@@ -256,6 +246,7 @@ function PlaceError(props: any) {
 export default function ShowPlace(props: { session: any }) {
     const { id, lat } = useParams();
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(true)
 
 
     let place: Place = places.find((p) => p.nombre == lat)
@@ -278,9 +269,10 @@ export default function ShowPlace(props: { session: any }) {
     }
 
     const checkPlace = async (group: Promise<Group>) => {
-        group.then((g) =>
-            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lat))
-        )
+        group.then((g) => {
+            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lat));
+            setLoading(false);
+        })
     }
 
     const [groups, setGroups] = useState<Promise<Group[]>>(userGroups)
@@ -296,11 +288,29 @@ export default function ShowPlace(props: { session: any }) {
 
     return (
         <>
+            <div>
+                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                        Mis grupos
+                    </Link>
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/showgroup/" + id)}>
+                        {id}
+                    </Link>
+                    <Typography color="text.primary">{lat}</Typography>
+                </Breadcrumbs>
+            </div>
             {placeDoesntExist() ? (
-                <PlaceError placename={lat} group={id} />
+                <>
+                    {loading &&
+                        <BoxCircularProgress>
+                            <CircularProgress size={100} color="primary" />
+                        </BoxCircularProgress>
+                    }
+                </>
             ) : (
                 <PlaceComponent place={podPlace} group={id} />
-            )}
+            )
+            }
         </>
     )
 }

@@ -20,6 +20,7 @@ import { Refresh } from '@mui/icons-material';
 import { ShowGroup } from './ShowGroup';
 
 const BoxCircularProgress = styled(Box)({
+    paddingTop: '7em',
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center',
@@ -29,7 +30,7 @@ const BoxCircularProgress = styled(Box)({
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
     overflow: 'auto',
-    scrollbarColor: 'black white'
+    scrollbarColor: '#81c784 white'
 })
 
 const AddItem = styled(ListItemButton)({

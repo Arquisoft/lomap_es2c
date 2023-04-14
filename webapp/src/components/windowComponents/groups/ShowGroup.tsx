@@ -16,7 +16,7 @@ import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfi
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
@@ -35,9 +35,9 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const ScrollBox = styled(Box)({
-    maxHeight: '60vh',
+    maxHeight: '40vh',
     overflow: 'auto',
-    scrollbarColor: 'black white'
+    scrollbarColor: '#81c784 white'
 })
 
 const InfoBox = styled(Box)({
@@ -46,6 +46,7 @@ const InfoBox = styled(Box)({
 })
 
 const BoxCircularProgress = styled(Box)({
+    paddingTop: '3.5em',
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center',
@@ -56,18 +57,22 @@ const AddItem = styled(ListItemButton)({
     color: '#81c784',
 })
 
-const DeleteItem = styled(ListItemButton)({
-    color: 'red',
-})
-
-
-const VerticalDivider = styled(Divider)({
-    padding: '0em 0.4em 0em'
+const BCBox = styled(Box)({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: '2em'
 })
 
 const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
+
+const CSSTypography = styled(Typography)({
+    color: '#81c784',
+    fontSize: '1.3em',
+    fontFamily: 'Calibri',
+});
 
 export const ShowGroup = (props: { session: any, refresh: any }) => {
 
@@ -95,22 +100,8 @@ export const ShowGroup = (props: { session: any, refresh: any }) => {
 
     const { id } = useParams();
 
-    console.log(id)
-
     const addPlace = () => {
         navigate("/home/groups/addplace/" + id)
-    }
-
-    const deleteGroup = () => {
-        new MapManager().verMapaDe(getUserInSesion(), props.session).then((groups) => {
-            for (let i = 0; i < groups.length; i++) {
-                if (groups[i].name === id) {
-                    showQuestion(groups[i])
-                    break;
-                }
-            }
-        })
-
     }
 
     const showQuestion = (group: Group) => {
@@ -136,21 +127,29 @@ export const ShowGroup = (props: { session: any, refresh: any }) => {
         })
     }
 
+    const deleteGroup = (group: Promise<Group>) => {
+        group.then((grp) => {
+            showQuestion(grp);
+        })
+    }
+
     return (
         <>
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-                    Mis grupos
-                </Link>
-                <Typography color="text.primary">{id}</Typography>
-            </Breadcrumbs>
-            <DeleteItem onClick={() => deleteGroup()}>
-                <ListItemIcon>
-                    <CloseIcon htmlColor='red' />
-                </ListItemIcon>
-                <ListItemText primary="Eliminar grupo" />
-            </DeleteItem>
-            <HorizontalDivider light color="#81c784" />
+            <BCBox>
+                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                        Mis grupos
+                    </Link>
+                    <Typography color="text.primary">{id}</Typography>
+                </Breadcrumbs>
+                <Tooltip title="Delete group" sx={{ ml: "0.6em" }}>
+                    <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
+                </Tooltip>
+            </BCBox>
+            <CSSTypography variant="body1" align="center"
+                sx={{ mt: "0.5em", mb: "0.5em" }}>
+                {id}
+            </CSSTypography>
             <AddItem onClick={() => addPlace()}>
                 <ListItemIcon>
                     <AddIcon htmlColor='#81c784' />
@@ -164,15 +163,15 @@ export const ShowGroup = (props: { session: any, refresh: any }) => {
                 </BoxCircularProgress>
             }
             <Box ref={ref}>
-                <GroupDetails daddy={ref} group={group} stopLoading={() => setLoading(false)} refresh={() => setGroup(userGroup())} />
+                <GroupDetails session={props.session} daddy={ref} group={group} stopLoading={() => setLoading(false)} refresh={() => setGroup(userGroup())} />
             </Box>
         </>
     )
 }
 
-const GroupDetails = (props: { daddy: any, group: Promise<Group>, stopLoading: any, refresh: any }) => {
+const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, stopLoading: any, refresh: any }) => {
 
-    console.log(props.group)
+    const navigate = useNavigate()
 
     const getScoreIcon = (place: Place) => {
         switch (place.reviewScore) {
@@ -191,18 +190,12 @@ const GroupDetails = (props: { daddy: any, group: Promise<Group>, stopLoading: a
             <>
                 {grp != null ?
                     <>
-                        < ListItemButton>
-                            <ListItemIcon>
-                                <MapIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={grp.name} />
-                        </ListItemButton>
                         <ScrollBox>
                             <List component="div" disablePadding>
                                 {grp.places.map((place, j) => {
                                     return (
                                         <React.Fragment key={j}>
-                                            <ListItemButton sx={{ pl: 4 }}>
+                                            <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/home/groups/showplace/" + grp.name + "/" + place.nombre)} >
                                                 <ListItemIcon>
                                                     <PlaceIcon />
                                                 </ListItemIcon>

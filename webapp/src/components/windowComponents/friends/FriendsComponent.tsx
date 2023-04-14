@@ -130,10 +130,13 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                                 </Tooltip>
                                             </ListItemIcon>
                                             <ListItemText primary={friend.user.username} />
-                                            {isOpen(i) ?
-                                                <ExpandLess onClick={() => handleClick(i)} />
+                                            {friend.groups.length > 0 ?
+                                                isOpen(i) ?
+                                                    <ExpandLess onClick={() => handleClick(i)} />
+                                                    :
+                                                    <ExpandMore onClick={() => handleClick(i)} />
                                                 :
-                                                <ExpandMore onClick={() => handleClick(i)} />
+                                                <></>
                                             }
                                             <VerticalDivider orientation='vertical' flexItem />
                                             <Tooltip title="Delete friend" sx={{ ml: "0.5em" }}>

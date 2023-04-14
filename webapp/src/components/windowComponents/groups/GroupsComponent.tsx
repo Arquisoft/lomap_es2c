@@ -181,12 +181,15 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                                                 <MapIcon />
                                             </ListItemIcon>
                                             <ListItemText primary={group.name} onClick={() => mostrarGrupo(group)} />
-                                            {isOpen(i) ?
+                                            {group.places.length > 0 ?
+                                                isOpen(i) ?
 
-                                                <ExpandLess onClick={() => { handleClick(i) }} />
+                                                    <ExpandLess onClick={() => { handleClick(i) }} />
+                                                    :
+
+                                                    <ExpandMore onClick={() => { handleClick(i) }} />
                                                 :
-
-                                                <ExpandMore onClick={() => { handleClick(i) }} />
+                                                <></>
                                             }
                                             <VerticalDivider orientation='vertical' flexItem />
                                             <Box sx={{ ml: "0.8em" }}>
@@ -220,7 +223,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                         </React.Fragment>
                         :
                         <InfoBox>
-                            <p><b>Aqui deberia haber grupos...</b></p><p>¡Venga, añade alguno!</p>
+                            <p><b>Aquí debería haber grupos...</b></p><p>¡Venga, añade alguno!</p>
                         </InfoBox>
                 }
             </>, props.daddy.current)

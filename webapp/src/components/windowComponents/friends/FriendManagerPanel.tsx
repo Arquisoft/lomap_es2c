@@ -44,6 +44,7 @@ const HorizontalDivider = styled(Divider)({
 })
 
 const BoxCircularProgress = styled(Box)({
+    paddingTop: '3em',
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center'
