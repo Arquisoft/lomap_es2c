@@ -1,5 +1,5 @@
 import { Session } from "@inrupt/solid-client-authn-browser";
-import { addStringNoLocale, addUrl, createSolidDataset, getFile, getJsonLdParser, getSolidDataset, getStringNoLocale, getThingAll, getUrl, getUrlAll, overwriteFile } from "@inrupt/solid-client";
+import { addStringNoLocale, addUrl, createAclFromFallbackAcl, saveAclFor, createSolidDataset, getFile, getJsonLdParser, getResourceAcl, getSolidDataset, getSolidDatasetWithAcl, getStringNoLocale, getThingAll, getUrl, getUrlAll, hasAccessibleAcl, hasFallbackAcl, hasResourceAcl, overwriteFile, setAgentDefaultAccess, setAgentResourceAccess, SolidDataset, Access, AclDataset } from "@inrupt/solid-client";
 import { setThing, createThing, Thing } from "@inrupt/solid-client";
 import { saveSolidDatasetAt } from "@inrupt/solid-client";
 import { Group, Place } from "shared/shareddtypes";
@@ -310,6 +310,90 @@ class PodManager {
             return [];
         }
     }
+
+    async addReadPermissionsToFriend(webId: string, friendWebId: string, session: Session): Promise<void> {
+        // Obtener el SolidDataset y su ACL asociada, si está disponible
+        const myDatasetWithAcl = await getSolidDatasetWithAcl(webId, { fetch: session.fetch });
+      
+        // Obtener la ACL propia del SolidDataset, si está disponible,
+        // o inicializar una nueva, si es posible:
+        let resourceAcl: AclDataset;
+        if (!hasResourceAcl(myDatasetWithAcl)) {
+
+            console.log(1)
+          if (!hasAccessibleAcl(myDatasetWithAcl)) {
+            console.log(2)
+            throw new Error("El usuario actual no tiene permiso para cambiar los permisos de acceso a este recurso.");
+          }
+          if (!hasFallbackAcl(myDatasetWithAcl)) {
+            console.log(3)
+            throw new Error("El usuario actual no tiene permiso para ver quién tiene acceso a este recurso.");
+            // Alternativamente, inicializa una nueva ACL vacía de la siguiente manera,
+            // pero ten en cuenta que si no le das a alguien acceso de Control,
+            // **nadie podrá cambiar los permisos de acceso en el futuro**:
+            // resourceAcl = createAcl(myDatasetWithAcl);
+          }
+          console.log(4)
+          resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
+        } else {
+            console.log(5)
+          resourceAcl = getResourceAcl(myDatasetWithAcl);
+          console.log(resourceAcl)
+        }
+      
+        // Agregar permisos de lectura al amigo especificado en el recurso:
+        const access: Access = { read: true, append: false, write: false, control: false };
+        let updatedAcl = setAgentResourceAccess(resourceAcl, friendWebId, access);
+        updatedAcl = setAgentDefaultAccess(updatedAcl, friendWebId, access);
+      
+        // Guardar la ACL actualizada:
+        await saveAclFor(myDatasetWithAcl, updatedAcl, { fetch: session.fetch });
+      }
+
+    async getFriendsGroups(session: Session, url: string): Promise<Group[]> {
+        console.log("MANAGER")
+        console.log(session)
+        url = url.replace("card#me", "public") + "profile/public/groups"
+
+        console.log(url)
+
+        try {
+            const file = await getFile(url, { fetch: session.fetch });
+            const text = await file.text();
+            const data = JSON.parse(text);
+
+            if (data["@type"] === "Groups") {
+                const groups = data.groups.map((group: any) => {
+                    return {
+                        name: group.name,
+                        places: group.places.map((place: any) => ({
+                            nombre: place.name,
+                            category: place.category,
+                            longitude: place.geo.longitude,
+                            latitude: place.geo.latitude,
+                            description: place.description,
+                            comments: place.comment.map((comment: any) => ({
+                                author: comment.author,
+                                comment: comment.comment,
+                                date: comment.date
+                            })),
+                            reviewScore: place.reviewScore,
+                            date: place.date
+                        }))
+                    };
+                });
+                return groups;
+            } else {
+                console.log("JSON-LD data is not of type 'Groups'");
+                return [];
+            }
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
+
+
 
 
 }
