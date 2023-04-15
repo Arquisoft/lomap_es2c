@@ -180,13 +180,13 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     const { register, control, setValue, handleSubmit, formState: { errors } } = useForm<PlaceShema>({
         resolver: yupResolver(schema),
         defaultValues: {
-            latitude: 0,
-            longitude: 0,
+            latitude: 0.0,
+            longitude: 0.0,
           },
     });
 
     const handleSetValue = (field:any, value:any) => {
-        setValue(field, value);
+        setValue(field, parseFloat(value));
       };
 
     useEffect(() => {
@@ -245,6 +245,19 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
             setScore(value);
         }
     };
+
+    const handleOnKeyPress = (e: any) => {
+        const maxLength = e.target.maxLength;
+        const currentValue: string = e.target.value;
+        const currentLength = currentValue.length;
+        const keyValue = e.key;
+        const number = /^[0-9.-]*$/;
+        if ( currentLength >= maxLength || (!number.test(keyValue) && !e.ctrlKey)
+        || (keyValue === '-' && currentLength !== 0)
+        || keyValue === '.' && currentValue.includes('.')) {
+            e.preventDefault();
+        }
+    }
 
     return (
         <>
@@ -312,10 +325,12 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                             inputProps={{
                             step: 0.000001,
                             min: -180,
-                            max: 180
+                            max: 180,
+                            maxLength: 11
                             }}
                             disabled={lng !== undefined ? true : false}
                             onChange={(e) => handleSetValue(field.name, e.target.value)}
+                            onKeyPress={(e) => handleOnKeyPress(e) }
                         />
                         )}
                     />
@@ -333,10 +348,12 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                             inputProps={{
                             step: 0.000001,
                             min: -90,
-                            max: 90
+                            max: 90,
+                            maxLength: 11
                             }}
                             disabled={lat !== undefined ? true : false}
                             onChange={(e) => handleSetValue(field.name, e.target.value)}
+                            onKeyPress={(e) => handleOnKeyPress(e) }
                         />
                         )}
                     />
