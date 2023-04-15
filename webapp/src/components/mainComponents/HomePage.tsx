@@ -65,7 +65,7 @@ const MainBox = styled(Box)({
 const ScrollBox = styled(Box)({
     maxHeight: '50vh',
     overflow: 'auto',
-    scrollbarColor: 'black white',
+    scrollbarColor: '#81c784 white',
     padding: '0em 0.9em 0em',
 })
 

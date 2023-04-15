@@ -22,7 +22,7 @@ import { showError } from 'utils/fieldsValidation';
 const ScrollBox = styled(Box)({
     maxHeight: '50vh',
     overflow: 'auto',
-    scrollbarColor: 'black white',
+    scrollbarColor: '#81c784 white',
 })
 
 const AddFriendBox = styled(Box)({
