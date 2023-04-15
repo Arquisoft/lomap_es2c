@@ -152,7 +152,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
 
-    const [category, setCategory] = useState('');
+    const [category, setCategory] = useState(null);
     const [score, setScore] = useState(4);
 
     let mapM = new MapManager();
@@ -190,13 +190,14 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
       };
 
     useEffect(() => {
-        if (lat !== null) {
+        if (lat !== undefined) {
+            console.log(lat)
             setValue('latitude', parseFloat(lat));
         }
       }, [lat, setValue]);
 
       useEffect(() => {
-        if (lng !== null) {
+        if (lng !== undefined) {
             setValue('longitude', parseFloat(lng));
         }
       }, [lng, setValue]);
@@ -291,8 +292,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                 <FormControl sx={{ mb: '0.8em', maxHeight: "50em", overflow: "none" }} fullWidth>
                     <InputLabel htmlFor="grouped-select">Categoría</InputLabel>
                     <Select
-                        value={category}
-                        defaultValue=""
+                        value={category ?? ''}
                         placeholder='Categoría'
                         id="grouped-select"
                         label="Categoría"
