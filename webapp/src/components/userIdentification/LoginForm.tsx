@@ -79,7 +79,8 @@ export function Login() {
                 navigate("/podlogin");
             }
         }).catch((err: any) => {
-            showError("Error al iniciar sesión", err.toString(), () => { });
+            console.log(err)
+            showError("Error al iniciar sesión", err.message, () => { });
         });
     }
 

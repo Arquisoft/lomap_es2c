@@ -98,7 +98,7 @@ export function Signup() {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
                 }).catch((e) => {
-                    fieldsValidation.showError("No se ha podido crear la cuenta", e.toString(), Swal.close)
+                    fieldsValidation.showError("No se ha podido crear la cuenta", e.message, Swal.close)
                 })
             } else {
                 fieldsValidation.showError("Las contraseñas no coinciden", "Por favor, revíselas.", Swal.close)

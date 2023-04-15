@@ -54,7 +54,7 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
                 imageAlt: 'Foto de perfil actual',
             })
         }).catch((err: any) => {
-            showError("Error mostrar el perfil de " + user + ".", err.toString(), Swal.close);
+            showError("Error mostrar el perfil de " + user + ".", err.message, Swal.close);
         });
     }
 
@@ -64,7 +64,7 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
             props.refreshFriends();
             temporalSuccessMessage("Solicitud de amistad de <em><b>" + req.sender + "</b></em> rechazada correctamente.");
         }).catch((err: any) => {
-            showError("Error al rechazar la solicitud de " + request.sender + ".", err.toString(), Swal.close);
+            showError("Error al rechazar la solicitud de " + request.sender + ".", err.message, Swal.close);
         });
     }
 
@@ -74,7 +74,7 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
             props.refreshFriends();
             temporalSuccessMessage("La solicitud de amistad de <em><b>" + request.sender + "</b></em> ha sido aceptada correctamente.");
         }).catch((err: any) => {
-            showError("Error al aceptar la solicitud de " + request.sender + ".", err.toString(), Swal.close);
+            showError("Error al aceptar la solicitud de " + request.sender + ".", err.message, Swal.close);
         });
     }
 
