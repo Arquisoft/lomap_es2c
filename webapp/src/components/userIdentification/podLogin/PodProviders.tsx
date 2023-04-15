@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 type PodProvider = {
     name: string,
     url: string,

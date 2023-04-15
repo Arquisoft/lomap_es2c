@@ -155,8 +155,6 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     const [category, setCategory] = useState('');
     const [score, setScore] = useState(4);
 
-
-
     let mapM = new MapManager();
 
     const userGroups = async () => {
@@ -164,7 +162,6 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         return groups;
     };
 
-    const [groups, setGroups] = useState<Group[]>([]);
     const [group, setGroup] = useState<Group>();
 
     const findGroup = async () => {
@@ -243,15 +240,11 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         setCategory(event.target.value as string);
     };
 
-
     const handleScoreChange = (event: any, value: number | null) => {
         if (value !== null) {
             setScore(value);
         }
     };
-
-    console.log(category)
-    console.log(score)
 
     return (
         <>

@@ -9,19 +9,16 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { editPassword, editUserDetails, getMyFriendRequests, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
+import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
-import { handleErrors } from 'api/ErrorHandler';
 import { User } from 'shared/shareddtypes';
 import { NotificationManager, temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Divider } from '@mui/material';
-import {
-    LogoutButton
-} from "@inrupt/solid-ui-react";
+import { showError } from '../../utils/fieldsValidation';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -62,25 +59,28 @@ function LogedMenu() {
 
     const getProfile = async () => {
         closeUserMenu();
-        let user = await searchUserByUsername(userInSession);
-        Swal.fire({
-            title: 'Mi perfil',
-            html: ` <label for="webid-gp" class="swal2-label">WebID: </label>
-                    <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
-                    <label for="biography-gp" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
-            confirmButtonText: 'Editar perfil',
-            confirmButtonColor: '#81c784',
-            focusConfirm: false,
-            imageUrl: url,
-            imageWidth: 'auto',
-            imageHeight: 200,
-            imageAlt: 'Foto de perfil actual',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                showEditNoPss();
-            }
-        })
+        await searchUserByUsername(userInSession).then((user) => {
+            Swal.fire({
+                title: 'Mi perfil',
+                html: ` <label for="webid-gp" class="swal2-label">WebID: </label>
+                        <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
+                        <label for="biography-gp" class="swal2-label">Biografía: </label>
+                        <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
+                confirmButtonText: 'Editar perfil',
+                confirmButtonColor: '#81c784',
+                focusConfirm: false,
+                imageUrl: url,
+                imageWidth: 'auto',
+                imageHeight: 200,
+                imageAlt: 'Foto de perfil actual',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showEditNoPss();
+                }
+            })
+        }).catch((err: any) => {
+            showError("Error al mostrar tú perfil", err.toString(), Swal.close);
+        });
     }
 
 
@@ -168,52 +168,55 @@ function LogedMenu() {
     async function showEditNoPss(): Promise<void> {
         closeUserMenu();
         let edited = true;
-        let user = await searchUserByUsername(userInSession);
-        Swal.fire({
-            title: 'Edita tu perfil',
-            html: ` 
-                    <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
-                    <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
-            confirmButtonText: 'Editar',
-            denyButtonText: 'Cambiar contraseña',
-            showDenyButton: true,
-            confirmButtonColor: '#81c784',
-            denyButtonColor: 'grey',
-            focusConfirm: false,
-            imageUrl: url,
-            imageWidth: 'auto',
-            imageHeight: 200,
-            imageAlt: 'Foto de perfil actual',
-            preConfirm: () => {
-                let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
+        await searchUserByUsername(userInSession).then((user) => {
+            Swal.fire({
+                title: 'Edita tu perfil',
+                html: ` 
+                        <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
+                        <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
+                confirmButtonText: 'Editar',
+                denyButtonText: 'Cambiar contraseña',
+                showDenyButton: true,
+                confirmButtonColor: '#81c784',
+                denyButtonColor: 'grey',
+                focusConfirm: false,
+                imageUrl: url,
+                imageWidth: 'auto',
+                imageHeight: 200,
+                imageAlt: 'Foto de perfil actual',
+                preConfirm: () => {
+                    let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
 
-                if (!biography) {
-                    edited = false;
-                    showQuestion();
-                } else {
-                    edited = true;
-                    if (!biography)
-                        biography = "..."; // Cambiarlo por user.biography
+                    if (!biography) {
+                        edited = false;
+                        showQuestion();
+                    } else {
+                        edited = true;
+                        if (!biography)
+                            biography = "..."; // Cambiarlo por user.biography
 
-                    editSchema.validate({
-                        biography: biography
-                    }).then(() => {
-                        user = { username: user.username, webID: user.webID, password: user.password, description: biography, img: user.img }
-                        return user;
-                    }).catch(e => {
-                        let errorMessage = (e as string)
-                        fieldsValidation.showError("No se ha podido actualizar el perfil", errorMessage, showEditNoPss);
-                    })
+                        editSchema.validate({
+                            biography: biography
+                        }).then(() => {
+                            user = { username: user.username, webID: user.webID, password: user.password, description: biography, img: user.img }
+                            return user;
+                        }).catch(e => {
+                            let errorMessage = (e as string)
+                            fieldsValidation.showError("No se ha podido actualizar el perfil", errorMessage, showEditNoPss);
+                        })
+                    }
                 }
-            }
-        }).then(async (result) => {
-            if (result.isConfirmed && edited) {
-                await editUserDetails(user)
-                temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
-            } else if (result.isDenied) {
-                showEdit();
-            }
-        })
+            }).then(async (result) => {
+                if (result.isConfirmed && edited) {
+                    await editUserDetails(user)
+                    temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
+                } else if (result.isDenied) {
+                    showEdit();
+                }
+            })
+        }).catch((err: any) => {
+            showError("Error al mostrar el menú de edición", err.toString(), Swal.close);
+        });
     }
 
     const goLogout = (user: User) => {

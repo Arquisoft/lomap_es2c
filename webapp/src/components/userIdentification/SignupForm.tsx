@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
 import SForm from './SesionForm';
@@ -15,7 +14,6 @@ import { signup } from '../../api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
-import { handleErrors } from 'api/ErrorHandler';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -100,7 +98,7 @@ export function Signup() {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
                 }).catch((e) => {
-                    fieldsValidation.showError("No se ha podido crear la cuenta", "Ha sucedido un error al crear la cuenta, vuelva a intentarlo más tarde.", Swal.close)
+                    fieldsValidation.showError("No se ha podido crear la cuenta", e.toString(), Swal.close)
                 })
             } else {
                 fieldsValidation.showError("Las contraseñas no coinciden", "Por favor, revíselas.", Swal.close)

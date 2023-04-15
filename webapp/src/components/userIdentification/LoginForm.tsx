@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
 import SForm from './SesionForm';
@@ -9,9 +8,8 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../shared/shareddtypes';
-import { getMyFriendRequests, getUserInSesion, login } from '../../api/api';
-import { handleErrors } from 'api/ErrorHandler';
-import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { login } from '../../api/api';
+import { showError } from "utils/fieldsValidation";
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -74,26 +72,18 @@ export function Login() {
     //#region METODOS DE CLASE
     const onSubmit: SubmitHandler<User> = data => tryLogin(data);
 
-    const checkRequests = () => {
-        getMyFriendRequests(getUserInSesion()).then((reqs) => {
-            if (reqs.length > -1) temporalInfoMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
-        })
-    }
-
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
             if (userApi != null) {
                 document.cookie = "notifications=; path=/"
-                //temporalSuccessMessage("La sesión se ha iniciado correctamente. " + getSaludo() + " <em>" + user.username + "</em>.");
-                //checkRequests();
                 navigate("/podlogin");
             }
-        }).catch((e) => {
-            console.log(e.message)
+        }).catch((err: any) => {
+            showError("Error al iniciar sesión", err.toString(), () => { });
         });
     }
 
-   
+
     const showSignup = () => {
         //Cambiar del Login a Singup component
         navigate("/signup");

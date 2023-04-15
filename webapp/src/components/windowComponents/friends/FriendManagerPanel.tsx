@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Divider, TextField, Tooltip } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
@@ -15,9 +15,9 @@ import { FriendRequestsComponent } from './FriendRequestsComponent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
 import { useForm, SubmitHandler } from "react-hook-form";
-import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
-import { useSession } from '@inrupt/solid-ui-react';
+import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import PodManager from 'podManager/PodManager';
+import { showError } from 'utils/fieldsValidation';
 
 const ScrollBox = styled(Box)({
     maxHeight: '50vh',
@@ -44,6 +44,7 @@ const HorizontalDivider = styled(Divider)({
 })
 
 const BoxCircularProgress = styled(Box)({
+    paddingTop: '3em',
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center'
@@ -78,8 +79,9 @@ export const FriendManagerPanel = (props: { session: any }) => {
                     "groups": friendGroups,
                 });
             }
-        })
-        console.log(myFriends)
+        }).catch((err: any) => {
+            showError("Error al listar tus amigos.", err.toString(), Swal.close);
+        });
         return myFriends;
     }
 
@@ -91,7 +93,9 @@ export const FriendManagerPanel = (props: { session: any }) => {
         await getMyFriendRequests(user).then((friendRequests) => {
             for (let i = 0; i < friendRequests.length; i++)
                 myFriendRequests.push(friendRequests[i]);
-        });
+        }).catch((err: any) => {
+            showError("Error al listar tus solicitudes de amistad", err.toString(), Swal.close);
+        });;
         return myFriendRequests;
     }
 
@@ -102,27 +106,12 @@ export const FriendManagerPanel = (props: { session: any }) => {
     const onSubmit: SubmitHandler<User> = data => searchUser(data);
 
     const searchUser = (user: User) => {
-        try {
-            searchUserByUsername(user.username).then((res) => {
-                if (res != null && res.username != null)
-                    showAddFriendConfirm(res)
-            })
-                .catch((err: Error) => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: err.message,
-                    })
-                });
-
-        } catch (e) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'No se ha enviado la solicitud de amistad',
-            })
-        }
-
+        searchUserByUsername(user.username).then((res) => {
+            if (res != null && res.username != null)
+                showAddFriendConfirm(res)
+        }).catch((err: any) => {
+            showError("Error al buscar el usuario " + user.username + ".", err.toString(), Swal.close);
+        });
     }
 
     const showAddFriendConfirm = async (user: User) => {
@@ -143,7 +132,9 @@ export const FriendManagerPanel = (props: { session: any }) => {
             preConfirm: () => {
                 sendFriendRequest(user).then(() => {
                     temporalSuccessMessage("La solicitud de amistad a <em><b>" + user.username + "</b></em> ha sido enviada correctamente.")
-                })
+                }).catch((err: any) => {
+                    showError("Error enviar la solicitud de amistad.", err.toString(), Swal.close);
+                });
             }
         })
     }

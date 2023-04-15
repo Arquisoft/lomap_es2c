@@ -1,4 +1,3 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,20 +9,9 @@ import uuid from 'react-uuid';
 import LogedMenu from '../profileMenus/LoggedMenu';
 import { NoLogedMenu } from '../profileMenus/NoLoggedMenu';
 import { useNavigate } from 'react-router-dom';
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Divider } from '@mui/material';
 
 //#region DEFINICION DE COMPONENTES STYLED
-const ButtonGENERIC = styled(Button)({
-    padding: '1.5em 5em 1.5em',
-    color: 'white',
-    justifySelf: 'right',
-    font: '1em Calibri',
-    '&:hover': {
-        outline: 'none',
-        backgroundColor: '#1f4a21',
-    },
-});
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'

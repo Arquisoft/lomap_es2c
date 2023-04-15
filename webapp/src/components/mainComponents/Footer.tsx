@@ -2,8 +2,6 @@ import { Box } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
 import { styled } from '@mui/material/styles'
-import Toolbar from '@mui/material/Toolbar'
-import React from 'react'
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyBar = styled(AppBar)({

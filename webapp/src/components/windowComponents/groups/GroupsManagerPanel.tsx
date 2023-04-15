@@ -12,14 +12,13 @@ import AddPlaceForm from './AddPlaceForm';
 import AddGroupForm from './AddGroupForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
-import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
 import { Groups } from './GroupsComponent';
 import { MapManager } from 'podManager/MapManager';
 import ShowPlace from './ShowPlace';
-import { Refresh } from '@mui/icons-material';
 import { ShowGroup } from './ShowGroup';
 
 const BoxCircularProgress = styled(Box)({
+    paddingTop: '7em',
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center',
@@ -29,15 +28,11 @@ const BoxCircularProgress = styled(Box)({
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
     overflow: 'auto',
-    scrollbarColor: 'black white'
+    scrollbarColor: '#81c784 white'
 })
 
 const AddItem = styled(ListItemButton)({
     color: '#81c784',
-})
-
-const VerticalDivider = styled(Divider)({
-    padding: '0em 0.4em 0em'
 })
 
 const HorizontalDivider = styled(Divider)({

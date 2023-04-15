@@ -11,8 +11,6 @@ const center = {
     lng: 4.3487800
 }
 
-
-
 type MarkerData = {
     position: [number, number];
     name: string;
@@ -25,7 +23,7 @@ const markers: MarkerData[] = [
 ];
 
 
-function AddPlace(props:any): any {
+function AddPlace(props: any): any {
 
     const [marker, setMarker] = useState(new L.Marker(center))
     const [lat, setLatitude] = useState("Latitud:")
@@ -59,8 +57,8 @@ function AddPlace(props:any): any {
         }
     })
 
-    if(!props.showAdd){
-        if(marker !== null)
+    if (!props.showAdd) {
+        if (marker !== null)
             marker.remove();
     }
 
@@ -79,7 +77,7 @@ export const MapComponent = () => {
 
     const handleMarkerClick = (name: string) => {
         navigate(`/home/groups/showplace/${groupid}${name ? `/${name}` : ''}`);
-      };
+    };
 
 
     return (
@@ -93,7 +91,7 @@ export const MapComponent = () => {
                     <Popup>{marker.name}</Popup>
                 </Marker>
             ))}
-            <AddPlace showAdd={showAdd}/>
+            <AddPlace showAdd={showAdd} />
         </MapContainer>
     );
 
