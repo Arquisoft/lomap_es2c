@@ -22,13 +22,15 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
-import { Place, Comment, Group } from 'shared/shareddtypes';
+import { Place, Comment, Group, MarkerData } from 'shared/shareddtypes';
 import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import * as fieldsValidation from '../../../utils/fieldsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { useDispatch } from 'react-redux';
+import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -149,12 +151,13 @@ export function RadioGroupRating() {
 }
 
 export default function AddPlaceForm(props: { session: any, refresh: any }) {
+   
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
+    const dispatch = useDispatch();
 
-    const [category, setCategory] = useState(null);
-    const [score, setScore] = useState(4);
-
+   
+    // Obtención del grupo al que se va a añadir el lugar
     let mapM = new MapManager();
 
     const userGroups = async () => {
@@ -173,9 +176,38 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     useEffect(() => {
         findGroup();
     }, []);
+    // ---- fin obtención del grupo
+
+    // Actualización de marcadores
+    const actualizarMarcadores = () => {
+        dispatch(clearMarkers()); 
+
+        dispatch(setGroupMarker(group.name as string)) 
+
+        const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
+
+        const groupMarkers: MarkerData[] = [];
+        
+        groupPlaces.forEach((place) => {
+            groupMarkers.push({
+                position: [parseFloat(place.latitude), parseFloat(place.longitude)],
+                name: place.nombre
+            })
+        })
+
+        dispatch(addMarkers(groupMarkers)); 
+    }
+
+    // ---- fin actualización de marcadores
+   
+
+    // Manejo del formulario
+    const [category, setCategory] = useState(null);
+    const [score, setScore] = useState(4);
 
     const schema = fieldsValidation.placeValidation;
     type PlaceShema = yup.InferType<typeof schema>;
+
 
     const { register, control, setValue, handleSubmit, formState: { errors } } = useForm<PlaceShema>({
         resolver: yupResolver(schema),
@@ -225,6 +257,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
         mapM.añadirLugarAGrupo(p, group, props.session).then(() => {
             temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
+            actualizarMarcadores();
             navigate("/home/groups/showgroup/" + group.name)
             props.refresh()
         })
@@ -237,6 +270,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         const day = String(currentDate.getDate()).padStart(2, '0');
         return `${day}/${month}/${year}`;
     }
+    
     const handleCategoryChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value as string);
     };
@@ -259,6 +293,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
             e.preventDefault();
         }
     }
+    // ---- fin manejo formulario
 
     return (
         <>
