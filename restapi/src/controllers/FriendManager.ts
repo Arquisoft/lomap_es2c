@@ -69,7 +69,8 @@ export class FriendManagerImpl implements FriendManager {
 
     async actualizarSolicitud(solicitud: FriendRequest, status: number): Promise<FriendRequest> {
         solicitud.status = status;
-        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver, status: 0 }, { status: solicitud.status }) as FriendRequest;
+        const resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: solicitud.status }) as FriendRequest;
+        if(resultado==null){throw new Error("la solicitud no existe")}
         return resultado;
     }
 

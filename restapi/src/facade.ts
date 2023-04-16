@@ -2,7 +2,7 @@
 import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { Place } from './entities/Place';
-import { FriendManager, FriendManagerImpl } from './controllers/FriendsManager'
+import { FriendManager, FriendManagerImpl } from './controllers/FriendManager'
 
 
 export interface SesionManager {
