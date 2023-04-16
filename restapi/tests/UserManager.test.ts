@@ -51,7 +51,15 @@ describe('SessionManager', () => {
     });
 
 
-    describe('modificarContrasena', () => {
-
+    describe('registrarse', () => {
+        it('deberia lanzar un error si el usuario ya existe', async () => {
+            let error=new Error("Error por defecto")
+            try{
+                await sessionManager.registrarse(new UserImpl("usertestn1", "", "", ""))
+            }catch(err){
+                error=err;
+            }
+            expect(error.message).toBe("Usuario ya existente");
+        });
     });
 });

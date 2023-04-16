@@ -18,8 +18,7 @@ class UserSesionManager implements SesionManager {
     async registrarse(usuario: User): Promise<User> {
         let usuarioEncontrado = await repo.Repository.findOne(usuario)
         if (usuarioEncontrado.username != "notfound") {
-            usuario.username = "userRepeated"
-            return usuario
+            throw new Error("Usuario ya existente")
         }
         repo.Repository.save(usuario, this.rondasDeEncriptacion)
         return usuario;
