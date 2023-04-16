@@ -147,6 +147,11 @@ api.post(
         }
     }
 );
-
+api.get(
+    "/test",
+    async (req: Request, res: Response): Promise<Response> => {
+           return res.sendStatus(200);
+    }
+);
 
 export default api;

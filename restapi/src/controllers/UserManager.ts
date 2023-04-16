@@ -40,8 +40,13 @@ class UserManagerImpl implements UserManager {
 
             userBd = await UserSchema.findOne({ username: user.username }, { _id: 0, __v: 0 }) as User;
         } catch {
-            throw new Error("El usuario no se encuentra")
+            throw new Error("Error al conectarse con la base de datos.")
         }
+
+        if(userBd==null){
+            throw new Error("El usuario no se encuentra");
+        }
+
 
         if (await bcrypt.compare(oldpsw, userBd.password)) {
             console.log(await bcrypt.compare(oldpsw, userBd.password))
@@ -61,8 +66,7 @@ async function buscarUsuarioPorUsername(username: string) {
     let resultado: User;
 
     try {
-        resultado = await UserSchema.findOne({ username: username }, { _id: 0, __v: 0 }) as User;
-        resultado.password = "";
+        resultado = await UserSchema.findOne({ username: username }, { _id: 0, __v: 0 })
     } catch {
         throw new Error("Error al conectarse con la base de datos.")
     }
@@ -70,7 +74,9 @@ async function buscarUsuarioPorUsername(username: string) {
     if (resultado == null) {
         throw new Error("El usuario no existe.")
     }
-    return resultado;
+    const resultado2 = resultado as User;
+    resultado2.password = "";
+    return resultado2;
 
 }
 
@@ -98,7 +104,7 @@ async function modificarUsuario(user: User) {
     try {
         resultado = await repo.Repository.findOneAndUpdate(user)
     } catch (err) {
-        throw new Error("Error al conectarse con la base de datos.");
+        throw new Error(err.message);
     }
     /*
     try {
