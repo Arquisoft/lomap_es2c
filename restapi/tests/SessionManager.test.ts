@@ -1,6 +1,7 @@
 import {UserManager, UserManagerImpl} from '../src/controllers/UserManager';
 import { UserImpl } from '../src/entities/User';
 import User from "../src/entities/UserSchema";
+import mongoose from "mongoose";
 
 describe('UserManager', () => {
     let userManager: UserManager;
@@ -16,7 +17,7 @@ describe('UserManager', () => {
     });
 
     afterAll(()=>{
-
+        mongoose.connection.close()
     });
 
     describe('listarDetalles', () => {

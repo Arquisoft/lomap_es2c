@@ -5,6 +5,8 @@ import {SesionManager} from "../src/facade";
 import {UserSesionManager} from "../src/controllers/SessionManager";
 import {FriendManager, FriendManagerImpl} from "../src/controllers/FriendManager";
 import {FriendRequest} from "../src/entities/FriendRequest";
+import mongoose from "mongoose";
+import {ftruncate} from "fs";
 
 describe('FriendsManager', () => {
     let userManager: UserManager;
@@ -18,14 +20,14 @@ describe('FriendsManager', () => {
     });
 
     afterEach(() => {
-        // Limpiar cualquier estado después de cada prueba
+
     });
 
     afterAll(()=>{
-
+        mongoose.connection.close()
     });
 
-    describe('iniciarSesion', () => {
+    describe('listarAmigos', () => {
         it('deberia devolver una lista vacía al pedir amigos de un usuario inexistente', async () => {
             const amigos=await friendManager.listarAmigos(new UserImpl("usernotexists", "", "", ""))
             expect(amigos.length).toBe(0);
@@ -79,4 +81,33 @@ describe('FriendsManager', () => {
         });
     });
 
+    describe('listarSolicitudes', () => {
+        it('deberia devolver una lista vacia si el usuario no existe', async () => {
+            const amigos=await friendManager.listarSolicitudes(new UserImpl("usernotexists", "", "", ""))
+            expect(amigos.length).toBe(0);
+        });
+        it('deberia devolver una lista con una solicitud para un usuario con una solicitud', async () => {
+            const amigos=await friendManager.listarSolicitudes(new UserImpl("usertestn1", "", "", ""))
+            expect(amigos.length).toBe(1);
+        });
+        it('deberia devolver una lista con 0 solicitudes para un usuario con cero solicitudes', async () => {
+            const amigos=await friendManager.listarSolicitudes(new UserImpl("usertestn2", "", "", ""))
+            expect(amigos.length).toBe(0);
+        });
+    });
+    describe('eliminarAmigo', () => {
+        it('deberia eliminar el amigo si existe', async () => {
+            let user1=new UserImpl("usertestn1", "", "", "")
+            let user2=new UserImpl("usertestn2", "", "", "")
+            const amigos1A=await friendManager.listarAmigos(user1);
+            const amigos2A=await friendManager.listarAmigos(user2);
+            await friendManager.eliminarAmigo(user1,user2)
+            const amigos1B=await friendManager.listarAmigos(user1);
+            const amigos2B=await friendManager.listarAmigos(user2);
+            expect(amigos1B.length).toBe(amigos1A.length-1)
+            expect(amigos2B.length).toBe(amigos2A.length-1)
+            await friendManager.enviarSolicitud(user1,user2)
+            await friendManager.actualizarSolicitud(new FriendRequest(user1.username,user2.username,0),1)
+        });
+    });
 });

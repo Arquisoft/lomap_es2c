@@ -3,6 +3,7 @@ import { UserImpl } from '../src/entities/User';
 import User from "../src/entities/UserSchema";
 import {SesionManager} from "../src/facade";
 import {UserSesionManager} from "../src/controllers/SessionManager";
+import mongoose from "mongoose";
 
 describe('SessionManager', () => {
     let userManager: UserManager;
@@ -20,7 +21,7 @@ describe('SessionManager', () => {
     });
 
     afterAll(()=>{
-
+        mongoose.connection.close()
     });
 
     describe('iniciarSesion', () => {
