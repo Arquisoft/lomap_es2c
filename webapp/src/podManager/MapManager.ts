@@ -14,6 +14,13 @@ class MapManager {
         return grupos
     }
 
+    async verMapaDeAmigo(user: User, session: Session): Promise<Group[]> {
+        console.log(user.webID)
+        let grupos = await this.pod.getFriendsGroups(session, user.webID)
+        console.log("Puede")
+        return grupos
+    }
+
     async añadirLugarAGrupo(lugar: Place, grupo: Group, session: Session): Promise<Group> {
         grupo.places.push(lugar)
 
