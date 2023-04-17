@@ -47,6 +47,7 @@ class UserSesionManager implements SesionManager {
             if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
                 return usuarioEncontrado;
             }
+            console.log("Mal contraseña")
             throw new Error("Las credenciales no coinciden")
         } else {
             throw new Error("Las credenciales no coinciden")

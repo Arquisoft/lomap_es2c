@@ -54,4 +54,19 @@ En la siguiente tabla, ordenadas por prioridad, se encuentran las decisiones arq
 | No soporta transacciones complejas.
 | https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-02-elecci%C3%B3n-de-la-base-de-datos[DA-02]
 
+| *Leaflet*
+| Leaflet es una biblioteca de JS open source utilizada para crear mapas interactivos y personalizarlos.
+| Presenta limitaciones en funcionalidades avanzadas.
+| https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-06-cambio-en-la-elecci%C3%B3n-del-proveedor-de-mapas[DA-06]
+
+| *JSON-LD*
+| Es una forma de representar datos JSON que se integra con otros formatos como RFD y Schema.org
+| Su implementación puede requerir un mayor esfuerzo en comparación con otros métodos de marcado.
+| https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-09-formato-de-archivos[DA-09]
+
+| *Redux*
+| Esta biblioteca permite centralizar el estado de la aplicación y compartirlo entre los componentes que se suscriban a él de manera sencilla.
+| Puede agregar complejidad a la aplicación web.
+| https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-08-redux[DA-08]
+
 |===

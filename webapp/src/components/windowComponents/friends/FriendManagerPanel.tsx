@@ -80,7 +80,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
                 });
             }
         }).catch((err: any) => {
-            showError("Error al listar tus amigos.", err.toString(), Swal.close);
+            showError("Error al listar tus amigos.", err.message, Swal.close);
         });
         return myFriends;
     }
@@ -94,7 +94,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
             for (let i = 0; i < friendRequests.length; i++)
                 myFriendRequests.push(friendRequests[i]);
         }).catch((err: any) => {
-            showError("Error al listar tus solicitudes de amistad", err.toString(), Swal.close);
+            showError("Error al listar tus solicitudes de amistad", err.message, Swal.close);
         });;
         return myFriendRequests;
     }
@@ -110,7 +110,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
             if (res != null && res.username != null)
                 showAddFriendConfirm(res)
         }).catch((err: any) => {
-            showError("Error al buscar el usuario " + user.username + ".", err.toString(), Swal.close);
+            showError("Error al buscar el usuario " + user.username + ".", err.message, Swal.close);
         });
     }
 
@@ -133,7 +133,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
                 sendFriendRequest(user).then(() => {
                     temporalSuccessMessage("La solicitud de amistad a <em><b>" + user.username + "</b></em> ha sido enviada correctamente.")
                 }).catch((err: any) => {
-                    showError("Error enviar la solicitud de amistad.", err.toString(), Swal.close);
+                    showError("Error enviar la solicitud de amistad.", err.message, Swal.close);
                 });
             }
         })

@@ -65,7 +65,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                     props.refresh();
                     temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
                 }).catch((err: any) => {
-                    showError("Error al eliminar el grupo " + group.name + ".", err.toString(), Swal.close);
+                    showError("Error al eliminar el grupo " + group.name + ".", err.message, Swal.close);
                 });;
             } else {
                 Swal.close();

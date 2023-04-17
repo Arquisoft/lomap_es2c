@@ -81,7 +81,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                     props.refresh()
                     temporalSuccessMessage("Tú amigo <em><b>" + friend.username + "</b></em> ha sido eliminado correctamente.");
                 }).catch((err: any) => {
-                    showError("Error al eliminar al amigo " + friend.username + ".", err.toString(), Swal.close);
+                    showError("Error al eliminar al amigo " + friend.username + ".", err.message, Swal.close);
                 });;
             } else {
                 Swal.close();
