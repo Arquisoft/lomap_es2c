@@ -6,13 +6,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonIcon from '@mui/icons-material/Person';
 import { FriendRequest } from '../../../shared/shareddtypes';
-import { searchUserByUsername, updateRequest } from '../../../api/api';
+import { getUserInSesion, searchUserByUsername, updateRequest } from '../../../api/api';
 import CloseIcon from '@mui/icons-material/Close';
 import { render } from 'react-dom';
 import Swal from 'sweetalert2';
 import CheckIcon from '@mui/icons-material/Check';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { showError } from 'utils/fieldsValidation';
+import PodManager from 'podManager/PodManager';
 
 
 const VerticalDivider = styled(Divider)({
@@ -24,7 +25,7 @@ const InfoBox = styled(Box)({
     textAlign: 'center'
 })
 
-export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendRequest[]>, daddy: any, refresh: any, refreshFriends: any, stopLoading: any }) => {
+export const FriendRequestsComponent = (props: { session: any, friendRequests: Promise<FriendRequest[]>, daddy: any, refresh: any, refreshFriends: any, stopLoading: any }) => {
 
     const [url, setUrl] = useState("../testUser.jfif");
 
@@ -72,7 +73,11 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
         updateRequest(request, 1).then((req) => {
             props.refresh();
             props.refreshFriends();
-            temporalSuccessMessage("La solicitud de amistad de <em><b>" + request.sender + "</b></em> ha sido aceptada correctamente.");
+            searchUserByUsername(request.sender).then((friend) => {
+                new PodManager().addReadPermissionsToFriend(getUserInSesion().webID, friend.webID, props.session).then(() => {
+                    temporalSuccessMessage("La solicitud de amistad de <em><b>" + request.sender + "</b></em> ha sido aceptada correctamente.");
+                })
+            })
         }).catch((err: any) => {
             showError("Error al aceptar la solicitud de " + request.sender + ".", err.message, Swal.close);
         });
@@ -118,3 +123,4 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
     })
     return (<></>)
 }
+

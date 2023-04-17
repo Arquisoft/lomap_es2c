@@ -18,6 +18,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import PodManager from 'podManager/PodManager';
 import { showError } from 'utils/fieldsValidation';
+import { MapManager } from 'podManager/MapManager';
+import { ErrorPage } from 'components/mainComponents/ErrorPage';
+import { ShowFriendGroup } from '../groups/groupViews/ShowFriendGroup';
+import ShowFriendPlace from '../groups/placeViews/ShowFriendPlace';
 
 const ScrollBox = styled(Box)({
     maxHeight: '50vh',
@@ -67,10 +71,10 @@ export const FriendManagerPanel = (props: { session: any }) => {
 
         let myFriends: Friend[] = [];
         let user = getUserInSesion();
-        await getMyFriends(user).then(function (friends) {
+        await getMyFriends(user).then(async function (friends) {
             for (let i = 0; i < friends.length; i++) {
                 let friendGroups: Group[] = []
-                new PodManager().getGroups(props.session).then(function (groups) {
+                await new MapManager().verMapaDeAmigo(friends[i], props.session).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
                         friendGroups.push(groups[j]);
                 })
@@ -82,6 +86,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
         }).catch((err: any) => {
             showError("Error al listar tus amigos.", err.message, Swal.close);
         });
+        console.log(myFriends)
         return myFriends;
     }
 
@@ -141,77 +146,92 @@ export const FriendManagerPanel = (props: { session: any }) => {
 
     return (
         <>
-            <OptionsBox>
-                <Tooltip title="Friends">
-                    <GroupIcon onClick={() => navigate("/home/friends/main")} htmlColor={op == "main" ? "#1f4a21" : "#81c784"} />
-                </Tooltip>
-                <Tooltip title="Friend requests">
-                    <NotificationsActiveIcon onClick={() => navigate("/home/friends/requests")} htmlColor={op == "requests" ? "#1f4a21" : "#81c784"} />
-                </Tooltip>
-            </OptionsBox>
-            <HorizontalDivider light color="#81c784" />
-            {op != "requests" ?
-                <>
-                    <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
-                        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                        <TextField
-                            label="Añadir un amigo"
-                            variant="standard"
-                            placeholder="Nombre de usuario"
-                            {...register("username", { maxLength: 20 })}
-                            helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
-                        />
-                        <Tooltip title="Add friend">
-                            <Button type="submit">
-                                <AddIcon htmlColor='#81c784' />
-                            </Button>
-                        </Tooltip>
-                    </AddFriendBox>
-                    <ScrollBox>
-                        <List
-                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                            aria-labelledby="nested-list-subheader"
-                            subheader={
-                                <ListSubheader component="div" id="nested-list-subheader">
-                                    Tus amigos
-                                </ListSubheader>
-                            }
-                        >
-                            {loading &&
-                                <BoxCircularProgress>
-                                    <CircularProgress size={100} color="primary" />
-                                </BoxCircularProgress>
-                            }
-                            <Box ref={ref}>
-                                <FriendsComponent friends={friends} daddy={ref} refresh={() => setFriends(userFriends())} stopLoading={() => setLoading(false)} />
-                            </Box>
-                        </List>
-                    </ScrollBox >
-                </>
+            {op == "showgroup" ?
+                <ShowFriendGroup session={props.session} />
                 :
-                <>
-                    <ScrollBox>
-                        <List
-                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                            component="nav"
-                            aria-labelledby="nested-list-subheader"
-                            subheader={
-                                <ListSubheader component="div" id="nested-list-subheader">
-                                    Solicitudes de amistad
-                                </ListSubheader>
-                            }
-                        >
-                            {loading &&
-                                <BoxCircularProgress>
-                                    <CircularProgress size={100} color="primary" />
-                                </BoxCircularProgress>
-                            }
-                            <Box ref={ref}>
-                                <FriendRequestsComponent friendRequests={friendRequests} daddy={ref} stopLoading={() => setLoading(false)} refresh={() => setFriendRequests(userFriendRequests())} refreshFriends={() => setFriends(userFriends())} />
-                            </Box>
-                        </List>
-                    </ScrollBox >
-                </>
+                (op == "showplace" ?
+                    <ShowFriendPlace session={props.session} />
+                    :
+                    <>
+                        <OptionsBox>
+                            <Tooltip title="Friends">
+                                <GroupIcon onClick={() => navigate("/home/friends/main")} htmlColor={op == "main" ? "#1f4a21" : "#81c784"} />
+                            </Tooltip>
+                            <Tooltip title="Friend requests">
+                                <NotificationsActiveIcon onClick={() => navigate("/home/friends/requests")} htmlColor={op == "requests" ? "#1f4a21" : "#81c784"} />
+                            </Tooltip>
+                        </OptionsBox>
+                        <HorizontalDivider light color="#81c784" />
+                        {op == "main" ?
+                            <>
+                                <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
+                                    <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                                    <TextField
+                                        label="Añadir un amigo"
+                                        variant="standard"
+                                        placeholder="Nombre de usuario"
+                                        {...register("username", { maxLength: 20 })}
+                                        helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
+                                    />
+                                    <Tooltip title="Add friend">
+                                        <Button type="submit">
+                                            <AddIcon htmlColor='#81c784' />
+                                        </Button>
+                                    </Tooltip>
+                                </AddFriendBox>
+                                <ScrollBox>
+                                    <List
+                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                                        aria-labelledby="nested-list-subheader"
+                                        subheader={
+                                            <ListSubheader component="div" id="nested-list-subheader">
+                                                Tus amigos
+                                            </ListSubheader>
+                                        }
+                                    >
+                                        {loading &&
+                                            <BoxCircularProgress>
+                                                <CircularProgress size={100} color="primary" />
+                                            </BoxCircularProgress>
+                                        }
+                                        <Box ref={ref}>
+                                            <FriendsComponent friends={friends} daddy={ref} refresh={() => setFriends(userFriends())} stopLoading={() => setLoading(false)} />
+                                        </Box>
+                                    </List>
+                                </ScrollBox >
+                            </>
+                            :
+                            (op == "requests" ?
+                                <>
+                                    <ScrollBox>
+                                        <List
+                                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                                            component="nav"
+                                            aria-labelledby="nested-list-subheader"
+                                            subheader={
+                                                <ListSubheader component="div" id="nested-list-subheader">
+                                                    Solicitudes de amistad
+                                                </ListSubheader>
+                                            }
+                                        >
+                                            {loading &&
+                                                <BoxCircularProgress>
+                                                    <CircularProgress size={100} color="primary" />
+                                                </BoxCircularProgress>
+                                            }
+                                            <Box ref={ref}>
+                                                <FriendRequestsComponent session={props.session} friendRequests={friendRequests} daddy={ref} stopLoading={() => setLoading(false)} refresh={() => setFriendRequests(userFriendRequests())} refreshFriends={() => setFriends(userFriends())} />
+                                            </Box>
+                                        </List>
+                                    </ScrollBox >
+                                </>
+                                :
+                                <ErrorPage></ErrorPage>
+                            )
+                        }
+                    </>
+                )
             }
-        </>)
+        </>
+    )
 }

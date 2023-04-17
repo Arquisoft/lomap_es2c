@@ -13,7 +13,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Place, Comment, Group } from '../../../shared/shareddtypes'
+import { Place, Comment, Group } from '../../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';

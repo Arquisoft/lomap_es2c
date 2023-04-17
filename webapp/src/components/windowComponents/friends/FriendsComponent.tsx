@@ -106,8 +106,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     }
 
     const showGroup = (group: Group, user: User) => {
-        navigate("/home/friends/" + user.username + "/" + group.name);
-        alert("Mostrando el grupo " + user.username + "/" + group.name)
+        navigate("/home/friends/showgroup/" + user.username + "/" + group.name);
+        temporalSuccessMessage("Se esta mostrando el grupo <b><em>" + group.name + "</em></b> de <b><em>" + user.username + "</em></b>")
     }
 
     props.friends.then((frds: Friend[]) => {
