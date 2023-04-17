@@ -49,7 +49,7 @@ class UserManagerImpl implements UserManager {
 
 
         if (await bcrypt.compare(oldpsw, userBd.password)) {
-            console.log(await bcrypt.compare(oldpsw, userBd.password))
+            //console.log(await bcrypt.compare(oldpsw, userBd.password))
             userBd.password = await bcrypt.hash(newpsw, 10)
             await repo.Repository.findOneAndUpdatePassword(userBd)
 
