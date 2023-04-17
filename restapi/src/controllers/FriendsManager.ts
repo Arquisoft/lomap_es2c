@@ -6,6 +6,7 @@ import { UserImpl } from "../entities/User";
 import { Repository } from "../persistence/Repository";
 
 
+
 export interface FriendManager {
     listarAmigos: (user: User) => Promise<User[]>;
     enviarSolicitud: (de: User, a: User) => Promise<FriendRequest>;
@@ -46,7 +47,6 @@ export class FriendManagerImpl implements FriendManager {
         catch (e: any) {
             throw new Error("Fallo listando los amigos")
         }
-        console.log(ret)
         return ret;
     }
 
@@ -115,7 +115,7 @@ export class FriendManagerImpl implements FriendManager {
             resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
         }
         catch (e: any) {
-            throw new Error("Fallo aceptando la solicitud de amistad")
+            throw new Error("Fallo listando las solicitudes de amistad")
         }
         return resultado;
     }

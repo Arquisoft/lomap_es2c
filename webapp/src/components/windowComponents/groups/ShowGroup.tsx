@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Divider, Tooltip, Breadcrumbs, Typography } from '@mui/material'
+import { Box, CircularProgress, Divider, Tooltip, Breadcrumbs, Typography, Collapse } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
@@ -25,6 +25,9 @@ import AddIcon from '@mui/icons-material/Add';
 import { getUserInSesion } from 'api/api';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { CategoriesFilter } from './CategoriesFilter';
 
 const ScrollBox = styled(Box)({
     maxHeight: '40vh',
@@ -35,6 +38,11 @@ const ScrollBox = styled(Box)({
 const InfoBox = styled(Box)({
     color: '#1f4a21',
     textAlign: 'center'
+})
+
+const FilterBox = styled(Box)({
+    display: 'flex',
+    flexDirection: 'row'
 })
 
 const BoxCircularProgress = styled(Box)({
@@ -177,14 +185,37 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
         }
     }
 
+    const [filters, setFilterState] = useState<string[]>([]);
+
+    const setFilter = (categories: any) => {
+        setFilterState(categories)
+    }
+
+    const [open, setOpen] = React.useState(false);
+
     props.group.then((grp) => {
         render(
             <>
                 {grp != null ?
                     <>
+                        <FilterBox>
+                            <FilterAltIcon />
+                            <ListItemText primary="Filtros" />
+                            {open ?
+                                <ExpandLess onClick={() => setOpen(false)} />
+                                :
+                                <ExpandMore onClick={() => setOpen(true)} />
+                            }
+                        </FilterBox>
+                        <Collapse in={open} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                                <CategoriesFilter setFilter={setFilter} />
+                                <p>filtro 2</p>
+                            </List>
+                        </Collapse>
                         <ScrollBox>
                             <List component="div" disablePadding>
-                                {grp.places.map((place, j) => {
+                                {grp.places.filter((place) => filters.length == 0 ? true : filters.includes(place.category)).map((place, j) => {
                                     return (
                                         <React.Fragment key={j}>
                                             <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/home/groups/showplace/" + grp.name + "/" + place.nombre)} >
