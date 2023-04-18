@@ -83,7 +83,7 @@ export class FriendManagerImpl implements FriendManager {
             resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver, status: 0 }, { status: solicitud.status }) as FriendRequest;
         }
         catch (e: any) {
-            throw new Error("Fallo listando los amigos")
+            throw new Error("Fallo actualizando la solicitud de amistad")
         }
         return resultado;
     }

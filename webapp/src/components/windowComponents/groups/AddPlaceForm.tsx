@@ -234,8 +234,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     }, [lng, setValue]);
 
     const onSubmit = (data: any) => {
-        let longitude = data.longitude == "" ? lng : data.longitude;
-        let latitude = data.latitude == "" ? lat : data.latitude;
+
         let comments: Comment[] = [{
             comment: data.review,
             date: getDate(),
@@ -245,8 +244,8 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         let p: Place = {
             nombre: data.placename,
             category: category,
-            latitude: latitude as string,
-            longitude: longitude as string,
+            latitude:  data.latitude  as string,
+            longitude: data.longitude as string,
             reviewScore: score.toString(),
             description: "",
             date: getDate(),
