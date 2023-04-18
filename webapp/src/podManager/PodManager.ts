@@ -306,46 +306,46 @@ class PodManager {
     async addReadPermissionsToFriend(webId: string, friendWebId: string, session: Session): Promise<void> {
         // Obtener el SolidDataset y su ACL asociada, si está disponible
         const myDatasetWithAcl = await getSolidDatasetWithAcl(webId, { fetch: session.fetch });
-      
+
         // Obtener la ACL propia del SolidDataset, si está disponible,
         // o inicializar una nueva, si es posible:
         let resourceAcl: AclDataset;
         if (!hasResourceAcl(myDatasetWithAcl)) {
 
             console.log(1)
-          if (!hasAccessibleAcl(myDatasetWithAcl)) {
-            console.log(2)
-            throw new Error("El usuario actual no tiene permiso para cambiar los permisos de acceso a este recurso.");
-          }
-          if (!hasFallbackAcl(myDatasetWithAcl)) {
-            console.log(3)
-            throw new Error("El usuario actual no tiene permiso para ver quién tiene acceso a este recurso.");
-            // Alternativamente, inicializa una nueva ACL vacía de la siguiente manera,
-            // pero ten en cuenta que si no le das a alguien acceso de Control,
-            // **nadie podrá cambiar los permisos de acceso en el futuro**:
-            // resourceAcl = createAcl(myDatasetWithAcl);
-          }
-          console.log(4)
-          resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
+            if (!hasAccessibleAcl(myDatasetWithAcl)) {
+                console.log(2)
+                throw new Error("El usuario actual no tiene permiso para cambiar los permisos de acceso a este recurso.");
+            }
+            if (!hasFallbackAcl(myDatasetWithAcl)) {
+                console.log(3)
+                throw new Error("El usuario actual no tiene permiso para ver quién tiene acceso a este recurso.");
+                // Alternativamente, inicializa una nueva ACL vacía de la siguiente manera,
+                // pero ten en cuenta que si no le das a alguien acceso de Control,
+                // **nadie podrá cambiar los permisos de acceso en el futuro**:
+                // resourceAcl = createAcl(myDatasetWithAcl);
+            }
+            console.log(4)
+            resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
         } else {
             console.log(5)
-          resourceAcl = getResourceAcl(myDatasetWithAcl);
-          console.log(resourceAcl)
+            resourceAcl = getResourceAcl(myDatasetWithAcl);
+            console.log(resourceAcl)
         }
-      
+
         // Agregar permisos de lectura al amigo especificado en el recurso:
         const access: Access = { read: true, append: false, write: false, control: false };
         let updatedAcl = setAgentResourceAccess(resourceAcl, friendWebId, access);
         updatedAcl = setAgentDefaultAccess(updatedAcl, friendWebId, access);
-      
+
         // Guardar la ACL actualizada:
         await saveAclFor(myDatasetWithAcl, updatedAcl, { fetch: session.fetch });
-      }
+    }
 
     async getFriendsGroups(session: Session, url: string): Promise<Group[]> {
         console.log("MANAGER")
         console.log(session)
-        url = url.replace("card#me", "public") + "profile/public/groups"
+        url = url.replace("card#me", "public") + "/groups"
 
         console.log(url)
 

@@ -14,8 +14,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { Groups } from './GroupsComponent';
 import { MapManager } from 'podManager/MapManager';
-import ShowPlace from './ShowPlace';
-import { ShowGroup } from './ShowGroup';
+import ShowPlace from './placeViews/ShowPlace';
+import { ShowGroup } from './groupViews/ShowGroup';
 
 const BoxCircularProgress = styled(Box)({
     paddingTop: '7em',

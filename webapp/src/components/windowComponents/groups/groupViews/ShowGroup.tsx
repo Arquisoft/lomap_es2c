@@ -5,7 +5,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Group } from '../../../shared/shareddtypes';
+import { Group } from '../../../../shared/shareddtypes';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
@@ -16,8 +16,8 @@ import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
-import PodManager from '../../../podManager/PodManager'
-import { Place } from '../../../shared/shareddtypes'
+import PodManager from '../../../../podManager/PodManager'
+import { Place } from '../../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';
@@ -27,7 +27,7 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import { CategoriesFilter } from './CategoriesFilter';
+import { CategoriesFilter } from '../filters/CategoriesFilter';
 
 const ScrollBox = styled(Box)({
     maxHeight: '40vh',

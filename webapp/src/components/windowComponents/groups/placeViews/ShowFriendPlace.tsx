@@ -13,10 +13,12 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Place, Comment, Group } from '../../../shared/shareddtypes'
+import { Place, Comment, Group } from '../../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import { searchUserByUsername } from 'api/api';
+import { latLng } from 'leaflet';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -176,16 +178,14 @@ function PlaceComponent(props: any) {
                 <CoordinatesBox>
                     <CSSTextField
                         id="longitude-SP"
-                        label="Longitud"
-                        value={(place.longitude.toString().substring(0, 8))}
+                        value={("Longitud: " + place.longitude.toString().substring(0, 8))}
                         placeholder="Longitud"
                         disabled
 
                     />
                     <CSSTextField
                         id="latitude-SP"
-                        label="Latitud"
-                        value={(place.latitude.toString().substring(0, 8))}
+                        value={("Latitud: " + place.latitude.toString().substring(0, 8))}
                         placeholder="Latitud"
                         disabled
                     />
@@ -199,7 +199,7 @@ function PlaceComponent(props: any) {
                         id="review-SP"
                         placeholder={place.comments[0] ? place.comments[0].comment : "Sin reseña"}
                         style={{ width: '98.7%', height: '7vh', resize: 'none' }}
-                        readOnly
+                        disabled
                     />
 
                 </Box>
@@ -211,7 +211,7 @@ function PlaceComponent(props: any) {
                         IconContainerComponent={IconContainer}
                         getLabelText={(value: number) => customIcons[value].label}
                         highlightSelectedOnly
-                        readOnly
+                        disabled
                     />
                 </Box>
 
@@ -239,8 +239,8 @@ function PlaceError(props: any) {
 }
 
 
-export default function ShowPlace(props: { session: any }) {
-    const { id, lat } = useParams();
+export default function ShowFriendPlace(props: { session: any }) {
+    const { id, lat, lng } = useParams();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
 
@@ -251,22 +251,24 @@ export default function ShowPlace(props: { session: any }) {
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await mapM.verMapaDe(null, props.session).then(function (groups) {
-            for (let i = 0; i < groups.length; i++) {
-                myGroups.push(groups[i]);
-            }
+        await searchUserByUsername(id).then(async (friend) => {
+            await new MapManager().verMapaDeAmigo(friend, props.session).then((groups) => {
+                for (let i = 0; i < groups.length; i++) {
+                    myGroups.push(groups[i]);
+                }
+            })
         })
 
         return myGroups;
     }
 
     const filterGroups = async (groups: Promise<Group[]>) => {
-        return (await groups).find((g) => g.name == id)
+        return (await groups).find((g) => g.name == lat)
     }
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lat));
+            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lng));
             setLoading(false);
         })
     }
@@ -286,13 +288,14 @@ export default function ShowPlace(props: { session: any }) {
         <>
             <div>
                 <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
-                        Mis grupos
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/friends/main")}>
+                        Amigos
                     </Link>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/showgroup/" + id)}>
-                        {id}
+                    <Typography color="text.primary">{id}</Typography>
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/friends/showgroup/" + id + "/" + lat)}>
+                        {lat}
                     </Link>
-                    <Typography color="text.primary">{lat}</Typography>
+                    <Typography color="text.primary">{lng}</Typography>
                 </Breadcrumbs>
             </div>
             {placeDoesntExist() ? (
