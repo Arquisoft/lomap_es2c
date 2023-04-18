@@ -244,7 +244,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         let p: Place = {
             nombre: data.placename,
             category: category,
-            latitude:  data.latitude  as string,
+            latitude: data.latitude as string,
             longitude: data.longitude as string,
             reviewScore: score.toString(),
             description: "",

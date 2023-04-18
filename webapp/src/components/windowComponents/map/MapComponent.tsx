@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'utils/redux/store';
 import { addPlaceMarker } from 'utils/redux/action';
-import { MarkerData } from 'shared/shareddtypes';
+import React from 'react';
 
 const BrusselsCenter = {
     lat: 50.8504500,
@@ -36,7 +36,7 @@ function CenterMapOnMarker(props: { marker: any }): any {
     const map = useMap();
     if (props.marker != null) {
         let position = props.marker.position;
-        map.setView(position, map.getZoom());
+        map.flyTo(position, map.getZoom());
     }
 
     return null;
@@ -74,7 +74,7 @@ function AddPlace(props: any): any {
     useMapEvents({
         click(e) {
             dispatch(addPlaceMarker(true))
-            if (op == 'addplace') {
+            if (op === 'addplace') {
                 lat = e.latlng.lat.toString();
                 lng = e.latlng.lng.toString();
                 if (marker !== null) {
@@ -109,25 +109,23 @@ export const MapComponent = () => {
 
     const navigate = useNavigate();
 
-    const { op } = useParams();
-
     const handleMarkerClick = (name: string) => {
         navigate(`/home/groups/showplace/${groupid}${name ? `/${name}` : ''}`);
     };
 
-    const [center, setCenter] = useState(BrusselsCenter);
-
-
     const [centerMarker, setCenterMarker] = useState(null);
 
     useEffect(() => {
+        console.log("entro por useffect")
         if (markers.length > 0) {
             setCenterMarker(markers[0]);
         }
     }, [markers]);
 
+    const CenterMapOnMarkerMemo = React.useMemo(() => React.memo(CenterMapOnMarker), [centerMarker]);
+
     return (
-        <MapContainer center={center} zoom={15} scrollWheelZoom={true} minZoom={3} maxZoom={18} >
+        <MapContainer center={BrusselsCenter} zoom={15} scrollWheelZoom={true} minZoom={3} maxZoom={18} >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -139,7 +137,7 @@ export const MapComponent = () => {
                     <Popup>{marker.name}</Popup>
                 </Marker>
             ))}
-            {centerMarker != null && <CenterMapOnMarker marker={centerMarker} />}
+            {centerMarker && <CenterMapOnMarkerMemo marker={centerMarker} />}
             <AddPlace showAdd={showAdd} />
         </MapContainer>
     );
