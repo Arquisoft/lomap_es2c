@@ -12,43 +12,43 @@ const center = {
     lng: 4.3487800
 }
 
-function CenterMap():any {
+function CenterMap(): any {
     const map = useMap();
-  
-    useEffect(() => {
-      map.locate({ setView: true, maxZoom: 13 });
-  
-      function onLocationFound(e:any) {
-        map.flyTo(e.latlng, map.getZoom());
-      }
-  
-      map.on("locationfound", onLocationFound);
-  
-      return () => {
-        map.off("locationfound", onLocationFound);
-      };
-    }, [map]);
-  
-    return null;
-  }
 
-  function CenterMapOnMarker(props: { marker: any }):any {
+    useEffect(() => {
+        map.locate({ setView: true, maxZoom: 13 });
+
+        function onLocationFound(e: any) {
+            map.flyTo(e.latlng, map.getZoom());
+        }
+
+        map.on("locationfound", onLocationFound);
+
+        return () => {
+            map.off("locationfound", onLocationFound);
+        };
+    }, [map]);
+
+    return null;
+}
+
+function CenterMapOnMarker(props: { marker: any }): any {
     const map = useMap();
-    if(props.marker != null){
+    if (props.marker != null) {
         let position = props.marker.position;
         map.setView(position, map.getZoom());
     }
-    
+
     return null;
-  }
-  
-  
-  
+}
+
+
+
 function AddPlace(props: any): any {
 
     const [marker, setMarker] = useState(new L.Marker(center))
-    const [lat, setLatitude] = useState("Latitud:")
-    const [lng, setLongitude] = useState("Longitud:")
+    let lat = "0";
+    let lng = "0";
     const navigate = useNavigate()
     const map = useMap()
     const { op, id } = useParams()
@@ -61,18 +61,17 @@ function AddPlace(props: any): any {
         click(e) {
             dispatch(addPlaceMarker(true))
             if (op == 'addplace') {
-                setLatitude(e.latlng.lat.toString());
-                setLongitude(e.latlng.lng.toString());
+                lat = e.latlng.lat.toString();
+                lng = e.latlng.lng.toString();
                 if (marker !== null) {
                     marker.remove();
                 }
-                if (lat !== "Latitud:") {
+                if (lat !== "0") {
                     nMarker = L.marker(e.latlng);
                     nMarker.bindPopup((new L.Popup({ keepInView: true })).setContent("<p>Lugar a añadir</p>"))
                     nMarker.addTo(map)
-                    navigate("/home/groups/addplace/" + id + "/" + lat + "/" + lng + "/")
                     setMarker(nMarker)
-                    console.log(marker)
+                    navigate("/home/groups/addplace/" + id + "/" + lat + "/" + lng + "/")
                 }
             }
         }
@@ -96,6 +95,8 @@ export const MapComponent = () => {
 
     const navigate = useNavigate();
 
+    const { op } = useParams();
+
     const handleMarkerClick = (name: string) => {
         navigate(`/home/groups/showplace/${groupid}${name ? `/${name}` : ''}`);
     };
@@ -107,14 +108,14 @@ export const MapComponent = () => {
             setCenterMarker(markers[0]);
         }
     }, [markers]);
-    
+
     return (
         <MapContainer center={center} zoom={15} scrollWheelZoom={true}>
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {centerMarker == null && <CenterMap/>}
+            {centerMarker == null && <CenterMap />}
             {markers.map((marker) => (
                 <Marker position={marker.position} key={marker.name} eventHandlers={{ click: () => handleMarkerClick(marker.name) }}>
                     <Popup>{marker.name}</Popup>
