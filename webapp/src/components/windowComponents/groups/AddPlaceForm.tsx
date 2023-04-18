@@ -151,12 +151,12 @@ export function RadioGroupRating() {
 }
 
 export default function AddPlaceForm(props: { session: any, refresh: any }) {
-   
+
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
-   
+
     // Obtención del grupo al que se va a añadir el lugar
     let mapM = new MapManager();
 
@@ -180,14 +180,14 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
     // Actualización de marcadores
     const actualizarMarcadores = () => {
-        dispatch(clearMarkers()); 
+        dispatch(clearMarkers());
 
-        dispatch(setGroupMarker(group.name as string)) 
+        dispatch(setGroupMarker(group.name as string))
 
         const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
 
         const groupMarkers: MarkerData[] = [];
-        
+
         groupPlaces.forEach((place) => {
             groupMarkers.push({
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
@@ -195,11 +195,11 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
             })
         })
 
-        dispatch(addMarkers(groupMarkers)); 
+        dispatch(addMarkers(groupMarkers));
     }
 
     // ---- fin actualización de marcadores
-   
+
 
     // Manejo del formulario
     const [category, setCategory] = useState(null);
@@ -214,28 +214,26 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         defaultValues: {
             latitude: 0.0,
             longitude: 0.0,
-          },
+        },
     });
 
-    const handleSetValue = (field:any, value:any) => {
+    const handleSetValue = (field: any, value: any) => {
         setValue(field, parseFloat(value));
-      };
+    };
 
     useEffect(() => {
         if (lat !== undefined) {
-            console.log(lat)
             setValue('latitude', parseFloat(lat));
         }
-      }, [lat, setValue]);
+    }, [lat, setValue]);
 
-      useEffect(() => {
+    useEffect(() => {
         if (lng !== undefined) {
             setValue('longitude', parseFloat(lng));
         }
-      }, [lng, setValue]);
+    }, [lng, setValue]);
 
     const onSubmit = (data: any) => {
-        console.log(data.review)
         let longitude = data.longitude == "" ? lng : data.longitude;
         let latitude = data.latitude == "" ? lat : data.latitude;
         let comments: Comment[] = [{
@@ -270,7 +268,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         const day = String(currentDate.getDate()).padStart(2, '0');
         return `${day}/${month}/${year}`;
     }
-    
+
     const handleCategoryChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value as string);
     };
@@ -287,9 +285,9 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         const currentLength = currentValue.length;
         const keyValue = e.key;
         const number = /^[0-9.-]*$/;
-        if ( currentLength >= maxLength || (!number.test(keyValue) && !e.ctrlKey)
-        || (keyValue === '-' && currentLength !== 0)
-        || keyValue === '.' && currentValue.includes('.')) {
+        if (currentLength >= maxLength || (!number.test(keyValue) && !e.ctrlKey)
+            || (keyValue === '-' && currentLength !== 0)
+            || keyValue === '.' && currentValue.includes('.')) {
             e.preventDefault();
         }
     }
@@ -347,49 +345,49 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                     </Select>
                 </FormControl>
                 <CoordinatesBox>
-                <Controller
+                    <Controller
                         name="longitude"
                         control={control}
                         render={({ field }) => (
-                        <TextField
-                            {...field}
-                            label="Longitud"
-                            type="number"
-                            error={Boolean(errors.longitude)}
-                            helperText={errors.longitude?.message}
-                            inputProps={{
-                            step: 0.000001,
-                            min: -180,
-                            max: 180,
-                            maxLength: 11
-                            }}
-                            disabled={lng !== undefined ? true : false}
-                            onChange={(e) => handleSetValue(field.name, e.target.value)}
-                            onKeyPress={(e) => handleOnKeyPress(e) }
-                        />
+                            <TextField
+                                {...field}
+                                label="Longitud"
+                                type="number"
+                                error={Boolean(errors.longitude)}
+                                helperText={errors.longitude?.message}
+                                inputProps={{
+                                    step: 0.000001,
+                                    min: -180,
+                                    max: 180,
+                                    maxLength: 11
+                                }}
+                                disabled={lng !== undefined ? true : false}
+                                onChange={(e) => handleSetValue(field.name, e.target.value)}
+                                onKeyPress={(e) => handleOnKeyPress(e)}
+                            />
                         )}
                     />
 
-                <Controller
+                    <Controller
                         name="latitude"
                         control={control}
                         render={({ field }) => (
-                        <TextField
-                            {...field}
-                            label="Latitud"
-                            type="number"
-                            error={Boolean(errors.latitude)}
-                            helperText={errors.latitude?.message}
-                            inputProps={{
-                            step: 0.000001,
-                            min: -90,
-                            max: 90,
-                            maxLength: 11
-                            }}
-                            disabled={lat !== undefined ? true : false}
-                            onChange={(e) => handleSetValue(field.name, e.target.value)}
-                            onKeyPress={(e) => handleOnKeyPress(e) }
-                        />
+                            <TextField
+                                {...field}
+                                label="Latitud"
+                                type="number"
+                                error={Boolean(errors.latitude)}
+                                helperText={errors.latitude?.message}
+                                inputProps={{
+                                    step: 0.000001,
+                                    min: -90,
+                                    max: 90,
+                                    maxLength: 11
+                                }}
+                                disabled={lat !== undefined ? true : false}
+                                onChange={(e) => handleSetValue(field.name, e.target.value)}
+                                onKeyPress={(e) => handleOnKeyPress(e)}
+                            />
                         )}
                     />
                 </CoordinatesBox>
