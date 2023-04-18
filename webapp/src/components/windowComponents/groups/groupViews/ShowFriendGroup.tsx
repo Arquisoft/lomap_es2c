@@ -31,7 +31,7 @@ import { CategoriesFilter } from '../filters/CategoriesFilter';
 
 const ScrollBox = styled(Box)({
     maxHeight: '45vh',
-    overflow: 'auto',
+    overflow: 'hidden auto',
     scrollbarColor: '#81c784 white'
 })
 
@@ -42,7 +42,7 @@ const InfoBox = styled(Box)({
 
 const FilterBox = styled(Box)({
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
 })
 
 const BoxCircularProgress = styled(Box)({
@@ -158,22 +158,22 @@ const GroupDetails = (props: { friend: any, session: any, daddy: any, group: Pro
             <>
                 {grp != null ?
                     <>
-                        <FilterBox>
-                            <FilterAltIcon />
-                            <ListItemText primary="Filtros" />
-                            {open ?
-                                <ExpandLess onClick={() => setOpen(false)} />
-                                :
-                                <ExpandMore onClick={() => setOpen(true)} />
-                            }
-                        </FilterBox>
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                                <CategoriesFilter setFilter={setFilter} />
-                                <p>filtro 2</p>
-                            </List>
-                        </Collapse>
                         <ScrollBox>
+                            <FilterBox>
+                                <FilterAltIcon />
+                                <ListItemText primary="Filtros" />
+                                {open ?
+                                    <ExpandLess onClick={() => setOpen(false)} />
+                                    :
+                                    <ExpandMore onClick={() => setOpen(true)} />
+                                }
+                            </FilterBox>
+                            <Collapse in={open} timeout="auto" unmountOnExit>
+                                <List component="div" disablePadding>
+                                    <CategoriesFilter setFilter={setFilter} />
+                                </List>
+                            </Collapse>
+
                             <List component="div" disablePadding>
                                 {grp.places.filter((place) => filters.length == 0 ? true : filters.includes(place.category)).map((place, j) => {
                                     return (
