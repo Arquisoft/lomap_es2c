@@ -10,6 +10,8 @@ import LogedMenu from '../profileMenus/LoggedMenu';
 import { NoLogedMenu } from '../profileMenus/NoLoggedMenu';
 import { useNavigate } from 'react-router-dom';
 import { Divider } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { clearMarkers } from 'utils/redux/action';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -59,12 +61,14 @@ export function Header(props: { logged: boolean }) {
 
     //#region HOOKS
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     //#endregion
 
     //#region METODOS DE CLASE
 
     const goHome = () => {
         if (props.logged == true) {
+            dispatch(clearMarkers());
             navigate("/home");
         } else {
             navigate("/");

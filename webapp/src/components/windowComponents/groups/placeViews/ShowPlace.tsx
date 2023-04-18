@@ -176,14 +176,16 @@ function PlaceComponent(props: any) {
                 <CoordinatesBox>
                     <CSSTextField
                         id="longitude-SP"
-                        value={("Longitud: " + place.longitude.toString().substring(0, 8))}
+                        label="Longitud"
+                        value={(place.longitude.toString().substring(0, 8))}
                         placeholder="Longitud"
                         disabled
 
                     />
                     <CSSTextField
                         id="latitude-SP"
-                        value={("Latitud: " + place.latitude.toString().substring(0, 8))}
+                        label="Latitud"
+                        value={(place.latitude.toString().substring(0, 8))}
                         placeholder="Latitud"
                         disabled
                     />
@@ -197,7 +199,7 @@ function PlaceComponent(props: any) {
                         id="review-SP"
                         placeholder={place.comments[0] ? place.comments[0].comment : "Sin reseña"}
                         style={{ width: '98.7%', height: '7vh', resize: 'none' }}
-                        disabled
+                        readOnly
                     />
 
                 </Box>
@@ -209,7 +211,7 @@ function PlaceComponent(props: any) {
                         IconContainerComponent={IconContainer}
                         getLabelText={(value: number) => customIcons[value].label}
                         highlightSelectedOnly
-                        disabled
+                        readOnly
                     />
                 </Box>
 

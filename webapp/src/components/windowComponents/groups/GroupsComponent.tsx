@@ -100,23 +100,6 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
         return open.charAt(item) == '0' ? false : true;
     }
 
-    /* SIN USAR POD
-        const mostrarGrupo = (group: Group) => {
-            const newMarkers = placeMarkers;
-     
-            dispatch(clearMarkers());
-            
-            dispatch(setGroupMarker(group.name as string))
-           
-            alert("Se muestra el grupo " + group.name)
-            if(group.name == 'aaa'){
-                dispatch(addMarkers([{position:[40.326565,4.32236], name:"paula"}]))
-            } else {
-                console.log(newMarkers)
-                dispatch(addMarkers(newMarkers));
-            }
-        }
-        */
 
     const mostrarGrupo = (group: Group) => {
         setSelectecGroup(group.name)
@@ -127,13 +110,8 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
         const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
 
-        /*
-        const groupMarkers : MarkerData[] = groupPlaces.map(({ latitude, longitude, nombre }) => ({
-            position: [parseFloat(latitude), parseFloat(longitude)],
-            name: nombre
-        })); */
-
         const groupMarkers: MarkerData[] = [];
+       
         groupPlaces.forEach((place) => {
             groupMarkers.push({
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
