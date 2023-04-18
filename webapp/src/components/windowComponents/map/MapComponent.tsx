@@ -7,7 +7,7 @@ import { RootState } from 'utils/redux/store';
 import { addPlaceMarker } from 'utils/redux/action';
 import { MarkerData } from 'shared/shareddtypes';
 
-const center = {
+const BrusselsCenter = {
     lat: 50.8504500,
     lng: 4.3487800
 }
@@ -16,7 +16,7 @@ function CenterMap(): any {
     const map = useMap();
 
     useEffect(() => {
-        map.locate({ setView: true, maxZoom: 13 });
+        map.locate({ setView: true });
 
         function onLocationFound(e: any) {
             map.flyTo(e.latlng, map.getZoom());
@@ -43,10 +43,24 @@ function CenterMapOnMarker(props: { marker: any }): any {
 }
 
 
+function RestrictMapMovement(): any {
+    const map = useMap();
+
+    const maxBounds = L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180));
+
+    map.setMaxBounds(maxBounds);
+
+    map.on('drag', function () {
+        map.panInsideBounds(maxBounds, { animate: false });
+    });
+
+    return null;
+}
+
 
 function AddPlace(props: any): any {
 
-    const [marker, setMarker] = useState(new L.Marker(center))
+    const [marker, setMarker] = useState(new L.Marker(BrusselsCenter))
     let lat = "0";
     let lng = "0";
     const navigate = useNavigate()
@@ -101,6 +115,9 @@ export const MapComponent = () => {
         navigate(`/home/groups/showplace/${groupid}${name ? `/${name}` : ''}`);
     };
 
+    const [center, setCenter] = useState(BrusselsCenter);
+
+
     const [centerMarker, setCenterMarker] = useState(null);
 
     useEffect(() => {
@@ -110,11 +127,12 @@ export const MapComponent = () => {
     }, [markers]);
 
     return (
-        <MapContainer center={center} zoom={15} scrollWheelZoom={true}>
+        <MapContainer center={center} zoom={15} scrollWheelZoom={true} minZoom={3} maxZoom={18} >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <RestrictMapMovement />
             {centerMarker == null && <CenterMap />}
             {markers.map((marker) => (
                 <Marker position={marker.position} key={marker.name} eventHandlers={{ click: () => handleMarkerClick(marker.name) }}>
