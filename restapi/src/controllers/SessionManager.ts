@@ -30,6 +30,7 @@ class UserSesionManager implements SesionManager {
         } catch (e: any) {
             throw new Error("Ha sucedido un error al crear la cuenta, vuelva a intentarlo más tarde.");
         }
+        usuario.password = "";
         return usuario;
     }
 
@@ -45,9 +46,9 @@ class UserSesionManager implements SesionManager {
         }
         if (usuarioEncontrado != null) {
             if (await bcrypt.compare(user.password, usuarioEncontrado.password)) {
+                usuarioEncontrado.password = "";
                 return usuarioEncontrado;
             }
-            console.log("Mal contraseña")
             throw new Error("Las credenciales no coinciden")
         } else {
             throw new Error("Las credenciales no coinciden")

@@ -96,7 +96,7 @@ export function Header(props: { logged: boolean }) {
                         key={uuid()}
                         onClick={goHome}
                     >
-                        <img id="imgLogo" src="nobgLogo.png"></img>
+                        <img data-testid="imgLogo" id="imgLogo" src="nobgLogo.png"></img>
                     </ButtonHOME>
                     <VerticalDivider orientation='vertical' flexItem />
                     <BoxNAV>

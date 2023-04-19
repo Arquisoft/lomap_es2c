@@ -58,10 +58,9 @@ export function NoLogedMenu() {
 
         //#region COMPONENTE
         <BoxProfile>
-
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
-                    <Avatar src="/broken-image.jpg" />
+                    <Avatar data-testid="defaultImg" src="/broken-image.jpg" />
                 </IconButton>
             </Tooltip>
             <MyMenu
