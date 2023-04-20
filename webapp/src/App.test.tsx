@@ -1,9 +1,11 @@
 import React from 'react';
+import "@inrupt/jest-jsdom-polyfills";
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import { act } from 'react-dom/test-utils';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Source code/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders app', async () => {
+    await act(async () => { render(<App />) });
+    const linkElement = screen.getByTestId("mainPageLogo");
+    expect(linkElement).toBeInTheDocument();
 });

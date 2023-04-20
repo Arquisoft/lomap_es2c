@@ -1,4 +1,3 @@
-
 import LoginView from './views/LoginView';
 import './App.css';
 import SignupView from './views/SignupView';

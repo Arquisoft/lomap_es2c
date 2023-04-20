@@ -1,5 +1,6 @@
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles';
+import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearMarkers, clearFriendsMarkers } from 'utils/redux/action';
 
@@ -31,10 +32,11 @@ export const ErrorPage = () => {
     dispatch(clearMarkers());
     dispatch(clearFriendsMarkers());
 
+    const location = useLocation();
     return (
         <ErrorBox>
             <TitleBox>
-                Error 404: Página no encontrada
+                Error 404: Página {location.pathname} no encontrada
             </TitleBox>
             <TextBox>
                 Disculpamos las molestias pero la página a la que acaba de intentar acceder no existe o no se encuentra disponible. Vuelva al menú principal calcando <a href="/">aquí</a> o contacte con nosotros mediante nuestro GitHub proporcionado en el pie de la página. ¡Gracias por la compresión!

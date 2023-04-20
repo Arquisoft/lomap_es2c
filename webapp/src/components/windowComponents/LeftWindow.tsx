@@ -5,8 +5,8 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import { styled } from '@mui/material/styles';
 import { createTheme, Tabs, ThemeProvider } from '@mui/material';
-import { GroupsManagerPanel } from './groups/GroupsManagerPanel';
-import { FriendManagerPanel } from './friends/FriendManagerPanel';
+import { GroupsManagerPanel } from 'components/windowComponents/groups/GroupsManagerPanel';
+import { FriendManagerPanel } from 'components/windowComponents/friends/FriendManagerPanel';
 import { useNavigate, useParams } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
 import MapIcon from '@mui/icons-material/Map';
@@ -73,8 +73,8 @@ export function LeftWindow(props: { session: any }) {
                         indicatorColor="primary"
                         aria-label="secondary tabs example"
                     >
-                        <Tab value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
-                        <Tab value="friends" label="Amigos" onClick={handleClick} icon={<GroupIcon />} iconPosition='start' />
+                        <Tab data-testid="groupsTab" value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
+                        <Tab data-testid="friendsTab" value="friends" label="Amigos" onClick={handleClick} icon={<GroupIcon />} iconPosition='start' />
                     </MyTabs>
                     <TabPanel value="groups">
                         <GroupsManagerPanel session={props.session} />

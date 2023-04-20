@@ -263,7 +263,7 @@ function LogedMenu() {
             <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
                 <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
-                    <Avatar alt="Remy Sharp" src={url} />
+                    <Avatar data-testid="userProfileImg" alt="User profile photo" src={url} />
                 </IconButton>
             </Tooltip>
             <MyMenu

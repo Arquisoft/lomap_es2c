@@ -177,6 +177,7 @@ export function Signup() {
                     type="submit"
                     size="large"
                     fullWidth
+                    data-testid="signupButton"
                 >
                     Crear cuenta
                 </CSSButton>

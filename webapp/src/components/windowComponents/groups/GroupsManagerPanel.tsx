@@ -52,7 +52,6 @@ export const GroupsManagerPanel = (props: { session: any }) => {
                 myGroups.push(groups[i]);
             }
         })
-
         return myGroups;
     }
 
