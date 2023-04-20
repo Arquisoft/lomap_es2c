@@ -135,23 +135,22 @@ export function HomePage() {
                         ¿descubriste un mirador al que necesitas ir con tu amor platónico?, ¿te has enamorado de la camarera de ese bar y necesitas volver?,
                         Añade todos los lugares que quieras en LoMap y organizalos en los grupos que prefieras para tener toda tu vida a un solo click.</p>
                     <p>Podrás añadir comentarios a cada lugar, fotos para recordar lo maravillosos que eran. Puedes añadir a tus amigos y compartir con ellos esos lugares
-                        a los que siempre se te olvida llevarles. No dudes, crea tu cuenta <a id="homeA" onClick={goSignup}>aquí</a> de forma gratuita y disfruta de nuestra aplicación.
+                        a los que siempre se te olvida llevarles. No dudes, crea tu cuenta <a id="homeA" data-testid="signupLink" onClick={goSignup}>aquí</a> de forma gratuita y disfruta de nuestra aplicación.
                     </p>
                 </TextBox>
                 <InfoBox>
-                    <TitleBox>
+                    <TitleBox data-testid="titleLoMap">
                         Descubre LoMap
                     </TitleBox>
-                    <ScrollBox>
+                    <ScrollBox data-testid="imgCarruselScroll">
                         <ImgCarrusel />
                     </ScrollBox>
-                    <GoButton onClick={() => goMain()}>
+                    <GoButton data-testid="mainButton" onClick={() => goMain()}>
                         ¡Adelante!
                     </GoButton>
                 </InfoBox>
             </HomeContainer >
         </MainBox>
         //#endregion
-
     )
 }

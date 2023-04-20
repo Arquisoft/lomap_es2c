@@ -9,15 +9,15 @@ export default function StandardImageList() {
     const showImg = (img: string, title: string) => {
         Swal.fire({
             html:
-                '<img alt="' + title + '"src="' + img + '"></img',
+                '<img data-testid="carruselImg" alt="' + title + '"src="' + img + '"></img',
             width: '90vw',
             confirmButtonColor: '#81c784'
         })
     }
 
     return (
-        <ImageList cols={1}>
-            {itemData.map((item) => (
+        <ImageList cols={1} data-testid="imgCarruselComp">
+            {itemData.map((item, index) => (
                 <ImageListItem key={item.img}>
                     <img
                         src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
@@ -29,6 +29,7 @@ export default function StandardImageList() {
                         title={item.title}
                         actionIcon={
                             <IconButton
+                                data-testid={"imgButton" + index}
                                 sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                 aria-label={`info about ${item.title}`}
                                 onClick={() => showImg(item.img, item.title)}
