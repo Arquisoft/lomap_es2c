@@ -108,15 +108,16 @@ export const MapComponent = () => {
     const groupid = useSelector((state: RootState) => state.markers.groupName);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleMarkerClick = (name: string) => {
+        dispatch(addPlaceMarker(false))
         navigate(`/home/groups/showplace/${groupid}${name ? `/${name}` : ''}`);
     };
 
     const [centerMarker, setCenterMarker] = useState(null);
 
     useEffect(() => {
-        console.log("entro por useffect")
         if (markers.length > 0) {
             setCenterMarker(markers[0]);
         }

@@ -62,7 +62,7 @@ export function LeftWindow(props: { session: any }) {
     };
 
     return (
-        <Window onClick={handleClick}>
+        <Window>
             <ThemeProvider theme={theme}>
                 <MyTabContext value={mainop} theme={theme}>
                     <MyTabs
@@ -74,7 +74,7 @@ export function LeftWindow(props: { session: any }) {
                         aria-label="secondary tabs example"
                     >
                         <Tab value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
-                        <Tab value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
+                        <Tab value="friends" label="Amigos" onClick={handleClick} icon={<GroupIcon />} iconPosition='start' />
                     </MyTabs>
                     <TabPanel value="groups">
                         <GroupsManagerPanel session={props.session} />

@@ -30,7 +30,7 @@ import * as fieldsValidation from '../../../utils/fieldsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
-import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
+import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -290,16 +290,17 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
             e.preventDefault();
         }
     }
+
     // ---- fin manejo formulario
 
     return (
         <>
             <div>
                 <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                    <Link underline="hover" color="inherit" onClick={() => { dispatch(addPlaceMarker(false)); navigate("/home/groups/main") }}>
                         Mis grupos
                     </Link>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/showgroup/" + id)}>
+                    <Link underline="hover" color="inherit" onClick={() => { dispatch(addPlaceMarker(false)); navigate("/home/groups/showgroup/" + id) }}>
                         {id}
                     </Link>
                     <Typography color="text.primary">Nuevo lugar</Typography>
