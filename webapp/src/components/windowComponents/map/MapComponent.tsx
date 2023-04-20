@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -113,7 +113,33 @@ function AddPlace(props: any): any {
     return null;
 }
 
+
+function Legend(): any {
+    const map = useMap();
+
+    const hasLegend = document.getElementById("titutloleyenda");
+
+    if (hasLegend === null) {
+        let legend = new L.Control({ position: 'bottomleft' });
+
+        legend.onAdd = function () {
+            let div = L.DomUtil.create('div', 'Leyenda');
+            div.innerHTML += '<h3 id="titutloleyenda" style="color: #81c784">Leyenda</h4>';
+            div.innerHTML += '<img src="../markers/myMarker.png" width="20px">Tus lugares<br>';
+            div.innerHTML += '<img src="../markers/friendsMarker.png" width="20px">Lugares de tus amigos<br>';
+            div.innerHTML += '<img src="../markers/add-location.png" width="20px">Lugar que estás añadiendo<br>';
+            return div;
+        };
+
+        legend.addTo(map);
+    }
+
+    return null;
+}
+
 export const MapComponent = () => {
+
+
 
     const myMarkers = useSelector((state: RootState) => state.markers.markers);
     const friendMarkers = useSelector((state: RootState) => state.markers.friendsMarkers);
@@ -148,7 +174,16 @@ export const MapComponent = () => {
         }
     }, [markers]);
 
+    const [leyenda, setLeyenda] = useState(false);
+    useEffect(() => {
+        setLeyenda(true);
+    }, []);
+
+
     const CenterMapOnMarkerMemo = React.useMemo(() => React.memo(CenterMapOnMarker), [centerMarker]);
+
+
+    // Leyenda del mapa
 
     return (
         <MapContainer center={BrusselsCenter} zoom={15} scrollWheelZoom={true} minZoom={3} maxZoom={18} >
@@ -156,6 +191,7 @@ export const MapComponent = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <Legend />
             <RestrictMapMovement />
             {centerMarker == null && <CenterMap />}
             {markers.map((marker) => (
