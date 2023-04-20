@@ -1,20 +1,26 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MarkerData } from 'shared/shareddtypes';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { MarkerData } from "shared/shareddtypes";
 
 interface MarkersState {
   markers: MarkerData[];
   addPlaceMarker: boolean;
   groupName: string;
+  friendGroupName: string;
+  friendsMarkers: MarkerData[];
+  friendUsername: string;
 }
 
 const initialState: MarkersState = {
   markers: [],
-  addPlaceMarker: false ,
+  addPlaceMarker: false,
   groupName: "",
+  friendGroupName: "",
+  friendsMarkers: [],
+  friendUsername: "",
 };
 
 const markersSlice = createSlice({
-  name: 'markers',
+  name: "markers",
   initialState,
   reducers: {
     addMarkers(state, action: PayloadAction<MarkerData[]>) {
@@ -22,14 +28,31 @@ const markersSlice = createSlice({
     },
     clearMarkers(state) {
       state.markers = [];
-    }, addPlaceMarker(state, action: PayloadAction<boolean>){
+      state.groupName = "";
+    },
+    addPlaceMarker(state, action: PayloadAction<boolean>) {
       state.addPlaceMarker = action.payload;
     },
     clearAddPlaceMarker(state) {
       state.addPlaceMarker = null;
-    }, setGroupMarker(state, action: PayloadAction<string>){
-        state.groupName = action.payload;
-    }
+    },
+    setGroupMarker(state, action: PayloadAction<string>) {
+      state.groupName = action.payload;
+    },
+    addFriendsMarkers(state, action: PayloadAction<MarkerData[]>) {
+      state.friendsMarkers.push(...action.payload);
+    },
+    clearFriendsMarkers(state) {
+      state.friendsMarkers = [];
+      state.friendGroupName = "";
+      state.friendUsername = "";
+    },
+    setFriendGroupMarker(state, action: PayloadAction<string>) {
+      state.friendGroupName = action.payload;
+    },
+    setFriendUsername(state, action: PayloadAction<string>) {
+      state.friendUsername = action.payload;
+    },
   },
 });
 

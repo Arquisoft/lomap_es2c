@@ -12,6 +12,19 @@ const BrusselsCenter = {
     lng: 4.3487800
 }
 
+function markerIcon(url: string): L.Icon {
+    return new L.Icon({
+        iconUrl: url,
+        iconSize: [41, 41]
+    })
+};
+
+const addMarkerIcon = new L.Icon({
+    iconUrl: '../markers/add-location.png',
+    iconSize: [47, 47]
+});
+
+
 function CenterMap(): any {
     const map = useMap();
 
@@ -82,6 +95,7 @@ function AddPlace(props: any): any {
                 }
                 if (lat !== "0") {
                     nMarker = L.marker(e.latlng);
+                    nMarker.setIcon(addMarkerIcon);
                     nMarker.bindPopup((new L.Popup({ keepInView: true })).setContent("<p>Lugar a añadir</p>"))
                     nMarker.addTo(map)
                     setMarker(nMarker)
@@ -101,18 +115,29 @@ function AddPlace(props: any): any {
 
 export const MapComponent = () => {
 
-    const markers = useSelector((state: RootState) => state.markers.markers);
+    const myMarkers = useSelector((state: RootState) => state.markers.markers);
+    const friendMarkers = useSelector((state: RootState) => state.markers.friendsMarkers);
+    const markers = myMarkers.concat(friendMarkers);
 
     const showAdd = useSelector((state: RootState) => state.markers.addPlaceMarker);
 
     const groupid = useSelector((state: RootState) => state.markers.groupName);
 
+    const friendUsername = useSelector((state: RootState) => state.markers.friendUsername);
+    const friendGroupId = useSelector((state: RootState) => state.markers.friendGroupName);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const handleMarkerClick = (name: string) => {
+    const handleMarkerClick = (marker: any) => {
         dispatch(addPlaceMarker(false))
-        navigate(`/home/groups/showplace/${groupid}${name ? `/${name}` : ''}`);
+        let url = `/home/groups/showplace/${groupid}${marker.name ? `/${marker.name}` : ''}`;
+        console.log(marker.type)
+        console.log(friendGroupId)
+        if (marker.type == "friend") {
+            url = `/home/friends/showplace/${friendUsername}/${friendGroupId}${marker.name ? `/${marker.name}` : ''}`;
+        }
+        navigate(url);
     };
 
     const [centerMarker, setCenterMarker] = useState(null);
@@ -134,7 +159,7 @@ export const MapComponent = () => {
             <RestrictMapMovement />
             {centerMarker == null && <CenterMap />}
             {markers.map((marker) => (
-                <Marker position={marker.position} key={marker.name} eventHandlers={{ click: () => handleMarkerClick(marker.name) }}>
+                <Marker position={marker.position} key={marker.name} icon={markerIcon(marker.iconUrl)} eventHandlers={{ click: () => handleMarkerClick(marker) }}>
                     <Popup>{marker.name}</Popup>
                 </Marker>
             ))}

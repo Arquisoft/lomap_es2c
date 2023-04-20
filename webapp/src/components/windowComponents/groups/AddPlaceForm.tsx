@@ -191,7 +191,9 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         groupPlaces.forEach((place) => {
             groupMarkers.push({
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
-                name: place.nombre
+                name: place.nombre,
+                type: "mine",
+                iconUrl: "../markers/yellow-marker.png",
             })
         })
 
