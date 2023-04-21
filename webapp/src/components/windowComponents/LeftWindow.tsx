@@ -12,6 +12,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import MapIcon from '@mui/icons-material/Map';
 import { useDispatch } from 'react-redux';
 import { addPlaceMarker } from 'utils/redux/action';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
@@ -42,7 +43,7 @@ type MarkerData = {
     name: string;
 };
 
-export function LeftWindow(props: { session: any }) {
+export function LeftWindow() {
 
     const { mainop } = useParams()
 
@@ -77,11 +78,11 @@ export function LeftWindow(props: { session: any }) {
                         <Tab data-testid="friendsTab" value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
                     </MyTabs>
                     <TabPanel value="groups">
-                        <GroupsManagerPanel session={props.session} />
+                        <GroupsManagerPanel />
 
                     </TabPanel>
                     <TabPanel value="friends">
-                        <FriendManagerPanel session={props.session} />
+                        <FriendManagerPanel />
                     </TabPanel>
                 </MyTabContext>
             </ThemeProvider>

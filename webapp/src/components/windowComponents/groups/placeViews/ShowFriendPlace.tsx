@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import { searchUserByUsername } from 'api/api';
 import { latLng } from 'leaflet';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -239,7 +240,9 @@ function PlaceError(props: any) {
 }
 
 
-export default function ShowFriendPlace(props: { session: any }) {
+export default function ShowFriendPlace() {
+
+    const { session } = useSession();
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
@@ -252,7 +255,7 @@ export default function ShowFriendPlace(props: { session: any }) {
     const userGroups = async () => {
         let myGroups: Group[] = [];
         await searchUserByUsername(id).then(async (friend) => {
-            await new MapManager().verMapaDeAmigo(friend, props.session).then((groups) => {
+            await new MapManager().verMapaDeAmigo(friend, session).then((groups) => {
                 for (let i = 0; i < groups.length; i++) {
                     myGroups.push(groups[i]);
                 }
@@ -268,7 +271,7 @@ export default function ShowFriendPlace(props: { session: any }) {
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lng));
+            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre == lng));
             setLoading(false);
         })
     }

@@ -27,6 +27,7 @@ import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';
 import { showError } from 'utils/fieldsValidation';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
@@ -37,8 +38,9 @@ const InfoBox = styled(Box)({
     textAlign: 'center'
 })
 
-export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: any, refresh: any, stopLoading: any }) => {
+export const Groups = (props: { groups: Promise<Group[]>, daddy: any, refresh: any, stopLoading: any }) => {
 
+    const { session } = useSession();
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
@@ -61,7 +63,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
             cancelButtonText: 'Volver'
         }).then((result) => {
             if (result.isConfirmed) {
-                new PodManager().deleteGroup(props.session, group).then(() => {
+                new PodManager().deleteGroup(session, group).then(() => {
                     props.refresh();
                     temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
                 }).catch((err: any) => {
@@ -108,10 +110,10 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
 
         dispatch(setGroupMarker(group.name as string)) // Se asigna el nombre del grupo que se va a mostrar
 
-        const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
+        const groupPlaces = new MapManager().mostrarGrupo(group, session);
 
         const groupMarkers: MarkerData[] = [];
-       
+
         groupPlaces.forEach((place) => {
             groupMarkers.push({
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],

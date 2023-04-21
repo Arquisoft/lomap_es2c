@@ -17,6 +17,14 @@ import { readCookie } from 'utils/CookieReader';
 import { parse, stringify } from 'flatted'
 import store from 'utils/redux/store';
 import { Provider } from 'react-redux';
+import { Login } from '@mui/icons-material';
+import { Signup } from 'components/userIdentification/SignupForm';
+import Pod from 'components/userIdentification/podLogin/Pod';
+import { ErrorPage } from 'components/mainComponents/ErrorPage';
+import { MainPage } from 'components/mainComponents/MainPage';
+import { Box } from '@mui/material';
+import { LeftWindow } from 'components/windowComponents/LeftWindow';
+import { HomePage } from 'components/mainComponents/HomePage';
 
 function App(): JSX.Element {
     const [session, setSession] = useState<any>(null)
@@ -29,18 +37,15 @@ function App(): JSX.Element {
             <SessionProvider sessionId={session?.sessionId as string}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path='/' element={<AuthCheckerNoLogged> <HomeView /> </AuthCheckerNoLogged>} />
-                        {/* 
-                    mainop = [groups/friends]
-                    ?op = [groupView (addplace, addgroup, main)/friendName]
-                    ?id = [shownGroupName]
-                    ?lat = [optional lat to add from map]
-                    ?lon = [optional lon to add from map]
-                */}
-                        <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<AuthPodChecker><LoggedView /></AuthPodChecker>} />
-                        <Route path='/login' element={<AuthCheckerNoLogged> <LoginView /></AuthCheckerNoLogged>} />
-                        <Route path='/home/:welcome?' element={<AuthPodChecker><HomeViewLogged /></AuthPodChecker>} />
-                        <Route path='/signup' element={<AuthCheckerNoLogged> <SignupView /></AuthCheckerNoLogged>} />
+                        <Route path='/' element={<AuthCheckerNoLogged> <HomeView /> </AuthCheckerNoLogged>} >
+                            <Route index element={<HomePage />} />
+                            <Route path='/signup' element={<SignupView />} />
+                            <Route path='/login' element={<LoginView />} />
+                        </Route>
+                        <Route path='/home' element={<AuthPodChecker><LoggedView /></AuthPodChecker>} >
+                            <Route index path='/home/:welcome?' element={<HomePage />} />
+                            <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<MainPage />} />
+                        </Route>
                         <Route path='/podlogin' element={<AuthChecker><PodView /></AuthChecker>} />
                         <Route path='*' element={<NoFound />} />
                     </Routes>

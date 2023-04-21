@@ -97,13 +97,10 @@ class PodManager {
             let url = session.info.webId.replace("card#me", "public") + "/groups";
             let groups = await this.getGroups(session);
 
-            groups.forEach((gr: Group) => {
-                console.log(gr)
-            })
 
             // Buscar el índice del grupo existente
             const groupIndex = groups.findIndex((oldGroup) => group.name == oldGroup.name);
-            console.log(groupIndex)
+
 
             if (groupIndex === -1) {
                 throw new Error(`No se encontró el grupo con el nombre ${group.name}`);
@@ -112,7 +109,6 @@ class PodManager {
             // Actualizar las propiedades del grupo existente
             groups[groupIndex] = group;
 
-            console.log(groups)
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
@@ -150,7 +146,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }
@@ -158,20 +153,15 @@ class PodManager {
 
     async deleteGroup(session: Session, group: Group): Promise<void> {
         try {
-            console.log(2)
+
 
             let url = session.info.webId.replace("card#me", "public") + "/groups";
             let groups = await this.getGroups(session);
 
-            groups.forEach((gr: Group) => {
-                console.log(gr)
-            })
-
-            console.log(group)
 
             groups = groups.filter((oldGroup) => group.name !== oldGroup.name);
 
-            console.log(groups)
+
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
@@ -209,7 +199,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }
@@ -258,7 +247,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }
@@ -312,25 +300,19 @@ class PodManager {
         let resourceAcl: AclDataset;
         if (!hasResourceAcl(myDatasetWithAcl)) {
 
-            console.log(1)
             if (!hasAccessibleAcl(myDatasetWithAcl)) {
-                console.log(2)
                 throw new Error("El usuario actual no tiene permiso para cambiar los permisos de acceso a este recurso.");
             }
             if (!hasFallbackAcl(myDatasetWithAcl)) {
-                console.log(3)
                 throw new Error("El usuario actual no tiene permiso para ver quién tiene acceso a este recurso.");
                 // Alternativamente, inicializa una nueva ACL vacía de la siguiente manera,
                 // pero ten en cuenta que si no le das a alguien acceso de Control,
                 // **nadie podrá cambiar los permisos de acceso en el futuro**:
                 // resourceAcl = createAcl(myDatasetWithAcl);
             }
-            console.log(4)
             resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
         } else {
-            console.log(5)
             resourceAcl = getResourceAcl(myDatasetWithAcl);
-            console.log(resourceAcl)
         }
 
         // Agregar permisos de lectura al amigo especificado en el recurso:
@@ -343,11 +325,8 @@ class PodManager {
     }
 
     async getFriendsGroups(session: Session, url: string): Promise<Group[]> {
-        console.log("MANAGER")
-        console.log(session)
         url = url.replace("card#me", "public") + "/groups"
 
-        console.log(url)
 
         try {
             const file = await getFile(url, { fetch: session.fetch });

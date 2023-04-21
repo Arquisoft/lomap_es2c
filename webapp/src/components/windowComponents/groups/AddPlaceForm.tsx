@@ -31,6 +31,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
 import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -150,8 +151,9 @@ export function RadioGroupRating() {
     );
 }
 
-export default function AddPlaceForm(props: { session: any, refresh: any }) {
+export default function AddPlaceForm(props: { refresh: any }) {
 
+    const { session } = useSession();
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
     const dispatch = useDispatch();
@@ -161,7 +163,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     let mapM = new MapManager();
 
     const userGroups = async () => {
-        const groups = await mapM.verMapaDe(null, props.session);
+        const groups = await mapM.verMapaDe(null, session);
         return groups;
     };
 
@@ -184,7 +186,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
         dispatch(setGroupMarker(group.name as string))
 
-        const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
+        const groupPlaces = new MapManager().mostrarGrupo(group, session);
 
         const groupMarkers: MarkerData[] = [];
 
@@ -253,7 +255,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
             comments,
         }
 
-        mapM.añadirLugarAGrupo(p, group, props.session).then(() => {
+        mapM.añadirLugarAGrupo(p, group, session).then(() => {
             temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
             actualizarMarcadores();
             navigate("/home/groups/showgroup/" + group.name)

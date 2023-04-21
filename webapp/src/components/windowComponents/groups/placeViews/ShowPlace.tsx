@@ -17,6 +17,7 @@ import { Place, Comment, Group } from '../../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -239,7 +240,9 @@ function PlaceError(props: any) {
 }
 
 
-export default function ShowPlace(props: { session: any }) {
+export default function ShowPlace() {
+
+    const { session } = useSession();
     const { id, lat } = useParams();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
@@ -251,7 +254,7 @@ export default function ShowPlace(props: { session: any }) {
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await mapM.verMapaDe(null, props.session).then(function (groups) {
+        await mapM.verMapaDe(null, session).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
@@ -266,7 +269,7 @@ export default function ShowPlace(props: { session: any }) {
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lat));
+            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre == lat));
             setLoading(false);
         })
     }

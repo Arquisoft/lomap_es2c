@@ -14,6 +14,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { showError } from 'utils/fieldsValidation';
 import PodManager from 'podManager/PodManager';
+import { useSession } from '@inrupt/solid-ui-react';
 
 
 const VerticalDivider = styled(Divider)({
@@ -25,8 +26,9 @@ const InfoBox = styled(Box)({
     textAlign: 'center'
 })
 
-export const FriendRequestsComponent = (props: { session: any, friendRequests: Promise<FriendRequest[]>, daddy: any, refresh: any, refreshFriends: any, stopLoading: any }) => {
+export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendRequest[]>, daddy: any, refresh: any, refreshFriends: any, stopLoading: any }) => {
 
+    const { session } = useSession();
     const [url, setUrl] = useState("../testUser.jfif");
 
     const [open, setOpen] = React.useState("");
@@ -74,7 +76,7 @@ export const FriendRequestsComponent = (props: { session: any, friendRequests: P
             props.refresh();
             props.refreshFriends();
             searchUserByUsername(request.sender).then((friend) => {
-                new PodManager().addReadPermissionsToFriend(getUserInSesion().webID, friend.webID, props.session).then(() => {
+                new PodManager().addReadPermissionsToFriend(getUserInSesion().webID, friend.webID, session).then(() => {
                     temporalSuccessMessage("La solicitud de amistad de <em><b>" + request.sender + "</b></em> ha sido aceptada correctamente.");
                 })
             })
