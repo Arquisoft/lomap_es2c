@@ -30,7 +30,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { CategoriesFilter } from '../filters/CategoriesFilter';
 import { useDispatch } from 'react-redux';
 import { clearFilterForFriendMarkers, setFilterForFriendMarkers } from 'utils/redux/action';
-import PlaceCategories from '../placeViews/PlaceCategories';
+import PlaceCategories from '../../places/placeViews/PlaceCategories';
 
 
 const ScrollBox = styled(Box)({

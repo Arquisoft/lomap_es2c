@@ -28,7 +28,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { CategoriesFilter } from '../filters/CategoriesFilter';
-import PlaceCategories from '../placeViews/PlaceCategories';
+import PlaceCategories from '../../places/placeViews/PlaceCategories';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearFilterForMyMarkers, setFilterForMyMarkers } from 'utils/redux/action';
 import { RootState } from 'utils/redux/store';

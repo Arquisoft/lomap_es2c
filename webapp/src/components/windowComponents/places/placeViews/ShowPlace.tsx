@@ -10,8 +10,13 @@ import { Place, Comment, Group } from '../../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
-import { searchUserByUsername } from 'api/api';
-import { PlaceComponent } from './ShowPlace';
+import PlaceComponent from '../PlaceComponent';
+
+const CSSTypography = styled(Typography)({
+    color: '#81c784',
+    fontSize: '1.3em',
+    fontFamily: 'Calibri',
+});
 
 
 const BoxCircularProgress = styled(Box)({
@@ -22,33 +27,32 @@ const BoxCircularProgress = styled(Box)({
 })
 
 
-export default function ShowFriendPlace(props: { session: any }) {
-    const { id, lat, lng } = useParams();
+export default function ShowPlace(props: { session: any }) {
+    const { id, lat } = useParams();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
+
 
     let mapM = new MapManager();
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await searchUserByUsername(id).then(async (friend) => {
-            await new MapManager().verMapaDeAmigo(friend, props.session).then((groups) => {
-                for (let i = 0; i < groups.length; i++) {
-                    myGroups.push(groups[i]);
-                }
-            })
+        await mapM.verMapaDe(null, props.session).then(function (groups) {
+            for (let i = 0; i < groups.length; i++) {
+                myGroups.push(groups[i]);
+            }
         })
 
         return myGroups;
     }
 
     const filterGroups = async (groups: Promise<Group[]>) => {
-        return (await groups).find((g) => g.name == lat)
+        return (await groups).find((g) => g.name == id)
     }
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lng));
+            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lat));
             setLoading(false);
         })
     }
@@ -68,14 +72,13 @@ export default function ShowFriendPlace(props: { session: any }) {
         <>
             <div>
                 <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/friends/main")}>
-                        Amigos
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                        Mis grupos
                     </Link>
-                    <Typography color="text.primary">{id}</Typography>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/friends/showgroup/" + id + "/" + lat)}>
-                        {lat}
+                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/showgroup/" + id)}>
+                        {id}
                     </Link>
-                    <Typography color="text.primary">{lng}</Typography>
+                    <Typography color="text.primary">{lat}</Typography>
                 </Breadcrumbs>
             </div>
             {placeDoesntExist() ? (

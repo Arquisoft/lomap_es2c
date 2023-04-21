@@ -1,11 +1,5 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Rating, { IconContainerProps } from '@mui/material/Rating';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { useForm, Controller } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -31,6 +25,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
 import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
+import { IconContainer, StyledRating, customIcons } from '../StyledRating';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -96,47 +91,6 @@ const LegendTypography = styled(Typography)({
     letterSpacing: '0.00938em',
 });
 
-export const StyledRating = styled(Rating)(({ theme }) => ({
-    '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
-        color: theme.palette.action.disabled,
-    },
-}));
-
-export const customIcons: {
-    [index: string]: {
-        icon: React.ReactElement;
-        label: string;
-    };
-} = {
-    1: {
-        icon: <SentimentVeryDissatisfiedIcon color="error" />,
-        label: 'Very Dissatisfied',
-    },
-    2: {
-        icon: <SentimentDissatisfiedIcon color="error" />,
-        label: 'Dissatisfied',
-    },
-    3: {
-        icon: <SentimentSatisfiedIcon color="warning" />,
-        label: 'Neutral',
-    },
-    4: {
-        icon: <SentimentSatisfiedAltIcon color="success" />,
-        label: 'Satisfied',
-    },
-    5: {
-        icon: <SentimentVerySatisfiedIcon color="success" />,
-        label: 'Very Satisfied',
-    },
-};
-
-
-
-
-export function IconContainer(props: IconContainerProps) {
-    const { value, ...other } = props;
-    return <span {...other}>{customIcons[value].icon}</span>;
-}
 
 
 export default function AddPlaceForm(props: { session: any, refresh: any }) {
@@ -231,7 +185,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
         let comments: Comment[] = [{
             comment: data.review,
-            date: getDate(),
+            date: new Date().getTime().toString(),
             author: getUserInSesion().username
         }]
 
@@ -242,7 +196,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
             longitude: data.longitude as string,
             reviewScore: score.toString(),
             description: "",
-            date: getDate(),
+            date: new Date().getTime().toString(),
             comments,
         }
 
@@ -253,14 +207,6 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
             props.refresh()
         })
     };
-
-    const getDate = (): string => {
-        const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        return `${day}/${month}/${year}`;
-    }
 
     const handleCategoryChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value as string);

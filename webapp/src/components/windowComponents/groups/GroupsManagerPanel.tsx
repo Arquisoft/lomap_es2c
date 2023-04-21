@@ -8,13 +8,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Group } from '../../../shared/shareddtypes';
 import AddIcon from '@mui/icons-material/Add';
-import AddPlaceForm from './placeViews/AddPlaceForm';
+import AddPlaceForm from '../places/placeViews/AddPlaceForm';
 import AddGroupForm from './groupViews/AddGroupForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { Groups } from './GroupsComponent';
 import { MapManager } from 'podManager/MapManager';
-import ShowPlace from './placeViews/ShowPlace';
+import ShowPlace from '../places/placeViews/ShowPlace';
 import { ShowGroup } from './groupViews/ShowGroup';
 
 const BoxCircularProgress = styled(Box)({
