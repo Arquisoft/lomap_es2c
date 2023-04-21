@@ -82,4 +82,5 @@ export type MarkerData = {
   name: string;
   type: string;
   iconUrl: string;
+  category: string;
 };

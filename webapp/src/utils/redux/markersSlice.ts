@@ -8,6 +8,8 @@ interface MarkersState {
   friendGroupName: string;
   friendsMarkers: MarkerData[];
   friendUsername: string;
+  myFilters: string[];
+  friendsFilters: string[];
 }
 
 const initialState: MarkersState = {
@@ -17,6 +19,8 @@ const initialState: MarkersState = {
   friendGroupName: "",
   friendsMarkers: [],
   friendUsername: "",
+  myFilters: [],
+  friendsFilters: [],
 };
 
 const markersSlice = createSlice({
@@ -29,6 +33,7 @@ const markersSlice = createSlice({
     clearMarkers(state) {
       state.markers = [];
       state.groupName = "";
+      state.myFilters = [];
     },
     addPlaceMarker(state, action: PayloadAction<boolean>) {
       state.addPlaceMarker = action.payload;
@@ -46,12 +51,25 @@ const markersSlice = createSlice({
       state.friendsMarkers = [];
       state.friendGroupName = "";
       state.friendUsername = "";
+      state.friendsFilters = [];
     },
     setFriendGroupMarker(state, action: PayloadAction<string>) {
       state.friendGroupName = action.payload;
     },
     setFriendUsername(state, action: PayloadAction<string>) {
       state.friendUsername = action.payload;
+    },
+    setFilterForMyMarkers(state, action: PayloadAction<string[]>) {
+      state.myFilters.push(...action.payload);
+    },
+    clearFilterForMyMarkers(state) {
+      state.myFilters = [];
+    },
+    setFilterForFriendMarkers(state, action: PayloadAction<string[]>) {
+      state.friendsFilters.push(...action.payload);
+    },
+    clearFilterForFriendMarkers(state) {
+      state.friendsFilters = [];
     },
   },
 });

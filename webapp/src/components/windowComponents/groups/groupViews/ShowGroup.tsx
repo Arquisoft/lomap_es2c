@@ -1,11 +1,11 @@
 import { Box, CircularProgress, Divider, Tooltip, Breadcrumbs, Typography, Collapse } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Group } from '../../../../shared/shareddtypes';
+import { Group, MarkerData } from '../../../../shared/shareddtypes';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
@@ -28,6 +28,10 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { CategoriesFilter } from '../filters/CategoriesFilter';
+import PlaceCategories from '../PlaceCategories';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearFilterForMyMarkers, setFilterForMyMarkers } from 'utils/redux/action';
+import { RootState } from 'utils/redux/store';
 
 const ScrollBox = styled(Box)({
     maxHeight: '40vh',
@@ -171,7 +175,8 @@ export const ShowGroup = (props: { session: any, refresh: any }) => {
 
 const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, stopLoading: any, refresh: any }) => {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const getScoreIcon = (place: Place) => {
         switch (place.reviewScore) {
@@ -188,10 +193,23 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
     const [filters, setFilterState] = useState<string[]>([]);
 
     const setFilter = (categories: any) => {
-        setFilterState(categories)
+        setFilterState(categories);
+        dispatch(clearFilterForMyMarkers());
     }
 
     const [open, setOpen] = React.useState(false);
+
+    function filterPlaces(place: Place) {
+        const placeCategory = PlaceCategories.find((pc) => pc.categories.includes(place.category));
+        let checkPlace = filters.includes(placeCategory?.name);
+
+        if (filters.length > 0) {
+            dispatch(clearFilterForMyMarkers());
+            dispatch(setFilterForMyMarkers(filters))
+        }
+
+        return checkPlace;
+    }
 
     props.group.then((grp) => {
         render(
@@ -215,7 +233,7 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
                             </Collapse>
 
                             <List component="div" disablePadding>
-                                {grp.places.filter((place) => filters.length == 0 ? true : filters.includes(place.category)).map((place, j) => {
+                                {grp.places.filter((place) => filters.length == 0 ? true : filterPlaces(place)).map((place, j) => {
                                     return (
                                         <React.Fragment key={j}>
                                             <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/home/groups/showplace/" + grp.name + "/" + place.nombre)} >
@@ -241,3 +259,5 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
     })
     return (<></>)
 }
+
+

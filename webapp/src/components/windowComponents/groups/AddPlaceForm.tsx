@@ -182,6 +182,8 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     const actualizarMarcadores = () => {
         dispatch(clearMarkers());
 
+        dispatch(addPlaceMarker(false));
+
         dispatch(setGroupMarker(group.name as string))
 
         const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
@@ -194,6 +196,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                 name: place.nombre,
                 type: "mine",
                 iconUrl: "../markers/yellow-marker.png",
+                category: place.category
             })
         })
 

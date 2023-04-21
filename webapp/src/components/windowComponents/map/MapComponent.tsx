@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'utils/redux/store';
 import { addPlaceMarker } from 'utils/redux/action';
 import React from 'react';
+import PlaceCategories from '../groups/PlaceCategories';
 
 const BrusselsCenter = {
     lat: 50.8504500,
@@ -140,9 +141,26 @@ function Legend(): any {
 export const MapComponent = () => {
 
 
+    function filterPlaces(place: any, filters: string[]) {
+        const placeCategory = PlaceCategories.find((pc) => pc.categories.includes(place.category));
+        let checkPlace = filters.includes(placeCategory?.name);
+        return checkPlace;
+    }
 
-    const myMarkers = useSelector((state: RootState) => state.markers.markers);
-    const friendMarkers = useSelector((state: RootState) => state.markers.friendsMarkers);
+    const filterForMyMarkers = useSelector((state: RootState) => state.markers.myFilters);
+    let myMarkers = useSelector((state: RootState) => state.markers.markers);
+    if (filterForMyMarkers.length > 0)
+        myMarkers = myMarkers.filter((place) => {
+            return filterPlaces(place, filterForMyMarkers)
+        });
+
+    const filterForFriendsMarkers = useSelector((state: RootState) => state.markers.friendsFilters);
+    let friendMarkers = useSelector((state: RootState) => state.markers.friendsMarkers);
+    if (filterForFriendsMarkers.length > 0)
+        friendMarkers = friendMarkers.filter((place) => {
+            return filterPlaces(place, filterForFriendsMarkers)
+        });
+
     const markers = myMarkers.concat(friendMarkers);
 
     const showAdd = useSelector((state: RootState) => state.markers.addPlaceMarker);
@@ -174,16 +192,8 @@ export const MapComponent = () => {
         }
     }, [markers]);
 
-    const [leyenda, setLeyenda] = useState(false);
-    useEffect(() => {
-        setLeyenda(true);
-    }, []);
-
 
     const CenterMapOnMarkerMemo = React.useMemo(() => React.memo(CenterMapOnMarker), [centerMarker]);
-
-
-    // Leyenda del mapa
 
     return (
         <MapContainer center={BrusselsCenter} zoom={15} scrollWheelZoom={true} minZoom={3} maxZoom={18} >

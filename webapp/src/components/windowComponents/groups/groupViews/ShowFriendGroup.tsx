@@ -28,6 +28,10 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { CategoriesFilter } from '../filters/CategoriesFilter';
+import { useDispatch } from 'react-redux';
+import { clearFilterForFriendMarkers, setFilterForFriendMarkers } from 'utils/redux/action';
+import PlaceCategories from '../PlaceCategories';
+
 
 const ScrollBox = styled(Box)({
     maxHeight: '45vh',
@@ -131,7 +135,8 @@ export const ShowFriendGroup = (props: { session: any }) => {
 
 const GroupDetails = (props: { friend: any, session: any, daddy: any, group: Promise<Group>, stopLoading: any }) => {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const getScoreIcon = (place: Place) => {
         switch (place.reviewScore) {
@@ -148,7 +153,20 @@ const GroupDetails = (props: { friend: any, session: any, daddy: any, group: Pro
     const [filters, setFilterState] = useState<string[]>([]);
 
     const setFilter = (categories: any) => {
-        setFilterState(categories)
+        setFilterState(categories);
+        dispatch(clearFilterForFriendMarkers());
+    }
+
+    function filterPlaces(place: Place) {
+        const placeCategory = PlaceCategories.find((pc) => pc.categories.includes(place.category));
+        let checkPlace = filters.includes(placeCategory?.name);
+
+        if (filters.length > 0) {
+            dispatch(clearFilterForFriendMarkers());
+            dispatch(setFilterForFriendMarkers(filters))
+        }
+
+        return checkPlace;
     }
 
     const [open, setOpen] = React.useState(false);
@@ -175,7 +193,7 @@ const GroupDetails = (props: { friend: any, session: any, daddy: any, group: Pro
                             </Collapse>
 
                             <List component="div" disablePadding>
-                                {grp.places.filter((place) => filters.length == 0 ? true : filters.includes(place.category)).map((place, j) => {
+                                {grp.places.filter((place) => filters.length == 0 ? true : filterPlaces(place)).map((place, j) => {
                                     return (
                                         <React.Fragment key={j}>
                                             <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/home/friends/showplace/" + props.friend + "/" + grp.name + "/" + place.nombre)} >

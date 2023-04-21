@@ -4,41 +4,41 @@ type PlaceCategory = {
 }
 const categories: PlaceCategory[] = [
     {
-       name: "Gastronomía",
-       categories: ["Bar", "Restaurante", "Cafetería", "Club nocturno", "Heladería"] 
+        name: "Gastronomía",
+        categories: ["Bar", "Restaurante"]
     },
     {
         name: "Compras",
-        categories: ["Centro comercial", "Librería", "Estanco", "Joyería", "Mercado", "Panadería", "Farmacia", "Floristería", 
-                        "Supermercado", "Tienda de alimentos", "Tienda"] 
+        categories: ["Centro comercial", "Mercado", "Farmacia", "Supermercado", "Tienda"]
     },
     {
         name: "Servicios",
-        categories: ["Servicio médico", "Agencia de viajes", "Agencia inmobiliaria", "Aparcamiento", "Banco", "Barbería", 
-                        "Cajero automático", "Centro de estética", "Gasolinera", "Peluquería", "Servicio de transporte", 
-                        "Taller de reparación"] 
+        categories: ["Servicio médico", "Agencia", "Aparcamiento", "Banco", "Centro de estética",
+            "Gasolinera", "Peluquería", "Servicio de transporte", "Taller"]
     },
     {
         name: "Alojamiento",
-        categories: ["Hotel", "Albergue", "Camping", "Motel"] 
+        categories: ["Hotel", "Albergue", "Camping", "Motel"]
     },
     {
         name: "Ocio y aire libre",
-        categories: ["Club deportivo", "Gimnansio", "Museo", "Biblioteca", "Monumento", "Parque temático", "Acuario", "Casino",
-            "Galería de arte", "Parque", "Playa", "Montaña", "Lago", "Reserva natural", "Zoológico", "Jardín botánico"] 
+        categories: ["Club deportivo", "Gimnansio", "Museo", "Biblioteca", "Monumento", "Parque temático", "Espacio natural"]
     },
     {
         name: "Religión",
-        categories: ["Lugar de culto", "Iglesia", "Santuario", "Templo"] 
+        categories: ["Lugar de culto"]
     },
     {
         name: "Oficinas e industria",
-        categories: ["Empresa", "Oficina", "Almacén", "OSAL", "Fábrica",] 
+        categories: ["Empresa", "Almacén", "Fábrica",]
     },
     {
         name: "Educación",
-        categories: ["Autoescuela", "Centro de educación preescolar", "Centro de educación primaria", "Centro educativo",
-                        "Centro de educación secundaria", "Instituto", "Formación profesional", "Jardín de infancia", "Universidad"] 
+        categories: ["Autoescuela", "Centro educativo", "Universidad"]
+    },
+    {
+        name: "Otro",
+        categories: ["Sin categoría"]
     },
 ];
 

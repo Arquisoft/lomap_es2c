@@ -21,7 +21,7 @@ import { render } from 'react-dom';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import PodManager from '../../../podManager/PodManager'
 import { useDispatch } from 'react-redux';
-import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
+import { addMarkers, clearFilterForMyMarkers, clearMarkers, setFilterForMyMarkers, setGroupMarker } from 'utils/redux/action';
 import { Place, Comment, MarkerData } from '../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
@@ -105,6 +105,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
         setSelectecGroup(group.name)
 
         dispatch(clearMarkers()); // Se eliminan los marcadores mostrados anteriormente
+        dispatch(clearFilterForMyMarkers());
 
         dispatch(setGroupMarker(group.name as string)) // Se asigna el nombre del grupo que se va a mostrar
 
@@ -117,7 +118,8 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
                 name: place.nombre,
                 type: "mine",
-                iconUrl: "../markers/myMarker.png"
+                iconUrl: "../markers/myMarker.png",
+                category: place.category
             })
         })
 

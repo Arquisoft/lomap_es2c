@@ -89,3 +89,43 @@ export const setFriendUsername = (
   type: "markers/setFriendUsername",
   payload: friendUsername,
 });
+
+interface SetFilterForMyMarkers {
+  type: "markers/setFilterForMyMarkers";
+  payload: string[];
+}
+
+export const setFilterForMyMarkers = (
+  myFilters: string[]
+): SetFilterForMyMarkers => ({
+  type: "markers/setFilterForMyMarkers",
+  payload: myFilters,
+});
+
+interface ClearFilterForMyMarkers {
+  type: "markers/clearFilterForMyMarkers";
+}
+
+export const clearFilterForMyMarkers = (): ClearFilterForMyMarkers => ({
+  type: "markers/clearFilterForMyMarkers",
+});
+
+interface SetFilterForFriendMarkers {
+  type: "markers/setFilterForFriendMarkers";
+  payload: string[];
+}
+
+export const setFilterForFriendMarkers = (
+  friendsFilters: string[]
+): SetFilterForFriendMarkers => ({
+  type: "markers/setFilterForFriendMarkers",
+  payload: friendsFilters,
+});
+
+interface ClearFilterForFriendMarkers {
+  type: "markers/clearFilterForFriendMarkers";
+}
+
+export const clearFilterForFriendMarkers = (): ClearFilterForFriendMarkers => ({
+  type: "markers/clearFilterForFriendMarkers",
+});
