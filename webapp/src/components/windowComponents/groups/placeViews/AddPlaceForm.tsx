@@ -26,7 +26,7 @@ import { Place, Comment, Group, MarkerData } from 'shared/shareddtypes';
 import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
-import * as fieldsValidation from '../../../utils/fieldsValidation';
+import * as fieldsValidation from '../../../../utils/fieldsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
@@ -96,13 +96,13 @@ const LegendTypography = styled(Typography)({
     letterSpacing: '0.00938em',
 });
 
-const StyledRating = styled(Rating)(({ theme }) => ({
+export const StyledRating = styled(Rating)(({ theme }) => ({
     '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
         color: theme.palette.action.disabled,
     },
 }));
 
-const customIcons: {
+export const customIcons: {
     [index: string]: {
         icon: React.ReactElement;
         label: string;
@@ -133,22 +133,11 @@ const customIcons: {
 
 
 
-function IconContainer(props: IconContainerProps) {
+export function IconContainer(props: IconContainerProps) {
     const { value, ...other } = props;
     return <span {...other}>{customIcons[value].icon}</span>;
 }
 
-export function RadioGroupRating() {
-    return (
-        <StyledRating
-            name="highlight-selected-only"
-            defaultValue={4}
-            IconContainerComponent={IconContainer}
-            getLabelText={(value: number) => customIcons[value].label}
-            highlightSelectedOnly
-        />
-    );
-}
 
 export default function AddPlaceForm(props: { session: any, refresh: any }) {
 

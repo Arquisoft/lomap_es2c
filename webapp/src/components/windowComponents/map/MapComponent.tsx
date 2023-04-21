@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'utils/redux/store';
 import { addPlaceMarker } from 'utils/redux/action';
 import React from 'react';
-import PlaceCategories from '../groups/PlaceCategories';
+import PlaceCategories from '../groups/placeViews/PlaceCategories';
 
 const BrusselsCenter = {
     lat: 50.8504500,

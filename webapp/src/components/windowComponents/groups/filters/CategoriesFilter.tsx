@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import PlaceCategories from '../PlaceCategories';
+import PlaceCategories from '../placeViews/PlaceCategories';
 
 const MyStack = styled(Stack)({
 })

@@ -1,11 +1,5 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Rating, { IconContainerProps } from '@mui/material/Rating';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -17,34 +11,14 @@ import { Place, Comment, Group } from '../../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import { IconContainer, StyledRating, customIcons } from './AddPlaceForm';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
     fontSize: '1.3em',
     fontFamily: 'Calibri',
 });
-/*
-const CSSButton = styled(Button)({
-    backgroundColor: "white",
-    color: "#81c784",
-    fontWeight: "bold",
-    '&:hover': {
-        backgroundColor: '#1f4a21',
-        color: 'white',
-        borderColor: '#0062cc',
-        boxShadow: 'none',
-    },
-    '&:active': {
-        boxShadow: 'none',
-        color: 'white',
-        backgroundColor: '#1f4a21',
-        borderColor: '#005cbf',
-    },
-    '&:focus': {
-        boxShadow: '0 0 0 0.2rem #1f4a21',
-    },
-});
-*/
+
 const CSSTextField = styled(TextField)({
     marginBottom: '0.8em',
     '& label.Mui-focused': {
@@ -90,68 +64,8 @@ const LegendTypography = styled(Typography)({
     letterSpacing: '0.00938em',
 });
 
-const StyledRating = styled(Rating)(({ theme }) => ({
-    '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
-        color: theme.palette.action.disabled,
-    },
-}));
 
-const customIcons: {
-    [index: string]: {
-        icon: React.ReactElement;
-        label: string;
-    };
-} = {
-    1: {
-        icon: <SentimentVeryDissatisfiedIcon color="error" />,
-        label: 'Very Dissatisfied',
-    },
-    2: {
-        icon: <SentimentDissatisfiedIcon color="error" />,
-        label: 'Dissatisfied',
-    },
-    3: {
-        icon: <SentimentSatisfiedIcon color="warning" />,
-        label: 'Neutral',
-    },
-    4: {
-        icon: <SentimentSatisfiedAltIcon color="success" />,
-        label: 'Satisfied',
-    },
-    5: {
-        icon: <SentimentVerySatisfiedIcon color="success" />,
-        label: 'Very Satisfied',
-    },
-};
-
-function IconContainer(props: IconContainerProps) {
-    const { value, ...other } = props;
-    return <span {...other}>{customIcons[value].icon}</span>;
-}
-
-export function RadioGroupRating() {
-    return (
-        <StyledRating
-            name="highlight-selected-only"
-            defaultValue={4}
-            IconContainerComponent={IconContainer}
-            getLabelText={(value: number) => customIcons[value].label}
-            highlightSelectedOnly
-        />
-    );
-}
-
-const comments: Comment[] = [
-    { author: "security", date: "10/04/2023", comment: "Review del bar de Pepe" }
-]
-
-const places: Place[] = [
-    { nombre: "Bar de Pepe", category: "Bar", latitude: "50.862545", longitude: "4.32321", reviewScore: "3", comments: comments, description: "", date: "10/10/2023" },
-    { nombre: "Restaurante 1", category: "Restaurante", latitude: "50.962545", longitude: "4.42321", reviewScore: "4", comments: comments, description: "", date: "10/10/2023" },
-    { nombre: "Tienda 1", category: "Tienda", latitude: "50.782545", longitude: "4.37321", reviewScore: "5", comments: comments, description: "", date: "10/10/2023" },
-]
-
-function PlaceComponent(props: any) {
+export function PlaceComponent(props: any) {
 
     const navigate = useNavigate()
 
@@ -170,8 +84,9 @@ function PlaceComponent(props: any) {
                     id="placename-SP"
                     variant="outlined"
                     label="Categoría"
-                    value={place.nombre}
+                    value={place.category}
                     fullWidth
+                    disabled
                 />
                 <CoordinatesBox>
                     <CSSTextField
@@ -244,8 +159,6 @@ export default function ShowPlace(props: { session: any }) {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
 
-
-    let place: Place = places.find((p) => p.nombre == lat)
 
     let mapM = new MapManager();
 
