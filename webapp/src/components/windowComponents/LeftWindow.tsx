@@ -63,7 +63,7 @@ export function LeftWindow() {
     };
 
     return (
-        <Window onClick={handleClick}>
+        <Window>
             <ThemeProvider theme={theme}>
                 <MyTabContext value={mainop} theme={theme}>
                     <MyTabs
@@ -75,7 +75,7 @@ export function LeftWindow() {
                         aria-label="secondary tabs example"
                     >
                         <Tab data-testid="groupsTab" value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
-                        <Tab data-testid="friendsTab" value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
+                        <Tab data-testid="friendsTab" value="friends" label="Amigos" onClick={handleClick} icon={<GroupIcon />} iconPosition='start' />
                     </MyTabs>
                     <TabPanel value="groups">
                         <GroupsManagerPanel />

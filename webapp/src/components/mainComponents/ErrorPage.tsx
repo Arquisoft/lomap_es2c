@@ -1,6 +1,8 @@
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { clearMarkers, clearFriendsMarkers } from 'utils/redux/action';
 
 const ErrorBox = styled(Box)({
     padding: "2em 7em 2em",
@@ -25,6 +27,11 @@ const TextBox = styled(Box)({
 })
 
 export const ErrorPage = () => {
+
+    const dispatch = useDispatch();
+    dispatch(clearMarkers());
+    dispatch(clearFriendsMarkers());
+
     const location = useLocation();
     return (
         <ErrorBox>

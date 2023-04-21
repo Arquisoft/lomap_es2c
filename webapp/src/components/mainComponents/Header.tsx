@@ -11,7 +11,7 @@ import { NoLogedMenu } from '../profileMenus/NoLoggedMenu';
 import { useNavigate } from 'react-router-dom';
 import { Divider } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { clearMarkers } from 'utils/redux/action';
+import { clearFriendsMarkers, clearMarkers } from 'utils/redux/action';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -69,6 +69,7 @@ export function Header(props: { logged: boolean }) {
     const goHome = () => {
         if (props.logged == true) {
             dispatch(clearMarkers());
+            dispatch(clearFriendsMarkers());
             navigate("/home");
         } else {
             navigate("/");

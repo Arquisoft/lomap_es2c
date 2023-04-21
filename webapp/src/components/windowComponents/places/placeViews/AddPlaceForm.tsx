@@ -1,11 +1,5 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Rating, { IconContainerProps } from '@mui/material/Rating';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { useForm, Controller } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -17,7 +11,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useEffect, useState } from 'react';
-import PlaceCategories from './PlaceCategories';
+import PlaceCategories from '../PlaceCategories';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -26,12 +20,17 @@ import { Place, Comment, Group, MarkerData } from 'shared/shareddtypes';
 import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
-import * as fieldsValidation from '../../../utils/fieldsValidation';
+import * as fieldsValidation from '../../../../utils/fieldsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
+<<<<<<< HEAD:webapp/src/components/windowComponents/groups/AddPlaceForm.tsx
 import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { useSession } from '@inrupt/solid-ui-react';
+=======
+import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
+import { IconContainer, StyledRating, customIcons } from '../StyledRating';
+>>>>>>> developPaula:webapp/src/components/windowComponents/places/placeViews/AddPlaceForm.tsx
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -97,43 +96,9 @@ const LegendTypography = styled(Typography)({
     letterSpacing: '0.00938em',
 });
 
-const StyledRating = styled(Rating)(({ theme }) => ({
-    '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
-        color: theme.palette.action.disabled,
-    },
-}));
-
-const customIcons: {
-    [index: string]: {
-        icon: React.ReactElement;
-        label: string;
-    };
-} = {
-    1: {
-        icon: <SentimentVeryDissatisfiedIcon color="error" />,
-        label: 'Very Dissatisfied',
-    },
-    2: {
-        icon: <SentimentDissatisfiedIcon color="error" />,
-        label: 'Dissatisfied',
-    },
-    3: {
-        icon: <SentimentSatisfiedIcon color="warning" />,
-        label: 'Neutral',
-    },
-    4: {
-        icon: <SentimentSatisfiedAltIcon color="success" />,
-        label: 'Satisfied',
-    },
-    5: {
-        icon: <SentimentVerySatisfiedIcon color="success" />,
-        label: 'Very Satisfied',
-    },
-};
 
 
-
-
+<<<<<<< HEAD:webapp/src/components/windowComponents/groups/AddPlaceForm.tsx
 function IconContainer(props: IconContainerProps) {
     const { value, ...other } = props;
     return <span {...other}>{customIcons[value].icon}</span>;
@@ -152,6 +117,9 @@ export function RadioGroupRating() {
 }
 
 export default function AddPlaceForm(props: { refresh: any }) {
+=======
+export default function AddPlaceForm(props: { session: any, refresh: any }) {
+>>>>>>> developPaula:webapp/src/components/windowComponents/places/placeViews/AddPlaceForm.tsx
 
     const { session } = useSession();
     const { id, lat, lng } = useParams();
@@ -184,6 +152,8 @@ export default function AddPlaceForm(props: { refresh: any }) {
     const actualizarMarcadores = () => {
         dispatch(clearMarkers());
 
+        dispatch(addPlaceMarker(false));
+
         dispatch(setGroupMarker(group.name as string))
 
         const groupPlaces = new MapManager().mostrarGrupo(group, session);
@@ -193,7 +163,10 @@ export default function AddPlaceForm(props: { refresh: any }) {
         groupPlaces.forEach((place) => {
             groupMarkers.push({
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
-                name: place.nombre
+                name: place.nombre,
+                type: "mine",
+                iconUrl: "../markers/yellow-marker.png",
+                category: place.category
             })
         })
 
@@ -236,22 +209,21 @@ export default function AddPlaceForm(props: { refresh: any }) {
     }, [lng, setValue]);
 
     const onSubmit = (data: any) => {
-        let longitude = data.longitude == "" ? lng : data.longitude;
-        let latitude = data.latitude == "" ? lat : data.latitude;
+
         let comments: Comment[] = [{
             comment: data.review,
-            date: getDate(),
+            date: new Date().getTime().toString(),
             author: getUserInSesion().username
         }]
 
         let p: Place = {
             nombre: data.placename,
             category: category,
-            latitude: latitude as string,
-            longitude: longitude as string,
+            latitude: data.latitude as string,
+            longitude: data.longitude as string,
             reviewScore: score.toString(),
             description: "",
-            date: getDate(),
+            date: new Date().getTime().toString(),
             comments,
         }
 
@@ -262,14 +234,6 @@ export default function AddPlaceForm(props: { refresh: any }) {
             props.refresh()
         })
     };
-
-    const getDate = (): string => {
-        const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        return `${day}/${month}/${year}`;
-    }
 
     const handleCategoryChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value as string);
@@ -293,16 +257,17 @@ export default function AddPlaceForm(props: { refresh: any }) {
             e.preventDefault();
         }
     }
+
     // ---- fin manejo formulario
 
     return (
         <>
             <div>
                 <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                    <Link underline="hover" color="inherit" onClick={() => { dispatch(addPlaceMarker(false)); navigate("/home/groups/main") }}>
                         Mis grupos
                     </Link>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/showgroup/" + id)}>
+                    <Link underline="hover" color="inherit" onClick={() => { dispatch(addPlaceMarker(false)); navigate("/home/groups/showgroup/" + id) }}>
                         {id}
                     </Link>
                     <Typography color="text.primary">Nuevo lugar</Typography>

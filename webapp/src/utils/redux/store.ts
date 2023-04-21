@@ -1,11 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from 'redux';
+import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
 
-// Importa tus reducers aquí
-import markersReducer from './markersSlice';
+import markersReducer from "./markersSlice";
 
 const rootReducer = combineReducers({
-  // Agrega tus reducers aquí
   markers: markersReducer,
 });
 

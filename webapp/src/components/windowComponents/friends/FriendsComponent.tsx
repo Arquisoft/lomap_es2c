@@ -10,7 +10,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
-import { Friend, Group, User } from '../../../shared/shareddtypes';
+import { Friend, Group, MarkerData, User } from '../../../shared/shareddtypes';
 import CloseIcon from '@mui/icons-material/Close';
 import { render } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,9 @@ import Swal from 'sweetalert2';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { deleteFriendApi } from 'api/api';
 import { showError } from 'utils/fieldsValidation';
+import { useDispatch } from 'react-redux';
+import { addFriendsMarkers, addMarkers, clearFriendsMarkers, setFriendGroupMarker, setFriendUsername } from 'utils/redux/action';
+import { MapManager } from 'podManager/MapManager';
 
 
 const VerticalDivider = styled(Divider)({
@@ -35,6 +38,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     const [url, setUrl] = useState("../testUser.jfif");
 
     const navigate = useNavigate()
+
+    const dispatch = useDispatch();
 
     const [open, setOpen] = React.useState("");
 
@@ -107,6 +112,27 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
 
     const showGroup = (group: Group, user: User) => {
         navigate("/home/friends/showgroup/" + user.username + "/" + group.name);
+
+        dispatch(clearFriendsMarkers())
+        dispatch(setFriendGroupMarker(group.name as string))
+        dispatch(setFriendUsername(user.username as string))
+
+        const groupPlaces = new MapManager().mostrarGrupo(group, null);
+
+        const groupMarkers: MarkerData[] = [];
+
+        groupPlaces.forEach((place) => {
+            groupMarkers.push({
+                position: [parseFloat(place.latitude), parseFloat(place.longitude)],
+                name: place.nombre,
+                type: "friend",
+                iconUrl: "../markers/friendsMarker.png",
+                category: place.category
+            })
+        })
+
+        dispatch(addFriendsMarkers(groupMarkers));
+
         temporalSuccessMessage("Se esta mostrando el grupo <b><em>" + group.name + "</em></b> de <b><em>" + user.username + "</em></b>")
     }
 
