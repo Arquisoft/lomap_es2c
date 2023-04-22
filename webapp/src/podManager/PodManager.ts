@@ -1,5 +1,5 @@
 import { Session } from "@inrupt/solid-client-authn-browser";
-import { addStringNoLocale, addUrl, createAclFromFallbackAcl, saveAclFor, createSolidDataset, getFile, getJsonLdParser, getResourceAcl, getSolidDataset, getSolidDatasetWithAcl, getStringNoLocale, getThingAll, getUrl, getUrlAll, hasAccessibleAcl, hasFallbackAcl, hasResourceAcl, overwriteFile, setAgentDefaultAccess, setAgentResourceAccess, SolidDataset, Access, AclDataset } from "@inrupt/solid-client";
+import { addStringNoLocale, addUrl, createAclFromFallbackAcl, saveAclFor, createSolidDataset, getFile, getJsonLdParser, getResourceAcl, getSolidDataset, getSolidDatasetWithAcl, getStringNoLocale, getThingAll, getUrl, getUrlAll, hasAccessibleAcl, hasFallbackAcl, hasResourceAcl, overwriteFile, setAgentDefaultAccess, setAgentResourceAccess, SolidDataset, Access, AclDataset, getThing, getIri } from "@inrupt/solid-client";
 import { setThing, createThing, Thing } from "@inrupt/solid-client";
 import { saveSolidDatasetAt } from "@inrupt/solid-client";
 import { Group, Place } from "shared/shareddtypes";
@@ -393,7 +393,18 @@ class PodManager {
         }
     }
 
+    async getPhoto(session: Session): Promise<string> {
+        try{
+            const dataset = await getSolidDataset(session.info.webId)
+            const profile = getThing(dataset, session.info.webId)
+            const photoUrl = getIri(profile, "http://www.w3.org/2006/vcard/ns#hasPhoto")
 
+            return photoUrl
+        } catch(error){
+            console.log(error)
+            return null
+        }
+    }
 
 
 }
