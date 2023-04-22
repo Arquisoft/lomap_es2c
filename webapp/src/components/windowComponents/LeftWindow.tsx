@@ -49,8 +49,6 @@ export function LeftWindow() {
 
     const navigate = useNavigate()
 
-    const [value, setValue] = React.useState(mainop);
-
     const dispatch = useDispatch();
 
     const handleClick = () => {
@@ -59,7 +57,6 @@ export function LeftWindow() {
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         navigate("/home/" + newValue + "/main")
-        setValue(newValue);
     };
 
     return (
@@ -68,7 +65,7 @@ export function LeftWindow() {
                 <MyTabContext value={mainop} theme={theme}>
                     <MyTabs
                         variant="fullWidth"
-                        value={value}
+                        value={mainop}
                         onChange={handleChange}
                         textColor="primary"
                         indicatorColor="primary"

@@ -9,14 +9,14 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useNavigate } from 'react-router-dom';
-import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from '../../api/api';
+import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from 'api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import { User } from 'shared/shareddtypes';
-import { NotificationManager, temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { NotificationManager, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Divider } from '@mui/material';
 import { showError } from '../../utils/fieldsValidation';
 
@@ -53,7 +53,9 @@ function LogedMenu() {
     const editSchema = fieldsValidation.editProfileValidation;
 
     const [userInSession, setUser] = useState(getUserInSesion().username)
-
+    /*{
+            
+        } */
 
     //#region METODOS DE CLASE
 
@@ -62,7 +64,7 @@ function LogedMenu() {
         await searchUserByUsername(userInSession).then((user) => {
             Swal.fire({
                 title: 'Mi perfil',
-                html: ` <label for="webid-gp" class="swal2-label">WebID: </label>
+                html: ` <label data-testid="profileInfo" for="webid-gp" class="swal2-label">WebID: </label>
                         <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
                         <label for="biography-gp" class="swal2-label">Biografía: </label>
                         <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
@@ -78,7 +80,8 @@ function LogedMenu() {
                     showEditNoPss();
                 }
             })
-        }).catch((err: any) => {
+        }
+        ).catch((err: any) => {
             showError("Error al mostrar tú perfil", err.toString(), Swal.close);
         });
     }
@@ -110,7 +113,7 @@ function LogedMenu() {
         let follow: boolean = false;
         Swal.fire({
             title: 'Cambiar contraseña',
-            html: `<label for="opassword-ep" class="swal2-label">Contraseña actual: </label>
+            html: `<label data-testid="editPswInfo" for="opassword-ep" class="swal2-label">Contraseña actual: </label>
                     <input type="password" id="opassword-ep" class="swal2-input" placeholder="Contraseña actual" {...register("password")}>
                     <label for="password-ep" class="swal2-label">Nueva contraseña: </label>
                     <input required type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
@@ -172,7 +175,7 @@ function LogedMenu() {
             Swal.fire({
                 title: 'Edita tu perfil',
                 html: ` 
-                        <label for="biagraphy-ep" class="swal2-label">Biografía: </label>
+                        <label data-testid="editNoPswInfo" for="biagraphy-ep" class="swal2-label">Biografía: </label>
                         <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
                 confirmButtonText: 'Editar',
                 denyButtonText: 'Cambiar contraseña',
@@ -250,7 +253,6 @@ function LogedMenu() {
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
     const [url, setUrl] = useState("testUser.jfif");
-    const [username, setUsername] = useState<String>("");
     //#endregion
 
 
@@ -262,7 +264,7 @@ function LogedMenu() {
             <VerticalDivider orientation='vertical' flexItem />
             <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
-                <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
+                <IconButton data-testid="profileMenuButton" onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar data-testid="userProfileImg" alt="User profile photo" src={url} />
                 </IconButton>
             </Tooltip>
@@ -281,13 +283,13 @@ function LogedMenu() {
                 open={Boolean(anchorElUser)}
                 onClose={closeUserMenu}
             >
-                <MenuItem key={uuid()} onClick={getProfile}>
+                <MenuItem data-testid="getProfileButton" key={uuid()} onClick={getProfile}>
                     <PersonIcon /> Profile
                 </MenuItem>
-                <MenuItem key={uuid()} onClick={showEditNoPss}>
+                <MenuItem data-testid="showEditButton" key={uuid()} onClick={showEditNoPss}>
                     <EditIcon /> Edit profile
                 </MenuItem>
-                <MenuItem key={uuid()} onClick={() => goLogout(getUserInSesion())}>
+                <MenuItem data-testid="logoutButton" key={uuid()} onClick={() => goLogout(getUserInSesion())}>
                     <LogoutIcon /> Logout
                 </MenuItem>
             </MyMenu>

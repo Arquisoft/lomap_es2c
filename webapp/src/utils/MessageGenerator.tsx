@@ -56,7 +56,7 @@ export const NotificationManager = () => {
         setMuted(true)
     }
     return (
-        <NotiBox>
+        <NotiBox data-testid="notificationManager" >
             {muted ?
                 < Tooltip title="Activar notificaciones" >
                     < NotificationsOffIcon onClick={activeNotifications} />

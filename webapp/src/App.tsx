@@ -17,7 +17,6 @@ import { readCookie } from 'utils/CookieReader';
 import { parse, stringify } from 'flatted'
 import store from 'utils/redux/store';
 import { Provider } from 'react-redux';
-import { Login } from '@mui/icons-material';
 import { Signup } from 'components/userIdentification/SignupForm';
 import Pod from 'components/userIdentification/podLogin/Pod';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
@@ -25,6 +24,7 @@ import { MainPage } from 'components/mainComponents/MainPage';
 import { Box } from '@mui/material';
 import { LeftWindow } from 'components/windowComponents/LeftWindow';
 import { HomePage } from 'components/mainComponents/HomePage';
+import { Login } from 'components/userIdentification/LoginForm';
 
 function App(): JSX.Element {
     const [session, setSession] = useState<any>(null)
@@ -37,10 +37,10 @@ function App(): JSX.Element {
             <SessionProvider sessionId={session?.sessionId as string}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path='/' element={<AuthCheckerNoLogged> <HomeView /> </AuthCheckerNoLogged>} >
+                        <Route path='/' element={<AuthCheckerNoLogged><HomeView /></AuthCheckerNoLogged>} >
                             <Route index element={<HomePage />} />
-                            <Route path='/signup' element={<SignupView />} />
-                            <Route path='/login' element={<LoginView />} />
+                            <Route path='/signup' element={<Signup />} />
+                            <Route path='/login' element={<Login />} />
                         </Route>
                         <Route path='/home' element={<AuthPodChecker><LoggedView /></AuthPodChecker>} >
                             <Route index path='/home/:welcome?' element={<HomePage />} />

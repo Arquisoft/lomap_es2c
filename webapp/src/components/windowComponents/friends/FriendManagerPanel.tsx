@@ -21,8 +21,8 @@ import { showError } from 'utils/fieldsValidation';
 import { MapManager } from 'podManager/MapManager';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { ShowFriendGroup } from '../groups/groupViews/ShowFriendGroup';
-import ShowFriendPlace from '../groups/placeViews/ShowFriendPlace';
 import { useSession } from '@inrupt/solid-ui-react';
+import ShowFriendPlace from '../places/placeViews/ShowFriendPlace';
 
 const ScrollBox = styled(Box)({
     maxHeight: '50vh',

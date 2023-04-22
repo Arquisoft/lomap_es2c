@@ -22,10 +22,10 @@ export function MainPage() {
 
     return (
         <>
-            {mainop == "groups" || mainop == "friends"
-                || op == "addplace" || op == "addgroup"
-                || op == "requests" || op == "showplace"
-                || op == "main"
+            {(mainop == "groups" || mainop == "friends")
+                && (op == "addplace" || op == "addgroup"
+                    || op == "requests" || op == "showplace"
+                    || op == "main")
                 ?
                 <MapContainer disableGutters>
                     <LeftWindow />

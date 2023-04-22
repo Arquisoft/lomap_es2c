@@ -24,13 +24,10 @@ import * as fieldsValidation from '../../../../utils/fieldsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
-<<<<<<< HEAD:webapp/src/components/windowComponents/groups/AddPlaceForm.tsx
-import { addMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { useSession } from '@inrupt/solid-ui-react';
-=======
 import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
-import { IconContainer, StyledRating, customIcons } from '../StyledRating';
->>>>>>> developPaula:webapp/src/components/windowComponents/places/placeViews/AddPlaceForm.tsx
+import { StyledRating, customIcons } from '../StyledRating';
+import { IconContainerProps } from '@mui/material';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -98,7 +95,6 @@ const LegendTypography = styled(Typography)({
 
 
 
-<<<<<<< HEAD:webapp/src/components/windowComponents/groups/AddPlaceForm.tsx
 function IconContainer(props: IconContainerProps) {
     const { value, ...other } = props;
     return <span {...other}>{customIcons[value].icon}</span>;
@@ -117,9 +113,6 @@ export function RadioGroupRating() {
 }
 
 export default function AddPlaceForm(props: { refresh: any }) {
-=======
-export default function AddPlaceForm(props: { session: any, refresh: any }) {
->>>>>>> developPaula:webapp/src/components/windowComponents/places/placeViews/AddPlaceForm.tsx
 
     const { session } = useSession();
     const { id, lat, lng } = useParams();

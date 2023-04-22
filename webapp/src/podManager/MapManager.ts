@@ -15,9 +15,7 @@ class MapManager {
     }
 
     async verMapaDeAmigo(user: User, session: Session): Promise<Group[]> {
-        console.log(user.webID)
         let grupos = await this.pod.getFriendsGroups(session, user.webID)
-        console.log("Puede")
         return grupos
     }
 
