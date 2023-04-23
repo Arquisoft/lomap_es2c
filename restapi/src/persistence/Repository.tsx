@@ -43,7 +43,6 @@ export class Repository {
 
         if (resultado == null) { throw new Error("Usuario no encontrado.") };
 
-        console.log(resultado)
         return resultado
     }
 
@@ -54,7 +53,7 @@ export class Repository {
 
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { password: user.password }, { new: true });
 
-        console.log(resultado)
+
         return resultado
     }
 

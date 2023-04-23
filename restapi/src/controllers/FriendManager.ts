@@ -47,6 +47,10 @@ export class FriendManagerImpl implements FriendManager {
     }
 
     async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
+        let b1=await UserSchema.exists({username: de.username})
+        let b2=await UserSchema.exists({username: a.username})
+
+        if(!b1 || !b2){throw new Error("Usuario no existe");}
         let cond = await FriendshipSchema.exists({
             sender: new String(de.username),
             receiver: new String(a.username)
@@ -93,8 +97,14 @@ export class FriendManagerImpl implements FriendManager {
     async eliminarAmigo(amigo1: User, amigo2: User): Promise<boolean> {
         let resultado1 = null
         let resultado2 = null
+        let b1=await UserSchema.exists({username: amigo1.username})
+        let b2=await UserSchema.exists({username: amigo2.username})
+
+        if(!b1 || !b2){throw new Error("Usuario no existe");}
         resultado1 = await FriendshipSchema.deleteOne({ sender: amigo1.username, receiver: amigo2.username, status: FriendManagerImpl.aceptado });
         resultado2 = await FriendshipSchema.deleteOne({ sender: amigo2.username, receiver: amigo1.username, status: FriendManagerImpl.aceptado });
+        if(resultado1.deletedCount==0 && resultado2.deletedCount==0){throw new Error("la solicitud de amistad no existia")}
+        if(resultado1.deletedCount==0 && resultado2.deletedCount==0){throw new Error("la solicitud de amistad no existia")}
         return true;
     }
 }

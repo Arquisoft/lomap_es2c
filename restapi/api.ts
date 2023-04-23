@@ -31,6 +31,7 @@ api.post(
         let user = req.body.user;
         try {
             let u = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
+            return res.sendStatus(200);
         } catch (err) {
             return res.status(404).send({ error: err.toString() })
         }
@@ -133,6 +134,7 @@ api.post(
         }
     }
 );
+
 api.post(
     "/usermanager/editpsw",
     async (req: Request, res: Response): Promise<Response> => {

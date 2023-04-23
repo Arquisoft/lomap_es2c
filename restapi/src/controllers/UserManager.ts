@@ -104,6 +104,7 @@ async function modificarUsuario(user: User) {
     try {
         resultado = await repo.Repository.findOneAndUpdate(user)
     } catch (err) {
+
         throw new Error(err.message);
     }
     /*
