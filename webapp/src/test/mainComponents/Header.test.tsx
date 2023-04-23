@@ -4,7 +4,7 @@ import { Header } from '../../components/mainComponents/Header'
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from 'utils/redux/store';
-import { AuthCheckerNoLogged } from 'checkers/AuthCheckerNoLogged';
+import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
 import { HomePage } from 'components/mainComponents/HomePage';
 import { AuthPodChecker } from 'auth/AuthPodChecker';
 
@@ -45,9 +45,9 @@ test('renders logged header', () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ;' +
-            'isLogged=true; path=/ ;' +
-            'isPodLogged=true; path=/ ;',
+        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ; ' +
+            'isLogged=true; path=/ ; ' +
+            'isPodLogged=true; path=/ ; ',
     });
 
     render(
@@ -65,9 +65,9 @@ test('header redirects homePage while logged', async () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession={"username":"test","webID":"test","password":""}; path=/;' +
-            'isLogged=true; path=/;' +
-            'isPodLogged=true; path=/;',
+        value: 'userInSession={"username":"test","webID":"test","password":""}; path=/; ' +
+            'isLogged=true; path=/; ' +
+            'isPodLogged=true; path=/; ',
     });
 
     render(
@@ -91,9 +91,9 @@ test('header redirects homePage while no logged', async () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession=; path=/;' +
-            'isLogged=; path=/;' +
-            'isPodLogged=; path=/;',
+        value: 'userInSession=; path=/; ' +
+            'isLogged=; path=/; ' +
+            'isPodLogged=; path=/; ',
     });
 
     render(

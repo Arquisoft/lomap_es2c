@@ -103,6 +103,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
             focusConfirm: false,
+            confirmButtonText: '¡Vale!',
+            confirmButtonColor: '#81c784',
             imageUrl: url,
             imageWidth: 'auto',
             imageHeight: 200,

@@ -21,9 +21,9 @@ test('renders loggedMenu', async () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ;' +
-            'isLogged=true ; path=/ ;' +
-            'isPodLogged=true ; path=/ ;',
+        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ; ' +
+            'isLogged=true ; path=/ ; ' +
+            'isPodLogged=true ; path=/ ; ',
     });
 
     await act(async () => {
@@ -43,9 +43,9 @@ test('renders click on profile menu', async () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ;' +
-            'isLogged=true ; path=/ ;' +
-            'isPodLogged=true ; path=/ ;',
+        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ; ' +
+            'isLogged=true ; path=/ ; ' +
+            'isPodLogged=true ; path=/ ; ',
     });
 
     await act(async () => {
@@ -73,9 +73,9 @@ test('click on getProfile', async () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession={"username":"security","webID":"test","password":""} ; path=/ ;' +
-            'isLogged=true ; path=/ ;' +
-            'isPodLogged=true ; path=/ ;',
+        value: 'userInSession={"username":"security","webID":"test","password":""} ; path=/ ; ' +
+            'isLogged=true ; path=/ ; ' +
+            'isPodLogged=true ; path=/ ; ',
     });
 
     await act(async () => {

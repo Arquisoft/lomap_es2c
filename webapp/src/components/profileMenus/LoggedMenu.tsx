@@ -147,15 +147,12 @@ function LogedMenu() {
                     }
                 }).catch(e => {
                     follow = false;
-                    console.log("CATCH")
-                    console.log(follow);
                     let errorMessage = (e as string)
                     fieldsValidation.showError("No se ha podido actualizar la contraseña", errorMessage, showEdit);
                 })
 
             }
         }).then(async (result) => {
-            console.log(follow)
             if (result.isConfirmed && follow) {
                 editPassword(oldpsw, newpsw).then(() => {
                     temporalSuccessMessage("Contraseña editada correctamente.")

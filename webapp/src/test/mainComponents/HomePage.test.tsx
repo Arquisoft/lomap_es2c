@@ -67,9 +67,9 @@ test('click button "Adelante" with friendRequests', async () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ;' +
-            'isLogged=true ; path=/ ;' +
-            'isPodLogged=true ; path=/ ;',
+        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ; ' +
+            'isLogged=true ; path=/ ; ' +
+            'isPodLogged=true ; path=/ ; ',
     });
 
     render(
@@ -97,9 +97,9 @@ test('click button "Adelante" with error at list friendRequests', async () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ;' +
-            'isLogged=true ; path=/ ;' +
-            'isPodLogged=true ; path=/ ;',
+        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ; ' +
+            'isLogged=true ; path=/ ; ' +
+            'isPodLogged=true ; path=/ ; ',
     });
 
     render(

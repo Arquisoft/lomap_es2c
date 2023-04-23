@@ -67,6 +67,7 @@ export const GroupsManagerPanel = () => {
 
     return (
         <>
+            {console.log("GMP " + op)}
             {op == "main" ?
                 <>
                     <AddItem onClick={() => navigate("/home/groups/addgroup")}>
