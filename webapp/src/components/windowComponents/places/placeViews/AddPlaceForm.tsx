@@ -26,12 +26,22 @@ import * as yup from "yup";
 import { useDispatch } from 'react-redux';
 import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { IconContainer, StyledRating, customIcons } from '../StyledRating';
+import Axios from "axios";
+import { cloudinaryUploadFolder, cloudinaryURL } from '../../../../utils/cloudinary/apiKeyCloudinary'
+import { IconButton } from '@mui/material';
+import { PhotoCamera } from '@mui/icons-material';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
     fontSize: '1.3em',
     fontFamily: 'Calibri',
 });
+
+const ScrollBox = styled(Box)({
+    maxHeight: '60vh',
+    overflow: 'auto',
+    scrollbarColor: '#81c784 white'
+})
 
 const CSSButton = styled(Button)({
     backgroundColor: "white",
@@ -182,6 +192,9 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     }, [lng, setValue]);
 
     const onSubmit = (data: any) => {
+        if (selectedImage !== null) {
+            uploadImage();
+        }
 
         let comments: Comment[] = [{
             comment: data.review,
@@ -231,10 +244,35 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         }
     }
 
+    // Manejo de imágenes
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [fileName, setFileName] = useState("Selecciona una imagen")
+
+    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        setFileName(file.name)
+        setSelectedImage(file);
+        console.log(file)
+    };
+
+    const uploadImage: any = () => {
+        const fd = new FormData();
+        fd.append("file", selectedImage)
+        fd.append("upload_preset", cloudinaryUploadFolder)
+
+        Axios.post(cloudinaryURL, fd).then((res) => {
+            let urlImg = res.data.secure_url;
+            console.log(urlImg)
+        })
+    }
+
+    // ---- fin manejo imágenes
+
+
     // ---- fin manejo formulario
 
     return (
-        <>
+        <ScrollBox>
             <div>
                 <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
                     <Link underline="hover" color="inherit" onClick={() => { dispatch(addPlaceMarker(false)); navigate("/home/groups/main") }}>
@@ -355,6 +393,14 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                     />
                 </Box>
 
+                <IconButton color="primary" aria-label="upload picture" component="label">
+                    <PhotoCamera sx={{ mr: "0.8em" }} />
+                    <input id="uploadImage" style={{ display: "none" }} accept="image/*" type="file" onChange={handleFileUpload} />
+                    <p style={{ fontSize: "0.5em" }}>{fileName}</p>
+                </IconButton>
+
+
+
                 <CSSButton
                     sx={{ mt: "1.2em" }}
                     variant="contained"
@@ -366,6 +412,6 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                 </CSSButton>
 
             </Box>
-        </>
+        </ScrollBox>
     );
 }
