@@ -6,6 +6,7 @@ import { Group, Place } from "shared/shareddtypes";
 import { JsonLdDocument, JsonLdProcessor } from 'jsonld';
 import { wait } from "@testing-library/user-event/dist/utils";
 import { url } from "inspector";
+import { v4 as uuidv4 } from 'uuid';
 
 class PodManager {
 
@@ -96,8 +97,8 @@ class PodManager {
     async updateGroup(session: Session, group: Group): Promise<void> {
         try {
             console.log(2)
+            let url = session.info.webId.replace("profile/card#me", "lomap")
 
-            let url = session.info.webId.replace("card#me", "public") + "/groups";
             let groups = await this.getGroups(session);
 
             groups.forEach((gr: Group) => {
@@ -121,29 +122,44 @@ class PodManager {
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
-                "@type": "Groups",
-                "groups": groups.map((group) => ({
-                    "@type": "Group",
+                "@type": "Maps",
+                "maps": groups.map((group) => ({
+                    "@type": "Map",
+                    "identifier": uuidv4(),
                     "name": group.name,
-                    "places": group.places.map((place) => ({
+                    "author": {
+                        "@type": "Person",
+                        "identifier": session.info.webId
+                    },
+                    "spatialCoverage": group.places.map((place) => ({
                         "@type": "Place",
+                        "identifier": uuidv4(),
                         "name": place.nombre,
-                        "category": place.category,
-                        "geo": {
-                            "@type": "GeoCoordinates",
-                            "latitude": place.latitude,
-                            "longitude": place.longitude
+                        "author": {
+                            "@type": "Person",
+                            "identifier": session.info.webId
                         },
+                        "additionalType": place.category,
+                        "latitude": place.latitude,
+                        "longitude": place.longitude,
                         "description": place.description,
-                        "comment": place.comments.map((comment) => ({
-                            "@type": "Comment",
-                            "author": comment.author,
-                            "comment": comment.comment,
-                            "date": comment.date
+                        "rewiev": place.comments.map((comment) => ({
+                            "@type": "Review",
+                            "author": {
+                                "@type": "Person",
+                                "identifier": session.info.webId
+                            },
+                            "reviewRating": {
+                                "@type": "Rating",
+                                "ratingValue": place.reviewScore
+                            },
+                            "datePublished": comment.date,
+                            "rewievBody": comment.comment
                         })),
                         "reviewScore": place.reviewScore,
                         "date": place.date
-                    }))
+                    })
+                    )
                 }))
             };
 
@@ -164,8 +180,8 @@ class PodManager {
     async deleteGroup(session: Session, group: Group): Promise<void> {
         try {
             console.log(2)
+            let url = session.info.webId.replace("profile/card#me", "lomap")
 
-            let url = session.info.webId.replace("card#me", "public") + "/groups";
             let groups = await this.getGroups(session);
 
             groups.forEach((gr: Group) => {
@@ -180,29 +196,44 @@ class PodManager {
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
-                "@type": "Groups",
-                "groups": groups.map((group) => ({
-                    "@type": "Group",
+                "@type": "Maps",
+                "maps": groups.map((group) => ({
+                    "@type": "Map",
+                    "identifier": uuidv4(),
                     "name": group.name,
-                    "places": group.places.map((place) => ({
+                    "author": {
+                        "@type": "Person",
+                        "identifier": session.info.webId
+                    },
+                    "spatialCoverage": group.places.map((place) => ({
                         "@type": "Place",
+                        "identifier": uuidv4(),
                         "name": place.nombre,
-                        "category": place.category,
-                        "geo": {
-                            "@type": "GeoCoordinates",
-                            "latitude": place.latitude,
-                            "longitude": place.longitude
+                        "author": {
+                            "@type": "Person",
+                            "identifier": session.info.webId
                         },
+                        "additionalType": place.category,
+                        "latitude": place.latitude,
+                        "longitude": place.longitude,
                         "description": place.description,
-                        "comment": place.comments.map((comment) => ({
-                            "@type": "Comment",
-                            "author": comment.author,
-                            "comment": comment.comment,
-                            "date": comment.date
+                        "rewiev": place.comments.map((comment) => ({
+                            "@type": "Review",
+                            "author": {
+                                "@type": "Person",
+                                "identifier": session.info.webId
+                            },
+                            "reviewRating": {
+                                "@type": "Rating",
+                                "ratingValue": place.reviewScore
+                            },
+                            "datePublished": comment.date,
+                            "rewievBody": comment.comment
                         })),
                         "reviewScore": place.reviewScore,
                         "date": place.date
-                    }))
+                    })
+                    )
                 }))
             };
 
@@ -223,36 +254,51 @@ class PodManager {
     async saveGroup(session: Session, group: Group): Promise<void> {
         try {
             console.log(session)
-            let url = session.info.webId.replace("card#me", "public") + "/groups";
+            let url = session.info.webId.replace("profile/card#me", "lomap")
             let groups = await this.getGroups(session);
 
             groups.push(group);
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
-                "@type": "Groups",
-                "groups": groups.map((group) => ({
-                    "@type": "Group",
+                "@type": "Maps",
+                "maps": groups.map((group) => ({
+                    "@type": "Map",
+                    "identifier": uuidv4(),
                     "name": group.name,
-                    "places": group.places.map((place) => ({
+                    "author": {
+                        "@type": "Person",
+                        "identifier": session.info.webId
+                    },
+                    "spatialCoverage": group.places.map((place) => ({
                         "@type": "Place",
+                        "identifier": uuidv4(),
                         "name": place.nombre,
-                        "category": place.category,
-                        "geo": {
-                            "@type": "GeoCoordinates",
-                            "latitude": place.latitude,
-                            "longitude": place.longitude
+                        "author": {
+                            "@type": "Person",
+                            "identifier": session.info.webId
                         },
+                        "additionalType": place.category,
+                        "latitude": place.latitude,
+                        "longitude": place.longitude,
                         "description": place.description,
-                        "comment": place.comments.map((comment) => ({
-                            "@type": "Comment",
-                            "author": comment.author,
-                            "comment": comment.comment,
-                            "date": comment.date
+                        "rewiev": place.comments.map((comment) => ({
+                            "@type": "Review",
+                            "author": {
+                                "@type": "Person",
+                                "identifier": session.info.webId
+                            },
+                            "reviewRating": {
+                                "@type": "Rating",
+                                "ratingValue": place.reviewScore
+                            },
+                            "datePublished": comment.date,
+                            "rewievBody": comment.comment
                         })),
                         "reviewScore": place.reviewScore,
                         "date": place.date
-                    }))
+                    })
+                    )
                 }))
             };
 
@@ -273,27 +319,27 @@ class PodManager {
     async getGroups(session: Session): Promise<Group[]> {
         console.log("MANAGER")
         console.log(session)
-        let url = session.info.webId.replace("card#me", "public") + "/groups"
+        let url = session.info.webId.replace("profile/card#me", "lomap")
 
         try {
             const file = await getFile(url, { fetch: session.fetch });
             const text = await file.text();
             const data = JSON.parse(text);
 
-            if (data["@type"] === "Groups") {
-                const groups = data.groups.map((group: any) => {
+            if (data["@type"] === "Maps") {
+                const groups = data.maps.map((map: any) => {
                     return {
-                        name: group.name,
-                        places: group.places.map((place: any) => ({
+                        name: map.name,
+                        places: map.spatialCoverage.map((place: any) => ({
                             nombre: place.name,
-                            category: place.category,
-                            longitude: place.geo.longitude,
-                            latitude: place.geo.latitude,
+                            category: place.additionalType,
+                            longitude: place.longitude,
+                            latitude: place.latitude,
                             description: place.description,
-                            comments: place.comment.map((comment: any) => ({
-                                author: comment.author,
-                                comment: comment.comment,
-                                date: comment.date
+                            comments: place.rewiev.map((review: any) => ({
+                                author: review.author.identifier,
+                                comment: review.rewievBody,
+                                date: review.datePublished
                             })),
                             reviewScore: place.reviewScore,
                             date: place.date
@@ -302,7 +348,7 @@ class PodManager {
                 });
                 return groups;
             } else {
-                console.log("JSON-LD data is not of type 'Groups'");
+                console.log("JSON-LD data is not of type 'Maps'");
                 return [];
             }
         } catch (error) {
@@ -320,23 +366,18 @@ class PodManager {
         let resourceAcl: AclDataset;
         if (!hasResourceAcl(myDatasetWithAcl)) {
 
-            console.log(1)
           if (!hasAccessibleAcl(myDatasetWithAcl)) {
-            console.log(2)
             throw new Error("El usuario actual no tiene permiso para cambiar los permisos de acceso a este recurso.");
           }
           if (!hasFallbackAcl(myDatasetWithAcl)) {
-            console.log(3)
             throw new Error("El usuario actual no tiene permiso para ver quién tiene acceso a este recurso.");
             // Alternativamente, inicializa una nueva ACL vacía de la siguiente manera,
             // pero ten en cuenta que si no le das a alguien acceso de Control,
             // **nadie podrá cambiar los permisos de acceso en el futuro**:
             // resourceAcl = createAcl(myDatasetWithAcl);
           }
-          console.log(4)
           resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
         } else {
-            console.log(5)
           resourceAcl = getResourceAcl(myDatasetWithAcl);
           console.log(resourceAcl)
         }
@@ -351,31 +392,27 @@ class PodManager {
       }
 
     async getFriendsGroups(session: Session, url: string): Promise<Group[]> {
-        console.log("MANAGER")
-        console.log(session)
-        url = url.replace("card#me", "public") + "profile/public/groups"
-
-        console.log(url)
+        url = url.replace("profile/card#me", "lomap")
 
         try {
             const file = await getFile(url, { fetch: session.fetch });
             const text = await file.text();
             const data = JSON.parse(text);
 
-            if (data["@type"] === "Groups") {
-                const groups = data.groups.map((group: any) => {
+            if (data["@type"] === "Maps") {
+                const groups = data.maps.map((map: any) => {
                     return {
-                        name: group.name,
-                        places: group.places.map((place: any) => ({
+                        name: map.name,
+                        places: map.spatialCoverage.map((place: any) => ({
                             nombre: place.name,
-                            category: place.category,
-                            longitude: place.geo.longitude,
-                            latitude: place.geo.latitude,
+                            category: place.additionalType,
+                            longitude: place.longitude,
+                            latitude: place.latitude,
                             description: place.description,
-                            comments: place.comment.map((comment: any) => ({
-                                author: comment.author,
-                                comment: comment.comment,
-                                date: comment.date
+                            comments: place.rewiev.map((review: any) => ({
+                                author: review.author.identifier,
+                                comment: review.rewievBody,
+                                date: review.datePublished
                             })),
                             reviewScore: place.reviewScore,
                             date: place.date
@@ -384,7 +421,7 @@ class PodManager {
                 });
                 return groups;
             } else {
-                console.log("JSON-LD data is not of type 'Groups'");
+                console.log("JSON-LD data is not of type 'Maps'");
                 return [];
             }
         } catch (error) {
