@@ -143,11 +143,11 @@ class PodManager {
                         "latitude": place.latitude,
                         "longitude": place.longitude,
                         "description": place.description,
-                        "rewiev": place.comments.map((comment) => ({
+                        "review": place.comments.map((comment) => ({
                             "@type": "Review",
                             "author": {
                                 "@type": "Person",
-                                "identifier": session.info.webId
+                                "identifier": comment.author
                             },
                             "reviewRating": {
                                 "@type": "Rating",
@@ -155,6 +155,14 @@ class PodManager {
                             },
                             "datePublished": comment.date,
                             "rewievBody": comment.comment
+                        })),
+                        "image": place.images.map((image) => ({
+                            "@type": "ImageObject",
+                            "author": {
+                                "@type": "Person",
+                                "identifier": image.author
+                            },
+                            "contentUrl": image.url
                         })),
                         "reviewScore": place.reviewScore,
                         "date": place.date
@@ -217,11 +225,11 @@ class PodManager {
                         "latitude": place.latitude,
                         "longitude": place.longitude,
                         "description": place.description,
-                        "rewiev": place.comments.map((comment) => ({
+                        "review": place.comments.map((comment) => ({
                             "@type": "Review",
                             "author": {
                                 "@type": "Person",
-                                "identifier": session.info.webId
+                                "identifier": comment.author
                             },
                             "reviewRating": {
                                 "@type": "Rating",
@@ -229,6 +237,14 @@ class PodManager {
                             },
                             "datePublished": comment.date,
                             "rewievBody": comment.comment
+                        })),
+                        "image": place.images.map((image) => ({
+                            "@type": "ImageObject",
+                            "author": {
+                                "@type": "Person",
+                                "identifier": image.author
+                            },
+                            "contentUrl": image.url
                         })),
                         "reviewScore": place.reviewScore,
                         "date": place.date
@@ -282,11 +298,11 @@ class PodManager {
                         "latitude": place.latitude,
                         "longitude": place.longitude,
                         "description": place.description,
-                        "rewiev": place.comments.map((comment) => ({
+                        "review": place.comments.map((comment) => ({
                             "@type": "Review",
                             "author": {
                                 "@type": "Person",
-                                "identifier": session.info.webId
+                                "identifier": comment.author
                             },
                             "reviewRating": {
                                 "@type": "Rating",
@@ -294,6 +310,14 @@ class PodManager {
                             },
                             "datePublished": comment.date,
                             "rewievBody": comment.comment
+                        })),
+                        "image": place.images.map((image) => ({
+                            "@type": "ImageObject",
+                            "author": {
+                                "@type": "Person",
+                                "identifier": image.author
+                            },
+                            "contentUrl": image.url
                         })),
                         "reviewScore": place.reviewScore,
                         "date": place.date
@@ -336,11 +360,15 @@ class PodManager {
                             longitude: place.longitude,
                             latitude: place.latitude,
                             description: place.description,
-                            comments: place.rewiev.map((review: any) => ({
+                            comments: place.review.map((review: any) => ({
                                 author: review.author.identifier,
                                 comment: review.rewievBody,
                                 date: review.datePublished
                             })),
+                            images: place.image.map((image: any) => ({
+                                author: image.author.identifier,
+                                url: image.contentUrl
+                              })),
                             reviewScore: place.reviewScore,
                             date: place.date
                         }))
@@ -409,11 +437,15 @@ class PodManager {
                             longitude: place.longitude,
                             latitude: place.latitude,
                             description: place.description,
-                            comments: place.rewiev.map((review: any) => ({
+                            comments: place.review.map((review: any) => ({
                                 author: review.author.identifier,
                                 comment: review.rewievBody,
                                 date: review.datePublished
                             })),
+                            images: place.image.map((image: any) => ({
+                                author: image.author.identifier,
+                                url: image.contentUrl
+                              })),
                             reviewScore: place.reviewScore,
                             date: place.date
                         }))
