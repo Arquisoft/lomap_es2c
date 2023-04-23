@@ -127,7 +127,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                 name: place.nombre,
                 type: "friend",
                 iconUrl: "../markers/friendsMarker.png",
-                category: place.category
+                category: place.category,
+                imageUrl: place.images[0]?.url
             })
         })
 

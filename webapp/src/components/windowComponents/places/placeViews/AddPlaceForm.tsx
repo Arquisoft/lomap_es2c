@@ -16,7 +16,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
-import { Place, Comment, Group, MarkerData } from 'shared/shareddtypes';
+import { Place, Comment, Group, MarkerData, Image } from 'shared/shareddtypes';
 import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
@@ -149,7 +149,8 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                 name: place.nombre,
                 type: "mine",
                 iconUrl: "../markers/yellow-marker.png",
-                category: place.category
+                category: place.category,
+                imageUrl: place.images[0]?.url
             })
         })
 
@@ -162,6 +163,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     // Manejo del formulario
     const [category, setCategory] = useState(null);
     const [score, setScore] = useState(4);
+    const [imageUrl, setImageUrl] = useState("");
 
     const schema = fieldsValidation.placeValidation;
     type PlaceShema = yup.InferType<typeof schema>;
@@ -193,32 +195,47 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
     const onSubmit = (data: any) => {
         if (selectedImage !== null) {
-            uploadImage();
+            // uploadImage();
+            const fd = new FormData();
+            fd.append("file", selectedImage)
+            fd.append("upload_preset", cloudinaryUploadFolder)
+
+            Axios.post(cloudinaryURL, fd).then((res) => {
+                let urlImg = res.data.secure_url;
+                let comments: Comment[] = [{
+                    comment: data.review,
+                    date: new Date().getTime().toString(),
+                    author: getUserInSesion().webID
+                }]
+
+                let images: Image[] = [{
+                    author: getUserInSesion().webID,
+                    url: urlImg
+                }]
+
+                let p: Place = {
+                    nombre: data.placename,
+                    category: category,
+                    latitude: data.latitude as string,
+                    longitude: data.longitude as string,
+                    reviewScore: score.toString(),
+                    description: "",
+                    date: new Date().getTime().toString(),
+                    comments,
+                    images,
+                }
+
+                mapM.añadirLugarAGrupo(p, group, props.session).then(() => {
+                    temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
+                    actualizarMarcadores();
+                    navigate("/home/groups/showgroup/" + group.name)
+                    props.refresh()
+                })
+            })
+
         }
 
-        let comments: Comment[] = [{
-            comment: data.review,
-            date: new Date().getTime().toString(),
-            author: getUserInSesion().username
-        }]
 
-        let p: Place = {
-            nombre: data.placename,
-            category: category,
-            latitude: data.latitude as string,
-            longitude: data.longitude as string,
-            reviewScore: score.toString(),
-            description: "",
-            date: new Date().getTime().toString(),
-            comments,
-        }
-
-        mapM.añadirLugarAGrupo(p, group, props.session).then(() => {
-            temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
-            actualizarMarcadores();
-            navigate("/home/groups/showgroup/" + group.name)
-            props.refresh()
-        })
     };
 
     const handleCategoryChange = (event: SelectChangeEvent) => {
@@ -262,6 +279,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
         Axios.post(cloudinaryURL, fd).then((res) => {
             let urlImg = res.data.secure_url;
+            setImageUrl(urlImg);
             console.log(urlImg)
         })
     }
@@ -395,7 +413,8 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
                 <IconButton color="primary" aria-label="upload picture" component="label">
                     <PhotoCamera sx={{ mr: "0.8em" }} />
-                    <input id="uploadImage" style={{ display: "none" }} accept="image/*" type="file" onChange={handleFileUpload} />
+                    <input id="uploadImage" name="uploadImage" accept="image/*" type="file"
+                        onChange={handleFileUpload} required />
                     <p style={{ fontSize: "0.5em" }}>{fileName}</p>
                 </IconButton>
 

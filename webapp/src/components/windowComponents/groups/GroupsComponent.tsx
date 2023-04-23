@@ -119,7 +119,8 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, session: a
                 name: place.nombre,
                 type: "mine",
                 iconUrl: "../markers/myMarker.png",
-                category: place.category
+                category: place.category,
+                imageUrl: place.images[0]?.url
             })
         })
 

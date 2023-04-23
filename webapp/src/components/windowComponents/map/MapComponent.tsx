@@ -7,6 +7,9 @@ import { RootState } from 'utils/redux/store';
 import { addPlaceMarker } from 'utils/redux/action';
 import React from 'react';
 import PlaceCategories from '../places/PlaceCategories';
+import { AdvancedImage } from '@cloudinary/react';
+import { CloudConfig, Cloudinary, CloudinaryConfig, CloudinaryImage, URLConfig } from "@cloudinary/url-gen";
+import { thumbnail } from '@cloudinary/url-gen/actions/resize';
 
 const BrusselsCenter = {
     lat: 50.8504500,
@@ -25,6 +28,35 @@ const addMarkerIcon = new L.Icon({
     iconSize: [47, 47]
 });
 
+function loadImage(imageUrl: string): any {
+
+    if (imageUrl) {
+        if (imageUrl.includes("cloudinary")) {
+            let urlConfig = new URLConfig({ secure: true });
+            let url = imageUrl.split("/");
+            console.log(url[3])
+            /* const cld = new CloudConfig({
+                 cloudName: url[3],
+                 secure: true,
+             });
+             return new CloudinaryImage(url[7], cld, urlConfig).resize(thumbnail().width(150).height(150));*/
+
+            const cld = new Cloudinary({
+                cloud: {
+                    cloudName: url[3],
+
+                },
+                url: {
+                    secure: true
+                }
+            });
+            return cld.image(url[7]).resize(thumbnail().width(150).height(150));
+
+        } else {
+            return imageUrl;
+        }
+    }
+}
 
 function CenterMap(): any {
     const map = useMap();
@@ -107,8 +139,9 @@ function AddPlace(props: any): any {
     })
 
     if (!props.showAdd) {
-        if (marker !== null)
+        if (marker !== null) {
             marker.remove();
+        }
     }
 
     return null;
@@ -195,6 +228,8 @@ export const MapComponent = () => {
 
     const CenterMapOnMarkerMemo = React.useMemo(() => React.memo(CenterMapOnMarker), [centerMarker]);
 
+
+
     return (
         <MapContainer center={BrusselsCenter} zoom={15} scrollWheelZoom={true} minZoom={3} maxZoom={18} >
             <TileLayer
@@ -206,7 +241,10 @@ export const MapComponent = () => {
             {centerMarker == null && <CenterMap />}
             {markers.map((marker) => (
                 <Marker position={marker.position} key={marker.name} icon={markerIcon(marker.iconUrl)} eventHandlers={{ click: () => handleMarkerClick(marker) }}>
-                    <Popup>{marker.name}</Popup>
+                    <Popup><>
+                        <h3 className='markerName'>{marker.name}</h3>
+                        {marker.imageUrl != '' && <AdvancedImage cldImg={loadImage(marker.imageUrl)}></AdvancedImage>}
+                    </></Popup>
                 </Marker>
             ))}
             {centerMarker && <CenterMapOnMarkerMemo marker={centerMarker} />}

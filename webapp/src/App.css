@@ -143,3 +143,8 @@ a {
   text-align: center;
   margin-bottom: 0.2em;
 }
+
+.markerName {
+  color: #81c784;
+  text-align: center;
+}
