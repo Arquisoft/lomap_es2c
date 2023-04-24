@@ -4,11 +4,11 @@ import L from 'leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'utils/redux/store';
-import { addPlaceMarker } from 'utils/redux/action';
+import { addPlaceMarker, clearFriendsMarkers, clearMarkers } from 'utils/redux/action';
 import React from 'react';
 import PlaceCategories from '../places/PlaceCategories';
 import { AdvancedImage } from '@cloudinary/react';
-import { CloudConfig, Cloudinary, CloudinaryConfig, CloudinaryImage, URLConfig } from "@cloudinary/url-gen";
+import { Cloudinary, URLConfig } from "@cloudinary/url-gen";
 import { thumbnail } from '@cloudinary/url-gen/actions/resize';
 
 const BrusselsCenter = {
@@ -147,6 +147,36 @@ function AddPlace(props: any): any {
     return null;
 }
 
+function CleanMap(props: { myGroup: string, friendGroup: string }): any {
+    const map = useMap();
+
+    const dispatch = useDispatch();
+
+    const hasCleanMap = document.getElementById("cleanMapButton");
+
+    if (hasCleanMap === null) {
+        let legend = new L.Control({ position: 'topright' });
+
+        legend.onAdd = function () {
+            let div = L.DomUtil.create('div', 'cleanMap');
+            div.innerHTML += '<button id="cleanMapButton"><img width="20px" src="../cleanMap.png" alt="Descripción de la imagen">Limpiar mapa</button>';
+            return div;
+        };
+
+        legend.addTo(map);
+    }
+    if (hasCleanMap) {
+        const hasOnClick = hasCleanMap.hasAttribute('name');
+        if (!hasOnClick)
+            hasCleanMap.addEventListener('click', () => {
+                hasCleanMap.setAttribute('name', 'cleanMapName');
+                dispatch(clearMarkers());
+                dispatch(clearFriendsMarkers());
+                dispatch(addPlaceMarker(false))
+            })
+    }
+    return null;
+}
 
 function Legend(): any {
     const map = useMap();
@@ -249,6 +279,7 @@ export const MapComponent = () => {
             ))}
             {centerMarker && <CenterMapOnMarkerMemo marker={centerMarker} />}
             <AddPlace showAdd={showAdd} />
+            <CleanMap myGroup={groupid} friendGroup={friendGroupId} />
         </MapContainer>
     );
 
