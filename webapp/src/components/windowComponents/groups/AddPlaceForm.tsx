@@ -197,6 +197,7 @@ export default function AddPlaceForm(props: { session: any }) {
             description: "",
             date: getDate(),
             comments,
+            images:[],
         }
 
         mapM.añadirLugarAGrupo(p, group, props.session)
