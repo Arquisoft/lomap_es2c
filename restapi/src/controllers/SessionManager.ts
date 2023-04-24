@@ -20,7 +20,7 @@ class UserSesionManager implements SesionManager {
         if (usuarioEncontrado.username != "notfound") {
             throw new Error("Usuario ya existente")
         }
-        repo.Repository.save(usuario, this.rondasDeEncriptacion)
+        await repo.Repository.save(usuario, this.rondasDeEncriptacion)
         return usuario;
     }
 

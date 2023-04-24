@@ -7,6 +7,7 @@ import {FriendManager, FriendManagerImpl} from "../src/controllers/FriendManager
 import {FriendRequest} from "../src/entities/FriendRequest";
 import mongoose from "mongoose";
 import {ftruncate} from "fs";
+import {response} from "express";
 
 describe('FriendsManager', () => {
     let userManager: UserManager;
@@ -82,9 +83,16 @@ describe('FriendsManager', () => {
     });
 
     describe('listarSolicitudes', () => {
-        it('deberia devolver una lista vacia si el usuario no existe', async () => {
-            const amigos=await friendManager.listarSolicitudes(new UserImpl("usernotexists", "", "", ""))
-            expect(amigos.length).toBe(0);
+        it('deberia lanzar un error si no existe', async () => {
+            let error=new Error("Error por defecto")
+            const fr= new FriendRequest("usernotexists1","usernotexists1",0)
+            try{
+                await friendManager.listarSolicitudes(new UserImpl("usernotexists", "", "", ""))
+            }catch(err){
+                error=err;
+            }
+            expect(error.message).toBe("El usuario no existe");
+
         });
         it('deberia devolver una lista con una solicitud para un usuario con una solicitud', async () => {
             const amigos=await friendManager.listarSolicitudes(new UserImpl("usertestn1", "", "", ""))

@@ -9,6 +9,7 @@ import {UserImpl} from "../src/entities/User";
 import {FriendRequest} from "../src/entities/FriendRequest";
 import {FriendManagerImpl} from "../src/controllers/FriendManager";
 import FriendshipSchema from "../src/entities/FriendshipSchema";
+import UserSchema from "../src/entities/UserSchema";
 
 var server: Server;
 
@@ -75,6 +76,13 @@ describe('/sesionmanager/signup ', () => {
         const response = await request(app).post('/sesionmanager/signup').send({user: user });
         expect(response.status).toBe(404);
 
+    });
+    test('crear user correctamente',async () => {
+
+        let user=new UserImpl("usertestsignup","1234","webIdPrueba","descripcionprueba","img")
+        const response = await request(app).post('/sesionmanager/signup').send({user: user });
+        expect(response.status).toBe(200);
+        let r=await UserSchema.deleteOne({username:"usertestsignup"})
     });
 });
 
@@ -198,30 +206,8 @@ describe('/friendmanager/deletefriend', () => {
         expect(response.status).toBe(404);
     });
 });
-describe('/friendmanager/deletefriend', () => {
-    test('borrar amistad correctamente',async () => {
-        let user1=new UserImpl("usertestn6","","","")
-        let user2=new UserImpl("usertestn7","","","")
-        const response = await request(app).post('/friendmanager/deletefriend').send({user:user1,friend:user2});
-        expect(response.status).toBe(200);
-        let fm= new FriendManagerImpl();
-        await fm.enviarSolicitud(user1,user2);
-        await fm.actualizarSolicitud(new FriendRequest(user1.username,user2.username,1),1);
-    });
-    test('amistad que no existe',async () => {
-        let user1=new UserImpl("usertestn6","","","")
-        let user2=new UserImpl("usertestn8","","","")
-        const response = await request(app).post('/friendmanager/deletefriend').send({user:user1,friend:user2});
-        expect(response.status).toBe(404);
-    });
-    test('usuario que no existe',async () => {
-        let user1=new UserImpl("usernotexists1","","","")
-        let user2=new UserImpl("usernotexists2","","","")
-        const response = await request(app).post('/friendmanager/deletefriend').send({user:user1,friend:user2});
-        expect(response.status).toBe(404);
-    });
-});
-describe('/usermanager/editpsw\'', () => {
+
+describe('/usermanager/editpsw', () => {
     test('user existe y contrasena correcta',async () => {
         let user=new UserImpl("usertestn1","","webIdPrueba1","descripcionprueba1")
         const response = await request(app).post('/usermanager/editpsw').send({user:user,oldpsw:"usertestN1.",newpsw:"usertestN1." });
@@ -239,5 +225,18 @@ describe('/usermanager/editpsw\'', () => {
         expect(response.status).toBe(404);
     });
 
+});
+
+describe('/friendmanager/friendrequests', () => {
+    test('user que existe',async () => {
+        let user=new UserImpl("usertestn1","","webIdPrueba1","descripcionprueba1")
+        const response = await request(app).post('/friendmanager/friendrequests').send({user:user});
+        expect(response.status).toBe(200);
+    });
+    test('user que no existe',async () => {
+        let user=new UserImpl("usernotexists","","webIdPrueba1","descripcionprueba1")
+        const response = await request(app).post('/friendmanager/friendrequests').send({user:user});
+        expect(response.status).toBe(404);
+    });
 });
 

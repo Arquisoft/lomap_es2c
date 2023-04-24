@@ -78,6 +78,8 @@ export class FriendManagerImpl implements FriendManager {
 
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
         let resultado;
+        let b1=await UserSchema.exists({username: user.username})
+        if(!b1){throw new Error("El usuario no existe")}
         resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
         return resultado;
     }

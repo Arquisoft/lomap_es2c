@@ -64,11 +64,11 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
 api.post("/friendmanager/friendrequests", async (req: Request, res: Response): Promise<Response> => {
     let user = req.body.user;
     let solicitudes = null
-    //try {
-    solicitudes = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user)
-    //} catch (err) {
-    //    return res.status(404).send({ error: err.toString() })
-    //}
+    try {
+        solicitudes = await fac.FactoryLoMap.getFriendManager().listarSolicitudes(user)
+    } catch (err) {
+        return res.status(404).send({ error: err.toString() })
+    }
     return res.status(200).send(solicitudes);
 })
 
