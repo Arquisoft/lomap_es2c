@@ -89,12 +89,11 @@ export function Signup() {
 
     //#region METODOS DE CLASE
     const onSubmit: SubmitHandler<UserSchema> = data => trySignup(data);
-    console.log(errors);
 
     const trySignup = (user: UserSchema) => {
         if (user.username && user.password) {
             let newUser: User = { username: user.username, webID: "", password: user.password, img: "", description: "" };
-            if (fieldsValidation.checkPasswords(pass, confirmPass)) {
+            if (fieldsValidation.checkPasswords(user.password, confirmPass)) {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
                 }).catch((e) => {
@@ -110,7 +109,7 @@ export function Signup() {
     const successSignup = (user: User) => {
         Swal.fire({
             title: 'Cuenta creada',
-            text: "¡Cuenta " + user.username + " ha sido creada con éxito!",
+            text: "¡Cuenta " + user.username + " creada con éxito!",
             icon: 'success',
             showCancelButton: false,
             confirmButtonColor: '#81c784',
@@ -136,8 +135,10 @@ export function Signup() {
         <SForm>
 
             <CSSTypography variant="h4" align="center"
-                sx={{ mt: "0.5em" }}>
-                Crear cuenta
+                sx={{ mt: "0.5em" }}
+                data-testid="signupTitle"
+            >
+                Registrarse
             </CSSTypography>
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
@@ -157,7 +158,7 @@ export function Signup() {
                     autoComplete="current-password"
                     fullWidth
                     {...register("password")}
-                    onChange={(e: any) => setPass(e.target.value)}
+
                     helperText={errors.password ? errors.password.message : ''}
                 />
 
@@ -168,7 +169,6 @@ export function Signup() {
                     fullWidth
                     autoComplete="current-password"
                     onChange={(e: any) => setConfirmPass(e.target.value)}
-
                 />
 
                 <CSSButton
@@ -190,6 +190,7 @@ export function Signup() {
                     onClick={showLogin}
                     align="left"
                     underline="always"
+                    data-testid="goLoginButton"
                 >
                     Inicia sesión
                 </Link>

@@ -38,14 +38,12 @@ const biographyConstraints = yup.string().max(100, "La biografía puede contener
 
 export const signupValidationSchema = yup.object({
     username: usernameConstraints.required("Debe de introducir un nombre de usuario"),
-    webID: webIDConstraints.required(),
-    password: passwordConstraints.required("Debe de introducir una contraseña"),
+    password: passwordConstraints.required("Debe de introducir una contraseña")
 }).required();
 
 
 export const editProfileValidation = yup.object({
     username: usernameConstraints.notRequired(),
-    webID: webIDConstraints.notRequired(),
     biography: biographyConstraints.notRequired()
 });
 
@@ -68,11 +66,11 @@ export const placeValidation = yup.object({
         .min(3, "El nombre debe de tener entre 3 y 30 caracteres")
         .max(30, "El nombre debe de tener entre 3 y 30 caracteres")
         .required("Debes de introducir un nombre"),
-    longitude:yup.number().min(-90, "La longitud debe estar comprendida entre -180 y 180")
+    longitude: yup.number().min(-90, "La longitud debe estar comprendida entre -180 y 180")
         .max(90, "La longitud debe estar entre -180 y 180")
         .required("La longitud es un campo obligatorio"),
-    latitude:yup.number().min(-90, "La latitud debe estar comprendida entre -90 y 90")
+    latitude: yup.number().min(-90, "La latitud debe estar comprendida entre -90 y 90")
         .max(90, "La latitud debe estar entre -90 y 90")
         .required("La latitud es un campo obligatorio"),
-    review: yup.string().max(150, "La longitud máxima permitida es de 150 caracteres"),   
+    review: yup.string().max(150, "La longitud máxima permitida es de 150 caracteres"),
 });

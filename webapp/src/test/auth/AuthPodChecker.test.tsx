@@ -4,8 +4,8 @@ import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from 'utils/redux/store';
-import { AuthChecker } from 'auth/AuthChecker';
 import { Login } from 'components/userIdentification/LoginForm';
+import { AuthPodChecker } from 'auth/AuthPodChecker';
 
 jest.mock('components/userIdentification/LoginForm', () => ({ Login: () => { return (<div data-testid="mockLogin">Mock</div>) } }))
 
@@ -21,7 +21,7 @@ test('checker redirect login if not logged', () => {
         <Provider store={store}>
             <MemoryRouter>
                 <Routes>
-                    <Route index element={<AuthChecker><div data-testid="allowRequest"></div> </AuthChecker>} />
+                    <Route index element={<AuthPodChecker><div data-testid="allowRequest"></div> </AuthPodChecker>} />
                     <Route path="/login" element={<Login />} />
                 </Routes>
             </MemoryRouter>
@@ -44,7 +44,7 @@ test('checker allow request if logged', () => {
         <Provider store={store}>
             <MemoryRouter>
                 <Routes>
-                    <Route index element={<AuthChecker><div data-testid="allowRequest"></div> </AuthChecker>} />
+                    <Route index element={<AuthPodChecker><div data-testid="allowRequest"></div> </AuthPodChecker>} />
                     <Route path="/login" element={<Login />} />
                 </Routes>
             </MemoryRouter>
