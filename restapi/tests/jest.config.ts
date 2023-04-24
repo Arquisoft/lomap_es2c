@@ -4,5 +4,12 @@ export default {
         "^.+\\.tsx?$": "ts-jest"
     },
     collectCoverage: true,
-    collectCoverageFrom:["api.ts"]
+    collectCoverageFrom:["**/src/controllers/*.{ts,tsx}",
+        "**/src/facade.ts",
+        "!server.ts",
+        "api.ts",
+        "**/src/persistence/*.{ts,tsx}",
+        "!**/src/persistence/DefaultMongo.ts",
+        "**/src/entities/*.{ts,tsx}",
+    ]
 }

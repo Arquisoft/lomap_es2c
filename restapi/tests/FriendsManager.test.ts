@@ -29,7 +29,7 @@ describe('FriendsManager', () => {
 
     describe('listarAmigos', () => {
         it('deberia devolver una lista vacía al pedir amigos de un usuario inexistente', async () => {
-            const amigos=await friendManager.listarAmigos(new UserImpl("usernotexists", "", "", ""))
+            const amigos=await friendManager.listarAmigos(new UserImpl("usernotexists", "", "", "",""))
             expect(amigos.length).toBe(0);
         });
         it('deberia devolver 2 amigos para testn1 que tiene dos amigos', async () => {

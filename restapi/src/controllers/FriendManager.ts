@@ -9,8 +9,6 @@ import { Repository } from "../persistence/Repository";
 export interface FriendManager {
     listarAmigos: (user: User) => Promise<User[]>;
     enviarSolicitud: (de: User, a: User) => Promise<FriendRequest>;
-    aceptarSolicitud: (solicitud: FriendRequest) => Promise<FriendRequest>;
-    rechazarSolicitud: (solicitud: FriendRequest) => Promise<FriendRequest>;
     listarSolicitudes: (user: User) => Promise<FriendRequest[]>;
     actualizarSolicitud: (solicitud: FriendRequest, status: number) => Promise<FriendRequest>;
     eliminarAmigo: (user: User, friend: User) => Promise<Boolean>;
@@ -78,17 +76,6 @@ export class FriendManagerImpl implements FriendManager {
         return resultado;
     }
 
-    async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        let resultado;
-        resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.aceptado }) as FriendRequest;
-        return resultado;
-    }
-    async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        let resultado;
-        resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.rechazado }) as FriendRequest;
-        return resultado;
-
-    }
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
         let resultado;
         resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
@@ -103,7 +90,6 @@ export class FriendManagerImpl implements FriendManager {
         if(!b1 || !b2){throw new Error("Usuario no existe");}
         resultado1 = await FriendshipSchema.deleteOne({ sender: amigo1.username, receiver: amigo2.username, status: FriendManagerImpl.aceptado });
         resultado2 = await FriendshipSchema.deleteOne({ sender: amigo2.username, receiver: amigo1.username, status: FriendManagerImpl.aceptado });
-        if(resultado1.deletedCount==0 && resultado2.deletedCount==0){throw new Error("la solicitud de amistad no existia")}
         if(resultado1.deletedCount==0 && resultado2.deletedCount==0){throw new Error("la solicitud de amistad no existia")}
         return true;
     }
