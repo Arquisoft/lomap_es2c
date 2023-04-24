@@ -10,6 +10,7 @@ import PlaceCategories from '../places/PlaceCategories';
 import { AdvancedImage } from '@cloudinary/react';
 import { Cloudinary, URLConfig } from "@cloudinary/url-gen";
 import { thumbnail } from '@cloudinary/url-gen/actions/resize';
+import { MarkerData } from 'shared/shareddtypes';
 
 const BrusselsCenter = {
     lat: 50.8504500,
@@ -27,36 +28,6 @@ const addMarkerIcon = new L.Icon({
     iconUrl: '../markers/add-location.png',
     iconSize: [47, 47]
 });
-
-function loadImage(imageUrl: string): any {
-
-    if (imageUrl) {
-        if (imageUrl.includes("cloudinary")) {
-            let urlConfig = new URLConfig({ secure: true });
-            let url = imageUrl.split("/");
-            console.log(url[3])
-            /* const cld = new CloudConfig({
-                 cloudName: url[3],
-                 secure: true,
-             });
-             return new CloudinaryImage(url[7], cld, urlConfig).resize(thumbnail().width(150).height(150));*/
-
-            const cld = new Cloudinary({
-                cloud: {
-                    cloudName: url[3],
-
-                },
-                url: {
-                    secure: true
-                }
-            });
-            return cld.image(url[7]).resize(thumbnail().width(150).height(150));
-
-        } else {
-            return imageUrl;
-        }
-    }
-}
 
 function CenterMap(): any {
     const map = useMap();
@@ -245,6 +216,8 @@ export const MapComponent = () => {
             url = `/home/friends/showplace/${friendUsername}/${friendGroupId}${marker.name ? `/${marker.name}` : ''}`;
         }
         navigate(url);
+
+
     };
 
     const [centerMarker, setCenterMarker] = useState(null);
@@ -273,7 +246,7 @@ export const MapComponent = () => {
                 <Marker position={marker.position} key={marker.name} icon={markerIcon(marker.iconUrl)} eventHandlers={{ click: () => handleMarkerClick(marker) }}>
                     <Popup><>
                         <h3 className='markerName'>{marker.name}</h3>
-                        {marker.imageUrl != '' && <AdvancedImage cldImg={loadImage(marker.imageUrl)}></AdvancedImage>}
+                        {marker.imageUrl.length > 0 && <img src={marker.imageUrl} width="100" height="100" id={marker.name} key={marker.name} alt={marker.name} />}
                     </></Popup>
                 </Marker>
             ))}
