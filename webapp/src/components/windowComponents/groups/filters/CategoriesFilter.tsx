@@ -1,8 +1,6 @@
-import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import PlaceCategories from '../../places/PlaceCategories';
 
@@ -13,10 +11,7 @@ export const CategoriesFilter = (props: { setFilter: any }) => {
 
     const updateFilters = (event: any, values: any) => {
         let categories: string[] = [];
-        values.map((value: any) => {
-            console.log("en categories filter.tsx   " + value)
-            categories.push(value);
-        })
+        values.map((value: any) => categories.push(value));
         props.setFilter(categories);
     }
 

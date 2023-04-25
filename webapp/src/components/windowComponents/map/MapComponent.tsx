@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'utils/redux/store';
-import { addPlaceMarker } from 'utils/redux/action';
+import { addPlaceMarker, clearFriendsMarkers, clearMarkers } from 'utils/redux/action';
 import React from 'react';
 import PlaceCategories from '../places/PlaceCategories';
 
@@ -24,6 +24,7 @@ const addMarkerIcon = new L.Icon({
     iconUrl: '../markers/add-location.png',
     iconSize: [47, 47]
 });
+
 
 
 function CenterMap(): any {
@@ -48,7 +49,7 @@ function CenterMap(): any {
 
 function CenterMapOnMarker(props: { marker: any }): any {
     const map = useMap();
-    if (props.marker != null) {
+    if (props.marker !== null) {
         let position = props.marker.position;
         map.flyTo(position, map.getZoom());
     }
@@ -107,13 +108,44 @@ function AddPlace(props: any): any {
     })
 
     if (!props.showAdd) {
-        if (marker !== null)
+        if (marker !== null) {
             marker.remove();
+        }
     }
 
     return null;
 }
 
+function CleanMap(props: { myGroup: string, friendGroup: string }): any {
+    const map = useMap();
+
+    const dispatch = useDispatch();
+
+    const hasCleanMap = document.getElementById("cleanMapButton");
+
+    if (hasCleanMap === null) {
+        let legend = new L.Control({ position: 'topright' });
+
+        legend.onAdd = function () {
+            let div = L.DomUtil.create('div', 'cleanMap');
+            div.innerHTML += '<button id="cleanMapButton"><img width="20px" src="../cleanMap.png" alt="Descripción de la imagen">Limpiar mapa</button>';
+            return div;
+        };
+
+        legend.addTo(map);
+    }
+    if (hasCleanMap) {
+        const hasOnClick = hasCleanMap.hasAttribute('name');
+        if (!hasOnClick)
+            hasCleanMap.addEventListener('click', () => {
+                hasCleanMap.setAttribute('name', 'cleanMapName');
+                dispatch(clearMarkers());
+                dispatch(clearFriendsMarkers());
+                dispatch(addPlaceMarker(false))
+            })
+    }
+    return null;
+}
 
 function Legend(): any {
     const map = useMap();
@@ -176,12 +208,13 @@ export const MapComponent = () => {
     const handleMarkerClick = (marker: any) => {
         dispatch(addPlaceMarker(false))
         let url = `/home/groups/showplace/${groupid}${marker.name ? `/${marker.name}` : ''}`;
-        console.log(marker.type)
-        console.log(friendGroupId)
-        if (marker.type == "friend") {
+
+        if (marker.type === "friend") {
             url = `/home/friends/showplace/${friendUsername}/${friendGroupId}${marker.name ? `/${marker.name}` : ''}`;
         }
         navigate(url);
+
+
     };
 
     const [centerMarker, setCenterMarker] = useState(null);
@@ -195,6 +228,8 @@ export const MapComponent = () => {
 
     const CenterMapOnMarkerMemo = React.useMemo(() => React.memo(CenterMapOnMarker), [centerMarker]);
 
+
+
     return (
         <MapContainer center={BrusselsCenter} zoom={15} scrollWheelZoom={true} minZoom={3} maxZoom={18} >
             <TileLayer
@@ -203,14 +238,18 @@ export const MapComponent = () => {
             />
             <Legend />
             <RestrictMapMovement />
-            {centerMarker == null && <CenterMap />}
+            {centerMarker === null && <CenterMap />}
             {markers.map((marker) => (
                 <Marker position={marker.position} key={marker.name} icon={markerIcon(marker.iconUrl)} eventHandlers={{ click: () => handleMarkerClick(marker) }}>
-                    <Popup>{marker.name}</Popup>
+                    <Popup><>
+                        <h3 className='markerName'>{marker.name}</h3>
+                        {marker.imageUrl.length > 0 && <img src={marker.imageUrl} width="100" height="100" id={marker.name} key={marker.name} alt={marker.name} crossOrigin="anonymous"/>}
+                    </></Popup>
                 </Marker>
             ))}
             {centerMarker && <CenterMapOnMarkerMemo marker={centerMarker} />}
             <AddPlace showAdd={showAdd} />
+            <CleanMap myGroup={groupid} friendGroup={friendGroupId} />
         </MapContainer>
     );
 

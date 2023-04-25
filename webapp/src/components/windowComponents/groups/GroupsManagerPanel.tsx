@@ -67,7 +67,7 @@ export const GroupsManagerPanel = () => {
 
     return (
         <>
-            {op == "main" ?
+            {op === "main" ?
                 <>
                     <AddItem data-testid="addGroup" onClick={() => navigate("/home/groups/addgroup")}>
                         <ListItemIcon>
@@ -98,16 +98,16 @@ export const GroupsManagerPanel = () => {
                     </ScrollBox>
                 </>
                 :
-                (op == "addgroup" ?
+                (op === "addgroup" ?
                     <AddGroupForm refresh={() => setGroups(userGroups())} />
                     :
-                    (op == "addplace" ?
+                    (op === "addplace" ?
                         <AddPlaceForm refresh={() => setGroups(userGroups())} />
                         :
-                        (op == "showplace" ?
+                        (op === "showplace" ?
                             <ShowPlace />
                             :
-                            (op == "showgroup" ?
+                            (op === "showgroup" ?
                                 <ShowGroup refresh={() => setGroups(userGroups())} />
                                 :
                                 <ErrorPage></ErrorPage>

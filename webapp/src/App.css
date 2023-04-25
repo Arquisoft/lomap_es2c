@@ -70,6 +70,12 @@ body.swal2-shown > [aria-hidden="true"] {
 
 #homeA {
   color: black;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  padding: 0em;
+  text-decoration: underline;
 }
 
 #addPlaceDyn {
@@ -142,4 +148,35 @@ a {
 .Leyenda > h3 {
   text-align: center;
   margin-bottom: 0.2em;
+}
+
+.markerName {
+  color: #81c784;
+  text-align: center;
+}
+
+.cleanMap {
+  border-radius: 0.5em;
+  background-color: white;
+  padding: 0.5em 0.5em 0.5em;
+  font-family: "Calibri", "Gill Sans", "Gill Sans MT", "Trebuchet MS",
+    sans-serif;
+  font-size: 1em;
+  color: #39393a;
+}
+
+.cleanMap > button {
+  background-color: white !important;
+  color: #39393a;
+  font-size: 1em;
+  outline: none;
+  border: none;
+}
+
+.cleanMap > button > img {
+  margin-right: 0.5em;
+}
+
+.cleanMap > button:hover {
+  cursor: pointer;
 }

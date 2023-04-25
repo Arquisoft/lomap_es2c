@@ -16,7 +16,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
-import { Place, Comment, Group, MarkerData } from 'shared/shareddtypes';
+import { Place, Comment, Group, MarkerData, Image } from 'shared/shareddtypes';
 import { getUserInSesion } from 'api/api';
 import { añadirLugarAGrupo, mostrarGrupoPod, verMapaDe } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
@@ -26,14 +26,23 @@ import * as yup from "yup";
 import { useDispatch } from 'react-redux';
 import { useSession } from '@inrupt/solid-ui-react';
 import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
-import { StyledRating, customIcons } from '../StyledRating';
-import { IconContainerProps } from '@mui/material';
+import { IconContainer, StyledRating, customIcons } from '../StyledRating';
+import { IconButton } from '@mui/material';
+import { PhotoCamera } from '@mui/icons-material';
+import { cloudinaryURL, cloudinaryUploadFolder } from 'utils/cloudinary/apiKeyCloudinary';
+import Axios from 'axios';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
     fontSize: '1.3em',
     fontFamily: 'Calibri',
 });
+
+const ScrollBox = styled(Box)({
+    maxHeight: '60vh',
+    overflow: 'auto',
+    scrollbarColor: '#81c784 white'
+})
 
 const CSSButton = styled(Button)({
     backgroundColor: "white",
@@ -95,24 +104,11 @@ const LegendTypography = styled(Typography)({
 
 
 
-function IconContainer(props: IconContainerProps) {
-    const { value, ...other } = props;
-    return <span {...other}>{customIcons[value].icon}</span>;
-}
 
-export function RadioGroupRating() {
-    return (
-        <StyledRating
-            name="highlight-selected-only"
-            defaultValue={4}
-            IconContainerComponent={IconContainer}
-            getLabelText={(value: number) => customIcons[value].label}
-            highlightSelectedOnly
-        />
-    );
-}
+
 
 export default function AddPlaceForm(props: { refresh: any }) {
+
 
     const { session } = useSession();
     const { id, lat, lng } = useParams();
@@ -137,6 +133,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
     }, []);
     // ---- fin obtención del grupo
 
+    
     // Actualización de marcadores
     const actualizarMarcadores = () => {
         dispatch(clearMarkers());
@@ -154,8 +151,9 @@ export default function AddPlaceForm(props: { refresh: any }) {
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
                 name: place.nombre,
                 type: "mine",
-                iconUrl: "../markers/yellow-marker.png",
-                category: place.category
+                iconUrl: "../markers/myMarker.png",
+                category: place.category,
+                imageUrl: place.images[0]?.url
             })
         })
 
@@ -197,32 +195,62 @@ export default function AddPlaceForm(props: { refresh: any }) {
         }
     }, [lng, setValue]);
 
+    // Manejo de imágenes
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [fileName, setFileName] = useState("Selecciona una imagen")
+
+    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        setFileName(file.name)
+        setSelectedImage(file);
+    };
+
+    // ---- fin manejo imágenes
+
     const onSubmit = (data: any) => {
+        if (selectedImage !== null)
+        {
+           
+            const fd = new FormData();
+            fd.append("file", selectedImage)
+            fd.append("upload_preset", cloudinaryUploadFolder)
 
-        let comments: Comment[] = [{
-            comment: data.review,
-            date: new Date().getTime().toString(),
-            author: getUserInSesion().username
-        }]
+            Axios.post(cloudinaryURL, fd).then((res) => {
+                let urlImg = res.data.secure_url;
+                let comments: Comment[] = [{
+                    comment: data.review,
+                    date: new Date().getTime().toString(),
+                    author: getUserInSesion().webID
+                }]
 
-        let p: Place = {
-            nombre: data.placename,
-            category: category,
-            latitude: data.latitude as string,
-            longitude: data.longitude as string,
-            reviewScore: score.toString(),
-            description: "",
-            date: new Date().getTime().toString(),
-            comments,
-            images: [],
+                let images: Image[] = [{
+                    author: getUserInSesion().webID,
+                    url: urlImg
+                }]
+
+                let p: Place = {
+                    nombre: data.placename,
+                    category: category,
+                    latitude: data.latitude as string,
+                    longitude: data.longitude as string,
+                    reviewScore: score.toString(),
+                    description: "",
+                    date: new Date().getTime().toString(),
+                    comments,
+                    images,
+                }
+
+                mapM.añadirLugarAGrupo(p, group, session).then(() => {
+                    temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
+                    actualizarMarcadores();
+                    navigate("/home/groups/showgroup/" + group.name)
+                    props.refresh()
+                })
+            
+            });
         }
 
-        añadirLugarAGrupo(p, group, session).then(() => {
-            temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
-            actualizarMarcadores();
-            navigate("/home/groups/showgroup/" + group.name)
-            props.refresh()
-        })
+
     };
 
     const handleCategoryChange = (event: SelectChangeEvent) => {
@@ -243,15 +271,16 @@ export default function AddPlaceForm(props: { refresh: any }) {
         const number = /^[0-9.-]*$/;
         if (currentLength >= maxLength || (!number.test(keyValue) && !e.ctrlKey)
             || (keyValue === '-' && currentLength !== 0)
-            || keyValue === '.' && currentValue.includes('.')) {
+            || (keyValue === '.' && currentValue.includes('.'))) {
             e.preventDefault();
         }
     }
 
+
     // ---- fin manejo formulario
 
     return (
-        <>
+        <ScrollBox>
             <div>
                 <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
                     <Link underline="hover" color="inherit" onClick={() => { dispatch(addPlaceMarker(false)); navigate("/home/groups/main") }}>
@@ -373,6 +402,15 @@ export default function AddPlaceForm(props: { refresh: any }) {
                     />
                 </Box>
 
+                <IconButton color="primary" aria-label="upload picture" component="label">
+                    <PhotoCamera sx={{ mr: "0.8em" }} />
+                    <input id="uploadImage" name="uploadImage" accept="image/*" type="file"
+                        onChange={handleFileUpload} required />
+                    <p style={{ fontSize: "0.5em" }}>{fileName}</p>
+                </IconButton>
+
+
+
                 <CSSButton
                     sx={{ mt: "1.2em" }}
                     variant="contained"
@@ -384,6 +422,6 @@ export default function AddPlaceForm(props: { refresh: any }) {
                 </CSSButton>
 
             </Box>
-        </>
+        </ScrollBox>
     );
 }

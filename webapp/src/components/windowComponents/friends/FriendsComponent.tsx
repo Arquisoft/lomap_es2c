@@ -52,18 +52,18 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     }
 
     const handleClick = (item: number) => {
-        let c = open.charAt(item) == '0' ? '1' : '0';
+        let c = open.charAt(item) === '0' ? '1' : '0';
         let newOpen = ""
         for (let i = 0; i < open.length; i++) {
-            newOpen += (i == item ? c : open.charAt(i));
+            newOpen += (i === item ? c : open.charAt(i));
         }
         setOpen(newOpen)
     }
 
     const isOpen = (item: number) => {
         let c = open.charAt(item);
-        if (c != '0' && c != '1') return false;
-        return open.charAt(item) == '0' ? false : true;
+        if (c !== '0' && c !== '1') return false;
+        return open.charAt(item) === '0' ? false : true;
     }
 
     const deleteFriend = (friend: User) => {
@@ -129,7 +129,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                 name: place.nombre,
                 type: "friend",
                 iconUrl: "../markers/friendsMarker.png",
-                category: place.category
+                category: place.category,
+                imageUrl: place.images[0]?.url
             })
         })
 
@@ -139,7 +140,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     }
 
     props.friends.then((frds: Friend[]) => {
-        if (open.length != frds.length) setOpen(generateOpen(frds.length))
+        if (open.length !== frds.length) setOpen(generateOpen(frds.length))
         try {
             render(
                 <>

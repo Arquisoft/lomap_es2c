@@ -232,7 +232,7 @@ function LogedMenu() {
         if (hours >= 6 && hours < 8) return "Hasta luego, qué tenga usted un buen día";
         if (hours >= 8 && hours < 12) return "Le echaremos de menos, ojalá verle de vuelta";
         if (hours >= 12 && hours < 20) return "Adiós, o como dirían los italianos <em>chao</em>";
-        if (hours >= 20 || hours == 0) return "Buenas noches, que duerma usted bien";
+        if (hours >= 20 || hours === 0) return "Buenas noches, que duerma usted bien";
         if (hours >= 0 && hours < 6) return "¿Qué hacía todavía despierto? Buenas noches";
     }
 

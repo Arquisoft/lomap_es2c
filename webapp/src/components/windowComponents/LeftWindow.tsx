@@ -12,7 +12,6 @@ import GroupIcon from '@mui/icons-material/Group';
 import MapIcon from '@mui/icons-material/Map';
 import { useDispatch } from 'react-redux';
 import { addPlaceMarker } from 'utils/redux/action';
-import { useSession } from '@inrupt/solid-ui-react';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
@@ -38,10 +37,6 @@ const theme = createTheme({
         },
     }
 });
-type MarkerData = {
-    position: [number, number];
-    name: string;
-};
 
 export function LeftWindow() {
 

@@ -86,7 +86,7 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
     }
 
     props.friendRequests.then((frds: FriendRequest[]) => {
-        if (open.length != frds.length) setOpen(generateOpen(frds.length))
+        if (open.length !== frds.length) setOpen(generateOpen(frds.length))
         try {
             render(
                 <>

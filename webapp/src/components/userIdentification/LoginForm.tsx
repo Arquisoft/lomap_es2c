@@ -74,7 +74,7 @@ export function Login() {
 
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
-            if (userApi != null) {
+            if (userApi !== null) {
                 document.cookie = "notifications=; path=/"
                 navigate("/podlogin");
             }

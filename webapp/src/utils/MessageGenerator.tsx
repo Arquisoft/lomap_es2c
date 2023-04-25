@@ -6,7 +6,7 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { Box, Tooltip, styled } from "@mui/material";
 
 export function temporalSuccessMessage(text: String) {
-    if (readCookie("notifications") != "mute")
+    if (readCookie("notifications") !== "mute")
         Swal.fire({
             position: 'top',
             title: text,
@@ -44,7 +44,7 @@ const NotiBox = styled(Box)({
 
 export const NotificationManager = () => {
 
-    const [muted, setMuted] = useState(readCookie("notifications") == "mute")
+    const [muted, setMuted] = useState(readCookie("notifications") === "mute")
 
     function activeNotifications() {
         document.cookie = "notifications=; path=/"
@@ -71,7 +71,7 @@ export const NotificationManager = () => {
 }
 
 export function temporalInfoMessage(text: String) {
-    if (readCookie("notifications") != "mute")
+    if (readCookie("notifications") !== "mute")
         Swal.fire({
             position: 'top',
             title: text,
@@ -102,7 +102,7 @@ export function temporalInfoMessage(text: String) {
 }
 
 export function temporalErrorMessage(text: String) {
-    if (readCookie("notifications") != "mute")
+    if (readCookie("notifications") !== "mute")
         Swal.fire({
             position: 'top',
             title: text,
