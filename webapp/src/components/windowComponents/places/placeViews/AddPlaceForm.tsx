@@ -216,13 +216,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     const onSubmit = (data: any) => {
         if (selectedImage !== null)
         {
-            /*
-            const imageUrl = URL.createObjectURL(selectedImage);
-            console.log(imageUrl);
-            getCloudinaryImageUrl(imageUrl).then((url) =>  console.log(url.toString()))*/
            
-
-            // res.data.secure_url
             const fd = new FormData();
             fd.append("file", selectedImage)
             fd.append("upload_preset", cloudinaryUploadFolder)
