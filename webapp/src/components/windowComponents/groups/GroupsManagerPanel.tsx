@@ -16,6 +16,7 @@ import { Groups } from './GroupsComponent';
 import { MapManager } from 'podManager/MapManager';
 import ShowPlace from '../places/placeViews/ShowPlace';
 import { ShowGroup } from './groupViews/ShowGroup';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const BoxCircularProgress = styled(Box)({
     paddingTop: '7em',
@@ -39,7 +40,9 @@ const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
 
-export const GroupsManagerPanel = (props: { session: any }) => {
+export const GroupsManagerPanel = () => {
+
+    const { session } = useSession();
 
     const [loading, setLoading] = useState(true)
 
@@ -47,7 +50,7 @@ export const GroupsManagerPanel = (props: { session: any }) => {
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await new MapManager().verMapaDe(null, props.session).then(function (groups) {
+        await new MapManager().verMapaDe(null, session).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
@@ -64,6 +67,7 @@ export const GroupsManagerPanel = (props: { session: any }) => {
 
     return (
         <>
+            {console.log("GMP " + op)}
             {op == "main" ?
                 <>
                     <AddItem onClick={() => navigate("/home/groups/addgroup")}>
@@ -89,23 +93,23 @@ export const GroupsManagerPanel = (props: { session: any }) => {
                                 </BoxCircularProgress>
                             }
                             <Box ref={ref}>
-                                <Groups groups={groups} daddy={ref} session={props.session} stopLoading={() => setLoading(false)} refresh={() => setGroups(userGroups())} />
+                                <Groups groups={groups} daddy={ref} stopLoading={() => setLoading(false)} refresh={() => setGroups(userGroups())} />
                             </Box>
                         </List >
                     </ScrollBox>
                 </>
                 :
                 (op == "addgroup" ?
-                    <AddGroupForm session={props.session} refresh={() => setGroups(userGroups())} />
+                    <AddGroupForm refresh={() => setGroups(userGroups())} />
                     :
                     (op == "addplace" ?
-                        <AddPlaceForm session={props.session} refresh={() => setGroups(userGroups())} />
+                        <AddPlaceForm refresh={() => setGroups(userGroups())} />
                         :
                         (op == "showplace" ?
-                            <ShowPlace session={props.session} />
+                            <ShowPlace />
                             :
                             (op == "showgroup" ?
-                                <ShowGroup session={props.session} refresh={() => setGroups(userGroups())} />
+                                <ShowGroup refresh={() => setGroups(userGroups())} />
                                 :
                                 <ErrorPage></ErrorPage>
                             )
@@ -114,4 +118,54 @@ export const GroupsManagerPanel = (props: { session: any }) => {
                 )}
         </ >
     )
+
+    /*return (
+        <>
+            <Routes>
+                <Route path='/home/groups/main' element={
+                    <>
+                        <AddItem onClick={() => navigate("/home/groups/addgroup")}>
+                            <ListItemIcon>
+                                <AddIcon htmlColor='#81c784' />
+                            </ListItemIcon>
+                            <ListItemText primary="Añadir grupo" />
+                        </AddItem>
+                        <HorizontalDivider light color="#81c784" />
+                        <ScrollBox>
+                            <List
+                                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                                aria-labelledby="nested-list-subheader"
+                                subheader={
+                                    <ListSubheader component="div" id="nested-list-subheader">
+                                        Tus grupos de mapas
+                                    </ListSubheader>
+                                }
+                            >
+                                {loading &&
+                                    <BoxCircularProgress>
+                                        <CircularProgress size={100} color="primary" />
+                                    </BoxCircularProgress>
+                                }
+                                <Box ref={ref}>
+                                    <Groups groups={groups} daddy={ref} session={session} stopLoading={() => setLoading(false)} refresh={() => setGroups(userGroups())} />
+                                </Box>
+                            </List >
+                        </ScrollBox>
+                    </>
+                } />
+                <Route path='/home/groups/addgroup' element={
+                    <AddGroupForm session={session} refresh={() => setGroups(userGroups())} />
+                } />
+                <Route path='/home/groups/addplace' element={
+                    <AddPlaceForm session={session} refresh={() => setGroups(userGroups())} />
+                } />
+                <Route path='/home/groups/showplace' element={
+                    <ShowPlace session={session} />
+                } />
+                <Route path='/home/groups/showgroup' element={
+                    <ShowGroup session={session} refresh={() => setGroups(userGroups())} />
+                } />
+            </Routes>
+        </>
+    )*/
 }

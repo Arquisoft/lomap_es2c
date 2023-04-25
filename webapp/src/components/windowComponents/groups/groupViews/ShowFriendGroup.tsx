@@ -28,6 +28,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { CategoriesFilter } from '../filters/CategoriesFilter';
+import { useSession } from '@inrupt/solid-ui-react';
 import { useDispatch } from 'react-redux';
 import { clearFilterForFriendMarkers, setFilterForFriendMarkers } from 'utils/redux/action';
 import PlaceCategories from '../../places/PlaceCategories';
@@ -78,8 +79,9 @@ const CSSTypography = styled(Typography)({
     fontFamily: 'Calibri',
 });
 
-export const ShowFriendGroup = (props: { session: any }) => {
+export const ShowFriendGroup = () => {
 
+    const { session } = useSession();
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true)
@@ -89,7 +91,7 @@ export const ShowFriendGroup = (props: { session: any }) => {
     const userGroup = async (): Promise<Group> => {
         let group = null
         await searchUserByUsername(id).then(async (friend) => {
-            await new MapManager().verMapaDeAmigo(friend, props.session).then((groups) => {
+            await new MapManager().verMapaDeAmigo(friend, session).then((groups) => {
                 for (let i = 0; i < groups.length; i++) {
                     if (groups[i].name === lat) {
                         group = groups[i];
@@ -127,7 +129,7 @@ export const ShowFriendGroup = (props: { session: any }) => {
                 </BoxCircularProgress>
             }
             <Box ref={ref}>
-                <GroupDetails friend={id} session={props.session} daddy={ref} group={group} stopLoading={() => setLoading(false)} />
+                <GroupDetails friend={id} session={session} daddy={ref} group={group} stopLoading={() => setLoading(false)} />
             </Box>
         </>
     )

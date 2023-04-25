@@ -102,13 +102,10 @@ class PodManager {
 
             let groups = await this.getGroups(session);
 
-            groups.forEach((gr: Group) => {
-                console.log(gr)
-            })
 
             // Buscar el índice del grupo existente
             const groupIndex = groups.findIndex((oldGroup) => group.name == oldGroup.name);
-            console.log(groupIndex)
+
 
             if (groupIndex === -1) {
                 throw new Error(`No se encontró el grupo con el nombre ${group.name}`);
@@ -117,7 +114,6 @@ class PodManager {
             // Actualizar las propiedades del grupo existente
             groups[groupIndex] = group;
 
-            console.log(groups)
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
@@ -178,7 +174,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }
@@ -191,15 +186,10 @@ class PodManager {
 
             let groups = await this.getGroups(session);
 
-            groups.forEach((gr: Group) => {
-                console.log(gr)
-            })
-
-            console.log(group)
 
             groups = groups.filter((oldGroup) => group.name !== oldGroup.name);
 
-            console.log(groups)
+
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
@@ -260,7 +250,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }
@@ -332,7 +321,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }

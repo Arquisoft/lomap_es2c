@@ -7,11 +7,12 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Place, Comment, Group } from '../../../../shared/shareddtypes'
-import { MapManager } from 'podManager/MapManager';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
-import { searchUserByUsername } from 'api/api';
 import PlaceComponent from '../PlaceComponent';
+import { MapManager } from '../../../../podManager/MapManager';
+import { searchUserByUsername } from 'api/api';
+import { useSession } from '@inrupt/solid-ui-react';
 
 
 const BoxCircularProgress = styled(Box)({
@@ -22,7 +23,8 @@ const BoxCircularProgress = styled(Box)({
 })
 
 
-export default function ShowFriendPlace(props: { session: any }) {
+export default function ShowFriendPlace() {
+    const { session } = useSession();
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
@@ -32,7 +34,7 @@ export default function ShowFriendPlace(props: { session: any }) {
     const userGroups = async () => {
         let myGroups: Group[] = [];
         await searchUserByUsername(id).then(async (friend) => {
-            await new MapManager().verMapaDeAmigo(friend, props.session).then((groups) => {
+            await new MapManager().verMapaDeAmigo(friend, session).then((groups) => {
                 for (let i = 0; i < groups.length; i++) {
                     myGroups.push(groups[i]);
                 }
@@ -48,7 +50,7 @@ export default function ShowFriendPlace(props: { session: any }) {
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, props.session).find((p) => p.nombre == lng));
+            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre == lng));
             setLoading(false);
         })
     }
@@ -56,8 +58,6 @@ export default function ShowFriendPlace(props: { session: any }) {
     const [groups, setGroups] = useState<Promise<Group[]>>(userGroups)
     const [group, setGroup] = useState<Promise<Group>>(filterGroups(groups))
     const [podPlace, setPodPlace] = useState<Place>(null);
-
-
 
     const placeDoesntExist = () => {
         checkPlace(group)

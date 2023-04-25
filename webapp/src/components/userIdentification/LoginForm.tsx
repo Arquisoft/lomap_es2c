@@ -79,7 +79,6 @@ export function Login() {
                 navigate("/podlogin");
             }
         }).catch((err: any) => {
-            console.log(err)
             showError("Error al iniciar sesión", err.message, () => { });
         });
     }
@@ -99,7 +98,8 @@ export function Login() {
         <SForm>
 
             <CSSTypography variant="h4" align="center"
-                sx={{ mt: "0.5em" }}>
+                sx={{ mt: "0.5em" }}
+                data-testid="loginTitle">
                 Inicia sesión
             </CSSTypography>
 
@@ -110,6 +110,7 @@ export function Login() {
                     label="Nombre de usuario"
                     placeholder="Nombre de usuario"
                     fullWidth
+                    data-testid="nameInput"
                     {...register("username", { required: true, maxLength: 30 })}
                     helperText={errors.username ? 'Debe introducir un nombre de usuario válido' : ''}
 
@@ -121,6 +122,7 @@ export function Login() {
                     type="password"
                     autoComplete="current-password"
                     fullWidth
+                    data-testid="passwordInput"
                     {...register("password", { required: true, maxLength: 30 })}
                     helperText={errors.username ? 'Debe introducir una contraseña' : ''}
                 />
@@ -131,6 +133,7 @@ export function Login() {
                     type="submit"
                     size="large"
                     fullWidth
+                    data-testid="loginButton"
                 >
                     Iniciar sesión
                 </CSSButton>
@@ -143,12 +146,13 @@ export function Login() {
                     onClick={showSignup}
                     align="left"
                     underline="always"
+                    data-testid="goSignupButton"
                 >
                     Regístrate
                 </Link>
             </Typography>
 
-        </SForm>
+        </SForm >
         //#endregion
 
     );

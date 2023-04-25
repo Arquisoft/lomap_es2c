@@ -56,18 +56,15 @@ const biographyConstraints = yup
   .string()
   .max(100, "La biografía puede contener un máximo de 100 caracteres");
 
-export const signupValidationSchema = yup
-  .object({
-    username: usernameConstraints.required(
-      "Debe de introducir un nombre de usuario"
-    ),
-    password: passwordConstraints.required("Debe de introducir una contraseña"),
-  })
-  .required();
+
+export const signupValidationSchema = yup.object({
+    username: usernameConstraints.required("Debe de introducir un nombre de usuario"),
+    password: passwordConstraints.required("Debe de introducir una contraseña")
+}).required();
 
 export const editProfileValidation = yup.object({
-  username: usernameConstraints.notRequired(),
-  biography: biographyConstraints.notRequired(),
+    username: usernameConstraints.notRequired(),
+    biography: biographyConstraints.notRequired()
 });
 
 export const passwordValidation = yup
@@ -91,26 +88,15 @@ export const groupValidation = yup.object({
 
 // Place validations
 export const placeValidation = yup.object({
-  placename: yup
-    .string()
-    .matches(
-      /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/g,
-      "El nombre no puede contener caracteres especiales"
-    )
-    .min(3, "El nombre debe de tener entre 3 y 30 caracteres")
-    .max(30, "El nombre debe de tener entre 3 y 30 caracteres")
-    .required("Debes de introducir un nombre"),
-  longitude: yup
-    .number()
-    .min(-90, "La longitud debe estar comprendida entre -180 y 180")
-    .max(90, "La longitud debe estar entre -180 y 180")
-    .required("La longitud es un campo obligatorio"),
-  latitude: yup
-    .number()
-    .min(-90, "La latitud debe estar comprendida entre -90 y 90")
-    .max(90, "La latitud debe estar entre -90 y 90")
-    .required("La latitud es un campo obligatorio"),
-  review: yup
-    .string()
-    .max(150, "La longitud máxima permitida es de 150 caracteres"),
+    placename: yup.string().matches(/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/g, "El nombre no puede contener caracteres especiales")
+        .min(3, "El nombre debe de tener entre 3 y 30 caracteres")
+        .max(30, "El nombre debe de tener entre 3 y 30 caracteres")
+        .required("Debes de introducir un nombre"),
+    longitude: yup.number().min(-90, "La longitud debe estar comprendida entre -180 y 180")
+        .max(90, "La longitud debe estar entre -180 y 180")
+        .required("La longitud es un campo obligatorio"),
+    latitude: yup.number().min(-90, "La latitud debe estar comprendida entre -90 y 90")
+        .max(90, "La latitud debe estar entre -90 y 90")
+        .required("La latitud es un campo obligatorio"),
+    review: yup.string().max(150, "La longitud máxima permitida es de 150 caracteres"),
 });

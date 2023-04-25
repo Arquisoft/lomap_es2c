@@ -14,6 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Group } from 'shared/shareddtypes';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -66,8 +67,9 @@ const CSSTextField = styled(TextField)({
 
 
 
-export default function AddGroupForm(props: { session: any, refresh: any }) {
+export default function AddGroupForm(props: { refresh: any }) {
 
+    const { session } = useSession();
     const schema = fieldsValidation.groupValidation;
     type GroupSchema = yup.InferType<typeof schema>;
 
@@ -76,7 +78,7 @@ export default function AddGroupForm(props: { session: any, refresh: any }) {
     });
 
     const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
-        new MapManager().crearGrupo(data.groupName, props.session).then((grupo: Group) => {
+        new MapManager().crearGrupo(data.groupName, session).then((grupo: Group) => {
             navigate("/home/groups/main")
             props.refresh()
             temporalSuccessMessage("Grupo <em><b>" + grupo.name + "</b></em> creado correctamente. ¡A añadir lugares se ha dicho!");

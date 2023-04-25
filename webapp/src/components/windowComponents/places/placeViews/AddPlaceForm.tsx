@@ -24,6 +24,7 @@ import * as fieldsValidation from '../../../../utils/fieldsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
+import { useSession } from '@inrupt/solid-ui-react';
 import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { IconContainer, StyledRating, customIcons } from '../StyledRating';
 import { IconButton } from '@mui/material';
@@ -111,6 +112,21 @@ const LegendTypography = styled(Typography)({
 
 export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
+export function RadioGroupRating() {
+    return (
+        <StyledRating
+            name="highlight-selected-only"
+            defaultValue={4}
+            IconContainerComponent={IconContainer}
+            getLabelText={(value: number) => customIcons[value].label}
+            highlightSelectedOnly
+        />
+    );
+}
+
+export default function AddPlaceForm(props: { refresh: any }) {
+
+    const { session } = useSession();
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
     const dispatch = useDispatch();
@@ -120,7 +136,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     let mapM = new MapManager();
 
     const userGroups = async () => {
-        const groups = await mapM.verMapaDe(null, props.session);
+        const groups = await mapM.verMapaDe(null, session);
         return groups;
     };
 
@@ -146,7 +162,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
         dispatch(setGroupMarker(group.name as string))
 
-        const groupPlaces = new MapManager().mostrarGrupo(group, props.session);
+        const groupPlaces = new MapManager().mostrarGrupo(group, session);
 
         const groupMarkers: MarkerData[] = [];
 

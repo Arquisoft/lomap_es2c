@@ -10,8 +10,6 @@ import { Repository } from "../persistence/Repository";
 export interface FriendManager {
     listarAmigos: (user: User) => Promise<User[]>;
     enviarSolicitud: (de: User, a: User) => Promise<FriendRequest>;
-    aceptarSolicitud: (solicitud: FriendRequest) => Promise<FriendRequest>;
-    rechazarSolicitud: (solicitud: FriendRequest) => Promise<FriendRequest>;
     listarSolicitudes: (user: User) => Promise<FriendRequest[]>;
     actualizarSolicitud: (solicitud: FriendRequest, status: number) => Promise<FriendRequest>;
     eliminarAmigo: (user: User, friend: User) => Promise<Boolean>;
@@ -51,24 +49,28 @@ export class FriendManagerImpl implements FriendManager {
     }
 
     async enviarSolicitud(de: User, a: User): Promise<FriendRequest> {
+        let cond = await FriendshipSchema.exists({
+            sender: new String(de.username),
+            receiver: new String(a.username)
+        });
+        let cond2 = await FriendshipSchema.exists({
+            sender: new String(a.username),
+            receiver: new String(de.username)
+        });
+        if (cond || cond2) {
+            throw new Error("La solicitud de amistad ya existe")
+        }
         try {
-            let cond = await FriendshipSchema.exists({
-                sender: new String(de.username),
-                receiver: new String(a.username)
-            });
-            let cond2 = await FriendshipSchema.exists({
-                sender: new String(a.username),
-                receiver: new String(de.username)
-            });
-            if (cond != null || cond2 != null) {
-                throw new Error("La solicitud de amistad ya existe")
-            }
-            const userSchema = new FriendshipSchema({
+            let sender = await UserSchema.exists({ username: de.username })
+            let receiver = await UserSchema.exists({ username: a.username })
+
+            if (!sender || !receiver) throw new Error("Uno o ambos de los usuarios de la solicitud no existen.");
+            const friendShipSchema = new FriendshipSchema({
                 sender: new String(de.username),
                 receiver: new String(a.username),
                 status: FriendManagerImpl.pendiente
             });
-            await userSchema.save();
+            await friendShipSchema.save();
         }
         catch (e: any) {
             throw new Error("Fallo enviando la solicitud de amistad")
@@ -80,37 +82,19 @@ export class FriendManagerImpl implements FriendManager {
         solicitud.status = status;
         let resultado;
         try {
-            resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver, status: 0 }, { status: solicitud.status }) as FriendRequest;
+            resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: solicitud.status }) as FriendRequest;
         }
         catch (e: any) {
             throw new Error("Fallo actualizando la solicitud de amistad")
         }
+        if (resultado == null) throw new Error("No se ha encontrado la solicitud de amistad.")
         return resultado;
     }
 
-    async aceptarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        let resultado;
-        try {
-            resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.aceptado }) as FriendRequest;
-        }
-        catch (e: any) {
-            throw new Error("Fallo aceptando la solicitud de amistad")
-        }
-        return resultado;
-    }
-    async rechazarSolicitud(solicitud: FriendRequest): Promise<FriendRequest> {
-        let resultado;
-        try {
-            resultado = await FriendshipSchema.findOneAndUpdate({ sender: solicitud.sender, receiver: solicitud.receiver }, { status: FriendManagerImpl.rechazado }) as FriendRequest;
-        }
-        catch (e: any) {
-            throw new Error("Fallo rechazando la solicitud de amistad")
-        }
-        return resultado;
-
-    }
     async listarSolicitudes(user: User): Promise<FriendRequest[]> {
         let resultado;
+        let userExists = await UserSchema.exists({ username: user.username })
+        if (!userExists) throw new Error("El usuario no existe");
         try {
             resultado = await FriendshipSchema.find({ receiver: user.username, status: FriendManagerImpl.pendiente }) as FriendRequest[];
         }

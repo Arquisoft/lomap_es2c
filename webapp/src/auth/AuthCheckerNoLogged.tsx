@@ -5,7 +5,6 @@ import { User } from 'shared/shareddtypes';
 import { readCookie } from 'utils/CookieReader';
 
 export const AuthCheckerNoLogged = (props: { children: any }) => {
-
     if (readCookie("isPodLogged") != "true") {
         return props.children;
     } else {

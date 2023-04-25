@@ -21,6 +21,7 @@ import { showError } from 'utils/fieldsValidation';
 import { MapManager } from 'podManager/MapManager';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { ShowFriendGroup } from '../groups/groupViews/ShowFriendGroup';
+import { useSession } from '@inrupt/solid-ui-react';
 import ShowFriendPlace from '../places/placeViews/ShowFriendPlace';
 
 const ScrollBox = styled(Box)({
@@ -54,7 +55,9 @@ const BoxCircularProgress = styled(Box)({
     alignContent: 'center'
 })
 
-export const FriendManagerPanel = (props: { session: any }) => {
+export const FriendManagerPanel = () => {
+
+    const { session } = useSession();
 
     const [loading, setLoading] = useState(true)
 
@@ -74,7 +77,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
         await getMyFriends(user).then(async function (friends) {
             for (let i = 0; i < friends.length; i++) {
                 let friendGroups: Group[] = []
-                await new MapManager().verMapaDeAmigo(friends[i], props.session).then(function (groups) {
+                await new MapManager().verMapaDeAmigo(friends[i], session).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
                         friendGroups.push(groups[j]);
                 })
@@ -86,7 +89,6 @@ export const FriendManagerPanel = (props: { session: any }) => {
         }).catch((err: any) => {
             showError("Error al listar tus amigos.", err.message, Swal.close);
         });
-        console.log(myFriends)
         return myFriends;
     }
 
@@ -147,10 +149,10 @@ export const FriendManagerPanel = (props: { session: any }) => {
     return (
         <>
             {op == "showgroup" ?
-                <ShowFriendGroup session={props.session} />
+                <ShowFriendGroup />
                 :
                 (op == "showplace" ?
-                    <ShowFriendPlace session={props.session} />
+                    <ShowFriendPlace />
                     :
                     <>
                         <OptionsBox>
@@ -220,7 +222,7 @@ export const FriendManagerPanel = (props: { session: any }) => {
                                                 </BoxCircularProgress>
                                             }
                                             <Box ref={ref}>
-                                                <FriendRequestsComponent session={props.session} friendRequests={friendRequests} daddy={ref} stopLoading={() => setLoading(false)} refresh={() => setFriendRequests(userFriendRequests())} refreshFriends={() => setFriends(userFriends())} />
+                                                <FriendRequestsComponent friendRequests={friendRequests} daddy={ref} stopLoading={() => setLoading(false)} refresh={() => setFriendRequests(userFriendRequests())} refreshFriends={() => setFriends(userFriends())} />
                                             </Box>
                                         </List>
                                     </ScrollBox >

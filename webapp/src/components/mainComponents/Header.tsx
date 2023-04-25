@@ -7,11 +7,12 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import LogedMenu from '../profileMenus/LoggedMenu';
-import { NoLogedMenu } from '../profileMenus/NoLoggedMenu';
+import { NoLoggedMenu } from '../profileMenus/NoLoggedMenu';
 import { useNavigate } from 'react-router-dom';
 import { Divider } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { clearFriendsMarkers, clearMarkers } from 'utils/redux/action';
+import { getUserInSesion } from 'api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -67,7 +68,7 @@ export function Header(props: { logged: boolean }) {
     //#region METODOS DE CLASE
 
     const goHome = () => {
-        if (props.logged == true) {
+        if (props.logged == true && getUserInSesion() != null) {
             dispatch(clearMarkers());
             dispatch(clearFriendsMarkers());
             navigate("/home");
@@ -81,7 +82,7 @@ export function Header(props: { logged: boolean }) {
             return (<LogedMenu />)
         }
         else {
-            return (<NoLogedMenu />)
+            return (<NoLoggedMenu />)
         }
     }
 
@@ -96,6 +97,7 @@ export function Header(props: { logged: boolean }) {
                     <ButtonHOME
                         key={uuid()}
                         onClick={goHome}
+                        data-testid="goHomeButton"
                     >
                         <img data-testid="imgLogo" id="imgLogo" src="nobgLogo.png"></img>
                     </ButtonHOME>

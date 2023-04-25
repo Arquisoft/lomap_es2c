@@ -24,7 +24,7 @@ const MyMenu = styled(Menu)({
 })
 //#endregion
 
-export function NoLogedMenu() {
+export function NoLoggedMenu() {
 
     const navigate = useNavigate();
 
@@ -59,7 +59,7 @@ export function NoLogedMenu() {
         //#region COMPONENTE
         <BoxProfile>
             <Tooltip title="Open settings">
-                <IconButton onClick={openUserMenu} sx={{ padding: 0 }}>
+                <IconButton data-testid="noLoggedPopupButton" onClick={openUserMenu} sx={{ padding: 0 }}>
                     <Avatar data-testid="defaultImg" src="/broken-image.jpg" />
                 </IconButton>
             </Tooltip>
@@ -78,10 +78,10 @@ export function NoLogedMenu() {
                 open={Boolean(anchorElUser)}
                 onClose={closeUserMenu}
             >
-                <MenuItem key={uuid()} onClick={showSignUp}>
+                <MenuItem data-testid="signupButton" key={uuid()} onClick={showSignUp}>
                     Sing Up
                 </MenuItem>
-                <MenuItem key={uuid()} onClick={showLogin}>
+                <MenuItem data-testid="loginButton" key={uuid()} onClick={showLogin}>
                     Login
                 </MenuItem>
             </MyMenu>

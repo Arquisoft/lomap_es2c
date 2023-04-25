@@ -32,6 +32,7 @@ import PlaceCategories from '../../places/PlaceCategories';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearFilterForMyMarkers, setFilterForMyMarkers } from 'utils/redux/action';
 import { RootState } from 'utils/redux/store';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const ScrollBox = styled(Box)({
     maxHeight: '40vh',
@@ -78,7 +79,9 @@ const CSSTypography = styled(Typography)({
     fontFamily: 'Calibri',
 });
 
-export const ShowGroup = (props: { session: any, refresh: any }) => {
+export const ShowGroup = (props: { refresh: any }) => {
+
+    const { session } = useSession();
 
     const navigate = useNavigate();
 
@@ -86,7 +89,7 @@ export const ShowGroup = (props: { session: any, refresh: any }) => {
 
     const userGroup = async (): Promise<Group> => {
         let group = null
-        await new MapManager().verMapaDe(getUserInSesion(), props.session).then((groups) => {
+        await new MapManager().verMapaDe(getUserInSesion(), session).then((groups) => {
             for (let i = 0; i < groups.length; i++) {
                 console.log(groups[i])
                 if (groups[i].name === id) {
@@ -120,7 +123,7 @@ export const ShowGroup = (props: { session: any, refresh: any }) => {
             cancelButtonText: 'Volver'
         }).then((result) => {
             if (result.isConfirmed) {
-                new PodManager().deleteGroup(props.session, group).then(() => {
+                new PodManager().deleteGroup(session, group).then(() => {
                     navigate("/home/groups/main")
                     temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
                     props.refresh()
@@ -167,7 +170,7 @@ export const ShowGroup = (props: { session: any, refresh: any }) => {
                 </BoxCircularProgress>
             }
             <Box ref={ref}>
-                <GroupDetails session={props.session} daddy={ref} group={group} stopLoading={() => setLoading(false)} refresh={() => setGroup(userGroup())} />
+                <GroupDetails session={session} daddy={ref} group={group} stopLoading={() => setLoading(false)} refresh={() => setGroup(userGroup())} />
             </Box>
         </>
     )
