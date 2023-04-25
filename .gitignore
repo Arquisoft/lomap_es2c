@@ -31,3 +31,4 @@ docs/build
 
 #API Keys
 webapp/src/utils/cloudinary/apiKeyCloudinary.ts
+restapi/.env

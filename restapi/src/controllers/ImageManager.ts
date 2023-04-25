@@ -1,36 +1,28 @@
-const cloudinary = require('cloudinary').v2;
+require("dotenv").config();
+const cloudinary = require("cloudinary").v2;
+
 cloudinary.config({
-    cloud_name: "dlemjid7n",
-    api_key: "467962783828192",
-    api_secret: "b-xgn8LNDXiSUaT-iuX0IQZAZvQ"
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
 });
-module.exports={
 
- uploadImage : async (imagePath:string,name :string):Promise<string> => {
+export interface ImageManager {
+  uploadImage: (image: string) => Promise<string>;
+}
 
-    // Use the uploaded file's name as the asset's public ID and
-    // allow overwriting the asset with new versions
-    const options = {
-        public_id:name,
-        unique_filename: false,
-        overwrite: true,
-    };
-
-    try {
-        // Upload the image
-        const result = await cloudinary.uploader.upload(imagePath, options);
-        console.log(result);
-        return result.public_id;
+export class ImageManagerImpl implements ImageManager {
+  async uploadImage(image: string): Promise<string> {
+    try
+    {
+      console.log(process.env.CLOUDINARY_CLOUD_NAME)
+      const result = await cloudinary.uploader.upload(image);
+      
+      console.log(result);
+      return result.secure_url;;
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
-},
-
- getImageURL:async (public_id:string,width:number,height:number):Promise<string>=>{
-    const url = cloudinary.url(public_id, {
-        width: width,
-        height: height,
-        Crop: 'fill'
-    });
-    return url;
-}}
+  }
+}

@@ -13,7 +13,9 @@ class PodManager {
 
     // podUrl must be correct for the moment
     async savePlace(session: Session, place: Place): Promise<void> {
-        try {
+        try
+        {
+            if(session.info.webId) {
             let url = session.info.webId.replace("card#me", "public") + "/places";
             let places = await this.getPlaces(session);
 
@@ -50,16 +52,18 @@ class PodManager {
                 url,
                 file,
                 { contentType: file.type, fetch: session.fetch }
-            );
+            );}
         } catch (error) {
             console.log(error);
         }
     }
 
     async getPlaces(session: Session): Promise<Place[]> {
-        let url = session.info.webId.replace("card#me", "public") + "/places"
 
-        try {
+        try
+        {
+            if (session.info.webId) {
+            let url = session.info.webId.replace("card#me", "public") + "/places"
             const file = await getFile(url, { fetch: session.fetch });
             const text = await file.text();
             const data = JSON.parse(text);
@@ -85,7 +89,7 @@ class PodManager {
             } else {
                 console.log("JSON-LD data is not of type 'Places'");
                 return [];
-            }
+            }}
         } catch (error) {
             console.log(error);
             return [];
@@ -94,7 +98,7 @@ class PodManager {
 
     async updateGroup(session: Session, group: Group): Promise<void> {
         try {
-            let url = session.info.webId.replace("profile/card#me", "lomap")
+            let url = session?.info.webId.replace("profile/card#me", "lomap")
 
             let groups = await this.getGroups(session);
 
@@ -183,7 +187,7 @@ class PodManager {
     async deleteGroup(session: Session, group: Group): Promise<void> {
         try {
             console.log(2)
-            let url = session.info.webId.replace("profile/card#me", "lomap")
+            let url = session?.info.webId.replace("profile/card#me", "lomap")
 
             let groups = await this.getGroups(session);
 
@@ -264,7 +268,7 @@ class PodManager {
 
     async saveGroup(session: Session, group: Group): Promise<void> {
         try {
-            let url = session.info.webId.replace("profile/card#me", "lomap")
+            let url = session?.info.webId.replace("profile/card#me", "lomap")
             let groups = await this.getGroups(session);
 
             groups.push(group);
@@ -335,7 +339,7 @@ class PodManager {
     }
 
     async getGroups(session: Session): Promise<Group[]> {
-        let url = session.info.webId.replace("profile/card#me", "lomap")
+        let url = session?.info.webId.replace("profile/card#me", "lomap")
 
         try {
             const file = await getFile(url, { fetch: session.fetch });

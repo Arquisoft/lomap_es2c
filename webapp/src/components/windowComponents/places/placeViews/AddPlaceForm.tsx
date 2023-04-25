@@ -17,7 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
 import { Place, Comment, Group, MarkerData, Image } from 'shared/shareddtypes';
-import { getUserInSesion } from 'api/api';
+import { getUserInSesion, getCloudinaryImageUrl } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import * as fieldsValidation from '../../../../utils/fieldsValidation';
@@ -26,10 +26,13 @@ import * as yup from "yup";
 import { useDispatch } from 'react-redux';
 import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { IconContainer, StyledRating, customIcons } from '../StyledRating';
-import Axios from "axios";
-import { cloudinaryUploadFolder, cloudinaryURL } from '../../../../utils/cloudinary/apiKeyCloudinary'
 import { IconButton } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
+import { cloudinaryURL, cloudinaryUploadFolder } from 'utils/cloudinary/apiKeyCloudinary';
+import Axios from 'axios';
+import { Cloudinary, CloudinaryImage, URLConfig } from '@cloudinary/url-gen';
+import { thumbnail } from '@cloudinary/url-gen/actions/resize';
+import { loadImage } from 'utils/cloudinary/cloudinaryUtils';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -103,6 +106,9 @@ const LegendTypography = styled(Typography)({
 
 
 
+
+
+
 export default function AddPlaceForm(props: { session: any, refresh: any }) {
 
     const { id, lat, lng } = useParams();
@@ -131,6 +137,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
     }, []);
     // ---- fin obtención del grupo
 
+    
     // Actualización de marcadores
     const actualizarMarcadores = () => {
         dispatch(clearMarkers());
@@ -148,7 +155,7 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
                 name: place.nombre,
                 type: "mine",
-                iconUrl: "../markers/yellow-marker.png",
+                iconUrl: "../markers/myMarker.png",
                 category: place.category,
                 imageUrl: place.images[0]?.url
             })
@@ -193,9 +200,29 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
         }
     }, [lng, setValue]);
 
+    // Manejo de imágenes
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [fileName, setFileName] = useState("Selecciona una imagen")
+
+    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        setFileName(file.name)
+        setSelectedImage(file);
+        console.log(file)
+    };
+
+    // ---- fin manejo imágenes
+
     const onSubmit = (data: any) => {
-        if (selectedImage !== null) {
-            // uploadImage();
+        if (selectedImage !== null)
+        {
+            /*
+            const imageUrl = URL.createObjectURL(selectedImage);
+            console.log(imageUrl);
+            getCloudinaryImageUrl(imageUrl).then((url) =>  console.log(url.toString()))*/
+           
+
+            // res.data.secure_url
             const fd = new FormData();
             fd.append("file", selectedImage)
             fd.append("upload_preset", cloudinaryUploadFolder)
@@ -231,8 +258,8 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
                     navigate("/home/groups/showgroup/" + group.name)
                     props.refresh()
                 })
-            })
-
+            
+            });
         }
 
 
@@ -260,31 +287,6 @@ export default function AddPlaceForm(props: { session: any, refresh: any }) {
             e.preventDefault();
         }
     }
-
-    // Manejo de imágenes
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [fileName, setFileName] = useState("Selecciona una imagen")
-
-    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        setFileName(file.name)
-        setSelectedImage(file);
-        console.log(file)
-    };
-
-    const uploadImage: any = () => {
-        const fd = new FormData();
-        fd.append("file", selectedImage)
-        fd.append("upload_preset", cloudinaryUploadFolder)
-
-        Axios.post(cloudinaryURL, fd).then((res) => {
-            let urlImg = res.data.secure_url;
-            setImageUrl(urlImg);
-            console.log(urlImg)
-        })
-    }
-
-    // ---- fin manejo imágenes
 
 
     // ---- fin manejo formulario

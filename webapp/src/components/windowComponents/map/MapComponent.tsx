@@ -29,6 +29,8 @@ const addMarkerIcon = new L.Icon({
     iconSize: [47, 47]
 });
 
+
+
 function CenterMap(): any {
     const map = useMap();
 

@@ -217,3 +217,29 @@ export async function deleteFriendApi(friend: User): Promise<FriendRequest> {
         default: throw new Error("Unexpected error");
     }
 }
+
+
+// IMAGES
+
+export async function getCloudinaryImageUrl(imageUrl: String): Promise<string> {
+   
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    
+    let response = await fetch(apiEndPoint + '/imagemanager/uploadimage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'imageUrl': imageUrl })
+    });
+
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: {
+            const secure_url  = await response.toString();
+            return secure_url;
+        }
+        default: throw new Error("Unexpected error. Failed to upload image");
+    }
+}
