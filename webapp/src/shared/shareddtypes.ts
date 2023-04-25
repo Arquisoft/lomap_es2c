@@ -12,20 +12,26 @@ export interface Group {
 }
 
 export interface Place {
-  latitude: string;
-  longitude: string;
-  nombre: string;
-  category: string;
-  description: string;
-  comments: Comment[];
-  reviewScore: string;
-  date: string;
+    latitude: string
+    longitude: string
+    nombre: string
+    category: string
+    description: string
+    comments: Comment[]
+    images: Image[]
+    reviewScore: string
+    date: string
 }
 
 export interface Comment {
   author: string;
   comment: string;
   date: string;
+}
+
+export interface Image {
+    author: string
+    url: string
 }
 
 export type User2 = {

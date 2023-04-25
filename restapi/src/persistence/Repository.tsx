@@ -28,8 +28,11 @@ export class Repository {
     static async findOneAndUpdate(user: User) {
 
         let resultado: User;
-
+        try{
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID, description: user.description, img: user.img }, { new: true });
+        }catch{
+            throw new Error("Error al conectarse con la base de datos.")
+        }
 
         return resultado
     }
