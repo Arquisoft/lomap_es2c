@@ -10,7 +10,7 @@ import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { editUserDetails, getUserInSesion, logout } from '../api/api';
 import { User } from 'shared/shareddtypes';
 import Swal from 'sweetalert2';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { readCookie } from 'utils/CookieReader';
 import solid, { Session } from 'solid-auth-client';
 
@@ -43,8 +43,8 @@ export default function HomeViewLogged() {
     const { welcome } = useParams();
     const { session } = useSession();
 
- 
-    
+
+
     if (session.info.webId) {
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
     }
@@ -107,7 +107,7 @@ export default function HomeViewLogged() {
         //#region COMPONENTE
         <MyContainer disableGutters maxWidth={false}>
             <MyPaper elevation={1}><Header logged={true} /></MyPaper>
-            <HomePage />
+            <Outlet />
             <MyPaper2 elevation={1}><Footer /></MyPaper2>
         </MyContainer>
         //#endregion

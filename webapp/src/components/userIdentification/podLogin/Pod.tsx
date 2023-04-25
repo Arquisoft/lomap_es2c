@@ -1,8 +1,6 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import SForm from '../SesionForm';
-import { SelectChangeEvent } from '@mui/material/Select';
 import GetProviders from './PodProviders';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -13,7 +11,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { logout } from '../../../api/api';
 import {
     LoginButton,
-    SessionProvider,
     useSession,
 } from "@inrupt/solid-ui-react";
 import { useNavigate } from 'react-router-dom';
@@ -50,7 +47,6 @@ const CSSTypography = styled(Typography)({
 export default function PodLogin() {
     const [provider, setProvider] = useState('');
     const [idp, setIdp] = useState("https://inrupt.net");
-    const { session } = useSession();
 
     const [providers, setProviders] = useState(GetProviders());
     const navigate = useNavigate();
@@ -58,12 +54,8 @@ export default function PodLogin() {
 
 
     const handleLogin = async () => {
-        handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {
-            console.log("REDIRECT")
-            console.log(s)
-        })
-        document.cookie = "isPodLogged=true; path=/"
-        document.cookie = "sameWebId=false; path=/"
+        handleIncomingRedirect({ restorePreviousSession: true }).then((s) => { console.log(s) })
+        document.cookie = "isPodLogged=true; path=/"; document.cookie = "sameWebId=false; path=/"
     };
 
     const handleError = async () => {
@@ -84,7 +76,11 @@ export default function PodLogin() {
                     options={providers}
                     getOptionLabel={(option) => option.name}
                     fullWidth
-                    onChange={(event, newValue) => { setProvider(newValue.name); setIdp(newValue.url) }}
+                    data-testid="providersCb"
+                    onChange={(event, newValue) => {
+                        setProvider(newValue.name);
+                        setIdp(newValue.url);
+                    }}
                     renderOption={(props, option) => (
                         <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                             <img

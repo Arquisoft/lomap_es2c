@@ -13,7 +13,6 @@ class PodManager {
 
     // podUrl must be correct for the moment
     async savePlace(session: Session, place: Place): Promise<void> {
-        console.log(session)
         try {
             let url = session.info.webId.replace("card#me", "public") + "/places";
             let places = await this.getPlaces(session);
@@ -52,7 +51,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Lugar añadido");
         } catch (error) {
             console.log(error);
         }
@@ -101,15 +99,10 @@ class PodManager {
 
             let groups = await this.getGroups(session);
 
-            groups.forEach((gr: Group) => {
-                console.log(gr)
-            })
-
-            console.log(group)
 
             // Buscar el índice del grupo existente
             const groupIndex = groups.findIndex((oldGroup) => group.name == oldGroup.name);
-            console.log(groupIndex)
+
 
             if (groupIndex === -1) {
                 throw new Error(`No se encontró el grupo con el nombre ${group.name}`);
@@ -118,7 +111,6 @@ class PodManager {
             // Actualizar las propiedades del grupo existente
             groups[groupIndex] = group;
 
-            console.log(groups)
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
@@ -179,7 +171,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }
@@ -192,15 +183,10 @@ class PodManager {
 
             let groups = await this.getGroups(session);
 
-            groups.forEach((gr: Group) => {
-                console.log(gr)
-            })
-
-            console.log(group)
 
             groups = groups.filter((oldGroup) => group.name !== oldGroup.name);
 
-            console.log(groups)
+
 
             let JSONLDgroup: JsonLdDocument = {
                 "@context": "https://schema.org",
@@ -261,7 +247,6 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }
@@ -334,15 +319,12 @@ class PodManager {
                 file,
                 { contentType: file.type, fetch: session.fetch }
             );
-            console.log("Grupo añadido");
         } catch (error) {
             console.log(error);
         }
     }
 
     async getGroups(session: Session): Promise<Group[]> {
-        console.log("MANAGER")
-        console.log(session)
         let url = session.info.webId.replace("profile/card#me", "lomap")
 
         try {
@@ -388,7 +370,7 @@ class PodManager {
     async addReadPermissionsToFriend(webId: string, friendWebId: string, session: Session): Promise<void> {
         // Obtener el SolidDataset y su ACL asociada, si está disponible
         const myDatasetWithAcl = await getSolidDatasetWithAcl(webId, { fetch: session.fetch });
-      
+
         // Obtener la ACL propia del SolidDataset, si está disponible,
         // o inicializar una nueva, si es posible:
         let resourceAcl: AclDataset;
@@ -409,15 +391,15 @@ class PodManager {
           resourceAcl = getResourceAcl(myDatasetWithAcl);
           console.log(resourceAcl)
         }
-      
+
         // Agregar permisos de lectura al amigo especificado en el recurso:
         const access: Access = { read: true, append: false, write: false, control: false };
         let updatedAcl = setAgentResourceAccess(resourceAcl, friendWebId, access);
         updatedAcl = setAgentDefaultAccess(updatedAcl, friendWebId, access);
-      
+
         // Guardar la ACL actualizada:
         await saveAclFor(myDatasetWithAcl, updatedAcl, { fetch: session.fetch });
-      }
+    }
 
     async getFriendsGroups(session: Session, url: string): Promise<Group[]> {
         url = url.replace("profile/card#me", "lomap")

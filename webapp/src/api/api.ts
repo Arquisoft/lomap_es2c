@@ -1,29 +1,8 @@
 import { readCookie } from 'utils/CookieReader';
 import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
 
-export async function addUser(user: User2): Promise<boolean> {
-    const apiEndPoint =
-        process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/users/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'name': user.name, 'email': user.email })
-    });
-    if (response.status === 200)
-        return true;
-    else
-        return false;
-}
-
-export async function getUsers(): Promise<User2[]> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/users/list');
-    //The objects returned by the api are directly convertible to User objects
-    return response.json()
-}
-
 export function getUserInSesion(): User {
-    return JSON.parse(readCookie("userInSession") ?? null) as User;
+    return readCookie("userInSession") !== "" ? JSON.parse(readCookie("userInSession")) : null as User;
 }
 
 export function logout() {
@@ -42,8 +21,15 @@ export async function signup(user: User): Promise<User> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'user': user })
     });
-    //The objects returned by the api are directly convertible to User objects
-    return response.json()
+
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return response.json();
+        default: throw new Error("Unexpected error");
+    }
 }
 
 export async function login(user: User): Promise<User> {
@@ -53,11 +39,12 @@ export async function login(user: User): Promise<User> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'user': user })
     });
-    //The objects returned by the api are directly convertible to User objects
+
     switch (response.status) {
-        case 404: throw new Error("La contraseña y usuario introducidos no coinciden.");
-        case 506: throw new Error("La contraseña y usuario introducidos no coinciden.");
-        case 507: throw new Error("La contraseña y usuario introducidos no coinciden.");
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
         case 200: return setSessionUser(response);
         default: throw new Error("Unexpected error");
     }
@@ -78,7 +65,14 @@ export async function editUserDetails(user: User): Promise<User> {
         body: JSON.stringify({ 'user': user })
     });
     //The objects returned by the api are directly convertible to User objects
-    return setSessionUser(response);
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return setSessionUser(response);
+        default: throw new Error("Unexpected error");
+    }
 }
 
 export async function getMyFriends(user: User): Promise<User[]> {
@@ -89,8 +83,15 @@ export async function getMyFriends(user: User): Promise<User[]> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'user': user })
     });
-    console.log("webapp" + await response)
-    return await response.json()
+
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return response.json();
+        default: throw new Error("Unexpected error");
+    }
 }
 
 export async function sendFriendRequest(user: User): Promise<String> {
@@ -101,7 +102,14 @@ export async function sendFriendRequest(user: User): Promise<String> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'receiver': user, 'sender': getUserInSesion() })
     });
-    return response.json()
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return response.json();
+        default: throw new Error("Unexpected error");
+    }
 }
 
 export async function searchUserByUsername(username: string): Promise<User> {
@@ -132,7 +140,14 @@ export async function updateRequest(req: FriendRequest, status: number) {
         body: JSON.stringify({ "friendrequest": req })
     });
     //The objects returned by the api are directly convertible to User objects
-    return response.json()
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return response.json();
+        default: throw new Error("Unexpected error");
+    }
 }
 
 export async function addGroup(group: Group): Promise<Group[]> {
@@ -142,7 +157,14 @@ export async function addGroup(group: Group): Promise<Group[]> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'group': group, "user": getUserInSesion() })
     });
-    return response.json()
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return response.json();
+        default: throw new Error("Unexpected error");
+    }
 }
 
 export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> {
@@ -152,7 +174,14 @@ export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'user': user })
     });
-    return response.json()
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return response.json();
+        default: throw new Error("Unexpected error");
+    }
 }
 
 export async function editPassword(oldpss: String, newpss: String): Promise<User> {
@@ -162,7 +191,14 @@ export async function editPassword(oldpss: String, newpss: String): Promise<User
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'oldpss': oldpss, 'newpss': newpss, 'user': getUserInSesion() })
     });
-    return response.json()
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return response.json();
+        default: throw new Error("Unexpected error");
+    }
 }
 
 export async function deleteFriendApi(friend: User): Promise<FriendRequest> {
@@ -172,5 +208,12 @@ export async function deleteFriendApi(friend: User): Promise<FriendRequest> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 'friend': friend, "user": getUserInSesion() })
     });
-    return response.json()
+    switch (response.status) {
+        case 404: {
+            let res = await response.json();
+            throw new Error(res.error);
+        }
+        case 200: return response.json();
+        default: throw new Error("Unexpected error");
+    }
 }

@@ -20,14 +20,7 @@ export class Repository {
     static async findOne(user: User) {
 
         let resultado: User;
-        //try {
         resultado = await UserSchema.findOne({ username: user.username } ?? null) as User;
-        //} catch {
-        //  return new UserImpl("bderror", "", "");
-        //}
-
-        if (resultado == null) { return new UserImpl("notfound", "", "") };
-
 
         return resultado
     }
@@ -41,8 +34,6 @@ export class Repository {
             throw new Error("Error al conectarse con la base de datos.")
         }
 
-        if (resultado == null) { throw new Error("Usuario no encontrado.") };
-
         return resultado
     }
 
@@ -52,7 +43,6 @@ export class Repository {
         let resultado: User;
 
         resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { password: user.password }, { new: true });
-
 
         return resultado
     }

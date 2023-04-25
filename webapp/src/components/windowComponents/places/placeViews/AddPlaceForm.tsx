@@ -1,12 +1,6 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Rating, { IconContainerProps } from '@mui/material/Rating';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -17,16 +11,23 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useEffect, useState } from 'react';
-import PlaceCategories from './PlaceCategories';
+import PlaceCategories from '../PlaceCategories';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
-import { Place, Comment, Group } from 'shared/shareddtypes';
-import { readCookie } from 'utils/CookieReader';
+import { Place, Comment, Group, MarkerData } from 'shared/shareddtypes';
 import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
+import * as fieldsValidation from '../../../../utils/fieldsValidation';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import { useDispatch } from 'react-redux';
+import { useSession } from '@inrupt/solid-ui-react';
+import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/redux/action';
+import { StyledRating, customIcons } from '../StyledRating';
+import { IconContainerProps } from '@mui/material';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -92,41 +93,6 @@ const LegendTypography = styled(Typography)({
     letterSpacing: '0.00938em',
 });
 
-const StyledRating = styled(Rating)(({ theme }) => ({
-    '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
-        color: theme.palette.action.disabled,
-    },
-}));
-
-const customIcons: {
-    [index: string]: {
-        icon: React.ReactElement;
-        label: string;
-    };
-} = {
-    1: {
-        icon: <SentimentVeryDissatisfiedIcon color="error" />,
-        label: 'Very Dissatisfied',
-    },
-    2: {
-        icon: <SentimentDissatisfiedIcon color="error" />,
-        label: 'Dissatisfied',
-    },
-    3: {
-        icon: <SentimentSatisfiedIcon color="warning" />,
-        label: 'Neutral',
-    },
-    4: {
-        icon: <SentimentSatisfiedAltIcon color="success" />,
-        label: 'Satisfied',
-    },
-    5: {
-        icon: <SentimentVerySatisfiedIcon color="success" />,
-        label: 'Very Satisfied',
-    },
-};
-
-
 
 
 function IconContainer(props: IconContainerProps) {
@@ -146,24 +112,22 @@ export function RadioGroupRating() {
     );
 }
 
-export default function AddPlaceForm(props: { session: any }) {
+export default function AddPlaceForm(props: { refresh: any }) {
+
+    const { session } = useSession();
     const { id, lat, lng } = useParams();
     const navigate = useNavigate()
-
-    const [category, setCategory] = useState('');
-    const [score, setScore] = useState(4);
+    const dispatch = useDispatch();
 
 
-
+    // Obtención del grupo al que se va a añadir el lugar
     let mapM = new MapManager();
 
-
     const userGroups = async () => {
-        const groups = await mapM.verMapaDe(null, props.session);
+        const groups = await mapM.verMapaDe(null, session);
         return groups;
     };
 
-    const [groups, setGroups] = useState<Group[]>([]);
     const [group, setGroup] = useState<Group>();
 
     const findGroup = async () => {
@@ -175,47 +139,99 @@ export default function AddPlaceForm(props: { session: any }) {
     useEffect(() => {
         findGroup();
     }, []);
+    // ---- fin obtención del grupo
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    // Actualización de marcadores
+    const actualizarMarcadores = () => {
+        dispatch(clearMarkers());
+
+        dispatch(addPlaceMarker(false));
+
+        dispatch(setGroupMarker(group.name as string))
+
+        const groupPlaces = new MapManager().mostrarGrupo(group, session);
+
+        const groupMarkers: MarkerData[] = [];
+
+        groupPlaces.forEach((place) => {
+            groupMarkers.push({
+                position: [parseFloat(place.latitude), parseFloat(place.longitude)],
+                name: place.nombre,
+                type: "mine",
+                iconUrl: "../markers/yellow-marker.png",
+                category: place.category
+            })
+        })
+
+        dispatch(addMarkers(groupMarkers));
+    }
+
+    // ---- fin actualización de marcadores
+
+
+    // Manejo del formulario
+    const [category, setCategory] = useState(null);
+    const [score, setScore] = useState(4);
+
+    const schema = fieldsValidation.placeValidation;
+    type PlaceShema = yup.InferType<typeof schema>;
+
+
+    const { register, control, setValue, handleSubmit, formState: { errors } } = useForm<PlaceShema>({
+        resolver: yupResolver(schema),
+        defaultValues: {
+            latitude: 0.0,
+            longitude: 0.0,
+        },
+    });
+
+    const handleSetValue = (field: any, value: any) => {
+        setValue(field, parseFloat(value));
+    };
+
+    useEffect(() => {
+        if (lat !== undefined) {
+            setValue('latitude', parseFloat(lat));
+        }
+    }, [lat, setValue]);
+
+    useEffect(() => {
+        if (lng !== undefined) {
+            setValue('longitude', parseFloat(lng));
+        }
+    }, [lng, setValue]);
+
     const onSubmit = (data: any) => {
-        console.log(data.longitude + "-" + lng)
-        console.log(data.latitude + "-" + lat)
-        let longitude = data.longitude == "" ? lng : data.longitude;
-        let latitude = data.latitude == "" ? lat : data.latitude;
+
         let comments: Comment[] = [{
             comment: data.review,
-            date: getDate(),
+            date: new Date().getTime().toString(),
             author: getUserInSesion().username
         }]
 
         let p: Place = {
             nombre: data.placename,
             category: category,
-            latitude: latitude as string,
-            longitude: longitude as string,
+            latitude: data.latitude as string,
+            longitude: data.longitude as string,
             reviewScore: score.toString(),
             description: "",
-            date: getDate(),
+            date: new Date().getTime().toString(),
             comments,
             images:[],
         }
 
-        mapM.añadirLugarAGrupo(p, group, props.session)
-        temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
-        navigate("/home/groups/main")
+        mapM.añadirLugarAGrupo(p, group, session).then(() => {
+            temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
+            actualizarMarcadores();
+            navigate("/home/groups/showgroup/" + group.name)
+            props.refresh()
+        })
     };
 
-    const getDate = (): string => {
-        const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        return `${day}/${month}/${year}`;
-    }
     const handleCategoryChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value as string);
     };
-
 
     const handleScoreChange = (event: any, value: number | null) => {
         if (value !== null) {
@@ -223,17 +239,31 @@ export default function AddPlaceForm(props: { session: any }) {
         }
     };
 
-    console.log(category)
-    console.log(score)
+    const handleOnKeyPress = (e: any) => {
+        const maxLength = e.target.maxLength;
+        const currentValue: string = e.target.value;
+        const currentLength = currentValue.length;
+        const keyValue = e.key;
+        const number = /^[0-9.-]*$/;
+        if (currentLength >= maxLength || (!number.test(keyValue) && !e.ctrlKey)
+            || (keyValue === '-' && currentLength !== 0)
+            || keyValue === '.' && currentValue.includes('.')) {
+            e.preventDefault();
+        }
+    }
+
+    // ---- fin manejo formulario
 
     return (
         <>
             <div>
                 <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
+                    <Link underline="hover" color="inherit" onClick={() => { dispatch(addPlaceMarker(false)); navigate("/home/groups/main") }}>
                         Mis grupos
                     </Link>
-                    <Typography color="inherit">{id}</Typography>
+                    <Link underline="hover" color="inherit" onClick={() => { dispatch(addPlaceMarker(false)); navigate("/home/groups/showgroup/" + id) }}>
+                        {id}
+                    </Link>
                     <Typography color="text.primary">Nuevo lugar</Typography>
                 </Breadcrumbs>
             </div>
@@ -250,14 +280,13 @@ export default function AddPlaceForm(props: { session: any }) {
                     placeholder="Nombre del lugar"
                     fullWidth
                     {...register("placename")}
-                    helperText={errors.placename ? 'Nombre inválido' : ''}
+                    helperText={errors.placename ? errors.placename.message : ''}
 
                 />
                 <FormControl sx={{ mb: '0.8em', maxHeight: "50em", overflow: "none" }} fullWidth>
                     <InputLabel htmlFor="grouped-select">Categoría</InputLabel>
                     <Select
-                        value={category}
-                        defaultValue=""
+                        value={category ?? ''}
                         placeholder='Categoría'
                         id="grouped-select"
                         label="Categoría"
@@ -277,22 +306,50 @@ export default function AddPlaceForm(props: { session: any }) {
                     </Select>
                 </FormControl>
                 <CoordinatesBox>
-                    <CSSTextField
-                        id="longitude-AP"
-                        label={lng ? ("Longitud: " + lng.toString().substring(0, 8)) : "Longitud"}
-                        placeholder="Longitud"
-                        disabled={lng ? true : false}
-                        {...register("longitude", { min: -180, max: 180 })}
-                        helperText={errors.longitude ? 'La coordenada de longitud no es válida' : ''}
+                    <Controller
+                        name="longitude"
+                        control={control}
+                        render={({ field }) => (
+                            <TextField
+                                {...field}
+                                label="Longitud"
+                                type="number"
+                                error={Boolean(errors.longitude)}
+                                helperText={errors.longitude?.message}
+                                inputProps={{
+                                    step: 0.000001,
+                                    min: -180,
+                                    max: 180,
+                                    maxLength: 11
+                                }}
+                                disabled={lng !== undefined ? true : false}
+                                onChange={(e) => handleSetValue(field.name, e.target.value)}
+                                onKeyPress={(e) => handleOnKeyPress(e)}
+                            />
+                        )}
                     />
 
-                    <CSSTextField
-                        id="latitude-AP"
-                        label={lat ? ("Latitud: " + lat.toString().substring(0, 9)) : "Latitud"}
-                        placeholder="Latitud"
-                        disabled={lat ? true : false}
-                        {...register("latitude", { min: -90, max: 90 })}
-                        helperText={errors.longitude ? 'La coordenada de latitud no es válida' : ''}
+                    <Controller
+                        name="latitude"
+                        control={control}
+                        render={({ field }) => (
+                            <TextField
+                                {...field}
+                                label="Latitud"
+                                type="number"
+                                error={Boolean(errors.latitude)}
+                                helperText={errors.latitude?.message}
+                                inputProps={{
+                                    step: 0.000001,
+                                    min: -90,
+                                    max: 90,
+                                    maxLength: 11
+                                }}
+                                disabled={lat !== undefined ? true : false}
+                                onChange={(e) => handleSetValue(field.name, e.target.value)}
+                                onKeyPress={(e) => handleOnKeyPress(e)}
+                            />
+                        )}
                     />
                 </CoordinatesBox>
 
@@ -301,10 +358,10 @@ export default function AddPlaceForm(props: { session: any }) {
                     <LegendTypography sx={{ mb: "0.3em" }}> Reseña: </LegendTypography>
 
                     <textarea
-                        id="review"
+                        id="review-AP"
                         placeholder="Reseña..."
                         style={{ width: '98.7%', height: '7vh', resize: 'none' }}
-                        {...register("review-AP", { required: true, maxLength: 150 })} />
+                        {...register("review")} />
 
                 </Box>
                 <Box sx={{ gridColumn: 3 }}>

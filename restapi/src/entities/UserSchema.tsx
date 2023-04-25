@@ -9,7 +9,7 @@ const userSchema = new Schema(
         },
         webID: {
             type: String,
-            required: true
+            required: false
         },
         password: {
             type: String,

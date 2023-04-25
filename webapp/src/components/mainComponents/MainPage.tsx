@@ -1,14 +1,11 @@
-import React from 'react'
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import { LeftWindow } from '../windowComponents/LeftWindow'
-import { MapComponent } from '../windowComponents/map/MapComponent';
-import { useSelector } from 'react-redux';
-import { RootState } from 'utils/redux/store';
-import { useParams } from 'react-router-dom';
+import { MapComponent } from 'components/windowComponents/map/MapComponent';
+import { Route, Routes, useParams } from 'react-router-dom';
 import { ErrorPage } from './ErrorPage';
-import { Session } from '@inrupt/solid-client-authn-browser';
 import { useSession } from '@inrupt/solid-ui-react';
+import { NoFound } from 'views/NoFound';
 
 const MapContainer = styled(Container)({
     display: 'flex',
@@ -22,24 +19,23 @@ const MapContainer = styled(Container)({
 export function MainPage() {
 
     const { mainop, op } = useParams()
-    const { session } = useSession();
-    console.log("MAIN PAGE")
-    console.log(session)
 
     return (
         <>
-            {mainop == "groups" || mainop == "friends"
-                || op == "addplace" || op == "addgroup"
-                || op == "requests" || op == "showplace"
-                || op == "main"
+            {console.log(mainop + "-" + op)}
+            {(mainop == "groups" || mainop == "friends")
+                && (op == "addplace" || op == "addgroup"
+                    || op == "requests" || op == "showplace"
+                    || op == "main" || op == "showgroup")
                 ?
                 <MapContainer disableGutters>
-                    <LeftWindow session={session} />
+                    <LeftWindow />
                     <MapComponent />
                 </MapContainer>
                 :
                 <ErrorPage />
             }
+
         </>
     )
 }

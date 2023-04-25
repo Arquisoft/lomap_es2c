@@ -1,4 +1,3 @@
-import React from 'react'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
@@ -6,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ImgCarrusel from './ImgCarrusel';
 import { getMyFriendRequests, getUserInSesion } from 'api/api';
-import { temporalInfoMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
+import { temporalErrorMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { User } from 'shared/shareddtypes';
+import { showError } from 'utils/fieldsValidation';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
@@ -65,7 +65,7 @@ const MainBox = styled(Box)({
 const ScrollBox = styled(Box)({
     maxHeight: '50vh',
     overflow: 'auto',
-    scrollbarColor: 'black white',
+    scrollbarColor: '#81c784 white',
     padding: '0em 0.9em 0em',
 })
 
@@ -117,7 +117,9 @@ export function HomePage() {
 
     const checkRequests = (user: User) => {
         getMyFriendRequests(user).then((reqs) => {
-            if (reqs.length > -1) temporalSuccessMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+            if (reqs.length > 0) temporalSuccessMessage("Tienes " + reqs.length + " solicitudes de amistad pendientes. ¡Echales un ojo!");
+        }).catch((err: any) => {
+            temporalErrorMessage("Error listando tus solicitudes de amistad. Algo va mal... Contacta con nosotros si sigue así.")
         })
     }
 
@@ -127,29 +129,28 @@ export function HomePage() {
         <MainBox>
             <HomeContainer>
                 <TextBox>
-                    <img src="../logoCompleto.png"></img>
+                    <img data-testid="mainPageLogo" src="../logoCompleto.png"></img>
                     <p>Bienvenido a LoMap, la aplicación que te permite organizar tu vida alrededor de los lugares que más te gustan.</p>
                     <p>En nuestra aplicación podrás guardar todos los lugares que te gustan, te relajan y te encanta visitar una y otra vez. ¿Acabas de comer en el restaurante nuevco de la ciudad?,
                         ¿descubriste un mirador al que necesitas ir con tu amor platónico?, ¿te has enamorado de la camarera de ese bar y necesitas volver?,
                         Añade todos los lugares que quieras en LoMap y organizalos en los grupos que prefieras para tener toda tu vida a un solo click.</p>
                     <p>Podrás añadir comentarios a cada lugar, fotos para recordar lo maravillosos que eran. Puedes añadir a tus amigos y compartir con ellos esos lugares
-                        a los que siempre se te olvida llevarles. No dudes, crea tu cuenta <a id="homeA" onClick={goSignup}>aquí</a> de forma gratuita y disfruta de nuestra aplicación.
+                        a los que siempre se te olvida llevarles. No dudes, crea tu cuenta <a id="homeA" data-testid="signupLink" onClick={goSignup}>aquí</a> de forma gratuita y disfruta de nuestra aplicación.
                     </p>
                 </TextBox>
                 <InfoBox>
-                    <TitleBox>
+                    <TitleBox data-testid="titleLoMap">
                         Descubre LoMap
                     </TitleBox>
-                    <ScrollBox>
+                    <ScrollBox data-testid="imgCarruselScroll">
                         <ImgCarrusel />
                     </ScrollBox>
-                    <GoButton onClick={() => goMain()}>
+                    <GoButton data-testid="mainButton" onClick={() => goMain()}>
                         ¡Adelante!
                     </GoButton>
                 </InfoBox>
             </HomeContainer >
         </MainBox>
         //#endregion
-
     )
 }

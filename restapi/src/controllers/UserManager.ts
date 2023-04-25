@@ -29,34 +29,24 @@ class UserManagerImpl implements UserManager {
     }
 
     async modificarContrasena(user: User, oldpsw: string, newpsw: string): Promise<User> {
-        const { uri, mongoose } = getBD();
-        try {
-            await mongoose.connect(uri);
-        } catch {
-            throw new Error("Error al conectarse con la base de datos.")
-        }
         let userBd
         try {
-
             userBd = await UserSchema.findOne({ username: user.username }, { _id: 0, __v: 0 }) as User;
         } catch {
-            throw new Error("Error al conectarse con la base de datos.")
+            throw new Error("Ha ocurrido un fallo interno.")
         }
-
-        if(userBd==null){
-            throw new Error("El usuario no se encuentra");
-        }
-
-
+        if (userBd == null) throw new Error("El usuario no existe.");
         if (await bcrypt.compare(oldpsw, userBd.password)) {
-            //console.log(await bcrypt.compare(oldpsw, userBd.password))
             userBd.password = await bcrypt.hash(newpsw, 10)
-            await repo.Repository.findOneAndUpdatePassword(userBd)
-
+            try {
+                await repo.Repository.findOneAndUpdatePassword(userBd)
+            } catch (e: any) {
+                throw new Error("Fallo actualizando la contraseña");
+            }
         } else {
             throw new Error("La contraseña antigua era incorrecta")
         }
-        //userBd.password=""
+        userBd.password = ""
         return userBd;
     }
 }
@@ -64,73 +54,30 @@ class UserManagerImpl implements UserManager {
 
 async function buscarUsuarioPorUsername(username: string) {
     let resultado: User;
-
     try {
-        resultado = await UserSchema.findOne({ username: username }, { _id: 0, __v: 0 })
+        resultado = await UserSchema.findOne({ username: username }, { _id: 0, __v: 0 }) as User;
     } catch {
-        throw new Error("Error al conectarse con la base de datos.")
+        throw new Error("Ha ocurrido un fallo interno.")
     }
-
     if (resultado == null) {
         throw new Error("El usuario no existe.")
     }
-    const resultado2 = resultado as User;
-    resultado2.password = "";
-    return resultado2;
+    resultado.password = "";
+    return resultado;
 
-}
-
-
-function getBD() {
-    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
-    const mongoose = require('mongoose');
-    mongoose.set('strictQuery', true);
-    return { uri, mongoose };
 }
 
 async function modificarUsuario(user: User) {
-
-    /*
-    console.log("Editar: " + JSON.stringify(user))
-    const { uri, mongoose } = getBD();
-    try {
-        await mongoose.connect(uri);
-    } catch {
-        return new UserImpl("bderror", "", "");
-    }
-    */
 
     let resultado: User;
     try {
         resultado = await repo.Repository.findOneAndUpdate(user)
     } catch (err) {
-
-        throw new Error(err.message);
+        throw new Error("Ha ocurrido un fallo interno.");
     }
-    /*
-    try {
-        resultado = await UserSchema.findOneAndUpdate({ username: user.username }, { webID: user.webID });
-    } catch {
-        return new UserImpl("bderror", "", "");
+    if (resultado == null) {
+        throw new Error("Usuario no encontrado.");
     }
-
-    mongoose.connection.close();
-    */
     resultado.password = "";
     return resultado;
-
 }
-/*
-prueba().catch(err => console.log(err));
-
-async function prueba() {
-
-    const u=modificarUsuario(new User("adrokoelloco","80","80","80"));
-    console.log((await u).webid);
-
-
-
-}*/
-
-//let a=new UserManagerImpl();
-//a.modificarContrasena(new UserImpl("security","","",""),"12345A...","hola").then(a=>console.log(a));

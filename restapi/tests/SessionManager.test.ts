@@ -1,8 +1,8 @@
-import {UserManager, UserManagerImpl} from '../src/controllers/UserManager';
+import { UserManager, UserManagerImpl } from '../src/controllers/UserManager';
 import { UserImpl } from '../src/entities/User';
 import User from "../src/entities/UserSchema";
-import {SesionManager} from "../src/facade";
-import {UserSesionManager} from "../src/controllers/SessionManager";
+import { SesionManager } from "../src/facade";
+import { UserSesionManager } from "../src/controllers/SessionManager";
 import mongoose from "mongoose";
 import request from "supertest";
 import UserSchema from "../src/entities/UserSchema";
@@ -22,47 +22,47 @@ describe('SessionManager', () => {
         // Limpiar cualquier estado después de cada prueba
     });
 
-    afterAll(()=>{
+    afterAll(() => {
         mongoose.connection.close()
     });
 
     describe('iniciarSesion', () => {
         it('deberia retornar el usuario si las credenciales son correctas', async () => {
-            const usuario=await sessionManager.iniciarSesion(new UserImpl("usertestn1", "usertestN1.", "", ""))
+            const usuario = await sessionManager.iniciarSesion(new UserImpl("usertestn1", "usertestN1.", "", ""))
             expect(usuario.webID).toBe("webIdPrueba1");
         });
         it('deberia lanzar un error si la contraseña es incorrecta', async () => {
 
-            let error=new Error("Error por defecto")
-            try{
+            let error = new Error("Error por defecto")
+            try {
                 await sessionManager.iniciarSesion(new UserImpl("usertestn1", "contrasenaincorrecta", "", ""))
-            }catch(err){
-                error=err;
+            } catch (err) {
+                error = err;
             }
-            expect(error.message).toBe("Contraseña incorrecta");
+            expect(error.message).toBe("Las credenciales no coinciden");
         });
         it('deberia lanzar un error si el usuario no existe', async () => {
 
-            let error=new Error("Error por defecto")
-            try{
+            let error = new Error("Error por defecto")
+            try {
                 await sessionManager.iniciarSesion(new UserImpl("usernotexists", "contrasenaincorrecta", "", ""))
-            }catch(err){
-                error=err;
+            } catch (err) {
+                error = err;
             }
-            expect(error.message).toBe("Usuario no encontrado");
+            expect(error.message).toBe("Las credenciales no coinciden");
         });
     });
 
 
     describe('registrarse', () => {
         it('deberia lanzar un error si el usuario ya existe', async () => {
-            let error=new Error("Error por defecto")
-            try{
+            let error = new Error("Error por defecto")
+            try {
                 await sessionManager.registrarse(new UserImpl("usertestn1", "", "", ""))
-            }catch(err){
-                error=err;
+            } catch (err) {
+                error = err;
             }
-            expect(error.message).toBe("Usuario ya existente");
+            expect(error.message).toBe("El nombre de usuario que intenta introducir no esta disponible.");
         });
         it('deberia registrarase correctamente', async () => {
             let user=new UserImpl("usertestsignup","1234","webIdPrueba","descripcionprueba","img")

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -9,13 +8,13 @@ import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import * as fieldsValidation from '../../../utils/fieldsValidation';
+import * as fieldsValidation from '../../../../utils/fieldsValidation';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Group } from 'shared/shareddtypes';
-import { Session } from '@inrupt/solid-client-authn-browser';
+import { useSession } from '@inrupt/solid-ui-react';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -68,8 +67,9 @@ const CSSTextField = styled(TextField)({
 
 
 
-export default function AddGroupForm(props: { session: any }) {
+export default function AddGroupForm(props: { refresh: any }) {
 
+    const { session } = useSession();
     const schema = fieldsValidation.groupValidation;
     type GroupSchema = yup.InferType<typeof schema>;
 
@@ -78,9 +78,12 @@ export default function AddGroupForm(props: { session: any }) {
     });
 
     const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
-        new MapManager().crearGrupo(data.groupName, props.session).then((grupo: Group) => {
+        new MapManager().crearGrupo(data.groupName, session).then((grupo: Group) => {
             navigate("/home/groups/main")
+            props.refresh()
             temporalSuccessMessage("Grupo <em><b>" + grupo.name + "</b></em> creado correctamente. ¡A añadir lugares se ha dicho!");
+        }).catch((e: any) => {
+            temporalSuccessMessage("Se ha creado todo correctamente en el POD. ¡A añadir grupos se ha dicho!");
         })
     }
 
