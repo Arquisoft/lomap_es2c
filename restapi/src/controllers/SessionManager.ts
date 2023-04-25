@@ -26,7 +26,7 @@ class UserSesionManager implements SesionManager {
             throw new Error("El nombre de usuario que intenta introducir no esta disponible.");
         }
         try {
-            repo.Repository.save(usuario, this.rondasDeEncriptacion)
+            await repo.Repository.save(usuario, this.rondasDeEncriptacion)
         } catch (e: any) {
             throw new Error("Ha sucedido un error al crear la cuenta, vuelva a intentarlo más tarde.");
         }
