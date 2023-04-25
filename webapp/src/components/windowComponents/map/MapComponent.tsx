@@ -221,7 +221,7 @@ export const MapComponent = () => {
 
     useEffect(() => {
         if (markers.length > 0) {
-            setCenterMarker(markers[0]);
+            setCenterMarker(markers[markers.length-1]);
         }
     }, [markers]);
 
@@ -243,7 +243,7 @@ export const MapComponent = () => {
                 <Marker position={marker.position} key={marker.name} icon={markerIcon(marker.iconUrl)} eventHandlers={{ click: () => handleMarkerClick(marker) }}>
                     <Popup><>
                         <h3 className='markerName'>{marker.name}</h3>
-                        {marker.imageUrl.length > 0 && <img src={marker.imageUrl} width="100" height="100" id={marker.name} key={marker.name} alt={marker.name} crossOrigin="anonymous"/>}
+                        {marker.imageUrl !== undefined && marker.imageUrl.length > 0 && <img src={marker.imageUrl} width="100" height="100" id={marker.name} key={marker.name} alt={marker.name} crossOrigin="anonymous"/>}
                     </></Popup>
                 </Marker>
             ))}
