@@ -55,7 +55,6 @@ api.post("/sesionmanager/login", async (req: Request, res: Response): Promise<Re
         userRes = await fac.FactoryLoMap.getSesionManager().iniciarSesion(user);
         return res.status(200).send(userRes);
     } catch (err: any) {
-        console.log(err)
         return res.status(404).send({ "error": err.message })
     }
 })
