@@ -133,7 +133,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
     }, []);
     // ---- fin obtención del grupo
 
-    
+
     // Actualización de marcadores
     const actualizarMarcadores = () => {
         dispatch(clearMarkers());
@@ -208,9 +208,8 @@ export default function AddPlaceForm(props: { refresh: any }) {
     // ---- fin manejo imágenes
 
     const onSubmit = (data: any) => {
-        if (selectedImage !== null)
-        {
-           
+        if (selectedImage !== null) {
+
             const fd = new FormData();
             fd.append("file", selectedImage)
             fd.append("upload_preset", cloudinaryUploadFolder)
@@ -240,13 +239,13 @@ export default function AddPlaceForm(props: { refresh: any }) {
                     images,
                 }
 
-                mapM.añadirLugarAGrupo(p, group, session).then(() => {
+                añadirLugarAGrupo(p, group, session).then(() => {
                     temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
                     actualizarMarcadores();
                     navigate("/home/groups/showgroup/" + group.name)
                     props.refresh()
                 })
-            
+
             });
         }
 

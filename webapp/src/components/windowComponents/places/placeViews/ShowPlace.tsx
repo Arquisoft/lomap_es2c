@@ -45,7 +45,7 @@ export default function ShowPlace() {
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre === lat));
+            setPodPlace(mostrarGrupoPod(g, session).find((p) => p.nombre === lat));
             setLoading(false);
         })
     }

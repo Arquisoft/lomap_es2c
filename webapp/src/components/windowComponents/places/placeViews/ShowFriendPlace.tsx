@@ -48,7 +48,7 @@ export default function ShowFriendPlace() {
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre === lng));
+            setPodPlace(mostrarGrupoPod(g, session).find((p) => p.nombre === lng));
             setLoading(false);
         })
     }

@@ -86,5 +86,3 @@ export async function añadirGrupo(grupo: Group, session: Session): Promise<Grou
 
     return grupos;
 }
-
-export { MapManager };
