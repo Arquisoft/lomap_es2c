@@ -22,7 +22,6 @@ export function MainPage() {
 
     return (
         <>
-            {console.log(mainop + "-" + op)}
             {(mainop == "groups" || mainop == "friends")
                 && (op == "addplace" || op == "addgroup"
                     || op == "requests" || op == "showplace"

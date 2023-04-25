@@ -9,11 +9,11 @@ import ListItemText from '@mui/material/ListItemText';
 import { Group } from '../../../shared/shareddtypes';
 import AddIcon from '@mui/icons-material/Add';
 import AddPlaceForm from '../places/placeViews/AddPlaceForm';
-import AddGroupForm from './groupViews/AddGroupForm';
+import { AddGroupForm } from './groupViews/AddGroupForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { Groups } from './GroupsComponent';
-import { MapManager } from 'podManager/MapManager';
+import { verMapaDe } from 'podManager/MapManager';
 import ShowPlace from '../places/placeViews/ShowPlace';
 import { ShowGroup } from './groupViews/ShowGroup';
 import { useSession } from '@inrupt/solid-ui-react';
@@ -50,7 +50,7 @@ export const GroupsManagerPanel = () => {
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await new MapManager().verMapaDe(null, session).then(function (groups) {
+        await verMapaDe(null, session).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
@@ -67,10 +67,9 @@ export const GroupsManagerPanel = () => {
 
     return (
         <>
-            {console.log("GMP " + op)}
             {op == "main" ?
                 <>
-                    <AddItem onClick={() => navigate("/home/groups/addgroup")}>
+                    <AddItem data-testid="addGroup" onClick={() => navigate("/home/groups/addgroup")}>
                         <ListItemIcon>
                             <AddIcon htmlColor='#81c784' />
                         </ListItemIcon>
@@ -118,54 +117,4 @@ export const GroupsManagerPanel = () => {
                 )}
         </ >
     )
-
-    /*return (
-        <>
-            <Routes>
-                <Route path='/home/groups/main' element={
-                    <>
-                        <AddItem onClick={() => navigate("/home/groups/addgroup")}>
-                            <ListItemIcon>
-                                <AddIcon htmlColor='#81c784' />
-                            </ListItemIcon>
-                            <ListItemText primary="Añadir grupo" />
-                        </AddItem>
-                        <HorizontalDivider light color="#81c784" />
-                        <ScrollBox>
-                            <List
-                                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                                aria-labelledby="nested-list-subheader"
-                                subheader={
-                                    <ListSubheader component="div" id="nested-list-subheader">
-                                        Tus grupos de mapas
-                                    </ListSubheader>
-                                }
-                            >
-                                {loading &&
-                                    <BoxCircularProgress>
-                                        <CircularProgress size={100} color="primary" />
-                                    </BoxCircularProgress>
-                                }
-                                <Box ref={ref}>
-                                    <Groups groups={groups} daddy={ref} session={session} stopLoading={() => setLoading(false)} refresh={() => setGroups(userGroups())} />
-                                </Box>
-                            </List >
-                        </ScrollBox>
-                    </>
-                } />
-                <Route path='/home/groups/addgroup' element={
-                    <AddGroupForm session={session} refresh={() => setGroups(userGroups())} />
-                } />
-                <Route path='/home/groups/addplace' element={
-                    <AddPlaceForm session={session} refresh={() => setGroups(userGroups())} />
-                } />
-                <Route path='/home/groups/showplace' element={
-                    <ShowPlace session={session} />
-                } />
-                <Route path='/home/groups/showgroup' element={
-                    <ShowGroup session={session} refresh={() => setGroups(userGroups())} />
-                } />
-            </Routes>
-        </>
-    )*/
 }

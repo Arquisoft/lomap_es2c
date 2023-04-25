@@ -10,7 +10,7 @@ import { Place, Comment, Group } from '../../../../shared/shareddtypes'
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import PlaceComponent from '../PlaceComponent';
-import { MapManager } from '../../../../podManager/MapManager';
+import { mostrarGrupoPod, verMapaDeAmigo } from '../../../../podManager/MapManager';
 import { searchUserByUsername } from 'api/api';
 import { useSession } from '@inrupt/solid-ui-react';
 
@@ -29,12 +29,10 @@ export default function ShowFriendPlace() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
 
-    let mapM = new MapManager();
-
     const userGroups = async () => {
         let myGroups: Group[] = [];
         await searchUserByUsername(id).then(async (friend) => {
-            await new MapManager().verMapaDeAmigo(friend, session).then((groups) => {
+            await verMapaDeAmigo(friend, session).then((groups) => {
                 for (let i = 0; i < groups.length; i++) {
                     myGroups.push(groups[i]);
                 }
@@ -50,7 +48,7 @@ export default function ShowFriendPlace() {
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre == lng));
+            setPodPlace(mostrarGrupoPod(g, session).find((p) => p.nombre == lng));
             setLoading(false);
         })
     }

@@ -18,7 +18,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
 import { Place, Comment, Group, MarkerData } from 'shared/shareddtypes';
 import { getUserInSesion } from 'api/api';
-import { MapManager } from 'podManager/MapManager';
+import { añadirLugarAGrupo, mostrarGrupoPod, verMapaDe } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import * as fieldsValidation from '../../../../utils/fieldsValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -119,12 +119,8 @@ export default function AddPlaceForm(props: { refresh: any }) {
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
-
-    // Obtención del grupo al que se va a añadir el lugar
-    let mapM = new MapManager();
-
     const userGroups = async () => {
-        const groups = await mapM.verMapaDe(null, session);
+        const groups = await verMapaDe(null, session);
         return groups;
     };
 
@@ -149,7 +145,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
 
         dispatch(setGroupMarker(group.name as string))
 
-        const groupPlaces = new MapManager().mostrarGrupo(group, session);
+        const groupPlaces = mostrarGrupoPod(group, session);
 
         const groupMarkers: MarkerData[] = [];
 
@@ -218,10 +214,10 @@ export default function AddPlaceForm(props: { refresh: any }) {
             description: "",
             date: new Date().getTime().toString(),
             comments,
-            images:[],
+            images: [],
         }
 
-        mapM.añadirLugarAGrupo(p, group, session).then(() => {
+        añadirLugarAGrupo(p, group, session).then(() => {
             temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
             actualizarMarcadores();
             navigate("/home/groups/showgroup/" + group.name)
@@ -368,6 +364,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
                     <LegendTypography sx={{ mt: "0.8em", mb: "0.3em" }}> Valoración: </LegendTypography>
                     <StyledRating
                         name="highlight-selected-only"
+                        data-testid="rating"
                         defaultValue={4}
                         IconContainerComponent={IconContainer}
                         getLabelText={(value: number) => customIcons[value].label}

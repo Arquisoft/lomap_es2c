@@ -18,7 +18,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import PodManager from '../../../../podManager/PodManager'
 import { Place } from '../../../../shared/shareddtypes'
-import { MapManager } from 'podManager/MapManager';
+import { verMapaDeAmigo } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';
 import AddIcon from '@mui/icons-material/Add';
@@ -91,7 +91,7 @@ export const ShowFriendGroup = () => {
     const userGroup = async (): Promise<Group> => {
         let group = null
         await searchUserByUsername(id).then(async (friend) => {
-            await new MapManager().verMapaDeAmigo(friend, session).then((groups) => {
+            await verMapaDeAmigo(friend, session).then((groups) => {
                 for (let i = 0; i < groups.length; i++) {
                     if (groups[i].name === lat) {
                         group = groups[i];

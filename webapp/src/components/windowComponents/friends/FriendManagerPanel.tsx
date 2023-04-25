@@ -18,7 +18,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import PodManager from 'podManager/PodManager';
 import { showError } from 'utils/fieldsValidation';
-import { MapManager } from 'podManager/MapManager';
+import { verMapaDeAmigo } from 'podManager/MapManager';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { ShowFriendGroup } from '../groups/groupViews/ShowFriendGroup';
 import { useSession } from '@inrupt/solid-ui-react';
@@ -77,7 +77,7 @@ export const FriendManagerPanel = () => {
         await getMyFriends(user).then(async function (friends) {
             for (let i = 0; i < friends.length; i++) {
                 let friendGroups: Group[] = []
-                await new MapManager().verMapaDeAmigo(friends[i], session).then(function (groups) {
+                await verMapaDeAmigo(friends[i], session).then(function (groups) {
                     for (let j = 0; j < groups.length; j++)
                         friendGroups.push(groups[j]);
                 })
