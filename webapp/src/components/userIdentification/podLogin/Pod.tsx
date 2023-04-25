@@ -47,7 +47,6 @@ const CSSTypography = styled(Typography)({
 export default function PodLogin() {
     const [provider, setProvider] = useState('');
     const [idp, setIdp] = useState("https://inrupt.net");
-    const { session } = useSession();
 
     const [providers, setProviders] = useState(GetProviders());
     const navigate = useNavigate();
@@ -55,12 +54,8 @@ export default function PodLogin() {
 
 
     const handleLogin = async () => {
-        handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {
-            console.log("REDIRECT")
-            console.log(s)
-        })
-        document.cookie = "isPodLogged=true; path=/"
-        document.cookie = "sameWebId=false; path=/"
+        handleIncomingRedirect({ restorePreviousSession: true }).then((s) => { console.log(s) })
+        document.cookie = "isPodLogged=true; path=/"; document.cookie = "sameWebId=false; path=/"
     };
 
     const handleError = async () => {
@@ -81,7 +76,11 @@ export default function PodLogin() {
                     options={providers}
                     getOptionLabel={(option) => option.name}
                     fullWidth
-                    onChange={(event, newValue) => { setProvider(newValue.name); setIdp(newValue.url) }}
+                    data-testid="providersCb"
+                    onChange={(event, newValue) => {
+                        setProvider(newValue.name);
+                        setIdp(newValue.url);
+                    }}
                     renderOption={(props, option) => (
                         <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                             <img
