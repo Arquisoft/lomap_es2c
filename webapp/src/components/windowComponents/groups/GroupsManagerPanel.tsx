@@ -68,7 +68,7 @@ export const GroupsManagerPanel = () => {
     return (
         <>
             {console.log("GMP " + op)}
-            {op == "main" ?
+            {op === "main" ?
                 <>
                     <AddItem onClick={() => navigate("/home/groups/addgroup")}>
                         <ListItemIcon>
@@ -99,16 +99,16 @@ export const GroupsManagerPanel = () => {
                     </ScrollBox>
                 </>
                 :
-                (op == "addgroup" ?
+                (op === "addgroup" ?
                     <AddGroupForm refresh={() => setGroups(userGroups())} />
                     :
-                    (op == "addplace" ?
+                    (op === "addplace" ?
                         <AddPlaceForm refresh={() => setGroups(userGroups())} />
                         :
-                        (op == "showplace" ?
+                        (op === "showplace" ?
                             <ShowPlace />
                             :
-                            (op == "showgroup" ?
+                            (op === "showgroup" ?
                                 <ShowGroup refresh={() => setGroups(userGroups())} />
                                 :
                                 <ErrorPage></ErrorPage>

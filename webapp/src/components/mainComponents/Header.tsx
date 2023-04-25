@@ -68,7 +68,7 @@ export function Header(props: { logged: boolean }) {
     //#region METODOS DE CLASE
 
     const goHome = () => {
-        if (props.logged === true && getUserInSesion() != null) {
+        if (props.logged === true && getUserInSesion() !== null) {
             dispatch(clearMarkers());
             dispatch(clearFriendsMarkers());
             navigate("/home");
@@ -99,7 +99,7 @@ export function Header(props: { logged: boolean }) {
                         onClick={goHome}
                         data-testid="goHomeButton"
                     >
-                        <img data-testid="imgLogo" id="imgLogo" src="nobgLogo.png"></img>
+                        <img data-testid="imgLogo" id="imgLogo" src="nobgLogo.png" alt="Logo de la aplicación"></img>
                     </ButtonHOME>
                     <VerticalDivider orientation='vertical' flexItem />
                     <BoxNAV>

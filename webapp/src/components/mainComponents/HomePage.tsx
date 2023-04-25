@@ -7,7 +7,6 @@ import ImgCarrusel from './ImgCarrusel';
 import { getMyFriendRequests, getUserInSesion } from 'api/api';
 import { temporalErrorMessage, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { User } from 'shared/shareddtypes';
-import { showError } from 'utils/fieldsValidation';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const HomeContainer = styled(Container)({
@@ -110,7 +109,7 @@ export function HomePage() {
 
     const goMain = () => {
         navigate("/home/groups/main")
-        if (getUserInSesion() != null) {
+        if (getUserInSesion() !== null) {
             checkRequests(getUserInSesion())
         }
     }
@@ -129,13 +128,13 @@ export function HomePage() {
         <MainBox>
             <HomeContainer>
                 <TextBox>
-                    <img data-testid="mainPageLogo" src="../logoCompleto.png"></img>
+                    <img data-testid="mainPageLogo" src="../logoCompleto.png" alt="Logo de la aplicación"></img>
                     <p>Bienvenido a LoMap, la aplicación que te permite organizar tu vida alrededor de los lugares que más te gustan.</p>
                     <p>En nuestra aplicación podrás guardar todos los lugares que te gustan, te relajan y te encanta visitar una y otra vez. ¿Acabas de comer en el restaurante nuevco de la ciudad?,
                         ¿descubriste un mirador al que necesitas ir con tu amor platónico?, ¿te has enamorado de la camarera de ese bar y necesitas volver?,
                         Añade todos los lugares que quieras en LoMap y organizalos en los grupos que prefieras para tener toda tu vida a un solo click.</p>
                     <p>Podrás añadir comentarios a cada lugar, fotos para recordar lo maravillosos que eran. Puedes añadir a tus amigos y compartir con ellos esos lugares
-                        a los que siempre se te olvida llevarles. No dudes, crea tu cuenta <a id="homeA" data-testid="signupLink" onClick={goSignup}>aquí</a> de forma gratuita y disfruta de nuestra aplicación.
+                        a los que siempre se te olvida llevarles. No dudes, crea tu cuenta <button id="homeA" data-testid="signupLink" onClick={goSignup}>aquí</button> de forma gratuita y disfruta de nuestra aplicación.
                     </p>
                 </TextBox>
                 <InfoBox>

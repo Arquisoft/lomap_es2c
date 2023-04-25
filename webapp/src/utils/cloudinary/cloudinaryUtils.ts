@@ -1,4 +1,4 @@
-import { CloudinaryImage, URLConfig, Cloudinary } from "@cloudinary/url-gen";
+import { CloudinaryImage, Cloudinary } from "@cloudinary/url-gen";
 import { thumbnail } from "@cloudinary/url-gen/actions/resize";
 
 export function loadImage(imageUrl: string): CloudinaryImage {

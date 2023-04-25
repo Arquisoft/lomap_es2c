@@ -16,7 +16,6 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
-import PodManager from 'podManager/PodManager';
 import { showError } from 'utils/fieldsValidation';
 import { MapManager } from 'podManager/MapManager';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
@@ -114,7 +113,7 @@ export const FriendManagerPanel = () => {
 
     const searchUser = (user: User) => {
         searchUserByUsername(user.username).then((res) => {
-            if (res != null && res.username != null)
+            if (res !== null && res.username !== null)
                 showAddFriendConfirm(res)
         }).catch((err: any) => {
             showError("Error al buscar el usuario " + user.username + ".", err.message, Swal.close);
@@ -148,23 +147,23 @@ export const FriendManagerPanel = () => {
 
     return (
         <>
-            {op == "showgroup" ?
+            {op === "showgroup" ?
                 <ShowFriendGroup />
                 :
-                (op == "showplace" ?
+                (op === "showplace" ?
                     <ShowFriendPlace />
                     :
                     <>
                         <OptionsBox>
                             <Tooltip title="Friends">
-                                <GroupIcon onClick={() => navigate("/home/friends/main")} htmlColor={op == "main" ? "#1f4a21" : "#81c784"} />
+                                <GroupIcon onClick={() => navigate("/home/friends/main")} htmlColor={op === "main" ? "#1f4a21" : "#81c784"} />
                             </Tooltip>
                             <Tooltip title="Friend requests">
-                                <NotificationsActiveIcon onClick={() => navigate("/home/friends/requests")} htmlColor={op == "requests" ? "#1f4a21" : "#81c784"} />
+                                <NotificationsActiveIcon onClick={() => navigate("/home/friends/requests")} htmlColor={op === "requests" ? "#1f4a21" : "#81c784"} />
                             </Tooltip>
                         </OptionsBox>
                         <HorizontalDivider light color="#81c784" />
-                        {op == "main" ?
+                        {op === "main" ?
                             <>
                                 <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
                                     <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
@@ -203,7 +202,7 @@ export const FriendManagerPanel = () => {
                                 </ScrollBox >
                             </>
                             :
-                            (op == "requests" ?
+                            (op === "requests" ?
                                 <>
                                     <ScrollBox>
                                         <List

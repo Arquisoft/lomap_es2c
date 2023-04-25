@@ -49,7 +49,7 @@ function CenterMap(): any {
 
 function CenterMapOnMarker(props: { marker: any }): any {
     const map = useMap();
-    if (props.marker != null) {
+    if (props.marker !== null) {
         let position = props.marker.position;
         map.flyTo(position, map.getZoom());
     }
@@ -209,7 +209,7 @@ export const MapComponent = () => {
         dispatch(addPlaceMarker(false))
         let url = `/home/groups/showplace/${groupid}${marker.name ? `/${marker.name}` : ''}`;
 
-        if (marker.type == "friend") {
+        if (marker.type === "friend") {
             url = `/home/friends/showplace/${friendUsername}/${friendGroupId}${marker.name ? `/${marker.name}` : ''}`;
         }
         navigate(url);
@@ -238,7 +238,7 @@ export const MapComponent = () => {
             />
             <Legend />
             <RestrictMapMovement />
-            {centerMarker == null && <CenterMap />}
+            {centerMarker === null && <CenterMap />}
             {markers.map((marker) => (
                 <Marker position={marker.position} key={marker.name} icon={markerIcon(marker.iconUrl)} eventHandlers={{ click: () => handleMarkerClick(marker) }}>
                     <Popup><>

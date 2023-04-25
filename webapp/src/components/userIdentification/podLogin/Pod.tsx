@@ -9,10 +9,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import { logout } from '../../../api/api';
-import {
-    LoginButton,
-    useSession,
-} from "@inrupt/solid-ui-react";
+import { LoginButton } from "@inrupt/solid-ui-react";
 import { useNavigate } from 'react-router-dom';
 import { handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
 

@@ -1,5 +1,5 @@
 import { readCookie } from 'utils/CookieReader';
-import { FriendRequest, Group, SesionManager, User, User2 } from '../shared/shareddtypes';
+import { FriendRequest, Group, User } from '../shared/shareddtypes';
 
 export function getUserInSesion(): User {
     return readCookie("userInSession") !== "" ? JSON.parse(readCookie("userInSession")) : null as User;

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Divider, Tooltip, Breadcrumbs, Typography, Collapse } from '@mui/material'
+import { Box, CircularProgress, Divider, Breadcrumbs, Typography, Collapse } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
@@ -13,16 +13,11 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
 import PlaceIcon from '@mui/icons-material/Place';
-import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
-import PodManager from '../../../../podManager/PodManager'
 import { Place } from '../../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
-import Swal from 'sweetalert2';
-import AddIcon from '@mui/icons-material/Add';
-import { getUserInSesion, searchUserByUsername } from 'api/api';
+import { searchUserByUsername } from 'api/api';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
@@ -176,7 +171,7 @@ const GroupDetails = (props: { friend: any, session: any, daddy: any, group: Pro
     props.group.then((grp) => {
         render(
             <>
-                {grp != null ?
+                {grp !== null ?
                     <>
                         <ScrollBox>
                             <FilterBox>
@@ -195,7 +190,7 @@ const GroupDetails = (props: { friend: any, session: any, daddy: any, group: Pro
                             </Collapse>
 
                             <List component="div" disablePadding>
-                                {grp.places.filter((place) => filters.length == 0 ? true : filterPlaces(place)).map((place, j) => {
+                                {grp.places.filter((place) => filters.length === 0 ? true : filterPlaces(place)).map((place, j) => {
                                     return (
                                         <React.Fragment key={j}>
                                             <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/home/friends/showplace/" + props.friend + "/" + grp.name + "/" + place.nombre)} >

@@ -2,10 +2,8 @@ import Container from '@mui/material/Container';
 import { styled } from '@mui/material/styles';
 import { LeftWindow } from '../windowComponents/LeftWindow'
 import { MapComponent } from 'components/windowComponents/map/MapComponent';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ErrorPage } from './ErrorPage';
-import { useSession } from '@inrupt/solid-ui-react';
-import { NoFound } from 'views/NoFound';
 
 const MapContainer = styled(Container)({
     display: 'flex',

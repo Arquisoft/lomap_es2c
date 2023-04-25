@@ -1,15 +1,13 @@
-import LoginView from './views/LoginView';
 import './App.css';
-import SignupView from './views/SignupView';
 import HomeView from './views/HomeView';
 import LoggedView from './views/LoggedView';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthChecker } from 'auth/AuthChecker';
 import { NoFound } from 'views/NoFound';
 import { AuthPodChecker } from 'auth/AuthPodChecker';
 import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
 import PodView from 'views/PodView';
-import { SessionProvider, useSession } from "@inrupt/solid-ui-react";
+import { SessionProvider } from "@inrupt/solid-ui-react";
 import { useState } from 'react';
 import { handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
 import { readCookie } from 'utils/CookieReader';
@@ -22,7 +20,7 @@ import { Login } from 'components/userIdentification/LoginForm';
 
 function App(): JSX.Element {
     const [session, setSession] = useState<any>(null)
-    if (readCookie("isPodLogged") == "true")
+    if (readCookie("isPodLogged") === "true")
         handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {
             if (s !== undefined) setSession(s)
         })

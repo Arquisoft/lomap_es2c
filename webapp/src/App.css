@@ -70,6 +70,12 @@ body.swal2-shown > [aria-hidden="true"] {
 
 #homeA {
   color: black;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  padding: 0em;
+  text-decoration: underline;
 }
 
 #addPlaceDyn {

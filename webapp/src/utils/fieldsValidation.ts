@@ -19,7 +19,7 @@ export function showError(
 // User validations
 
 export function checkPasswords(pass: String, confirmPass: String) {
-  if (pass == null ||  pass === undefined || pass.trim().length === 0)
+  if (pass === null ||  pass === undefined || pass.trim().length === 0)
     return false;
   return confirmPass === pass;
 }

@@ -1,11 +1,11 @@
 import { Box, CircularProgress, Divider, Tooltip, Breadcrumbs, Typography, Collapse } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Group, MarkerData } from '../../../../shared/shareddtypes';
+import { Group } from '../../../../shared/shareddtypes';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
@@ -29,9 +29,8 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { CategoriesFilter } from '../filters/CategoriesFilter';
 import PlaceCategories from '../../places/PlaceCategories';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { clearFilterForMyMarkers, setFilterForMyMarkers } from 'utils/redux/action';
-import { RootState } from 'utils/redux/store';
 import { useSession } from '@inrupt/solid-ui-react';
 
 const ScrollBox = styled(Box)({
@@ -216,7 +215,7 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
     props.group.then((grp) => {
         render(
             <>
-                {grp != null ?
+                {grp !== null ?
                     <>
                         <ScrollBox>
                             <FilterBox>
@@ -235,7 +234,7 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
                             </Collapse>
 
                             <List component="div" disablePadding>
-                                {grp.places.filter((place) => filters.length == 0 ? true : filterPlaces(place)).map((place, j) => {
+                                {grp.places.filter((place) => filters.length === 0 ? true : filterPlaces(place)).map((place, j) => {
                                     return (
                                         <React.Fragment key={j}>
                                             <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/home/groups/showplace/" + grp.name + "/" + place.nombre)} >

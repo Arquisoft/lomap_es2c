@@ -21,7 +21,7 @@ import { render } from 'react-dom';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import PodManager from '../../../podManager/PodManager'
 import { useDispatch } from 'react-redux';
-import { addMarkers, clearFilterForMyMarkers, clearMarkers, setFilterForMyMarkers, setGroupMarker } from 'utils/redux/action';
+import { addMarkers, clearFilterForMyMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
 import { Place, MarkerData } from '../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
@@ -88,18 +88,18 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, refresh: a
     }
 
     const handleClick = (item: number) => {
-        let c = open.charAt(item) == '0' ? '1' : '0';
+        let c = open.charAt(item) === '0' ? '1' : '0';
         let newOpen = ""
         for (let i = 0; i < open.length; i++) {
-            newOpen += (i == item ? c : open.charAt(i));
+            newOpen += (i === item ? c : open.charAt(i));
         }
         setOpen(newOpen)
     }
 
     const isOpen = (item: number) => {
         let c = open.charAt(item);
-        if (c != '0' && c != '1') return false;
-        return open.charAt(item) == '0' ? false : true;
+        if (c !== '0' && c !== '1') return false;
+        return open.charAt(item) === '0' ? false : true;
     }
 
 
@@ -148,7 +148,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, refresh: a
     }
 
     props.groups.then((grps: Group[]) => {
-        if (open.length != grps.length) setOpen(generateOpen(grps.length))
+        if (open.length !== grps.length) setOpen(generateOpen(grps.length))
         render(
             <>
                 {
