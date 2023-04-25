@@ -91,7 +91,6 @@ export const ShowGroup = (props: { refresh: any }) => {
         let group = null
         await new MapManager().verMapaDe(getUserInSesion(), session).then((groups) => {
             for (let i = 0; i < groups.length; i++) {
-                console.log(groups[i])
                 if (groups[i].name === id) {
                     group = groups[i];
                     break

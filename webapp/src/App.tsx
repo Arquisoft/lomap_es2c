@@ -6,23 +6,17 @@ import LoggedView from './views/LoggedView';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthChecker } from 'auth/AuthChecker';
 import { NoFound } from 'views/NoFound';
-import HomeViewLogged from 'views/HomeViewLogged';
 import { AuthPodChecker } from 'auth/AuthPodChecker';
 import { AuthCheckerNoLogged } from 'auth/AuthCheckerNoLogged';
 import PodView from 'views/PodView';
 import { SessionProvider, useSession } from "@inrupt/solid-ui-react";
-import { useEffect, useState } from 'react';
-import { Session, handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
+import { useState } from 'react';
+import { handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
 import { readCookie } from 'utils/CookieReader';
-import { parse, stringify } from 'flatted'
 import store from 'utils/redux/store';
 import { Provider } from 'react-redux';
 import { Signup } from 'components/userIdentification/SignupForm';
-import Pod from 'components/userIdentification/podLogin/Pod';
-import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { MainPage } from 'components/mainComponents/MainPage';
-import { Box } from '@mui/material';
-import { LeftWindow } from 'components/windowComponents/LeftWindow';
 import { HomePage } from 'components/mainComponents/HomePage';
 import { Login } from 'components/userIdentification/LoginForm';
 

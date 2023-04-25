@@ -1,11 +1,7 @@
 import { Session } from "@inrupt/solid-client-authn-browser";
-import { addStringNoLocale, addUrl, createAclFromFallbackAcl, saveAclFor, createSolidDataset, getFile, getJsonLdParser, getResourceAcl, getSolidDataset, getSolidDatasetWithAcl, getStringNoLocale, getThingAll, getUrl, getUrlAll, hasAccessibleAcl, hasFallbackAcl, hasResourceAcl, overwriteFile, setAgentDefaultAccess, setAgentResourceAccess, SolidDataset, Access, AclDataset, getThing, getIri } from "@inrupt/solid-client";
-import { setThing, createThing, Thing } from "@inrupt/solid-client";
-import { saveSolidDatasetAt } from "@inrupt/solid-client";
+import { createAclFromFallbackAcl, saveAclFor, getFile, getResourceAcl, getSolidDataset, getSolidDatasetWithAcl, hasAccessibleAcl, hasFallbackAcl, hasResourceAcl, overwriteFile, setAgentDefaultAccess, setAgentResourceAccess, Access, AclDataset, getThing, getIri } from "@inrupt/solid-client";
 import { Group, Place } from "shared/shareddtypes";
-import { JsonLdDocument, JsonLdProcessor } from 'jsonld';
-import { wait } from "@testing-library/user-event/dist/utils";
-import { url } from "inspector";
+import { JsonLdDocument } from 'jsonld';
 import { v4 as uuidv4 } from 'uuid';
 
 class PodManager {
@@ -97,83 +93,86 @@ class PodManager {
     }
 
     async updateGroup(session: Session, group: Group): Promise<void> {
-        try {
-            let url = session?.info.webId.replace("profile/card#me", "lomap")
+        try
+        {
+            if (session.info.webId)  {
+                let url = session?.info.webId.replace("profile/card#me", "lomap")
 
-            let groups = await this.getGroups(session);
-
-
-            // Buscar el índice del grupo existente
-            const groupIndex = groups.findIndex((oldGroup) => group.name == oldGroup.name);
+                let groups = await this.getGroups(session);
 
 
-            if (groupIndex === -1) {
-                throw new Error(`No se encontró el grupo con el nombre ${group.name}`);
-            }
-
-            // Actualizar las propiedades del grupo existente
-            groups[groupIndex] = group;
+                // Buscar el índice del grupo existente
+                const groupIndex = groups.findIndex((oldGroup) => group.name === oldGroup.name);
 
 
-            let JSONLDgroup: JsonLdDocument = {
-                "@context": "https://schema.org",
-                "@type": "Maps",
-                "maps": groups.map((group) => ({
-                    "@type": "Map",
-                    "identifier": uuidv4(),
-                    "name": group.name,
-                    "author": {
-                        "@type": "Person",
-                        "identifier": session.info.webId
-                    },
-                    "spatialCoverage": group.places.map((place) => ({
-                        "@type": "Place",
+                if (groupIndex === -1) {
+                    throw new Error(`No se encontró el grupo con el nombre ${group.name}`);
+                }
+
+                // Actualizar las propiedades del grupo existente
+                groups[groupIndex] = group;
+
+
+                let JSONLDgroup: JsonLdDocument = {
+                    "@context": "https://schema.org",
+                    "@type": "Maps",
+                    "maps": groups.map((group) => ({
+                        "@type": "Map",
                         "identifier": uuidv4(),
-                        "name": place.nombre,
+                        "name": group.name,
                         "author": {
                             "@type": "Person",
                             "identifier": session.info.webId
                         },
-                        "additionalType": place.category,
-                        "latitude": place.latitude,
-                        "longitude": place.longitude,
-                        "description": place.description,
-                        "review": place.comments.map((comment) => ({
-                            "@type": "Review",
+                        "spatialCoverage": group.places.map((place) => ({
+                            "@type": "Place",
+                            "identifier": uuidv4(),
+                            "name": place.nombre,
                             "author": {
                                 "@type": "Person",
-                                "identifier": comment.author
+                                "identifier": session.info.webId
                             },
-                            "reviewRating": {
-                                "@type": "Rating",
-                                "ratingValue": place.reviewScore
-                            },
-                            "datePublished": comment.date,
-                            "rewievBody": comment.comment
-                        })),
-                        "image": place.images.map((image) => ({
-                            "@type": "ImageObject",
-                            "author": {
-                                "@type": "Person",
-                                "identifier": image.author
-                            },
-                            "contentUrl": image.url
-                        })),
-                        "reviewScore": place.reviewScore,
-                        "date": place.date
-                    })
-                    )
-                }))
-            };
+                            "additionalType": place.category,
+                            "latitude": place.latitude,
+                            "longitude": place.longitude,
+                            "description": place.description,
+                            "review": place.comments.map((comment) => ({
+                                "@type": "Review",
+                                "author": {
+                                    "@type": "Person",
+                                    "identifier": comment.author
+                                },
+                                "reviewRating": {
+                                    "@type": "Rating",
+                                    "ratingValue": place.reviewScore
+                                },
+                                "datePublished": comment.date,
+                                "rewievBody": comment.comment
+                            })),
+                            "image": place.images.map((image) => ({
+                                "@type": "ImageObject",
+                                "author": {
+                                    "@type": "Person",
+                                    "identifier": image.author
+                                },
+                                "contentUrl": image.url
+                            })),
+                            "reviewScore": place.reviewScore,
+                            "date": place.date
+                        })
+                        )
+                    }))
+                };
 
-            let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
-            let file = new File([blob], group.name + ".jsonld", { type: blob.type });
+                let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
+                let file = new File([blob], group.name + ".jsonld", { type: blob.type });
 
-            await overwriteFile(
-                url,
-                file,
-                { contentType: file.type, fetch: session.fetch }
-            );
+                await overwriteFile(
+                    url,
+                    file,
+                    { contentType: file.type, fetch: session.fetch }
+                );
+            }
         } catch (error) {
             console.log(error);
         }
@@ -181,186 +180,200 @@ class PodManager {
 
     async deleteGroup(session: Session, group: Group): Promise<void> {
         try {
-            console.log(2)
-            let url = session?.info.webId.replace("profile/card#me", "lomap")
+           
+            if (session.info.webId) {
+                
+                let url = session?.info.webId.replace("profile/card#me", "lomap")
 
-            let groups = await this.getGroups(session);
-
-
-            groups = groups.filter((oldGroup) => group.name !== oldGroup.name);
-
+                let groups = await this.getGroups(session);
 
 
-            let JSONLDgroup: JsonLdDocument = {
-                "@context": "https://schema.org",
-                "@type": "Maps",
-                "maps": groups.map((group) => ({
-                    "@type": "Map",
-                    "identifier": uuidv4(),
-                    "name": group.name,
-                    "author": {
-                        "@type": "Person",
-                        "identifier": session.info.webId
-                    },
-                    "spatialCoverage": group.places.map((place) => ({
-                        "@type": "Place",
+                groups = groups.filter((oldGroup) => group.name !== oldGroup.name);
+
+
+
+                let JSONLDgroup: JsonLdDocument = {
+                    "@context": "https://schema.org",
+                    "@type": "Maps",
+                    "maps": groups.map((group) => ({
+                        "@type": "Map",
                         "identifier": uuidv4(),
-                        "name": place.nombre,
+                        "name": group.name,
                         "author": {
                             "@type": "Person",
                             "identifier": session.info.webId
                         },
-                        "additionalType": place.category,
-                        "latitude": place.latitude,
-                        "longitude": place.longitude,
-                        "description": place.description,
-                        "review": place.comments.map((comment) => ({
-                            "@type": "Review",
+                        "spatialCoverage": group.places.map((place) => ({
+                            "@type": "Place",
+                            "identifier": uuidv4(),
+                            "name": place.nombre,
                             "author": {
                                 "@type": "Person",
-                                "identifier": comment.author
+                                "identifier": session.info.webId
                             },
-                            "reviewRating": {
-                                "@type": "Rating",
-                                "ratingValue": place.reviewScore
-                            },
-                            "datePublished": comment.date,
-                            "rewievBody": comment.comment
-                        })),
-                        "image": place.images.map((image) => ({
-                            "@type": "ImageObject",
-                            "author": {
-                                "@type": "Person",
-                                "identifier": image.author
-                            },
-                            "contentUrl": image.url
-                        })),
-                        "reviewScore": place.reviewScore,
-                        "date": place.date
-                    })
-                    )
-                }))
-            };
+                            "additionalType": place.category,
+                            "latitude": place.latitude,
+                            "longitude": place.longitude,
+                            "description": place.description,
+                            "review": place.comments.map((comment) => ({
+                                "@type": "Review",
+                                "author": {
+                                    "@type": "Person",
+                                    "identifier": comment.author
+                                },
+                                "reviewRating": {
+                                    "@type": "Rating",
+                                    "ratingValue": place.reviewScore
+                                },
+                                "datePublished": comment.date,
+                                "rewievBody": comment.comment
+                            })),
+                            "image": place.images.map((image) => ({
+                                "@type": "ImageObject",
+                                "author": {
+                                    "@type": "Person",
+                                    "identifier": image.author
+                                },
+                                "contentUrl": image.url
+                            })),
+                            "reviewScore": place.reviewScore,
+                            "date": place.date
+                        })
+                        )
+                    }))
+                };
 
-            let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
-            let file = new File([blob], group.name + ".jsonld", { type: blob.type });
+                let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
+                let file = new File([blob], group.name + ".jsonld", { type: blob.type });
 
-            await overwriteFile(
-                url,
-                file,
-                { contentType: file.type, fetch: session.fetch }
-            );
+                await overwriteFile(
+                    url,
+                    file,
+                    { contentType: file.type, fetch: session.fetch }
+                );
+            }
         } catch (error) {
             console.log(error);
         }
     }
 
     async saveGroup(session: Session, group: Group): Promise<void> {
-        try {
-            let url = session?.info.webId.replace("profile/card#me", "lomap")
-            let groups = await this.getGroups(session);
+        try
+        {
+            if(session.info.webId)
+            {
+                let url = session?.info.webId.replace("profile/card#me", "lomap")
+                let groups = await this.getGroups(session);
 
-            groups.push(group);
+                groups.push(group);
 
-            let JSONLDgroup: JsonLdDocument = {
-                "@context": "https://schema.org",
-                "@type": "Maps",
-                "maps": groups.map((group) => ({
-                    "@type": "Map",
-                    "identifier": uuidv4(),
-                    "name": group.name,
-                    "author": {
-                        "@type": "Person",
-                        "identifier": session.info.webId
-                    },
-                    "spatialCoverage": group.places.map((place) => ({
-                        "@type": "Place",
+                let JSONLDgroup: JsonLdDocument = {
+                    "@context": "https://schema.org",
+                    "@type": "Maps",
+                    "maps": groups.map((group) => ({
+                        "@type": "Map",
                         "identifier": uuidv4(),
-                        "name": place.nombre,
+                        "name": group.name,
                         "author": {
                             "@type": "Person",
                             "identifier": session.info.webId
                         },
-                        "additionalType": place.category,
-                        "latitude": place.latitude,
-                        "longitude": place.longitude,
-                        "description": place.description,
-                        "review": place.comments.map((comment) => ({
-                            "@type": "Review",
+                        "spatialCoverage": group.places.map((place) => ({
+                            "@type": "Place",
+                            "identifier": uuidv4(),
+                            "name": place.nombre,
                             "author": {
                                 "@type": "Person",
-                                "identifier": comment.author
+                                "identifier": session.info.webId
                             },
-                            "reviewRating": {
-                                "@type": "Rating",
-                                "ratingValue": place.reviewScore
-                            },
-                            "datePublished": comment.date,
-                            "rewievBody": comment.comment
-                        })),
-                        "image": place.images.map((image) => ({
-                            "@type": "ImageObject",
-                            "author": {
-                                "@type": "Person",
-                                "identifier": image.author
-                            },
-                            "contentUrl": image.url
-                        })),
-                        "reviewScore": place.reviewScore,
-                        "date": place.date
-                    })
-                    )
-                }))
-            };
+                            "additionalType": place.category,
+                            "latitude": place.latitude,
+                            "longitude": place.longitude,
+                            "description": place.description,
+                            "review": place.comments.map((comment) => ({
+                                "@type": "Review",
+                                "author": {
+                                    "@type": "Person",
+                                    "identifier": comment.author
+                                },
+                                "reviewRating": {
+                                    "@type": "Rating",
+                                    "ratingValue": place.reviewScore
+                                },
+                                "datePublished": comment.date,
+                                "rewievBody": comment.comment
+                            })),
+                            "image": place.images.map((image) => ({
+                                "@type": "ImageObject",
+                                "author": {
+                                    "@type": "Person",
+                                    "identifier": image.author
+                                },
+                                "contentUrl": image.url
+                            })),
+                            "reviewScore": place.reviewScore,
+                            "date": place.date
+                        })
+                        )
+                    }))
+                };
 
-            let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
-            let file = new File([blob], group.name + ".jsonld", { type: blob.type });
+                let blob = new Blob([JSON.stringify(JSONLDgroup)], { type: "application/ld+json" });
+                let file = new File([blob], group.name + ".jsonld", { type: blob.type });
 
-            await overwriteFile(
-                url,
-                file,
-                { contentType: file.type, fetch: session.fetch }
-            );
+                await overwriteFile(
+                    url,
+                    file,
+                    { contentType: file.type, fetch: session.fetch }
+                    );
+            }
         } catch (error) {
             console.log(error);
         }
     }
 
     async getGroups(session: Session): Promise<Group[]> {
-        let url = session?.info.webId.replace("profile/card#me", "lomap")
+        
 
-        try {
-            const file = await getFile(url, { fetch: session.fetch });
-            const text = await file.text();
-            const data = JSON.parse(text);
+        try
+        {
+            if (session.info.webId)
+            {    let url = session?.info.webId.replace("profile/card#me", "lomap")
+                const file = await getFile(url, { fetch: session.fetch });
+                const text = await file.text();
+                const data = JSON.parse(text);
 
-            if (data["@type"] === "Maps") {
-                const groups = data.maps.map((map: any) => {
-                    return {
-                        name: map.name,
-                        places: map.spatialCoverage.map((place: any) => ({
-                            nombre: place.name,
-                            category: place.additionalType,
-                            longitude: place.longitude,
-                            latitude: place.latitude,
-                            description: place.description,
-                            comments: place.review.map((review: any) => ({
-                                author: review.author.identifier,
-                                comment: review.rewievBody,
-                                date: review.datePublished
-                            })),
-                            images: place.image.map((image: any) => ({
-                                author: image.author.identifier,
-                                url: image.contentUrl
-                              })),
-                            reviewScore: place.reviewScore,
-                            date: place.date
-                        }))
-                    };
-                });
-                return groups;
-            } else {
-                console.log("JSON-LD data is not of type 'Maps'");
+                if (data["@type"] === "Maps") {
+                    const groups = data.maps.map((map: any) => {
+                        return {
+                            name: map.name,
+                            places: map.spatialCoverage.map((place: any) => ({
+                                nombre: place.name,
+                                category: place.additionalType,
+                                longitude: place.longitude,
+                                latitude: place.latitude,
+                                description: place.description,
+                                comments: place.review.map((review: any) => ({
+                                    author: review.author.identifier,
+                                    comment: review.rewievBody,
+                                    date: review.datePublished
+                                })),
+                                images: place.image.map((image: any) => ({
+                                    author: image.author.identifier,
+                                    url: image.contentUrl
+                                })),
+                                reviewScore: place.reviewScore,
+                                date: place.date
+                            }))
+                        };
+                    });
+                    return groups;
+                } else {
+                    console.log("JSON-LD data is not of type 'Maps'");
+                    return [];
+                }
+            } else
+            {
                 return [];
             }
         } catch (error) {
@@ -404,9 +417,12 @@ class PodManager {
     }
 
     async getFriendsGroups(session: Session, url: string): Promise<Group[]> {
-        url = url.replace("profile/card#me", "lomap")
+       
+        try
+        {
+            if (session.info.webId)
+             {    url = url.replace("profile/card#me", "lomap")
 
-        try {
             const file = await getFile(url, { fetch: session.fetch });
             const text = await file.text();
             const data = JSON.parse(text);
@@ -439,7 +455,12 @@ class PodManager {
             } else {
                 console.log("JSON-LD data is not of type 'Maps'");
                 return [];
+                }
+            } else
+            {
+                return [];
             }
+            
         } catch (error) {
             console.log(error);
             return [];

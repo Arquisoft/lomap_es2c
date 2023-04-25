@@ -6,7 +6,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Place, Comment, Group } from '../../../../shared/shareddtypes'
+import { Place, Group } from '../../../../shared/shareddtypes'
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import PlaceComponent from '../PlaceComponent';
@@ -45,12 +45,12 @@ export default function ShowFriendPlace() {
     }
 
     const filterGroups = async (groups: Promise<Group[]>) => {
-        return (await groups).find((g) => g.name == lat)
+        return (await groups).find((g) => g.name === lat)
     }
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre == lng));
+            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre === lng));
             setLoading(false);
         })
     }

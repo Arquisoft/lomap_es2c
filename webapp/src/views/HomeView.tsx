@@ -4,7 +4,6 @@ import { Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
-import { HomePage } from '../components/mainComponents/HomePage';
 import { Outlet } from 'react-router-dom';
 
 //#region DEFINICION DE COMPONENTES STYLED

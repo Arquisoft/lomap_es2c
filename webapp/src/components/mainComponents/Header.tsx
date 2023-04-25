@@ -68,7 +68,7 @@ export function Header(props: { logged: boolean }) {
     //#region METODOS DE CLASE
 
     const goHome = () => {
-        if (props.logged == true && getUserInSesion() != null) {
+        if (props.logged === true && getUserInSesion() != null) {
             dispatch(clearMarkers());
             dispatch(clearFriendsMarkers());
             navigate("/home");

@@ -6,18 +6,12 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Place, Comment, Group } from '../../../../shared/shareddtypes'
+import { Place, Group } from '../../../../shared/shareddtypes'
 import { MapManager } from 'podManager/MapManager';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import PlaceComponent from '../PlaceComponent';
 import { useSession } from '@inrupt/solid-ui-react';
-
-const CSSTypography = styled(Typography)({
-    color: '#81c784',
-    fontSize: '1.3em',
-    fontFamily: 'Calibri',
-});
 
 
 const BoxCircularProgress = styled(Box)({
@@ -49,12 +43,12 @@ export default function ShowPlace() {
     }
 
     const filterGroups = async (groups: Promise<Group[]>) => {
-        return (await groups).find((g) => g.name == id)
+        return (await groups).find((g) => g.name === id)
     }
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre == lat));
+            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre === lat));
             setLoading(false);
         })
     }

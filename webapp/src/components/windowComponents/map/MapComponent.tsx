@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,10 +7,6 @@ import { RootState } from 'utils/redux/store';
 import { addPlaceMarker, clearFriendsMarkers, clearMarkers } from 'utils/redux/action';
 import React from 'react';
 import PlaceCategories from '../places/PlaceCategories';
-import { AdvancedImage } from '@cloudinary/react';
-import { Cloudinary, URLConfig } from "@cloudinary/url-gen";
-import { thumbnail } from '@cloudinary/url-gen/actions/resize';
-import { MarkerData } from 'shared/shareddtypes';
 
 const BrusselsCenter = {
     lat: 50.8504500,
@@ -212,8 +208,7 @@ export const MapComponent = () => {
     const handleMarkerClick = (marker: any) => {
         dispatch(addPlaceMarker(false))
         let url = `/home/groups/showplace/${groupid}${marker.name ? `/${marker.name}` : ''}`;
-        console.log(marker.type)
-        console.log(friendGroupId)
+
         if (marker.type == "friend") {
             url = `/home/friends/showplace/${friendUsername}/${friendGroupId}${marker.name ? `/${marker.name}` : ''}`;
         }

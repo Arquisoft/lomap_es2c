@@ -1,7 +1,6 @@
 import { Session } from "@inrupt/solid-client-authn-browser/dist/Session";
 import PodManager from "./PodManager";
 import { Group, Place, User } from "shared/shareddtypes";
-export { MapManager };
 
 const sessionStorage = require('sessionstorage-for-nodejs')
 
@@ -94,3 +93,5 @@ class MapManager {
     }
 
 }
+
+export { MapManager };

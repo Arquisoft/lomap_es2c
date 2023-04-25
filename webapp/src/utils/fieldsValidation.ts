@@ -19,7 +19,7 @@ export function showError(
 // User validations
 
 export function checkPasswords(pass: String, confirmPass: String) {
-  if (pass == null || typeof pass == "undefined" || pass.trim().length == 0)
+  if (pass == null ||  pass === undefined || pass.trim().length === 0)
     return false;
   return confirmPass === pass;
 }
@@ -47,10 +47,6 @@ const passwordConstraints = yup
   .min(8, "La contraseña debe de tener una longitud mínima de 8 caracteres")
   .max(24, "La contraseña debe de tener una longitud máxima de 24 caracteres");
 
-const webIDConstraints = yup
-  .string()
-  .min(15, "Introduce un webID válido")
-  .matches(/^https:\/\/.*$/, "Introduce un webID válido");
 
 const biographyConstraints = yup
   .string()

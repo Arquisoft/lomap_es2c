@@ -17,7 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import FormControl from '@mui/material/FormControl';
 import { Place, Comment, Group, MarkerData, Image } from 'shared/shareddtypes';
-import { getUserInSesion, getCloudinaryImageUrl } from 'api/api';
+import { getUserInSesion } from 'api/api';
 import { MapManager } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import * as fieldsValidation from '../../../../utils/fieldsValidation';
@@ -31,9 +31,6 @@ import { IconButton } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import { cloudinaryURL, cloudinaryUploadFolder } from 'utils/cloudinary/apiKeyCloudinary';
 import Axios from 'axios';
-import { Cloudinary, CloudinaryImage, URLConfig } from '@cloudinary/url-gen';
-import { thumbnail } from '@cloudinary/url-gen/actions/resize';
-import { loadImage } from 'utils/cloudinary/cloudinaryUtils';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -110,21 +107,8 @@ const LegendTypography = styled(Typography)({
 
 
 
-export default function AddPlaceForm(props: { session: any, refresh: any }) {
-
-export function RadioGroupRating() {
-    return (
-        <StyledRating
-            name="highlight-selected-only"
-            defaultValue={4}
-            IconContainerComponent={IconContainer}
-            getLabelText={(value: number) => customIcons[value].label}
-            highlightSelectedOnly
-        />
-    );
-}
-
 export default function AddPlaceForm(props: { refresh: any }) {
+
 
     const { session } = useSession();
     const { id, lat, lng } = useParams();
@@ -186,7 +170,6 @@ export default function AddPlaceForm(props: { refresh: any }) {
     // Manejo del formulario
     const [category, setCategory] = useState(null);
     const [score, setScore] = useState(4);
-    const [imageUrl, setImageUrl] = useState("");
 
     const schema = fieldsValidation.placeValidation;
     type PlaceShema = yup.InferType<typeof schema>;
@@ -224,7 +207,6 @@ export default function AddPlaceForm(props: { refresh: any }) {
         const file = event.target.files?.[0];
         setFileName(file.name)
         setSelectedImage(file);
-        console.log(file)
     };
 
     // ---- fin manejo imágenes
@@ -262,7 +244,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
                     images,
                 }
 
-                mapM.añadirLugarAGrupo(p, group, props.session).then(() => {
+                mapM.añadirLugarAGrupo(p, group, session).then(() => {
                     temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
                     actualizarMarcadores();
                     navigate("/home/groups/showgroup/" + group.name)
@@ -293,7 +275,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
         const number = /^[0-9.-]*$/;
         if (currentLength >= maxLength || (!number.test(keyValue) && !e.ctrlKey)
             || (keyValue === '-' && currentLength !== 0)
-            || keyValue === '.' && currentValue.includes('.')) {
+            || (keyValue === '.' && currentValue.includes('.'))) {
             e.preventDefault();
         }
     }
