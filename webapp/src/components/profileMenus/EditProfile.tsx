@@ -110,17 +110,11 @@ export function EditProfile() {
 
     const onSubmit: SubmitHandler<EditSchema> = data => tryToEdit(data);
 
-    const [showPasswordFields, setShowPasswordFields] = useState(false);
-
-    const [confirmPass, setConfirmPass] = useState('')
-    
-    const [currentPassword, setCurrentPassword] = useState('')
-
     const [user, setUser] = useState(getUserInSesion())
 
 
     const showPassword = () => {
-        setShowPasswordFields(!showPasswordFields)
+        navigate("/home/edit/psw")
     }
 
     const goBack = () => {
@@ -130,66 +124,20 @@ export function EditProfile() {
         navigate(url)
     }
     
-    const editBiography = (biography: string):boolean => {
-        let biographyUpdated:boolean = false;
-        let editedUser = { username: user.username, webID: user.webID, password: user.password, description:biography, img: user.img }
+
+
+    const tryToEdit = (editions: EditSchema) => {
+
+        if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null)
+        {
+           let editedUser = { username: user.username, webID: user.webID, password: user.password, description:editions.biography, img: user.img }
             editUserDetails(editedUser).then(() => {
-                biographyUpdated = true;
+                temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
+                goBack();
             }).catch((e) => {
                 fieldsValidation.showError("No se ha podido actualizar el perfil.", e as string, () => {}); 
                 return false;
             })
-        return biographyUpdated;
-    }
-
-    const tryToEdit = (editions: EditSchema) => {
-        let biographyUpdated:boolean = false;
-        let passwordUpdated:boolean = false;
-
-        if (!showPasswordFields && editions.biography !== undefined && editions.biography !== '' && editions.biography !== null)
-        {
-            console.log("Ta pasando x aqui")
-           biographyUpdated = editBiography(editions.biography);
-        }
-
-        if (showPasswordFields && currentPassword !== undefined && currentPassword !== '' && currentPassword !== null){
-         if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null)
-        {
-            if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword))  {
-                editPassword(currentPassword, editions.newPassword).then(() => {
-                    passwordUpdated = true;
-                }).catch((e) => {
-                    fieldsValidation.showError("No se actualizó la contraseña", e as string, () => {});
-                })
-
-            } else
-            {
-                 fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", () => {});
-             }
-             
-             if (passwordUpdated && editions.biography !== undefined && editions.biography !== '' && editions.biography !== null)
-                {
-                biographyUpdated = editBiography(editions.biography);
-                }
-
-            }
-        } else
-        {
-             fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe introducir la contraseña actual", () => {});
-        }
-
-        if (biographyUpdated && !passwordUpdated)
-        {
-            temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
-        }
-        if (!biographyUpdated && passwordUpdated)
-        {
-            temporalSuccessMessage("Contraseña editada correctamente.")
-        }
-
-        if (biographyUpdated && passwordUpdated)
-        {
-            temporalSuccessMessage("Biografía y contraseña editadas correctamente.")
         }
     }
     
@@ -226,42 +174,6 @@ export function EditProfile() {
                <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
                 Actualizar contraseña
             </EditPasswordButton>
-
-                
-                
-                { showPasswordFields && <>
-                
-                 <CSSTextField sx={{ mt: "0.8em" }}
-                    id="oldPasswordEP"
-                    label="Contraseña actual"
-                    type="password"
-                    autoComplete="current-password"
-                    fullWidth
-                     onChange={(e: any) => setCurrentPassword(e.target.value)}
-                    />
-                    
-                    <CSSTextField sx={{ mt: "0.3em" }}
-                    id="passwordSU"
-                    label="Nueva contraseña"
-                    type="password"
-                    autoComplete="current-password"
-                    fullWidth
-                    {...register("newPassword")}
-
-                    helperText={errors.newPassword ? errors.newPassword.message : ''}
-                    />
-
-                <CSSTextField  sx={{ mt: "0.3em" }}
-                    id="confirmPasswordSU"
-                    label="Repite la nueva contraseña"
-                    type="password"
-                    fullWidth
-                    autoComplete="current-password"
-                    onChange={(e: any) => setConfirmPass(e.target.value)}
-                />
-
-                </> }
-                
         
              <CSSButton
                     sx={{ mt: "1.5em", mb: "2em" }}

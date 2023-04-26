@@ -74,6 +74,7 @@ function LogedMenu() {
             }).then((result) => {
                 if (result.isConfirmed) {
                     showEdit();
+                    closeUserMenu();
                 }
             })
         }
@@ -85,6 +86,7 @@ function LogedMenu() {
 
 
     async function showEdit() {
+        closeUserMenu();
         document.cookie = "lastPath=" + pathname +"; path=/";
         navigate("/home/edit");
     }

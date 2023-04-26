@@ -18,6 +18,7 @@ import { MainPage } from 'components/mainComponents/MainPage';
 import { HomePage } from 'components/mainComponents/HomePage';
 import { Login } from 'components/userIdentification/LoginForm';
 import { EditProfile } from 'components/profileMenus/EditProfile';
+import { EditPassword } from 'components/profileMenus/EditPassword';
 
 function App(): JSX.Element {
     const [session, setSession] = useState<any>(null)
@@ -37,7 +38,8 @@ function App(): JSX.Element {
                         </Route>
                         <Route path='/home' element={<AuthPodChecker><LoggedView /></AuthPodChecker>} >
                             <Route index path='/home/:welcome?' element={ <HomePage /> } />
-                             <Route path='/home/edit' element={<EditProfile />} />
+                            <Route path='/home/edit' element={ <EditProfile /> } />
+                            <Route path='/home/edit/psw' element={<EditPassword />} />
                             <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<MainPage />} />
                         </Route>
                         <Route path='/podlogin' element={<AuthChecker><PodView /></AuthChecker>} />

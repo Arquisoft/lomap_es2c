@@ -98,7 +98,7 @@ const LegendTypography = styled(Typography)({
 //#endregion
 
 
-export function EditProfile() {
+export function EditPassword() {
 
     const navigate = useNavigate();
 
@@ -120,7 +120,7 @@ export function EditProfile() {
 
     const goBack = () => {
         let url = readCookie("lastPath");
-        if (url === "/home/edit")
+        if (url === "/home/edit/psw")
             url = "/";
         navigate(url)
     }
