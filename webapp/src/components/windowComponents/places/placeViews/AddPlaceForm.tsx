@@ -340,7 +340,8 @@ export default function AddPlaceForm(props: { refresh: any }) {
                         id="grouped-select"
                         label="Categoría"
                         onChange={handleCategoryChange}
-                        MenuProps={MenuProps}
+                        MenuProps={ MenuProps }
+                        required
                     >
                         {PlaceCategories.map(({ name, categories }) => (
                             [

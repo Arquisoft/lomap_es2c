@@ -174,8 +174,15 @@ export const MapComponent = () => {
 
 
     function filterPlaces(place: any, filters: string[]) {
-        const placeCategory = PlaceCategories.find((pc) => pc.categories.includes(place.category));
-        let checkPlace = filters.includes(placeCategory?.name);
+        let checkPlace: boolean = false;
+        if (place.category === undefined || place.category === null)
+        {
+           checkPlace = filters.includes("Otro");
+        } else
+        {
+            const placeCategory = PlaceCategories.find((pc) => pc.categories.includes(place.category));
+            checkPlace = filters.includes(placeCategory?.name);
+        }
         return checkPlace;
     }
 
