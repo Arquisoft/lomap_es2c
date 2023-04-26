@@ -13,16 +13,16 @@ const categories: PlaceCategory[] = [
     },
     {
         name: "Servicios",
-        categories: ["Servicio médico", "Agencia", "Aparcamiento", "Banco", "Centro de estética",
-            "Gasolinera", "Peluquería", "Servicio de transporte", "Taller"]
+        categories: ["Servicio médico", "Aparcamiento", "Banco",
+            "Gasolinera", "Peluquería", "Servicio de transporte", "Estación de policía", "Institución pública"]
     },
     {
         name: "Alojamiento",
-        categories: ["Hotel", "Albergue", "Camping", "Motel"]
+        categories: ["Hotel", "Camping"]
     },
     {
         name: "Ocio y aire libre",
-        categories: ["Club deportivo", "Gimnansio", "Museo", "Biblioteca", "Monumento", "Parque temático", "Espacio natural"]
+        categories: ["Club de deportes", "Museo", "Biblioteca", "Monumento", "Parque temático", "Espacio natural"]
     },
     {
         name: "Religión",
@@ -37,8 +37,8 @@ const categories: PlaceCategory[] = [
         categories: ["Autoescuela", "Centro educativo", "Universidad"]
     },
     {
-        name: "Otro",
-        categories: ["Sin categoría"]
+        name: "¿No encuentras la categoría?",
+        categories: ["Otro"]
     },
 ];
 

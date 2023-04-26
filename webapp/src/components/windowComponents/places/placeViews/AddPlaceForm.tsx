@@ -41,13 +41,16 @@ const CSSTypography = styled(Typography)({
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
     overflow: 'auto',
-    scrollbarColor: '#81c784 white'
+    scrollbarColor: '#81c784 white',
+    overflowX: 'hidden',
+    scrollbarWidth: 'thin',
 })
 
 const CSSButton = styled(Button)({
     backgroundColor: "white",
     color: "#81c784",
     fontWeight: "bold",
+    width: "95%",
     '&:hover': {
         backgroundColor: '#1f4a21',
         color: 'white',
@@ -66,6 +69,7 @@ const CSSButton = styled(Button)({
 });
 const CSSTextField = styled(TextField)({
     marginBottom: '0.8em',
+    width:'95%',
     '& label.Mui-focused': {
         color: '#81c784',
     },
@@ -90,6 +94,8 @@ const CSSTextField = styled(TextField)({
 const CoordinatesBox = styled(Box)({
     display: 'flex',
     flexDirection: 'row',
+   // justifyContent: 'space-between',
+    width: '95%'
 })
 
 
@@ -103,7 +109,16 @@ const LegendTypography = styled(Typography)({
 });
 
 
-
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 200,
+    },
+  },
+};
 
 
 
@@ -197,15 +212,52 @@ export default function AddPlaceForm(props: { refresh: any }) {
 
     // Manejo de imágenes
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [fileName, setFileName] = useState("Selecciona una imagen")
+    const [fileName, setFileName] = useState("¡Sube una foto!")
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        setFileName(file.name)
+        if (file !== undefined )
+        {
+             setFileName(file.name)
         setSelectedImage(file);
+        }
+       
     };
 
     // ---- fin manejo imágenes
+
+    function addPlaceToGroup(data:any, urlImg: any) {
+        let comments: Comment[] = [{
+            comment: data.review,
+            date: new Date().getTime().toString(),
+            author: getUserInSesion().webID
+        }]
+
+        let images: Image[] = [{
+            author: getUserInSesion().webID,
+            url: urlImg
+        }]
+
+        let p: Place = {
+            nombre: data.placename,
+            category: category,
+            latitude: data.latitude as string,
+            longitude: data.longitude as string,
+            reviewScore: score.toString(),
+            description: "",
+            date: new Date().getTime().toString(),
+            comments,
+            images,
+        }
+
+        añadirLugarAGrupo(p, group, session).then(() => {
+            temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
+            actualizarMarcadores();
+            navigate("/home/groups/showgroup/" + group.name)
+            props.refresh()
+        })
+    
+    }
 
     const onSubmit = (data: any) => {
         if (selectedImage !== null) {
@@ -216,37 +268,12 @@ export default function AddPlaceForm(props: { refresh: any }) {
 
             Axios.post(cloudinaryURL, fd).then((res) => {
                 let urlImg = res.data.secure_url;
-                let comments: Comment[] = [{
-                    comment: data.review,
-                    date: new Date().getTime().toString(),
-                    author: getUserInSesion().webID
-                }]
-
-                let images: Image[] = [{
-                    author: getUserInSesion().webID,
-                    url: urlImg
-                }]
-
-                let p: Place = {
-                    nombre: data.placename,
-                    category: category,
-                    latitude: data.latitude as string,
-                    longitude: data.longitude as string,
-                    reviewScore: score.toString(),
-                    description: "",
-                    date: new Date().getTime().toString(),
-                    comments,
-                    images,
-                }
-
-                añadirLugarAGrupo(p, group, session).then(() => {
-                    temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
-                    actualizarMarcadores();
-                    navigate("/home/groups/showgroup/" + group.name)
-                    props.refresh()
-                })
-
+                addPlaceToGroup(data, urlImg);
             });
+
+        } else
+        {
+            addPlaceToGroup(data, "");
         }
 
 
@@ -302,12 +329,11 @@ export default function AddPlaceForm(props: { refresh: any }) {
                     variant="outlined"
                     label="Nombre del lugar"
                     placeholder="Nombre del lugar"
-                    fullWidth
                     {...register("placename")}
                     helperText={errors.placename ? errors.placename.message : ''}
 
                 />
-                <FormControl sx={{ mb: '0.8em', maxHeight: "50em", overflow: "none" }} fullWidth>
+                <FormControl sx={{ mb: '0.8em', maxHeight: "50em", overflow: "none", width: "95%" }} fullWidth>
                     <InputLabel htmlFor="grouped-select">Categoría</InputLabel>
                     <Select
                         value={category ?? ''}
@@ -315,7 +341,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
                         id="grouped-select"
                         label="Categoría"
                         onChange={handleCategoryChange}
-                        fullWidth
+                        MenuProps={MenuProps}
                     >
                         {PlaceCategories.map(({ name, categories }) => (
                             [
@@ -334,12 +360,13 @@ export default function AddPlaceForm(props: { refresh: any }) {
                         name="longitude"
                         control={control}
                         render={({ field }) => (
-                            <TextField
+                            <TextField 
                                 {...field}
                                 label="Longitud"
                                 type="number"
                                 error={Boolean(errors.longitude)}
-                                helperText={errors.longitude?.message}
+                                helperText={ errors.longitude?.message }
+                                fullWidth
                                 inputProps={{
                                     step: 0.000001,
                                     min: -180,
@@ -357,12 +384,13 @@ export default function AddPlaceForm(props: { refresh: any }) {
                         name="latitude"
                         control={control}
                         render={({ field }) => (
-                            <TextField
+                            <TextField 
                                 {...field}
                                 label="Latitud"
                                 type="number"
                                 error={Boolean(errors.latitude)}
-                                helperText={errors.latitude?.message}
+                                helperText={ errors.latitude?.message }
+                                fullWidth
                                 inputProps={{
                                     step: 0.000001,
                                     min: -90,
@@ -384,7 +412,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
                     <textarea
                         id="review-AP"
                         placeholder="Reseña..."
-                        style={{ width: '98.7%', height: '7vh', resize: 'none' }}
+                        style={{ width: '93%', height: '7vh', resize: 'none' }}
                         {...register("review")} />
 
                 </Box>
@@ -401,21 +429,22 @@ export default function AddPlaceForm(props: { refresh: any }) {
                     />
                 </Box>
 
-                <IconButton color="primary" aria-label="upload picture" component="label">
-                    <PhotoCamera sx={{ mr: "0.8em" }} />
-                    <input id="uploadImage" name="uploadImage" accept="image/*" type="file"
-                        onChange={handleFileUpload} required />
-                    <p style={{ fontSize: "0.5em" }}>{fileName}</p>
-                </IconButton>
+                <div id="uploadImageDiv">
+                    <IconButton color="primary" aria-label="upload picture" component="label">
+                        <PhotoCamera />
+                        <input id="uploadImage" name="uploadImage" accept="image/*" type="file"
+                            onChange={handleFileUpload} />
+                        
+                    </IconButton>
+                    <p style={{color:"primary", fontSize: "0.8em" }}>{fileName}</p>
 
-
+                </div>
 
                 <CSSButton
                     sx={{ mt: "1.2em" }}
                     variant="contained"
                     type="submit"
                     size="large"
-                    fullWidth
                 >
                     Añadir
                 </CSSButton>
