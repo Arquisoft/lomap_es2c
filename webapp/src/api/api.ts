@@ -184,12 +184,12 @@ export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> 
     }
 }
 
-export async function editPassword(oldpss: String, newpss: String): Promise<User> {
+export async function editPassword(oldpsw: String, newpsw: String): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/usermanager/editpsw', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'oldpss': oldpss, 'newpss': newpss, 'user': getUserInSesion() })
+        body: JSON.stringify({ 'oldpsw': oldpsw, 'newpsw': newpsw, 'user': getUserInSesion() })
     });
     switch (response.status) {
         case 404: {
@@ -222,9 +222,9 @@ export async function deleteFriendApi(friend: User): Promise<FriendRequest> {
 // IMAGES
 
 export async function getCloudinaryImageUrl(imageUrl: String): Promise<string> {
-   
+
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    
+
     let response = await fetch(apiEndPoint + '/imagemanager/uploadimage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -237,7 +237,7 @@ export async function getCloudinaryImageUrl(imageUrl: String): Promise<string> {
             throw new Error(res.error);
         }
         case 200: {
-            const secure_url  = await response.toString();
+            const secure_url = await response.toString();
             return secure_url;
         }
         default: throw new Error("Unexpected error. Failed to upload image");
