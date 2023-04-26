@@ -227,7 +227,4 @@ const places: Place[] = [
     { nombre: "Tienda 1", category: "Tienda", latitude: "50.782545", longitude: "4.37321", reviewScore: "5", comments: comments, description: "", date: "10/10/2023",images:[], },
 ]
 
-const placeMarkers: MarkerData[] = places.map(({ latitude, longitude, nombre }) => ({
-    position: [parseFloat(latitude), parseFloat(longitude)],
-    name: nombre
-}));
+

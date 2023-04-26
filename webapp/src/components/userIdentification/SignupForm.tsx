@@ -164,6 +164,7 @@ export function Signup() {
 
                 <CSSTextField
                     id="confirmPasswordSU"
+                    name="confirmPasswordSU"
                     label="Repite la contraseña"
                     type="password"
                     fullWidth
