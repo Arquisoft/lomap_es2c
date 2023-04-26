@@ -11,7 +11,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import * as fieldsValidation from '../../../../utils/fieldsValidation';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { MapManager } from 'podManager/MapManager';
+import { crearGrupo } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Group } from 'shared/shareddtypes';
 import { useSession } from '@inrupt/solid-ui-react';
@@ -67,7 +67,7 @@ const CSSTextField = styled(TextField)({
 
 
 
-export default function AddGroupForm(props: { refresh: any }) {
+export function AddGroupForm(props: { refresh: any }) {
 
     const { session } = useSession();
     const schema = fieldsValidation.groupValidation;
@@ -78,7 +78,7 @@ export default function AddGroupForm(props: { refresh: any }) {
     });
 
     const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
-        new MapManager().crearGrupo(data.groupName, session).then((grupo: Group) => {
+        crearGrupo(data.groupName, session).then((grupo: Group) => {
             navigate("/home/groups/main")
             props.refresh()
             temporalSuccessMessage("Grupo <em><b>" + grupo.name + "</b></em> creado correctamente. ¡A añadir lugares se ha dicho!");

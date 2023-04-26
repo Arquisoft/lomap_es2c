@@ -16,8 +16,8 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import { Place } from '../../../../shared/shareddtypes'
-import { MapManager } from 'podManager/MapManager';
 import { searchUserByUsername } from 'api/api';
+import { verMapaDeAmigo } from 'podManager/MapManager';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
@@ -86,7 +86,7 @@ export const ShowFriendGroup = () => {
     const userGroup = async (): Promise<Group> => {
         let group = null
         await searchUserByUsername(id).then(async (friend) => {
-            await new MapManager().verMapaDeAmigo(friend, session).then((groups) => {
+            await verMapaDeAmigo(friend, session).then((groups) => {
                 for (let i = 0; i < groups.length; i++) {
                     if (groups[i].name === lat) {
                         group = groups[i];

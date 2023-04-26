@@ -208,8 +208,10 @@ function LogedMenu() {
                 }
             }).then(async (result) => {
                 if (result.isConfirmed && edited) {
-                    await editUserDetails(user)
-                    temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
+                    console.log("editar edita")
+                    await editUserDetails(user).then(() => {
+                        temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
+                    })
                 } else if (result.isDenied) {
                     showEdit();
                 }

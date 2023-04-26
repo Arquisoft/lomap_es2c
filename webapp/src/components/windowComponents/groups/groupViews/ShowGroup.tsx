@@ -18,7 +18,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
 import PodManager from '../../../../podManager/PodManager'
 import { Place } from '../../../../shared/shareddtypes'
-import { MapManager } from 'podManager/MapManager';
+import { verMapaDe } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';
 import AddIcon from '@mui/icons-material/Add';
@@ -88,7 +88,7 @@ export const ShowGroup = (props: { refresh: any }) => {
 
     const userGroup = async (): Promise<Group> => {
         let group = null
-        await new MapManager().verMapaDe(getUserInSesion(), session).then((groups) => {
+        await verMapaDe(getUserInSesion(), session).then((groups) => {
             for (let i = 0; i < groups.length; i++) {
                 if (groups[i].name === id) {
                     group = groups[i];

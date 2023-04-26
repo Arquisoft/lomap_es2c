@@ -19,8 +19,8 @@ import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { deleteFriendApi } from 'api/api';
 import { showError } from 'utils/fieldsValidation';
 import { useDispatch } from 'react-redux';
-import { addFriendsMarkers, clearFriendsMarkers, setFriendGroupMarker, setFriendUsername } from 'utils/redux/action';
-import { MapManager } from 'podManager/MapManager';
+import { addFriendsMarkers, addMarkers, clearFriendsMarkers, setFriendGroupMarker, setFriendUsername } from 'utils/redux/action';
+import { mostrarGrupoPod } from 'podManager/MapManager';
 
 
 const VerticalDivider = styled(Divider)({
@@ -119,7 +119,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
         dispatch(setFriendGroupMarker(group.name as string))
         dispatch(setFriendUsername(user.username as string))
 
-        const groupPlaces = new MapManager().mostrarGrupo(group, null);
+        const groupPlaces = mostrarGrupoPod(group, null);
 
         const groupMarkers: MarkerData[] = [];
 

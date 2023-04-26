@@ -6,8 +6,8 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useNavigate, useParams } from 'react-router-dom';
+import { verMapaDe, mostrarGrupoPod } from 'podManager/MapManager';
 import { Place, Group } from '../../../../shared/shareddtypes'
-import { MapManager } from 'podManager/MapManager';
 import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import PlaceComponent from '../PlaceComponent';
@@ -28,12 +28,9 @@ export default function ShowPlace() {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
 
-
-    let mapM = new MapManager();
-
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await mapM.verMapaDe(null, session).then(function (groups) {
+        await verMapaDe(null, session).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
@@ -48,7 +45,7 @@ export default function ShowPlace() {
 
     const checkPlace = async (group: Promise<Group>) => {
         group.then((g) => {
-            setPodPlace(mapM.mostrarGrupo(g, session).find((p) => p.nombre === lat));
+            setPodPlace(mostrarGrupoPod(g, session).find((p) => p.nombre === lat));
             setLoading(false);
         })
     }
