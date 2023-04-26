@@ -59,8 +59,8 @@ export const signupValidationSchema = yup.object({
 }).required();
 
 export const editProfileValidation = yup.object({
-    username: usernameConstraints.notRequired(),
-    biography: biographyConstraints.notRequired()
+  biography: biographyConstraints.notRequired(),
+  newPassword: passwordConstraints.notRequired(),
 });
 
 export const passwordValidation = yup

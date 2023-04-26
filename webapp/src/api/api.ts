@@ -184,12 +184,12 @@ export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> 
     }
 }
 
-export async function editPassword(oldpss: String, newpss: String): Promise<User> {
+export async function editPassword(oldpsw: String, newpsw: String): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/usermanager/editpsw', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'oldpss': oldpss, 'newpss': newpss, 'user': getUserInSesion() })
+        body: JSON.stringify({ 'oldpsw': oldpsw, 'newpsw': newpsw, 'user': getUserInSesion() })
     });
     switch (response.status) {
         case 404: {

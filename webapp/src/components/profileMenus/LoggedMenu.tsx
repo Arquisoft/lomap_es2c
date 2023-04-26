@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from 'api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
@@ -47,24 +47,20 @@ function LoginInformation(props: any) {
 //#endregion
 function LogedMenu() {
 
-
-    const passwordSchema = fieldsValidation.passwordValidation;
-
-    const editSchema = fieldsValidation.editProfileValidation;
+    const location = useLocation();
+    const { pathname } = location;
 
     const [userInSession, setUser] = useState(getUserInSesion().username)
-    /*{
-            
-        } */
-
+    
     //#region METODOS DE CLASE
 
     const getProfile = async () => {
         closeUserMenu();
         await searchUserByUsername(userInSession).then((user) => {
             Swal.fire({
-                title: 'Mi perfil',
-                html: ` <label data-testid="profileInfo" for="webid-gp" class="swal2-label">WebID: </label>
+                title: user.username,
+                html: ` 
+                        <label data-testid="profileInfo" for="webid-gp" class="swal2-label">WebID: </label>
                         <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
                         <label for="biography-gp" class="swal2-label">Biografía: </label>
                         <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
@@ -77,7 +73,7 @@ function LogedMenu() {
                 imageAlt: 'Foto de perfil actual',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    showEditNoPss();
+                    showEdit();
                 }
             })
         }
@@ -87,138 +83,10 @@ function LogedMenu() {
     }
 
 
-    const showQuestion = () => {
-        Swal.fire({
-            title: "Cancelar edición",
-            text: "No se ha realizado ningún cambio. ¿Desea abandonar la edición del perfil?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#81c784',
-            cancelButtonColor: 'grey',
-            confirmButtonText: 'Salir sin editar',
-            cancelButtonText: 'Volver'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.close();
-            } else {
-                showEditNoPss()
-            }
-        })
-    }
 
-    async function showEdit(): Promise<void> {
-        closeUserMenu();
-        let oldpsw: string;
-        let newpsw: string;
-        let follow: boolean = false;
-        Swal.fire({
-            title: 'Cambiar contraseña',
-            html: `<label data-testid="editPswInfo" for="opassword-ep" class="swal2-label">Contraseña actual: </label>
-                    <input type="password" id="opassword-ep" class="swal2-input" placeholder="Contraseña actual" {...register("password")}>
-                    <label for="password-ep" class="swal2-label">Nueva contraseña: </label>
-                    <input required type="password" id="password-ep" class="swal2-input" placeholder="Nueva contraseña" {...register("password")}>
-                    <label for="rpassword-ep" class="swal2-label">Confirmar nueva contraseña: </label>
-                    <input required type="password" id="rpassword-ep" class="swal2-input" placeholder="Confirmar contraseña"> 
-                    `,
-
-            confirmButtonText: 'Cambiar contraseña',
-            denyButtonText: 'Volver',
-            confirmButtonColor: '#81c784',
-            denyButtonColor: 'grey',
-            showDenyButton: true,
-            focusConfirm: false,
-            preConfirm: async () => {
-                let pass = (Swal.getPopup().querySelector('#password-ep') as HTMLInputElement).value
-
-                passwordSchema.validate({ password: pass }).then(() => {
-
-                    let confirmPass = (Swal.getPopup().querySelector('#rpassword-ep') as HTMLInputElement).value
-
-                    if (fieldsValidation.checkPasswords(pass, confirmPass)) {
-                        let oldPassword = (Swal.getPopup().querySelector('#opassword-ep') as HTMLInputElement).value
-                        oldpsw = oldPassword;
-                        newpsw = pass;
-                        follow = true;
-                    }
-                    else {
-                        fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", showEdit);
-                        follow = false;
-
-                    }
-                }).catch(e => {
-                    follow = false;
-                    let errorMessage = (e as string)
-                    fieldsValidation.showError("No se ha podido actualizar la contraseña", errorMessage, showEdit);
-                })
-
-            }
-        }).then(async (result) => {
-            if (result.isConfirmed && follow) {
-                editPassword(oldpsw, newpsw).then(() => {
-                    temporalSuccessMessage("Contraseña editada correctamente.")
-                }).catch((e) => {
-                    fieldsValidation.showError("No se actualizó la contraseña", e.message, showEdit)
-                })
-            } else if (result.isDenied) {
-                showEditNoPss();
-            }
-        })
-    }
-
-    async function showEditNoPss(): Promise<void> {
-        closeUserMenu();
-        let edited = true;
-        await searchUserByUsername(userInSession).then((user) => {
-            Swal.fire({
-                title: 'Edita tu perfil',
-                html: ` 
-                        <label data-testid="editNoPswInfo" for="biagraphy-ep" class="swal2-label">Biografía: </label>
-                        <textarea rows="5" id="biography-ep" class="swal2-input" placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
-                confirmButtonText: 'Editar',
-                denyButtonText: 'Cambiar contraseña',
-                showDenyButton: true,
-                confirmButtonColor: '#81c784',
-                denyButtonColor: 'grey',
-                focusConfirm: false,
-                imageUrl: url,
-                imageWidth: 'auto',
-                imageHeight: 200,
-                imageAlt: 'Foto de perfil actual',
-                preConfirm: () => {
-                    let biography = (Swal.getPopup().querySelector('#biography-ep') as HTMLInputElement).value
-
-                    if (!biography) {
-                        edited = false;
-                        showQuestion();
-                    } else {
-                        edited = true;
-                        if (!biography)
-                            biography = "..."; // Cambiarlo por user.biography
-
-                        editSchema.validate({
-                            biography: biography
-                        }).then(() => {
-                            user = { username: user.username, webID: user.webID, password: user.password, description: biography, img: user.img }
-                            return user;
-                        }).catch(e => {
-                            let errorMessage = (e as string)
-                            fieldsValidation.showError("No se ha podido actualizar el perfil", errorMessage, showEditNoPss);
-                        })
-                    }
-                }
-            }).then(async (result) => {
-                if (result.isConfirmed && edited) {
-                    console.log("editar edita")
-                    await editUserDetails(user).then(() => {
-                        temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
-                    })
-                } else if (result.isDenied) {
-                    showEdit();
-                }
-            })
-        }).catch((err: any) => {
-            showError("Error al mostrar el menú de edición", err.toString(), Swal.close);
-        });
+    async function showEdit() {
+        document.cookie = "lastPath=" + pathname +"; path=/";
+        navigate("/home/edit");
     }
 
     const goLogout = (user: User) => {
@@ -251,7 +119,7 @@ function LogedMenu() {
     //#region HOOKS
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
-    const [url, setUrl] = useState("testUser.jfif");
+    const [url, setUrl] = useState("defaultUser3.png");
     //#endregion
 
 
@@ -285,7 +153,7 @@ function LogedMenu() {
                 <MenuItem data-testid="getProfileButton" key={uuid()} onClick={getProfile}>
                     <PersonIcon /> Profile
                 </MenuItem>
-                <MenuItem data-testid="showEditButton" key={uuid()} onClick={showEditNoPss}>
+                <MenuItem data-testid="showEditButton" key={uuid()} onClick={showEdit}>
                     <EditIcon /> Edit profile
                 </MenuItem>
                 <MenuItem data-testid="logoutButton" key={uuid()} onClick={() => goLogout(getUserInSesion())}>

@@ -122,7 +122,7 @@ api.post(
             const b = await fac.FactoryLoMap.getFriendManager().eliminarAmigo(user, friend);
             return res.status(200).send(b);
         } catch (err) {
-            return res.status(404).send({ error: { "error": err.message } })
+            return res.status(404).send({ "error": err.message })
         }
     }
 );
@@ -136,8 +136,10 @@ api.post(
             const user = req.body.user;
             const b = await fac.FactoryLoMap.getUserManager().modificarContrasena(user, oldpsw, newpsw);
             return res.status(200).send(b);
-        } catch (err) {
-            return res.status(404).send({ error: { error: err.message } });
+        } catch (err)
+        {
+            console.log(err)
+            return res.status(404).send({ "error": err.message });
         }
     }
 );
@@ -147,7 +149,6 @@ api.get(
         return res.sendStatus(200);
     }
 );
-
 
 
 export default api;

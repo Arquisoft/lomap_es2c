@@ -196,3 +196,15 @@ a {
   font-size: 0.8em;
   font-weight: lighter;
 }
+
+#profileImage {
+  height: 250px;
+}
+
+#biography-EP {
+  width: 99%;
+  height: 7vh;
+  resize: none;
+  background-color: transparent;
+  color:"red" !important;
+}
