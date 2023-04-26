@@ -18,6 +18,7 @@ export const CategoriesFilter = (props: { setFilter: any }) => {
     return (
         <MyStack id="stack" spacing={3} >
             <Autocomplete
+                data-testid="categoriesFilter"
                 multiple
                 id="tags-standard"
                 options={PlaceCategories.flatMap((option) => option.name)}

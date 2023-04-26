@@ -1,5 +1,5 @@
 import "@inrupt/jest-jsdom-polyfills";
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from 'utils/redux/store';
@@ -32,6 +32,7 @@ const mapManager = require('podManager/MapManager')
 jest.spyOn(mapManager, 'verMapaDe')
 jest.spyOn(mapManager, 'crearGrupo')
 jest.spyOn(mapManager, 'añadirLugarAGrupo')
+jest.spyOn(mapManager, 'eliminarGrupo')
 
 jest.mock('components/windowComponents/friends/FriendManagerPanel', () => ({ FriendManagerPanel: () => { return (<div data-testid="mockFriendManager">Mock</div>) } }))
 //jest.mock('components/windowComponents/groups/groupViews/AddGroupForm', () => ({ AddGroupForm: () => { return (<div data-testid="mockAddGroup">Mock</div>) } }))
@@ -146,7 +147,7 @@ test('check add group', async () => {
     expect(linkElement).toBeInTheDocument();
 });
 
-test('check renders groupss places', async () => {
+test('check renders groups places', async () => {
 
     (verMapaDe as any).mockReturnValue(
         Promise.resolve(
@@ -175,18 +176,15 @@ test('check renders groupss places', async () => {
     linkElement = await screen.findByText("Bar de Pepe");
     expect(linkElement).toBeInTheDocument();
 });
-test('check add place', async () => {
+
+
+test('check showgroup from main', async () => {
 
     (verMapaDe as any).mockReturnValue(
         Promise.resolve(
             groups
         )
     );
-
-    (añadirLugarAGrupo as any).mockImplementationOnce((lugar: Place, grupo: Group, session: any) => {
-        places.push(lugar)
-        return Promise.resolve(groups[0])
-    })
 
     await act(async () => {
         render(
@@ -205,41 +203,21 @@ test('check add place', async () => {
             </Provider>
         );
     });
-    let linkElement = screen.getByTestId("addPlaceGrupo1");
-    fireEvent.click(linkElement);
-    linkElement = await screen.findByText("Añadir lugar");
-    expect(linkElement).toBeInTheDocument();
-    let inputName = screen.getByLabelText("Nombre del lugar")
-    fireEvent.change(inputName, { target: { value: 'Lugar2' } });
-    let inputCategory = screen.getByPlaceholderText("Categoría")
-    fireEvent.change(inputCategory, { target: { value: 'Bar' } });
-    let inputLng = screen.getByLabelText("Longitud")
-    fireEvent.change(inputLng, { target: { value: '1' } });
-    let inputLat = screen.getByLabelText("Latitud")
-    fireEvent.change(inputLat, { target: { value: '1' } });
-    let inputReseña = screen.getByPlaceholderText("Reseña...")
-    fireEvent.change(inputReseña, { target: { value: 'reseña' } });
-    let rating = screen.getByLabelText("Very Dissatisfied");
-    linkElement = screen.getByText("Añadir")
-    fireEvent.submit(linkElement);
-    linkElement = await screen.findByText("Lugar2");
-    expect(linkElement).toBeInTheDocument();
-    linkElement = await screen.findByText(/añadido correctamente/i);
-    expect(linkElement).toBeInTheDocument();
+    await act(async () => {
+        let linkElement = screen.getByTestId("Grupo1");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByTestId("breadcrumbShowgroup");
+        expect(linkElement).toBeInTheDocument();
+    });
 });
 
-test('check add place from map', async () => {
+test('check showplace', async () => {
 
     (verMapaDe as any).mockReturnValue(
         Promise.resolve(
             groups
         )
     );
-
-    (añadirLugarAGrupo as any).mockImplementationOnce((lugar: Place, grupo: Group, session: any) => {
-        places.push(lugar)
-        return Promise.resolve(groups[0])
-    })
 
     await act(async () => {
         render(
@@ -258,29 +236,150 @@ test('check add place from map', async () => {
             </Provider>
         );
     });
-    let linkElement = screen.getByTestId("addPlaceGrupo1");
-    fireEvent.click(linkElement);
-    linkElement = await screen.findByText(/Añadir lugar/i);
-    expect(linkElement).toBeInTheDocument();
-    let map = screen.getAllByRole("img")[0]
-    fireEvent.click(map);
-    let inputName = screen.getByLabelText("Nombre del lugar")
-    fireEvent.change(inputName, { target: { value: 'Lugar3' } });
-    let inputCategory = screen.getByPlaceholderText("Categoría")
-    fireEvent.change(inputCategory, { target: { value: 'Iglesia' } });
-    let inputReseña = screen.getByPlaceholderText("Reseña...")
-    fireEvent.change(inputReseña, { target: { value: 'reseña' } });
-    let rating = screen.getByLabelText("Dissatisfied");
-    fireEvent.click(rating);
-    linkElement = screen.getByText("Añadir")
-    fireEvent.submit(linkElement);
-    linkElement = await screen.findByText("Lugar3");
-    expect(linkElement).toBeInTheDocument();
-    linkElement = await screen.findByText(/añadido correctamente/i);
-    expect(linkElement).toBeInTheDocument();
+    await act(async () => {
+        let linkElement = screen.getByTestId("Grupo1");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByText("Bar de Pepe");
+        fireEvent.click(linkElement);
+        linkElement = screen.getByTestId("breadcrumbShowplace");
+        expect(linkElement).toBeInTheDocument();
+    });
+});
+
+test('check breadcrumbs', async () => {
+
+    (verMapaDe as any).mockReturnValue(
+        Promise.resolve(
+            groups
+        )
+    );
+
+    await act(async () => {
+        render(
+            <Provider store={store}>
+                <SessionProvider sessionId="">
+                    <MemoryRouter initialEntries={['/home/groups/main']} initialIndex={1}>
+                        <Routes>
+                            <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<>
+                                <MainPage />
+                            </>} />
+                        </Routes>
+                    </MemoryRouter>
+                </SessionProvider>
+            </Provider>
+        );
+    });
+    await act(async () => {
+        let linkElement = screen.getByTestId("Grupo1");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByText("Bar de Pepe");
+        fireEvent.click(linkElement);
+        linkElement = screen.getByTestId("breadcrumbShowplace");
+        expect(linkElement).toBeInTheDocument();
+        linkElement = await screen.findByLabelText("Categoría");
+        expect(linkElement).toBeInTheDocument();
+        linkElement = await screen.findByTestId("Grupo1");
+        fireEvent.click(linkElement);
+        linkElement = screen.getByTestId("breadcrumbShowgroup");
+        expect(linkElement).toBeInTheDocument();
+        linkElement = await screen.findByText("Bar de Pepe");
+        expect(linkElement).toBeInTheDocument();
+        linkElement = screen.getByText("Mis grupos");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByText("Grupo2");
+        expect(linkElement).toBeInTheDocument();
+    });
 });
 
 
+
+test('check showgroup filters', async () => {
+
+    (verMapaDe as any).mockReturnValue(
+        Promise.resolve(
+            groups
+        )
+    );
+
+    await act(async () => {
+        render(
+            <Provider store={store}>
+                <SessionProvider sessionId="">
+                    <MemoryRouter initialEntries={['/home/groups/main']} initialIndex={1}>
+                        <Routes>
+                            <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={
+                                <>
+                                    <MainPage />
+                                </>
+                            } />
+                        </Routes>
+                    </MemoryRouter>
+                </SessionProvider>
+            </Provider>
+        );
+    });
+    await act(async () => {
+        let linkElement = screen.getByTestId("Grupo1");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByText("Tienda 1");
+        expect(linkElement).toBeInTheDocument();
+        linkElement = screen.getByTestId("showgroupxm");
+        fireEvent.click(linkElement);
+        let autocomplete = await screen.findByTestId("categoriesFilter");
+        const input = within(autocomplete).getByRole('combobox');
+        autocomplete.focus()
+        fireEvent.change(input, { target: { value: "" } })
+        fireEvent.keyDown(autocomplete, { key: 'ArrowDown' })
+        fireEvent.keyDown(autocomplete, { key: 'ArrowDown' })
+        fireEvent.keyDown(autocomplete, { key: 'Enter' })
+        screen.getAllByText("Grupo1")[0].focus();
+        linkElement = await screen.findByText("Gastronomía");
+        expect(linkElement).toBeInTheDocument();
+    });
+});
+
+test('check delete group', async () => {
+
+    (verMapaDe as any).mockReturnValue(
+        Promise.resolve(
+            groups
+        )
+    );
+
+    (eliminarGrupo as any).mockImplementationOnce((group: any, session: any) => {
+        console.log("delete mock")
+        places.pop()
+        return Promise.resolve(true)
+    });
+
+    await act(async () => {
+        render(
+            <Provider store={store}>
+                <SessionProvider sessionId="">
+                    <MemoryRouter initialEntries={['/home/groups/main']} initialIndex={1}>
+                        <Routes>
+                            <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={
+                                <>
+                                    <MainPage />
+                                </>
+                            } />
+                        </Routes>
+                    </MemoryRouter>
+                </SessionProvider>
+            </Provider>
+        );
+    });
+    await act(async () => {
+        let linkElement = screen.getByTestId("Grupo1");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByText("Tienda 1");
+        expect(linkElement).toBeInTheDocument();
+        linkElement = screen.getByTestId("deleteGroup");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByText("Eliminar grupo");
+        expect(linkElement).toBeInTheDocument();
+    });
+});
 
 const comments: Comment[] = [
     { author: "security", date: "10/04/2023", comment: "Review del bar de Pepe" }
