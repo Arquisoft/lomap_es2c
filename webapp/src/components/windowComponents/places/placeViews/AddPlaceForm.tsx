@@ -29,7 +29,6 @@ import { addMarkers, addPlaceMarker, clearMarkers, setGroupMarker } from 'utils/
 import { IconContainer, StyledRating, customIcons } from '../StyledRating';
 import { IconButton } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
-import { cloudinaryURL, cloudinaryUploadFolder } from 'utils/cloudinary/apiKeyCloudinary';
 import Axios from 'axios';
 
 const CSSTypography = styled(Typography)({
@@ -264,9 +263,9 @@ export default function AddPlaceForm(props: { refresh: any }) {
 
             const fd = new FormData();
             fd.append("file", selectedImage)
-            fd.append("upload_preset", cloudinaryUploadFolder)
+            fd.append("upload_preset", "t9chndiq")
 
-            Axios.post(cloudinaryURL, fd).then((res) => {
+            Axios.post("https://api.cloudinary.com/v1_1/lomapes2c/image/upload", fd).then((res) => {
                 let urlImg = res.data.secure_url;
                 addPlaceToGroup(data, urlImg);
             });

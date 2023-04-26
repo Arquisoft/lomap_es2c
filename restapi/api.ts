@@ -1,9 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { check } from 'express-validator';
 import * as fac from './src/facade';
-import { FriendRequest } from "./src/entities/FriendRequest";
-import { deprecate } from "util";
-import { image } from "@cloudinary/url-gen/qualifiers/source";
 
 const api: Router = express.Router()
 
@@ -152,20 +148,6 @@ api.get(
     }
 );
 
-
-api.post(
-    "/imagemanager/uploadimage",
-    async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const imageUrl = req.body.imageUrl;
-            const secure_url = fac.FactoryLoMap.getImageManager().uploadImage(imageUrl);
-            console.log("secure url " + secure_url)
-            res.status(200).send({ secure_url });
-        } catch (err) {
-            return res.status(404).send({ error: err.message });
-        }
-    }
-);
 
 
 export default api;

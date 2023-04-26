@@ -29,6 +29,3 @@ yarn-error.log*
 #documentation build does not go into master
 docs/build
 
-#API Keys
-webapp/src/utils/cloudinary/apiKeyCloudinary.ts
-restapi/.env
