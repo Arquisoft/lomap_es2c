@@ -250,7 +250,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
             images,
         }
 
-        mapM.añadirLugarAGrupo(p, group, session).then(() => {
+        añadirLugarAGrupo(p, group, session).then(() => {
             temporalSuccessMessage("Lugar " + p.nombre + " añadido correctamente al grupo <b><em>" + group.name + "</em></b>. Habrá que volver, ¿o no?");
             actualizarMarcadores();
             navigate("/home/groups/showgroup/" + group.name)
