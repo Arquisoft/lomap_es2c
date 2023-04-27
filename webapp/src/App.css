@@ -198,11 +198,12 @@ a {
 }
 
 #profileImage {
-  height: 250px;
+  height: 180px;
 }
 
-#profileImagePod {
-  height: 250px;
+#profileImagePodLM, #profileImagePodPT {
+  height: 180px;
+  width: auto;
   border-radius: 500px;
 }
 

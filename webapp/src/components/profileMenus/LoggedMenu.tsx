@@ -20,6 +20,8 @@ import { Divider } from '@mui/material';
 import { showError } from '../../utils/fieldsValidation';
 import PodManager from 'podManager/PodManager';
 import { useSession } from '@inrupt/solid-ui-react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'utils/redux/store';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -53,32 +55,22 @@ function LogedMenu() {
 
     const [userInSession, setUser] = useState(getUserInSesion().username)
     
-     const { session } = useSession();
-
     
-    const profileImageUrl = async () => {
-    const img = await new PodManager().getPhoto(session);
-        return img;
-    }
+    const imgUrl = useSelector((state: RootState) => state.user.imgUrl);
 
-    const [imgUrl, setImgUrl] = React.useState('');
-
-    React.useEffect(() => {
-        const fetchImgUrl = async () => {
-            const url = await profileImageUrl();
-            setImgUrl(url);
-        };
-        fetchImgUrl();
-    }, []);
-    
     //#region METODOS DE CLASE
 
     const getProfile = async () => {
         closeUserMenu();
+        let imgHtml = `<img id="profileImage" src="defaultUser3.png" alt="Foto de perfil" />`;
+        if (imgUrl !== null)
+        {
+            imgHtml = ` <img id="profileImagePodLM" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
+        }
         await searchUserByUsername(userInSession).then((user) => {
             Swal.fire({
-                title: user.username,
-                html: ` 
+                html: imgHtml + `</br>
+                        <h2> ` + user.username + ` </h2> 
                         <label data-testid="profileInfo" for="webid-gp" class="swal2-label">WebID: </label>
                         <input type="text" id="webid-gp" class="swal2-input" disabled placeholder=` + user.webID + `>
                         <label for="biography-gp" class="swal2-label">Biografía: </label>
@@ -86,16 +78,6 @@ function LogedMenu() {
                 confirmButtonText: 'Editar perfil',
                 confirmButtonColor: '#81c784',
                 focusConfirm: false,
-                imageUrl: imgUrl !== null ? imgUrl: url,
-                imageWidth: 'auto',
-                imageHeight: 200,
-                imageAlt: 'Foto de perfil actual',
-                didOpen: (modal) => {
-                    const image = modal.querySelector('.swal2-image')?.querySelector('img');
-                    if (image) {
-                    image.setAttribute('crossOrigin', 'anonymous');
-                    }
-                },
             }).then((result) => {
                 if (result.isConfirmed) {
                     showEdit();
@@ -161,7 +143,7 @@ function LogedMenu() {
                 <IconButton data-testid="profileMenuButton" onClick={ openUserMenu } sx={ { padding: 0 } }>
                     { imgUrl !== null ?
                         <Avatar data-testid="userProfileImg" >
-                            <img id="profileImagePod" src={ imgUrl } alt="User profile photo"crossOrigin="anonymous" />
+                            <img id="profileImagePod" src={ imgUrl } alt="User profile photo" crossOrigin="anonymous" />
                         </Avatar>
                         :
                         <Avatar data-testid="userProfileImg" alt="User profile photo" src="defaultUser3.png" />

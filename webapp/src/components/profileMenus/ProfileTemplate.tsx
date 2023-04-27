@@ -5,6 +5,8 @@ import Paper from '../userIdentification/Paper';
 import { styled } from '@mui/material/styles';
 import { useSession } from '@inrupt/solid-ui-react';
 import PodManager  from '../../podManager/PodManager';
+import { useSelector } from 'react-redux';
+import { RootState } from 'utils/redux/store';
 
 const LogoBox = styled(Box)({
     display: 'flex',
@@ -16,24 +18,8 @@ export default function SesionForm(props: React.HTMLAttributes<HTMLDivElement>) 
     //#region METODOS DE CLASE
     const { children } = props;
     //#endregion
-    const { session } = useSession();
 
-    
-    const profileImageUrl = async () => {
-    const img = await new PodManager().getPhoto(session);
-        return img;
-    }
-
-    const [imgUrl, setImgUrl] = React.useState('');
-
-    React.useEffect(() => {
-        const fetchImgUrl = async () => {
-            const url = await profileImageUrl();
-            setImgUrl(url);
-        };
-        fetchImgUrl();
-    }, []);
-
+    const imgUrl = useSelector((state: RootState) => state.user.imgUrl);
 
     
     return (
@@ -52,7 +38,7 @@ export default function SesionForm(props: React.HTMLAttributes<HTMLDivElement>) 
                     >
                         <LogoBox>
                             { imgUrl !== null ? 
-                                <img id="profileImagePod" src={ imgUrl } alt="Foto de perfil" crossOrigin="anonymous" />
+                                <img id="profileImagePodPT" src={ imgUrl } alt="Foto de perfil" crossOrigin="anonymous" />
                                 :
                                  <img id="profileImage" src="defaultUser3.png" alt="Foto de perfil" />
                             }

@@ -11,6 +11,9 @@ import { User } from 'shared/shareddtypes';
 import Swal from 'sweetalert2';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { readCookie } from 'utils/CookieReader';
+import { useDispatch } from 'react-redux';
+import { setProfileImage } from 'utils/redux/action';
+import PodManager from 'podManager/PodManager';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -38,15 +41,31 @@ const MyPaper2 = styled(Paper)({
 export default function LoggedView() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { welcome } = useParams();
     const { session } = useSession();
 
 
+    const profileImageUrl = async () => {
+        return await new PodManager().getPhoto(session.info.webId);
+    }
 
+    
     if (session.info.webId) {
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
     }
 
+
+      React.useEffect(() => {
+          const fetchImgUrl = async () => {
+            const url = await profileImageUrl();
+            dispatch(setProfileImage(url))
+          };
+          if(session.info?.webId !== undefined)
+            fetchImgUrl();
+      }, [session.info.webId]);
+    
+    
     const getSaludo = () => {
         let now = new Date();
         let hours = now.getHours();
@@ -86,7 +105,8 @@ export default function LoggedView() {
                         navigate("/login")
                     }
                 })
-            } else {
+            } else
+            {
                 saludo();
                 document.cookie = "sameWebId=true; path=/"
             }
@@ -96,8 +116,11 @@ export default function LoggedView() {
     }
 
     useEffect(() => {
+        
+
         if (welcome && readCookie("sameWebId") !== "true")
             checkWebId();
+            
     }, []);
 
     return (
