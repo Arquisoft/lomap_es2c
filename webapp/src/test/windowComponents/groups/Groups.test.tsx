@@ -347,7 +347,6 @@ test('check delete group', async () => {
     );
 
     (eliminarGrupo as any).mockImplementationOnce((group: any, session: any) => {
-        console.log("delete mock")
         places.pop()
         return Promise.resolve(true)
     });
