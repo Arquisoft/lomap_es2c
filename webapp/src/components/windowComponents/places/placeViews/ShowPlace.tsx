@@ -24,8 +24,6 @@ const BoxCircularProgress = styled(Box)({
 
 export default function ShowPlace() {
     const { session } = useSession();
-    console.log("en show place")
-    console.log(session)
     const { id, lat } = useParams();
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)

@@ -50,22 +50,23 @@ export default function LoggedView() {
         return await new PodManager().getPhoto(session.info.webId);
     }
 
-    
     if (session.info.webId) {
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
     }
 
+    React.useEffect(() => {
+        if (welcome && readCookie("sameWebId") !== "true" && session.info.webId)
+            checkWebId();
 
-      React.useEffect(() => {
-          const fetchImgUrl = async () => {
+        const fetchImgUrl = async () => {
             const url = await profileImageUrl();
             dispatch(setProfileImage(url))
-          };
-          if(session.info?.webId !== undefined)
+        };
+        if (session.info?.webId !== undefined)
             fetchImgUrl();
-      }, [session.info.webId]);
-    
-    
+    }, [session.info.webId]);
+
+
     const getSaludo = () => {
         let now = new Date();
         let hours = now.getHours();
@@ -84,6 +85,8 @@ export default function LoggedView() {
     const checkWebId = () => {
         let user: User = getUserInSesion();
         setTimeout(() => {
+            console.log(user.webID)
+            console.log(readCookie("userWebId"))
             if (user.webID !== readCookie("userWebId")) {
                 Swal.fire({
                     title: "Actualizar webId",
@@ -105,8 +108,7 @@ export default function LoggedView() {
                         navigate("/login")
                     }
                 })
-            } else
-            {
+            } else {
                 saludo();
                 document.cookie = "sameWebId=true; path=/"
             }
@@ -114,12 +116,6 @@ export default function LoggedView() {
         }, 3000);
 
     }
-
-    useEffect(() => {
-        if (welcome && readCookie("sameWebId") !== "true" && session.info.webId)
-            checkWebId();
-            
-    }, []);
 
     return (
 

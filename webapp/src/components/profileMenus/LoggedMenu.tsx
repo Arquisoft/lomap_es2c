@@ -55,7 +55,6 @@ export function LoggedMenu() {
 
     const [userInSession, setUser] = useState(getUserInSesion().username)
 
-
     const imgUrl = useSelector((state: RootState) => state.user.imgUrl);
 
     //#region METODOS DE CLASE

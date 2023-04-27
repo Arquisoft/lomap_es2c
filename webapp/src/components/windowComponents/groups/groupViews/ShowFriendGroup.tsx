@@ -105,7 +105,7 @@ export const ShowFriendGroup = () => {
     return (
         <>
             <BCBox>
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                <Breadcrumbs data-testid="showfriendgroupbc" separator={<NavigateNextIcon fontSize="small" />}>
                     <Link underline="hover" color="inherit" onClick={() => navigate("/home/friends/main")}>
                         Amigos
                     </Link>
@@ -180,7 +180,7 @@ const GroupDetails = (props: { friend: any, session: any, daddy: any, group: Pro
                                 {open ?
                                     <ExpandLess onClick={() => setOpen(false)} />
                                     :
-                                    <ExpandMore onClick={() => setOpen(true)} />
+                                    <ExpandMore data-testid="filterxm" onClick={() => setOpen(true)} />
                                 }
                             </FilterBox>
                             <Collapse in={open} timeout="auto" unmountOnExit>

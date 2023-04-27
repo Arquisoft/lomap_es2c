@@ -15,7 +15,7 @@ export const CategoriesFilter = (props: { setFilter: any }) => {
     categories[categories.length - 1].name = "Otro";
 
     return (
-        
+
         <Autocomplete
             sx={{ maxHeight: 50 }}
             multiple
@@ -33,7 +33,6 @@ export const CategoriesFilter = (props: { setFilter: any }) => {
                 />
             )}
         />
-      
-                
+
     )
 }

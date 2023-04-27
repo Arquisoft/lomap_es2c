@@ -103,7 +103,6 @@ export function Signup() {
                 fieldsValidation.showError("Las contraseñas no coinciden", "Por favor, revíselas.", Swal.close)
             }
         }
-        //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
     const successSignup = (user: User) => {
