@@ -201,7 +201,15 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
 
     function filterPlaces(place: Place) {
         const placeCategory = PlaceCategories.find((pc) => pc.categories.includes(place.category));
-        let checkPlace = filters.includes(placeCategory?.name);
+        
+        let checkPlace;
+
+        if (placeCategory === undefined || place.category === null)
+            checkPlace = filters.includes("Otro");
+        else
+        {
+            checkPlace = filters.includes(placeCategory?.name);
+        }
 
         if (filters.length > 0) {
             dispatch(clearFilterForMyMarkers());

@@ -196,3 +196,22 @@ a {
   font-size: 0.8em;
   font-weight: lighter;
 }
+
+#profileImage, #profileImageLM {
+  height: 180px;
+}
+
+
+#profileImagePodLM, #profileImagePodPT {
+  height: 180px;
+  width: auto;
+  border-radius: 500px;
+}
+
+#biography-EP {
+  width: 99%;
+  height: 7vh;
+  resize: none;
+  background-color: transparent;
+  color:"red" !important;
+}

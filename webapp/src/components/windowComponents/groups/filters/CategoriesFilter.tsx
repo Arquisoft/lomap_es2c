@@ -1,11 +1,7 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import PlaceCategories from '../../places/PlaceCategories';
 
-const MyStack = styled(Stack)({
-})
 
 export const CategoriesFilter = (props: { setFilter: any }) => {
 
@@ -15,23 +11,29 @@ export const CategoriesFilter = (props: { setFilter: any }) => {
         props.setFilter(categories);
     }
 
+    let categories = PlaceCategories;
+    categories[categories.length - 1].name = "Otro";
+
     return (
-        <MyStack id="stack" spacing={3} >
-            <Autocomplete
-                data-testid="categoriesFilter"
-                multiple
-                id="tags-standard"
-                options={PlaceCategories.flatMap((option) => option.name)}
-                onChange={updateFilters}
-                getOptionLabel={(option) => option}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        variant="standard"
-                        placeholder="Categorías"
-                    />
-                )}
-            />
-        </MyStack>
+        
+        <Autocomplete
+            sx={{ maxHeight: 50 }}
+            multiple
+            id="tags-standard"
+            data-testid="categoriesFilter"
+            className='categoriesAutocomplete'
+            options={PlaceCategories.flatMap((option) => option.name)}
+            onChange={updateFilters}
+            getOptionLabel={(option) => option}
+            renderInput={(params) => (
+                <TextField
+                    {...params}
+                    variant="standard"
+                    placeholder="Categorías"
+                />
+            )}
+        />
+      
+                
     )
 }

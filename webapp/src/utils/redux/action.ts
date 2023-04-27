@@ -1,5 +1,6 @@
 import { MarkerData } from "shared/shareddtypes";
 
+// Functionality related to updating the map
 export interface AddMarkersAction {
   type: "markers/addMarkers";
   payload: MarkerData[];
@@ -128,4 +129,18 @@ interface ClearFilterForFriendMarkers {
 
 export const clearFilterForFriendMarkers = (): ClearFilterForFriendMarkers => ({
   type: "markers/clearFilterForFriendMarkers",
+});
+
+// Functionality related to the user
+
+interface SetProfileImage {
+  type: "user/setProfileImage";
+  payload: string;
+}
+
+export const setProfileImage = (
+  imgUrl: string
+): SetProfileImage => ({
+  type: "user/setProfileImage",
+  payload: imgUrl,
 });

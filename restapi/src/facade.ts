@@ -2,7 +2,6 @@
 import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager, UserManagerImpl } from './controllers/UserManager'
 import { FriendManager, FriendManagerImpl } from './controllers/FriendManager'
-import { ImageManager, ImageManagerImpl } from './controllers/ImageManager';
 
 
 export interface SesionManager {
@@ -31,9 +30,6 @@ export class FactoryLoMap {
     return new UserManagerImpl();
   }
 
-  static getImageManager(): ImageManager {
-    return new ImageManagerImpl();
-  }
 }
 //#endregion
 

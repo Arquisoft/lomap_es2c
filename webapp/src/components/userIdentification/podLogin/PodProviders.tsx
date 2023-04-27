@@ -1,6 +1,7 @@
-type PodProvider = {
+export type PodProvider = {
     name: string,
     url: string,
+    logo: string,
 };
 
 export function GetProviders(): Array<PodProvider> {
@@ -8,7 +9,13 @@ export function GetProviders(): Array<PodProvider> {
         {
             name: "Inrupt",
             url: "https://inrupt.net/",
+            logo: "inrupt.png"
         },
+        {
+            name: "SolidCommunity",
+            url: "https://solidcommunity.net",
+            logo: "solidcommunity.png"
+        }
     ];
 
 }

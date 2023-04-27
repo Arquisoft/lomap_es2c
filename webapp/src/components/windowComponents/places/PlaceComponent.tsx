@@ -70,7 +70,7 @@ export default function PlaceComponent(props: any) {
                     id="placename-SP"
                     variant="outlined"
                     label="Categoría"
-                    value={place.category}
+                    value={place.category ? place.category : "Otro"}
                     fullWidth
                     disabled
                 />

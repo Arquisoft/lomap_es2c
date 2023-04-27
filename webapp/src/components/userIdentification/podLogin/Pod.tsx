@@ -4,14 +4,13 @@ import SForm from '../SesionForm';
 import GetProviders from './PodProviders';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import { logout } from '../../../api/api';
 import { LoginButton } from "@inrupt/solid-ui-react";
 import { useNavigate } from 'react-router-dom';
-import { handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
 
 
 const CSSButton = styled(Button)({
@@ -50,10 +49,11 @@ export default function PodLogin() {
 
 
 
-    const handleLogin = async () => {
-        document.cookie = "isPodLogged=true; path=/"; document.cookie = "sameWebId=false; path=/"
-    };
+const handleLogin = async () => {
 
+    document.cookie = "isPodLogged=true; path=/";
+    document.cookie = "sameWebId=false; path=/";
+};
     const handleError = async () => {
         logout();
         navigate("/login");
