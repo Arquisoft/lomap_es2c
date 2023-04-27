@@ -56,7 +56,10 @@ export default function LoggedView() {
     }
 
 
-      React.useEffect(() => {
+    React.useEffect(() => {
+          if (welcome && readCookie("sameWebId") !== "true" && session.info.webId)
+            checkWebId();
+        
           const fetchImgUrl = async () => {
             const url = await profileImageUrl();
             dispatch(setProfileImage(url))
@@ -114,12 +117,6 @@ export default function LoggedView() {
         }, 3000);
 
     }
-
-    useEffect(() => {
-        if (welcome && readCookie("sameWebId") !== "true" && session.info.webId)
-            checkWebId();
-            
-    }, []);
 
     return (
 
