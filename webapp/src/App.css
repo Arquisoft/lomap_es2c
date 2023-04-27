@@ -197,9 +197,10 @@ a {
   font-weight: lighter;
 }
 
-#profileImage {
+#profileImage, #profileImageLM {
   height: 180px;
 }
+
 
 #profileImagePodLM, #profileImagePodPT {
   height: 180px;

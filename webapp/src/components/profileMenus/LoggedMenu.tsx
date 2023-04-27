@@ -62,7 +62,7 @@ function LogedMenu() {
 
     const getProfile = async () => {
         closeUserMenu();
-        let imgHtml = `<img id="profileImage" src="defaultUser3.png" alt="Foto de perfil" />`;
+        let imgHtml = ` <img id="profileImageLM" src="defaultUser2.png" alt="Foto de perfil" >`;
         if (imgUrl !== null)
         {
             imgHtml = ` <img id="profileImagePodLM" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
@@ -128,7 +128,6 @@ function LogedMenu() {
     //#region HOOKS
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState<HTMLElement>(null);
-    const [url, setUrl] = useState("defaultUser3.png");
     //#endregion
 
 
@@ -146,7 +145,7 @@ function LogedMenu() {
                             <img id="profileImagePod" src={ imgUrl } alt="User profile photo" crossOrigin="anonymous" />
                         </Avatar>
                         :
-                        <Avatar data-testid="userProfileImg" alt="User profile photo" src="defaultUser3.png" />
+                        <Avatar data-testid="userProfileImg" alt="User profile photo" src="defaultUser.png" />
                     }
                 </IconButton>
             </Tooltip>

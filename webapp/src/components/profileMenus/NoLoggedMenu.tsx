@@ -60,7 +60,7 @@ export function NoLoggedMenu() {
         <BoxProfile>
             <Tooltip title="Open settings">
                 <IconButton data-testid="noLoggedPopupButton" onClick={openUserMenu} sx={{ padding: 0 }}>
-                    <Avatar data-testid="defaultImg" src="/broken-image.jpg" />
+                    <Avatar data-testid="defaultImg" src="/defaultUser.png" />
                 </IconButton>
             </Tooltip>
             <MyMenu

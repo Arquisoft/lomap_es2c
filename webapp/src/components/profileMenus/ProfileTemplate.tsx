@@ -40,7 +40,7 @@ export default function SesionForm(props: React.HTMLAttributes<HTMLDivElement>) 
                             { imgUrl !== null ? 
                                 <img id="profileImagePodPT" src={ imgUrl } alt="Foto de perfil" crossOrigin="anonymous" />
                                 :
-                                 <img id="profileImage" src="defaultUser3.png" alt="Foto de perfil" />
+                                 <img id="profileImage" src="defaultUser.png" alt="Foto de perfil" />
                             }
                             
                         </LogoBox>
