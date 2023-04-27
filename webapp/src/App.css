@@ -201,6 +201,11 @@ a {
   height: 250px;
 }
 
+#profileImagePod {
+  height: 250px;
+  border-radius: 500px;
+}
+
 #biography-EP {
   width: 99%;
   height: 7vh;

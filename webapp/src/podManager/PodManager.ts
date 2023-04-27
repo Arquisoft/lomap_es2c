@@ -468,12 +468,22 @@ class PodManager {
     }
 
     async getPhoto(session: Session): Promise<string> {
-        try{
-            const dataset = await getSolidDataset(session.info.webId)
-            const profile = getThing(dataset, session.info.webId)
-            const photoUrl = getIri(profile, "http://www.w3.org/2006/vcard/ns#hasPhoto")
+        try
+        {
+            if (session.info.webId)
+            {
+                 console.log(session.info.webId)
+                const dataset = await getSolidDataset(session.info.webId)
+                const profile = getThing(dataset, session.info.webId)
+                console.log("profileee" + profile)
+                const photoUrl = getIri(profile, "http://www.w3.org/2006/vcard/ns#hasPhoto")
 
-            return photoUrl
+                return photoUrl;
+            } else
+            {
+                return null;
+            }
+           
         } catch(error){
             console.log(error)
             return null

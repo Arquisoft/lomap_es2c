@@ -9,16 +9,17 @@ import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { editPassword, editUserDetails, getUserInSesion, logout, searchUserByUsername } from 'api/api';
+import { getUserInSesion, logout, searchUserByUsername } from 'api/api';
 import Swal from 'sweetalert2';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
-import * as fieldsValidation from '../../utils/fieldsValidation';
 import { User } from 'shared/shareddtypes';
 import { NotificationManager, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Divider } from '@mui/material';
 import { showError } from '../../utils/fieldsValidation';
+import PodManager from 'podManager/PodManager';
+import { useSession } from '@inrupt/solid-ui-react';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -52,6 +53,24 @@ function LogedMenu() {
 
     const [userInSession, setUser] = useState(getUserInSesion().username)
     
+     const { session } = useSession();
+
+    
+    const profileImageUrl = async () => {
+    const img = await new PodManager().getPhoto(session);
+        return img;
+    }
+
+    const [imgUrl, setImgUrl] = React.useState('');
+
+    React.useEffect(() => {
+        const fetchImgUrl = async () => {
+            const url = await profileImageUrl();
+            setImgUrl(url);
+        };
+        fetchImgUrl();
+    }, []);
+    
     //#region METODOS DE CLASE
 
     const getProfile = async () => {
@@ -67,10 +86,16 @@ function LogedMenu() {
                 confirmButtonText: 'Editar perfil',
                 confirmButtonColor: '#81c784',
                 focusConfirm: false,
-                imageUrl: url,
+                imageUrl: imgUrl !== null ? imgUrl: url,
                 imageWidth: 'auto',
                 imageHeight: 200,
                 imageAlt: 'Foto de perfil actual',
+                didOpen: (modal) => {
+                    const image = modal.querySelector('.swal2-image')?.querySelector('img');
+                    if (image) {
+                    image.setAttribute('crossOrigin', 'anonymous');
+                    }
+                },
             }).then((result) => {
                 if (result.isConfirmed) {
                     showEdit();
@@ -133,8 +158,14 @@ function LogedMenu() {
             <VerticalDivider orientation='vertical' flexItem />
             <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
-                <IconButton data-testid="profileMenuButton" onClick={openUserMenu} sx={{ padding: 0 }}>
-                    <Avatar data-testid="userProfileImg" alt="User profile photo" src={url} />
+                <IconButton data-testid="profileMenuButton" onClick={ openUserMenu } sx={ { padding: 0 } }>
+                    { imgUrl !== null ?
+                        <Avatar data-testid="userProfileImg" >
+                            <img id="profileImagePod" src={ imgUrl } alt="User profile photo"crossOrigin="anonymous" />
+                        </Avatar>
+                        :
+                        <Avatar data-testid="userProfileImg" alt="User profile photo" src="defaultUser3.png" />
+                    }
                 </IconButton>
             </Tooltip>
             <MyMenu
