@@ -12,7 +12,9 @@ import * as fieldsValidation from '../../utils/fieldsValidation';
 import ProfileTemplate from "./ProfileTemplate";
 import EditIcon from '@mui/icons-material/Edit';
 import { temporalSuccessMessage } from "utils/MessageGenerator";
-import { readCookie } from "utils/CookieReader";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'utils/redux/store';
+import { setLastPath } from 'utils/redux/action';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -78,6 +80,8 @@ const LegendTypography = styled(Typography)({
 export function EditProfile() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     const schema = fieldsValidation.editProfileValidation;
     type EditSchema = yup.InferType<typeof schema>;
@@ -89,18 +93,19 @@ export function EditProfile() {
 
     const [user, setUser] = useState(getUserInSesion())
 
+    const url = useSelector((state: RootState) => state.app.lastPath);
 
     const showPassword = () => {
-        document.cookie = "lastPath=/home/edit/psw; path=/";
-        console.log(readCookie("lastPath"))
+        dispatch(setLastPath("/home/edit/psw"))
         navigate("/home/edit/psw")
     }
 
     const goBack = () => {
-        let url = readCookie("lastPath");
+       
         if (url === "/home/edit" || url === "/home/edit/psw")
-            url = "/";
-        navigate(url)
+            navigate("/")
+        else
+            navigate(url)
     }
     
     const tryToEdit = (editions: EditSchema) => {

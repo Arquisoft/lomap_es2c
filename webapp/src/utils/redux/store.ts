@@ -3,10 +3,12 @@ import { combineReducers } from "redux";
 
 import markersReducer from "./markersSlice";
 import userReducer from "./userSlice";
+import appReducer from "./appSlice";
 
 const rootReducer = combineReducers({
   markers: markersReducer,
   user: userReducer,
+  app: appReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

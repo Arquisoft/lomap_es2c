@@ -18,10 +18,9 @@ import { User } from 'shared/shareddtypes';
 import { NotificationManager, temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Divider } from '@mui/material';
 import { showError } from '../../utils/fieldsValidation';
-import PodManager from 'podManager/PodManager';
-import { useSession } from '@inrupt/solid-ui-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'utils/redux/store';
+import { setLastPath } from 'utils/redux/action';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -52,6 +51,7 @@ export function LoggedMenu() {
 
     const location = useLocation();
     const { pathname } = location;
+    const dispatch = useDispatch();
 
     const [userInSession, setUser] = useState(getUserInSesion().username)
 
@@ -93,7 +93,7 @@ export function LoggedMenu() {
 
     async function showEdit() {
         closeUserMenu();
-        document.cookie = "lastPath=" + pathname + "; path=/";
+        dispatch(setLastPath(pathname))
         navigate("/home/edit");
     }
 

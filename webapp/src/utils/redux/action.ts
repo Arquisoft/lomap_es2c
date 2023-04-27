@@ -144,3 +144,16 @@ export const setProfileImage = (
   type: "user/setProfileImage",
   payload: imgUrl,
 });
+
+// Functionality related to the app
+interface SetLastPath {
+  type: "app/setLastPath";
+  payload: string;
+}
+
+export const setLastPath = (
+  lastPath: string
+): SetLastPath => ({
+  type: "app/setLastPath",
+  payload: lastPath,
+});

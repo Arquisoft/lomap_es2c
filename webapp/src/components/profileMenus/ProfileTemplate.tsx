@@ -8,10 +8,8 @@ import PodManager from '../../podManager/PodManager';
 import { useSelector } from 'react-redux';
 import { RootState } from 'utils/redux/store';
 import { Fab } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { readCookie } from 'utils/CookieReader';
 
 const LogoBox = styled(Box)({
     display: 'flex',
@@ -28,15 +26,14 @@ export default function SesionForm(props: React.HTMLAttributes<HTMLDivElement>) 
     //#endregion
 
     const imgUrl = useSelector((state: RootState) => state.user.imgUrl);
+    const url = useSelector((state: RootState) => state.app.lastPath);
 
     const goBack = () => {
-        let url: string = readCookie("lastPath");
-            if (url === "/home/edit")
-                url = "/";
-            if (url === "/home/edit/psw" && pathname === "/home/edit/psw")
-            url = "/home/edit";
-            if (url === "/home/edit/psw" && pathname === "/home/edit")
-                url = "/";
+       
+        if (url === "/home/edit" || (url === "/home/edit/psw" && pathname === "/home/edit/psw") ||
+            (url === "/home/edit/psw" && pathname === "/home/edit"))
+                navigate("/")
+        else
             navigate(url)
      }
     
