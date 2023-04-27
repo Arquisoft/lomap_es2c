@@ -50,7 +50,6 @@ class PodManager {
                 { contentType: file.type, fetch: session.fetch }
             );}
         } catch (error) {
-            console.log(error);
         }
     }
 
@@ -83,11 +82,9 @@ class PodManager {
                 });
                 return places;
             } else {
-                console.log("JSON-LD data is not of type 'Places'");
                 return [];
             }}
         } catch (error) {
-            console.log(error);
             return [];
         }
     }
@@ -173,8 +170,8 @@ class PodManager {
                     { contentType: file.type, fetch: session.fetch }
                 );
             }
-        } catch (error) {
-            console.log(error);
+        } catch (error)
+        {
         }
     }
 
@@ -253,7 +250,6 @@ class PodManager {
                 );
             }
         } catch (error) {
-            console.log(error);
         }
     }
 
@@ -328,7 +324,6 @@ class PodManager {
                     );
             }
         } catch (error) {
-            console.log(error);
         }
     }
 
@@ -369,7 +364,6 @@ class PodManager {
                     });
                     return groups;
                 } else {
-                    console.log("JSON-LD data is not of type 'Maps'");
                     return [];
                 }
             } else
@@ -377,7 +371,6 @@ class PodManager {
                 return [];
             }
         } catch (error) {
-            console.log(error);
             return [];
         }
     }
@@ -404,7 +397,6 @@ class PodManager {
           resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
         } else {
           resourceAcl = getResourceAcl(myDatasetWithAcl);
-          console.log(resourceAcl)
         }
 
         // Agregar permisos de lectura al amigo especificado en el recurso:
@@ -453,7 +445,6 @@ class PodManager {
                 });
                 return groups;
             } else {
-                console.log("JSON-LD data is not of type 'Maps'");
                 return [];
                 }
             } else
@@ -462,7 +453,6 @@ class PodManager {
             }
             
         } catch (error) {
-            console.log(error);
             return [];
         }
     }
@@ -483,7 +473,6 @@ class PodManager {
             }
            
         } catch(error){
-            console.log(error)
             return null
         }
     }
