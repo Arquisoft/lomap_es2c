@@ -2,7 +2,7 @@ import "@inrupt/jest-jsdom-polyfills";
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import LoggedMenu from "components/profileMenus/LoggedMenu";
+import { LoggedMenu } from "components/profileMenus/LoggedMenu";
 import { searchUserByUsername, getUserInSesion } from "api/api";
 import { HomePage } from "components/mainComponents/HomePage";
 

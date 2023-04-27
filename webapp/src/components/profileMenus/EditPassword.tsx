@@ -1,16 +1,12 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../userIdentification/SesionForm';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Swal from 'sweetalert2';
-import { User } from '../../shared/shareddtypes';
-import { editPassword, editUserDetails, getUserInSesion } from 'api/api';
+import { editPassword, getUserInSesion } from 'api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
@@ -36,7 +32,7 @@ const EditPasswordButton = styled(Button)({
     color: 'white',
     borderColor: '#1f4a21',
     textTransform: 'none',
-     '&:hover': {
+    '&:hover': {
         color: '#1f4a21',
         borderColor: '#1f4a21',
         boxShadow: 'none',
@@ -112,7 +108,7 @@ export function EditPassword() {
 
 
     const [confirmPass, setConfirmPass] = useState('')
-    
+
     const [currentPassword, setCurrentPassword] = useState('')
 
     const [user, setUser] = useState(getUserInSesion())
@@ -124,70 +120,66 @@ export function EditPassword() {
             url = "/";
         navigate(url)
     }
-    
+
 
     const tryToEdit = (editions: EditSchema) => {
-        
 
-        if (currentPassword !== undefined && currentPassword !== '' && currentPassword !== null){
-         if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null)
-            {
-            if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword))  {
-                editPassword(currentPassword, editions.newPassword).then(() => {
-                    temporalSuccessMessage("Contraseña editada correctamente.");
-                    goBack();
-                }).catch((e) => {
-                    fieldsValidation.showError("No se actualizó la contraseña", e as string, () => {});
-                })
 
-            } else
-            {
-                 fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", () => {});
-             }
-             
+        if (currentPassword !== undefined && currentPassword !== '' && currentPassword !== null) {
+            if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null) {
+                if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword)) {
+                    editPassword(currentPassword, editions.newPassword).then(() => {
+                        temporalSuccessMessage("Contraseña editada correctamente.");
+                        goBack();
+                    }).catch((e) => {
+                        fieldsValidation.showError("No se actualizó la contraseña", e as string, () => { });
+                    })
+
+                } else {
+                    fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", () => { });
+                }
+
 
             }
-         else
-         {
-             fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe confirmar la nueva contraseña", () => {});
+            else {
+                fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe confirmar la nueva contraseña", () => { });
             }
-        } else
-        {
-             fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe introducir la contraseña actual", () => {});
+        } else {
+            fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe introducir la contraseña actual", () => { });
         }
 
     }
-    
+
     return (
         <Box sx={{ '& > :not(style)': { ml: '2em', mt: '2em' } }} component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" onClick={goBack}>
-        <KeyboardBackspaceIcon />
-      </Fab>
-        <ProfileTemplate> 
-            <CSSTypography variant="h3" align="center"
-                data-testid="usernameEditProfile"
-            >
-                {user.username}
-            </CSSTypography>
-            <CSSTypography fontWeight= 'lighter' variant="h5" align="center"
-                sx={{ mt: "0.5em" }}
-                data-testid="editProfileTitle"
-            >
-               Actualizar contraseña
-            </CSSTypography>
-             
-        
-                
-                 <CSSTextField sx={{ mt: "0.8em" }}
+            <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" onClick={goBack}>
+                <KeyboardBackspaceIcon />
+            </Fab>
+            <ProfileTemplate>
+                <CSSTypography variant="h3" align="center"
+                    data-testid="usernameEditProfile"
+                >
+                    {user.username}
+                </CSSTypography>
+                <CSSTypography fontWeight='lighter' variant="h5" align="center"
+                    sx={{ mt: "0.5em" }}
+                    data-testid="editProfileTitle"
+                >
+                    Actualizar contraseña
+                </CSSTypography>
+
+
+
+                <CSSTextField sx={{ mt: "0.8em" }}
                     id="oldPasswordEP"
                     label="Contraseña actual"
                     type="password"
                     autoComplete="current-password"
                     fullWidth
-                     onChange={(e: any) => setCurrentPassword(e.target.value)}
-                    />
-                    
-                    <CSSTextField sx={{ mt: "0.3em" }}
+                    onChange={(e: any) => setCurrentPassword(e.target.value)}
+                />
+
+                <CSSTextField sx={{ mt: "0.3em" }}
                     id="passwordSU"
                     label="Nueva contraseña"
                     type="password"
@@ -196,9 +188,9 @@ export function EditPassword() {
                     {...register("newPassword")}
 
                     helperText={errors.newPassword ? errors.newPassword.message : ''}
-                    />
+                />
 
-                <CSSTextField  sx={{ mt: "0.3em" }}
+                <CSSTextField sx={{ mt: "0.3em" }}
                     id="confirmPasswordSU"
                     label="Repite la nueva contraseña"
                     type="password"
@@ -206,8 +198,8 @@ export function EditPassword() {
                     autoComplete="current-password"
                     onChange={(e: any) => setConfirmPass(e.target.value)}
                 />
-        
-             <CSSButton
+
+                <CSSButton
                     sx={{ mt: "1.5em", mb: "2em" }}
                     variant="contained"
                     type="submit"
@@ -217,7 +209,7 @@ export function EditPassword() {
                 >
                     Editar perfil
                 </CSSButton>
-                
+
             </ProfileTemplate>
         </Box>
     )

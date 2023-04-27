@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import LogedMenu from '../profileMenus/LoggedMenu';
+import { LoggedMenu } from '../profileMenus/LoggedMenu';
 import { NoLoggedMenu } from '../profileMenus/NoLoggedMenu';
 import { useNavigate } from 'react-router-dom';
 import { Divider } from '@mui/material';
@@ -79,7 +79,7 @@ export function Header(props: { logged: boolean }) {
 
     const getMode = () => {
         if (props.logged) {
-            return (<LogedMenu />)
+            return (<LoggedMenu />)
         }
         else {
             return (<NoLoggedMenu />)

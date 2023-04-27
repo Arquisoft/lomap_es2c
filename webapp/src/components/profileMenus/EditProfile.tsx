@@ -36,7 +36,7 @@ const EditPasswordButton = styled(Button)({
     color: 'white',
     borderColor: '#1f4a21',
     textTransform: 'none',
-     '&:hover': {
+    '&:hover': {
         color: '#1f4a21',
         borderColor: '#1f4a21',
         boxShadow: 'none',
@@ -123,59 +123,58 @@ export function EditProfile() {
             url = "/";
         navigate(url)
     }
-    
+
 
 
     const tryToEdit = (editions: EditSchema) => {
 
-        if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null)
-        {
-           let editedUser = { username: user.username, webID: user.webID, password: user.password, description:editions.biography, img: user.img }
+        if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null) {
+            let editedUser = { username: user.username, webID: user.webID, password: user.password, description: editions.biography, img: user.img }
             editUserDetails(editedUser).then(() => {
                 temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
                 goBack();
             }).catch((e) => {
-                fieldsValidation.showError("No se ha podido actualizar el perfil.", e as string, () => {}); 
+                fieldsValidation.showError("No se ha podido actualizar el perfil.", e as string, () => { });
                 return false;
             })
         }
     }
-    
+
     return (
         <Box sx={{ '& > :not(style)': { ml: '2em', mt: '2em' } }} component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" onClick={goBack}>
-        <KeyboardBackspaceIcon />
-      </Fab>
-        <ProfileTemplate> 
-            <CSSTypography variant="h3" align="center"
-                data-testid="usernameEditProfile"
-            >
-                {user.username}
-            </CSSTypography>
-            <CSSTypography fontWeight= 'lighter' variant="h5" align="center"
-                sx={{ mt: "0.5em" }}
-                data-testid="editProfileTitle"
-            >
-               Edita tu perfil
-            </CSSTypography>
-             <Box>
+            <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" onClick={goBack}>
+                <KeyboardBackspaceIcon />
+            </Fab>
+            <ProfileTemplate>
+                <CSSTypography variant="h3" align="center"
+                    data-testid="usernameEditProfile"
+                >
+                    {user.username}
+                </CSSTypography>
+                <CSSTypography fontWeight='lighter' variant="h5" align="center"
+                    sx={{ mt: "0.5em" }}
+                    data-testid="editProfileTitle"
+                >
+                    Edita tu perfil
+                </CSSTypography>
+                <Box>
                     <LegendTypography sx={{ mb: "0.3em" }}> Biografía: </LegendTypography>
 
                     <textarea
                         id="biography-EP"
-                        placeholder= {user?.description? user.description : "Edita tu biografía..."}
+                        placeholder={user?.description ? user.description : "Edita tu biografía..."}
                         {...register("biography")}
-                        />
+                    />
 
-            </Box>
-            
+                </Box>
 
-            
-               <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
-                Actualizar contraseña
-            </EditPasswordButton>
-        
-             <CSSButton
+
+
+                <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
+                    Actualizar contraseña
+                </EditPasswordButton>
+
+                <CSSButton
                     sx={{ mt: "1.5em", mb: "2em" }}
                     variant="contained"
                     type="submit"
@@ -185,7 +184,7 @@ export function EditProfile() {
                 >
                     Editar perfil
                 </CSSButton>
-                
+
             </ProfileTemplate>
         </Box>
     )
