@@ -2,16 +2,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import PlaceCategories from '../../places/PlaceCategories';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 200,
-    },
-  },
-};
 
 export const CategoriesFilter = (props: { setFilter: any }) => {
 

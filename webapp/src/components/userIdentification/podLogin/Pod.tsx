@@ -11,10 +11,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { logout } from '../../../api/api';
 import { LoginButton } from "@inrupt/solid-ui-react";
 import { useNavigate } from 'react-router-dom';
-import { ISessionInfo, handleIncomingRedirect } from '@inrupt/solid-client-authn-browser';
-import { useDispatch } from 'react-redux';
-import { setProfileImage } from 'utils/redux/action';
-import PodManager from 'podManager/PodManager';
 
 
 const CSSButton = styled(Button)({
