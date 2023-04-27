@@ -48,14 +48,14 @@ function LoginInformation(props: any) {
     return <b><p>{props.name}</p></b>;
 }
 //#endregion
-function LogedMenu() {
+export function LoggedMenu() {
 
     const location = useLocation();
     const { pathname } = location;
 
     const [userInSession, setUser] = useState(getUserInSesion().username)
-    
-    
+
+
     const imgUrl = useSelector((state: RootState) => state.user.imgUrl);
 
     //#region METODOS DE CLASE
@@ -63,8 +63,7 @@ function LogedMenu() {
     const getProfile = async () => {
         closeUserMenu();
         let imgHtml = ` <img id="profileImageLM" src="defaultUser2.png" alt="Foto de perfil" >`;
-        if (imgUrl !== null)
-        {
+        if (imgUrl !== null) {
             imgHtml = ` <img id="profileImagePodLM" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
         }
         await searchUserByUsername(userInSession).then((user) => {
@@ -94,7 +93,7 @@ function LogedMenu() {
 
     async function showEdit() {
         closeUserMenu();
-        document.cookie = "lastPath=" + pathname +"; path=/";
+        document.cookie = "lastPath=" + pathname + "; path=/";
         navigate("/home/edit");
     }
 
@@ -139,10 +138,10 @@ function LogedMenu() {
             <VerticalDivider orientation='vertical' flexItem />
             <LoginInformation name={userInSession} />
             <Tooltip title="Open settings">
-                <IconButton data-testid="profileMenuButton" onClick={ openUserMenu } sx={ { padding: 0 } }>
-                    { imgUrl !== null ?
+                <IconButton data-testid="profileMenuButton" onClick={openUserMenu} sx={{ padding: 0 }}>
+                    {imgUrl !== null ?
                         <Avatar data-testid="userProfileImg" >
-                            <img id="profileImagePod" src={ imgUrl } alt="User profile photo" crossOrigin="anonymous" />
+                            <img id="profileImagePod" src={imgUrl} alt="User profile photo" crossOrigin="anonymous" />
                         </Avatar>
                         :
                         <Avatar data-testid="userProfileImg" alt="User profile photo" src="defaultUser.png" />
@@ -179,5 +178,3 @@ function LogedMenu() {
 
     )
 }
-
-export default LogedMenu;

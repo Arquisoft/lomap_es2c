@@ -97,7 +97,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     const showFriendProfile = async (user: User) => {
         let usr = user;
         Swal.fire({
-            title: 'Mi perfil',
+            title: 'Perfil de amigo',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                     <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
@@ -152,7 +152,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <Tooltip title="See friend profile">
-                                                    <PersonIcon onClick={() => showFriendProfile(friend.user)} />
+                                                    <PersonIcon data-testid={friend.user.username} onClick={() => showFriendProfile(friend.user)} />
                                                 </Tooltip>
                                             </ListItemIcon>
                                             <ListItemText primary={friend.user.username} />
@@ -160,13 +160,13 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                                 isOpen(i) ?
                                                     <ExpandLess onClick={() => handleClick(i)} />
                                                     :
-                                                    <ExpandMore onClick={() => handleClick(i)} />
+                                                    <ExpandMore data-testid={friend.user.username + "xm"} onClick={() => handleClick(i)} />
                                                 :
                                                 <></>
                                             }
                                             <VerticalDivider orientation='vertical' flexItem />
                                             <Tooltip title="Delete friend" sx={{ ml: "0.5em" }}>
-                                                <CloseIcon onClick={() => deleteFriend(friend.user)} htmlColor="red" />
+                                                <CloseIcon data-testid={"deleteFriend" + friend.user.username} onClick={() => deleteFriend(friend.user)} htmlColor="red" />
                                             </Tooltip>
                                         </ListItemButton>
                                         <Collapse in={isOpen(i)} timeout="auto" unmountOnExit>
@@ -175,7 +175,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                                     return (
                                                         <React.Fragment key={i + "-" + j}>
                                                             <Tooltip title="Show on map">
-                                                                <ListItemButton sx={{ pl: 4 }} onClick={() => showGroup(group, friend.user)}>
+                                                                <ListItemButton data-testid={friend.user.username + group.name} sx={{ pl: 4 }} onClick={() => showGroup(group, friend.user)}>
                                                                     <ListItemIcon>
                                                                         <MapIcon />
                                                                     </ListItemIcon>

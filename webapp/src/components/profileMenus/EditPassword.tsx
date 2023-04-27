@@ -34,7 +34,7 @@ const EditPasswordButton = styled(Button)({
     color: 'white',
     borderColor: '#1f4a21',
     textTransform: 'none',
-     '&:hover': {
+    '&:hover': {
         color: '#1f4a21',
         borderColor: '#1f4a21',
         boxShadow: 'none',
@@ -100,14 +100,13 @@ export function EditPassword() {
 
 
     const [confirmPass, setConfirmPass] = useState('')
-    
+
     const [currentPassword, setCurrentPassword] = useState('')
 
     const [user, setUser] = useState(getUserInSesion())
 
 
     const tryToEdit = (editions: EditSchema) => {
-        
 
         if (currentPassword !== undefined && currentPassword !== '' && currentPassword !== null){
          if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null)
@@ -119,25 +118,21 @@ export function EditPassword() {
                 }).catch((e) => {
                     fieldsValidation.showError("No se actualizó la contraseña", e as string, () => {});
                 })
+                } else {
+                    fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", () => { });
+                }
 
-            } else
-            {
-                 fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", () => {});
-             }
-             
 
             }
-         else
-         {
-             fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe confirmar la nueva contraseña", () => {});
+            else {
+                fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe confirmar la nueva contraseña", () => { });
             }
-        } else
-        {
-             fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe introducir la contraseña actual", () => {});
+        } else {
+            fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe introducir la contraseña actual", () => { });
         }
 
     }
-    
+
     return (
         <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
         <ProfileTemplate> 
@@ -161,10 +156,10 @@ export function EditPassword() {
                     type="password"
                     autoComplete="current-password"
                     fullWidth
-                     onChange={(e: any) => setCurrentPassword(e.target.value)}
-                    />
-                    
-                    <CSSTextField sx={{ mt: "0.3em" }}
+                    onChange={(e: any) => setCurrentPassword(e.target.value)}
+                />
+
+                <CSSTextField sx={{ mt: "0.3em" }}
                     id="passwordSU"
                     label="Nueva contraseña"
                     type="password"
@@ -173,9 +168,9 @@ export function EditPassword() {
                     {...register("newPassword")}
 
                     helperText={errors.newPassword ? errors.newPassword.message : ''}
-                    />
+                />
 
-                <CSSTextField  sx={{ mt: "0.3em" }}
+                <CSSTextField sx={{ mt: "0.3em" }}
                     id="confirmPasswordSU"
                     label="Repite la nueva contraseña"
                     type="password"
@@ -183,8 +178,8 @@ export function EditPassword() {
                     autoComplete="current-password"
                     onChange={(e: any) => setConfirmPass(e.target.value)}
                 />
-        
-             <CSSButton
+
+                <CSSButton
                     sx={{ mt: "1.5em", mb: "2em" }}
                     variant="contained"
                     type="submit"
@@ -194,7 +189,7 @@ export function EditPassword() {
                 >
                     Editar perfil
                 </CSSButton>
-                
+
             </ProfileTemplate>
         </StyledBox>
     )

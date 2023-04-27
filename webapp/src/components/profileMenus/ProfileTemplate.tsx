@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Paper from '../userIdentification/Paper';
 import { styled } from '@mui/material/styles';
 import { useSession } from '@inrupt/solid-ui-react';
-import PodManager  from '../../podManager/PodManager';
+import PodManager from '../../podManager/PodManager';
 import { useSelector } from 'react-redux';
 import { RootState } from 'utils/redux/store';
 import { Fab } from "@mui/material";
@@ -55,18 +55,18 @@ export default function SesionForm(props: React.HTMLAttributes<HTMLDivElement>) 
                         sx={{ pt:'2em', pl:'2em', pr:'2em' }}
                     >
                         <LogoBox>
-                            { imgUrl !== null ? 
-                                <img id="profileImagePodPT" src={ imgUrl } alt="Foto de perfil" crossOrigin="anonymous" />
+                            {imgUrl !== null ?
+                                <img id="profileImagePodPT" src={imgUrl} alt="Foto de perfil" crossOrigin="anonymous" />
                                 :
-                                 <img id="profileImage" src="defaultUser.png" alt="Foto de perfil" />
+                                <img id="profileImage" src="defaultUser.png" alt="Foto de perfil" />
                             }
-                            
+
                         </LogoBox>
                         {children}
                     </Paper>
                 </Box>
-            </Container>
-        </Box>
+            </Container >
+        </Box >
         //#endregion
 
     );

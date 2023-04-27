@@ -1,204 +1,207 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
 
-  to {
-    transform: rotate(360deg);
-  }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 #imgLogo {
-  width: 3em;
+    width: 3em;
 }
 
 body {
-  min-width: 100%;
-  overflow-x: hidden;
-  overflow-y: overlay;
+    min-width: 100%;
+    overflow-x: hidden;
+    overflow-y: overlay;
 }
 
 #biography-ep,
 #biography-gp {
-  height: 7em;
-  resize: none;
+    height: 7em;
+    resize: none;
 }
 
 .swal2-input {
-  width: 17em !important;
-  margin: 0.5em 2em !important;
+    width: 17em !important;
+    margin: 0.5em 2em !important;
 }
 
-body.swal2-shown > [aria-hidden="true"] {
-  transition: 0.1s filter;
-  filter: blur(5px);
+body.swal2-shown>[aria-hidden="true"] {
+    transition: 0.1s filter;
+    filter: blur(5px);
 }
 
 .swal2-image {
-  border-radius: 350px;
+    border-radius: 350px;
 }
 
 .leaflet-container {
-  width: 70vw;
-  height: auto;
+    width: 70vw;
+    height: auto;
 }
 
 #homeA {
-  color: black;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  background-color: transparent;
-  padding: 0em;
-  text-decoration: underline;
+    color: black;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    padding: 0em;
+    text-decoration: underline;
 }
 
 #addPlaceDyn {
-  background: transparent;
-  color: #81c784;
-  border: 2px solid #81c784;
-  border-radius: 6px;
-  font-size: 1.2em;
+    background: transparent;
+    color: #81c784;
+    border: 2px solid #81c784;
+    border-radius: 6px;
+    font-size: 1.2em;
 }
 
 #addPlaceDyn:hover {
-  background: #81c784;
-  color: black;
-  border: 2px solid #81c784;
-  border-radius: 6px;
-  font-size: 1.2em;
+    background: #81c784;
+    color: black;
+    border: 2px solid #81c784;
+    border-radius: 6px;
+    font-size: 1.2em;
 }
 
 a:visited,
 a:hover {
-  color: #1f4a21;
+    color: #1f4a21;
 }
 
 a {
-  color: white;
+    color: white;
 }
 
 .swal-text-success,
 .swal-text-info {
-  font-size: 1em !important;
-  justify-self: left !important;
-  padding: 1em 1em 0em !important;
-  margin: 0em !important;
-  align-self: center !important;
+    font-size: 1em !important;
+    justify-self: left !important;
+    padding: 1em 1em 0em !important;
+    margin: 0em !important;
+    align-self: center !important;
 }
 
 .swal-text-info {
-  color: "black";
+    color: "black";
 }
 
 .swal-text-error {
-  color: "red";
+    color: "red";
 }
 
 .swal-text-success {
-  color: #81c784 !important;
+    color: #81c784 !important;
 }
 
 .swal-popup {
-  display: flex !important;
-  flex-direction: row !important;
-  height: 5vh;
-  align-content: center !important;
+    display: flex !important;
+    flex-direction: row !important;
+    height: 5vh;
+    align-content: center !important;
 }
 
 #review:focus {
-  border-color: #81c784 !important;
+    border-color: #81c784 !important;
 }
 
 .Leyenda {
-  border-radius: 0.5em;
-  background-color: white;
-  padding: 0em 0.5em 0.5em;
-  font-family: "Calibri", "Gill Sans", "Gill Sans MT", "Trebuchet MS",
-    sans-serif;
-  font-size: 1.1em;
-  color: #39393a;
+    border-radius: 0.5em;
+    background-color: white;
+    padding: 0em 0.5em 0.5em;
+    font-family: "Calibri", "Gill Sans", "Gill Sans MT", "Trebuchet MS",
+        sans-serif;
+    font-size: 1.1em;
+    color: #39393a;
 }
 
-.Leyenda > h3 {
-  text-align: center;
-  margin-bottom: 0.2em;
+.Leyenda>h3 {
+    text-align: center;
+    margin-bottom: 0.2em;
 }
 
 .markerName {
-  color: #81c784;
-  text-align: center;
+    color: #81c784;
+    text-align: center;
 }
 
 .cleanMap {
-  border-radius: 0.5em;
-  background-color: white;
-  padding: 0.5em 0.5em 0.5em;
-  font-family: "Calibri", "Gill Sans", "Gill Sans MT", "Trebuchet MS",
-    sans-serif;
-  font-size: 1em;
-  color: #39393a;
+    border-radius: 0.5em;
+    background-color: white;
+    padding: 0.5em 0.5em 0.5em;
+    font-family: "Calibri", "Gill Sans", "Gill Sans MT", "Trebuchet MS",
+        sans-serif;
+    font-size: 1em;
+    color: #39393a;
 }
 
-.cleanMap > button {
-  background-color: white !important;
-  color: #39393a;
-  font-size: 1em;
-  outline: none;
-  border: none;
+.cleanMap>button {
+    background-color: white !important;
+    color: #39393a;
+    font-size: 1em;
+    outline: none;
+    border: none;
 }
 
-.cleanMap > button > img {
-  margin-right: 0.5em;
+.cleanMap>button>img {
+    margin-right: 0.5em;
 }
 
-.cleanMap > button:hover {
-  cursor: pointer;
+.cleanMap>button:hover {
+    cursor: pointer;
 }
 
 #uploadImage {
-  display: none;
-}
-#uploadImageDiv {
-  margin-top: 0.8em;
-  margin-bottom: 0.3em;
-  display: flex;
-  align-items: center;
-  align-content: center;
-}
-#uploadImageDiv > p {
-  color:#39393a;
-  font-size: 0.8em;
-  font-weight: lighter;
+    display: none;
 }
 
-#profileImage, #profileImageLM {
-  height: 180px;
+#uploadImageDiv {
+    margin-top: 0.8em;
+    margin-bottom: 0.3em;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
+#uploadImageDiv>p {
+    color: #39393a;
+    font-size: 0.8em;
+    font-weight: lighter;
+}
+
+#profileImage,
+#profileImageLM {
+    height: 180px;
 }
 
 
@@ -209,9 +212,9 @@ a {
 }
 
 #biography-EP {
-  width: 99%;
-  height: 7vh;
-  resize: none;
-  background-color: transparent;
-  color:"red" !important;
+    width: 99%;
+    height: 7vh;
+    resize: none;
+    background-color: transparent;
+    color: "red" !important;
 }

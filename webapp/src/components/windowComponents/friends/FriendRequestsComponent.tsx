@@ -13,8 +13,8 @@ import Swal from 'sweetalert2';
 import CheckIcon from '@mui/icons-material/Check';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { showError } from 'utils/fieldsValidation';
-import PodManager from 'podManager/PodManager';
 import { useSession } from '@inrupt/solid-ui-react';
+import { añadirPermisosAmigo } from 'podManager/MapManager';
 
 
 const VerticalDivider = styled(Divider)({
@@ -38,14 +38,13 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
         for (let i = 0; i < elems; i++) {
             str += '0';
         }
-        console.log("Generate open: " + str)
         return str;
     }
 
     const showFriendProfile = async (user: string) => {
         await searchUserByUsername(user).then((usr) => {
             Swal.fire({
-                title: 'Mi perfil',
+                title: 'Solicitud de amistad',
                 html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                         <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
                         <label for="biography-gp" class="swal2-label">Biografía: </label>
@@ -76,9 +75,11 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
             props.refresh();
             props.refreshFriends();
             searchUserByUsername(request.sender).then((friend) => {
-                new PodManager().addReadPermissionsToFriend(getUserInSesion().webID, friend.webID, session).then(() => {
+                añadirPermisosAmigo(getUserInSesion().webID, friend.webID, session).then(() => {
                     temporalSuccessMessage("La solicitud de amistad de <em><b>" + request.sender + "</b></em> ha sido aceptada correctamente.");
-                })
+                }).catch((err: any) => {
+                    showError("Error procesar los permisos de Inrupt", err.message, Swal.close);
+                });
             })
         }).catch((err: any) => {
             showError("Error al aceptar la solicitud de " + request.sender + ".", err.message, Swal.close);
@@ -93,22 +94,21 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
                     {frds.length > 0 ?
                         <React.Fragment key="loaded">
                             {frds.map((request, i) => {
-                                console.log(request)
                                 return (
                                     <React.Fragment key={i}>
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <Tooltip title="See friend profile">
-                                                    <PersonIcon onClick={() => showFriendProfile(request.sender)} />
+                                                    <PersonIcon data-testid={request.sender} onClick={() => showFriendProfile(request.sender)} />
                                                 </Tooltip>
                                             </ListItemIcon>
                                             <ListItemText primary={request.sender} />
                                             <Tooltip title="Decline request">
-                                                <CloseIcon onClick={() => declineRequest(request)} htmlColor="red" />
+                                                <CloseIcon data-testid={request.sender + "Decline"} onClick={() => declineRequest(request)} htmlColor="red" />
                                             </Tooltip>
                                             <VerticalDivider orientation='vertical' flexItem />
                                             <Tooltip title="Accept request" sx={{ ml: "0.5em" }}>
-                                                <CheckIcon onClick={() => acceptRequest(request)} htmlColor="green" />
+                                                <CheckIcon data-testid={request.sender + "Accept"} onClick={() => acceptRequest(request)} htmlColor="green" />
                                             </Tooltip>
                                         </ListItemButton>
                                     </React.Fragment>)

@@ -116,9 +116,7 @@ export default function LoggedView() {
     }
 
     useEffect(() => {
-        
-
-        if (welcome && readCookie("sameWebId") !== "true")
+        if (welcome && readCookie("sameWebId") !== "true" && session.info.webId)
             checkWebId();
             
     }, []);

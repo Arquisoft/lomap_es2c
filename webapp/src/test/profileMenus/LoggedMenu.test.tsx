@@ -1,10 +1,12 @@
 import "@inrupt/jest-jsdom-polyfills";
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import LoggedMenu from "components/profileMenus/LoggedMenu";
+import { LoggedMenu } from "components/profileMenus/LoggedMenu";
 import { searchUserByUsername, getUserInSesion } from "api/api";
 import { HomePage } from "components/mainComponents/HomePage";
+import { Provider } from "react-redux";
+import store from "utils/redux/store";
 
 const api = require('api/api')
 jest.spyOn(api, 'searchUserByUsername')
@@ -28,9 +30,11 @@ test('renders loggedMenu', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let linkElement = screen.getByTestId("notificationManager");
@@ -50,9 +54,11 @@ test('renders click on profile menu', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let profileMenuButton = screen.getByTestId("profileMenuButton");
@@ -80,9 +86,11 @@ test('click on getProfile', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let profileMenuButton = screen.getByTestId("profileMenuButton");
@@ -102,16 +110,18 @@ test('click on editProfile', async () => {
 
     Object.defineProperty(document, 'cookie', {
         writable: true,
-        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ;' +
+        value: 'userInSession={"username":"test","webID":"test","password":"","img":"","description":""} ; path=/ ;' +
             'isLogged=true ; path=/ ;' +
             'isPodLogged=true ; path=/ ;',
     });
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let profileMenuButton = screen.getByTestId("profileMenuButton");
@@ -122,38 +132,6 @@ test('click on editProfile', async () => {
     expect(editNoPswInfo).toBeInTheDocument();
 
 });
-
-/*
-test('click on editProfile and go editPsw', async () => {
-
-    (searchUserByUsername as any).mockReturnValueOnce(
-        Promise.resolve({ username: 'test', webID: 'test', password: '', description: 'test', img: '' })
-    );
-
-    Object.defineProperty(document, 'cookie', {
-        writable: true,
-        value: 'userInSession={"username":"test","webID":"test","password":""} ; path=/ ;' +
-            'isLogged=true ; path=/ ;' +
-            'isPodLogged=true ; path=/ ;',
-    });
-
-    await act(async () => {
-        render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
-        );
-    })
-    let profileMenuButton = screen.getByTestId("profileMenuButton");
-    fireEvent.click(profileMenuButton);
-    let showEditButton = screen.getByTestId("showEditButton");
-    fireEvent.click(showEditButton);
-    let editPswButton = await screen.findByText("Cambiar contraseña");
-    console.log(editPswButton)
-    //let editPswInfo = await screen.findByTestId("editPswInfo");
-    //expect(editPswInfo).toBeInTheDocument();
-
-});*/
 
 test('logout', async () => {
 
@@ -166,12 +144,14 @@ test('logout', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter initialEntries={["/home"]} initialIndex={1}>
-                <Routes>
-                    <Route path="/home" element={<LoggedMenu />} />
-                    <Route path="/" element={<HomePage />} />
-                </Routes>
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter initialEntries={["/home"]} initialIndex={1}>
+                    <Routes>
+                        <Route path="/home" element={<LoggedMenu />} />
+                        <Route path="/" element={<HomePage />} />
+                    </Routes>
+                </MemoryRouter>
+            </Provider>
         );
     })
     let profileMenuButton = screen.getByTestId("profileMenuButton");
@@ -201,9 +181,11 @@ test('click on getProfile throw error', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let profileMenuButton = screen.getByTestId("profileMenuButton");

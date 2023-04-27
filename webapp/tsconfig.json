@@ -10,6 +10,7 @@
         "allowJs": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
+        "allowUnusedLabels": true,
         "allowSyntheticDefaultImports": true,
         "strict": true,
         "strictNullChecks": false,
@@ -24,5 +25,5 @@
     },
     "include": [
         "src"
-    ]
+    ],
 }

@@ -35,7 +35,7 @@ const EditPasswordButton = styled(Button)({
     color: 'white',
     borderColor: '#1f4a21',
     textTransform: 'none',
-     '&:hover': {
+    '&:hover': {
         color: '#1f4a21',
         borderColor: '#1f4a21',
         boxShadow: 'none',
@@ -105,19 +105,18 @@ export function EditProfile() {
     
     const tryToEdit = (editions: EditSchema) => {
 
-        if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null)
-        {
-           let editedUser = { username: user.username, webID: user.webID, password: user.password, description:editions.biography, img: user.img }
+        if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null) {
+            let editedUser = { username: user.username, webID: user.webID, password: user.password, description: editions.biography, img: user.img }
             editUserDetails(editedUser).then(() => {
                 temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
                 goBack();
             }).catch((e) => {
-                fieldsValidation.showError("No se ha podido actualizar el perfil.", e as string, () => {}); 
+                fieldsValidation.showError("No se ha podido actualizar el perfil.", e as string, () => { });
                 return false;
             })
         }
     }
-    
+
     return (
         <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
         
@@ -138,12 +137,11 @@ export function EditProfile() {
 
                     <textarea
                         id="biography-EP"
-                        placeholder= {user?.description? user.description : "Edita tu biografía..."}
+                        placeholder={user?.description ? user.description : "Edita tu biografía..."}
                         {...register("biography")}
-                        />
+                    />
 
-            </Box>
-            
+                </Box>
 
             
             <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
@@ -160,7 +158,7 @@ export function EditProfile() {
                 >
                     Editar perfil
                 </CSSButton>
-                
+
             </ProfileTemplate>
         </StyledBox>
     )

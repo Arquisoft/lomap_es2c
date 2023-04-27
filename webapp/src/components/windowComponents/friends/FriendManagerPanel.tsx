@@ -123,7 +123,7 @@ export const FriendManagerPanel = () => {
     const showAddFriendConfirm = async (user: User) => {
         let usr = user;
         Swal.fire({
-            title: 'Mi perfil',
+            title: '¿Enviar solicitud?',
             html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                     <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
@@ -139,7 +139,7 @@ export const FriendManagerPanel = () => {
                 sendFriendRequest(user).then(() => {
                     temporalSuccessMessage("La solicitud de amistad a <em><b>" + user.username + "</b></em> ha sido enviada correctamente.")
                 }).catch((err: any) => {
-                    showError("Error enviar la solicitud de amistad.", err.message, Swal.close);
+                    showError("Error al enviar la solicitud de amistad.", err.message, Swal.close);
                 });
             }
         })
@@ -156,16 +156,16 @@ export const FriendManagerPanel = () => {
                     <>
                         <OptionsBox>
                             <Tooltip title="Friends">
-                                <GroupIcon onClick={() => navigate("/home/friends/main")} htmlColor={op === "main" ? "#1f4a21" : "#81c784"} />
+                                <GroupIcon data-testid="goFriendsIcon" onClick={() => navigate("/home/friends/main")} htmlColor={op === "main" ? "#1f4a21" : "#81c784"} />
                             </Tooltip>
                             <Tooltip title="Friend requests">
-                                <NotificationsActiveIcon onClick={() => navigate("/home/friends/requests")} htmlColor={op === "requests" ? "#1f4a21" : "#81c784"} />
+                                <NotificationsActiveIcon data-testid="goRequestsIcon" onClick={() => navigate("/home/friends/requests")} htmlColor={op === "requests" ? "#1f4a21" : "#81c784"} />
                             </Tooltip>
                         </OptionsBox>
                         <HorizontalDivider light color="#81c784" />
                         {op === "main" ?
                             <>
-                                <AddFriendBox component="form" onSubmit={handleSubmit(onSubmit)}>
+                                <AddFriendBox data-testid="addFriendForm" component="form" onSubmit={handleSubmit(onSubmit)}>
                                     <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
                                     <TextField
                                         label="Añadir un amigo"
