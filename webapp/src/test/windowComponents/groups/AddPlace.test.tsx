@@ -202,6 +202,80 @@ test('check add place from showgroup', async () => {
     });
 });
 
+test('check breadcrumbs', async () => {
+
+    (verMapaDe as any).mockReturnValue(
+        Promise.resolve(
+            groups
+        )
+    );
+
+    await act(async () => {
+        render(
+            <Provider store={store}>
+                <SessionProvider sessionId="">
+                    <MemoryRouter initialEntries={['/home/groups/main']} initialIndex={1}>
+                        <Routes>
+                            <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<>
+                                <MainPage />
+                            </>} />
+                        </Routes>
+                    </MemoryRouter>
+                </SessionProvider>
+            </Provider>
+        );
+    });
+    await act(async () => {
+        let linkElement = screen.getByTestId("Grupo1");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByTestId("añadirLugar");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByTestId("addplacebreadcrumbs");
+        expect(linkElement).toBeInTheDocument();
+        linkElement = await screen.findByText("Mis grupos")
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByText("Tus grupos de mapas");
+        expect(linkElement).toBeInTheDocument();
+    });
+});
+
+test('check breadcrumbs 2', async () => {
+
+    (verMapaDe as any).mockReturnValue(
+        Promise.resolve(
+            groups
+        )
+    );
+
+    await act(async () => {
+        render(
+            <Provider store={store}>
+                <SessionProvider sessionId="">
+                    <MemoryRouter initialEntries={['/home/groups/main']} initialIndex={1}>
+                        <Routes>
+                            <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<>
+                                <MainPage />
+                            </>} />
+                        </Routes>
+                    </MemoryRouter>
+                </SessionProvider>
+            </Provider>
+        );
+    });
+    await act(async () => {
+        let linkElement = screen.getByTestId("Grupo1");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByTestId("añadirLugar");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByTestId("addplacebreadcrumbs");
+        expect(linkElement).toBeInTheDocument();
+        let linkElements = await screen.findAllByText("Grupo1")
+        fireEvent.click(linkElements[0]);
+        linkElement = await screen.findByTestId("breadcrumbShowgroup");
+        expect(linkElement).toBeInTheDocument();
+    });
+});
+
 const comments: Comment[] = [
     { author: "security", date: "10/04/2023", comment: "Review del bar de Pepe" }
 ]

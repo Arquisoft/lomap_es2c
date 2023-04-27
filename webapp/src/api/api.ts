@@ -150,23 +150,6 @@ export async function updateRequest(req: FriendRequest, status: number) {
     }
 }
 
-export async function addGroup(group: Group): Promise<Group[]> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
-    let response = await fetch(apiEndPoint + '/mapmanager/addgroup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'group': group, "user": getUserInSesion() })
-    });
-    switch (response.status) {
-        case 404: {
-            let res = await response.json();
-            throw new Error(res.error);
-        }
-        case 200: return response.json();
-        default: throw new Error("Unexpected error");
-    }
-}
-
 export async function getMyFriendRequests(user: User): Promise<FriendRequest[]> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/friendmanager/friendrequests', {
