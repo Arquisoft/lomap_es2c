@@ -1,27 +1,26 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../userIdentification/SesionForm';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Swal from 'sweetalert2';
-import { User } from '../../shared/shareddtypes';
-import { editPassword, editUserDetails, getUserInSesion } from 'api/api';
+import { editUserDetails, getUserInSesion } from 'api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import ProfileTemplate from "./ProfileTemplate";
-import { Fab } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { temporalSuccessMessage } from "utils/MessageGenerator";
 import { readCookie } from "utils/CookieReader";
 
 //#region DEFINICION DE COMPONENTES STYLED
+
+const StyledBox = styled(Box)({
+    marginTop: '1em',
+    marginLeft: '2em',
+});
+
 
 const CSSTypography = styled(Typography)({
     color: "white",
@@ -62,29 +61,6 @@ const CSSButton = styled(Button)({
         boxShadow: '0 0 0 0.2rem #1f4a21',
     },
 });
-const CSSTextField = styled(TextField)({
-    marginBottom: '0.8em',
-    '& label.Mui-focused': {
-        color: '#1f4a21',
-    },
-    '& .MuiInput-underline:after': {
-        borderBottomColor: '#1f4a21',
-    },
-    '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-            borderColor: 'white',
-        },
-        '&:hover fieldset': {
-            borderColor: '#1f4a21',
-        },
-        '&.Mui-focused fieldset': {
-            borderColor: '#1f4a21',
-        },
-    }, '.MuiFormHelperText-root': {
-        color: 'white !important',
-    }
-});
-
 
 const LegendTypography = styled(Typography)({
     color: 'white',
@@ -94,6 +70,7 @@ const LegendTypography = styled(Typography)({
     lineHeight: '1.4375em',
     letterSpacing: '0.00938em',
 });
+
 
 //#endregion
 
@@ -114,18 +91,18 @@ export function EditProfile() {
 
 
     const showPassword = () => {
+        document.cookie = "lastPath=/home/edit/psw; path=/";
+        console.log(readCookie("lastPath"))
         navigate("/home/edit/psw")
     }
 
     const goBack = () => {
         let url = readCookie("lastPath");
-        if (url === "/home/edit")
+        if (url === "/home/edit" || url === "/home/edit/psw")
             url = "/";
         navigate(url)
     }
     
-
-
     const tryToEdit = (editions: EditSchema) => {
 
         if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null)
@@ -142,10 +119,8 @@ export function EditProfile() {
     }
     
     return (
-        <Box sx={{ '& > :not(style)': { ml: '2em', mt: '2em' } }} component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" onClick={goBack}>
-        <KeyboardBackspaceIcon />
-      </Fab>
+        <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
+        
         <ProfileTemplate> 
             <CSSTypography variant="h3" align="center"
                 data-testid="usernameEditProfile"
@@ -171,7 +146,7 @@ export function EditProfile() {
             
 
             
-               <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
+            <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
                 Actualizar contraseña
             </EditPasswordButton>
         
@@ -187,6 +162,6 @@ export function EditProfile() {
                 </CSSButton>
                 
             </ProfileTemplate>
-        </Box>
+        </StyledBox>
     )
 }

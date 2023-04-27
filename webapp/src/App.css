@@ -205,7 +205,7 @@ a {
 #profileImagePodLM, #profileImagePodPT {
   height: 180px;
   width: auto;
-  border-radius: 500px;
+  border-radius: 3%;
 }
 
 #biography-EP {

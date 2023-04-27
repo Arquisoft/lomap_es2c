@@ -1,27 +1,25 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../userIdentification/SesionForm';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Swal from 'sweetalert2';
-import { User } from '../../shared/shareddtypes';
-import { editPassword, editUserDetails, getUserInSesion } from 'api/api';
+import { editPassword, getUserInSesion } from 'api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import ProfileTemplate from "./ProfileTemplate";
-import { Fab } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { temporalSuccessMessage } from "utils/MessageGenerator";
-import { readCookie } from "utils/CookieReader";
 
 //#region DEFINICION DE COMPONENTES STYLED
+
+const StyledBox = styled(Box)({
+    marginTop: '1em',
+    marginLeft: '2em',
+});
 
 const CSSTypography = styled(Typography)({
     color: "white",
@@ -85,16 +83,6 @@ const CSSTextField = styled(TextField)({
     }
 });
 
-
-const LegendTypography = styled(Typography)({
-    color: 'white',
-    fontFamily: '"Calibri", "Roboto","Helvetica","Arial",sans-serif',
-    fontWeight: '400',
-    fontSize: '1em',
-    lineHeight: '1.4375em',
-    letterSpacing: '0.00938em',
-});
-
 //#endregion
 
 
@@ -118,14 +106,6 @@ export function EditPassword() {
     const [user, setUser] = useState(getUserInSesion())
 
 
-    const goBack = () => {
-        let url = readCookie("lastPath");
-        if (url === "/home/edit/psw")
-            url = "/";
-        navigate(url)
-    }
-    
-
     const tryToEdit = (editions: EditSchema) => {
         
 
@@ -135,7 +115,7 @@ export function EditPassword() {
             if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword))  {
                 editPassword(currentPassword, editions.newPassword).then(() => {
                     temporalSuccessMessage("Contraseña editada correctamente.");
-                    goBack();
+                    navigate("/home/edit")
                 }).catch((e) => {
                     fieldsValidation.showError("No se actualizó la contraseña", e as string, () => {});
                 })
@@ -159,10 +139,7 @@ export function EditPassword() {
     }
     
     return (
-        <Box sx={{ '& > :not(style)': { ml: '2em', mt: '2em' } }} component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" onClick={goBack}>
-        <KeyboardBackspaceIcon />
-      </Fab>
+        <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
         <ProfileTemplate> 
             <CSSTypography variant="h3" align="center"
                 data-testid="usernameEditProfile"
@@ -219,6 +196,6 @@ export function EditPassword() {
                 </CSSButton>
                 
             </ProfileTemplate>
-        </Box>
+        </StyledBox>
     )
 }
