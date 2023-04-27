@@ -5,6 +5,8 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { LoggedMenu } from "components/profileMenus/LoggedMenu";
 import { searchUserByUsername, getUserInSesion } from "api/api";
 import { HomePage } from "components/mainComponents/HomePage";
+import { Provider } from "react-redux";
+import store from "utils/redux/store";
 
 const api = require('api/api')
 jest.spyOn(api, 'searchUserByUsername')
@@ -28,9 +30,11 @@ test('renders loggedMenu', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let linkElement = screen.getByTestId("notificationManager");
@@ -50,9 +54,11 @@ test('renders click on profile menu', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let profileMenuButton = screen.getByTestId("profileMenuButton");
@@ -80,9 +86,11 @@ test('click on getProfile', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let profileMenuButton = screen.getByTestId("profileMenuButton");
@@ -109,9 +117,11 @@ test('click on editProfile', async () => {
 
     await act(async () => {
         render(
-            <MemoryRouter>
-                <LoggedMenu />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <LoggedMenu />
+                </MemoryRouter>
+            </Provider>
         );
     })
     let profileMenuButton = screen.getByTestId("profileMenuButton");
