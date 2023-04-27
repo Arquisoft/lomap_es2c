@@ -30,9 +30,11 @@ export default function SesionForm(props: React.HTMLAttributes<HTMLDivElement>) 
 
     const goBack = () => {
        
-        if (url === "/home/edit" || (url === "/home/edit/psw" && pathname === "/home/edit/psw") ||
+        if (url === "/home/edit" ||
             (url === "/home/edit/psw" && pathname === "/home/edit"))
-                navigate("/")
+            navigate("/")
+        else if (url === "/home/edit/psw" && pathname === "/home/edit/psw")
+            navigate("/home/edit")
         else
             navigate(url)
      }

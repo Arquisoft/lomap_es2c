@@ -13,7 +13,7 @@ const appSlice = createSlice({
     name: "app",
     initialState,
     reducers: {
-        setProfileImage(state, action: PayloadAction<string>) {
+        setLastPath(state, action: PayloadAction<string>) {
       state.lastPath = action.payload;
     },
     }
