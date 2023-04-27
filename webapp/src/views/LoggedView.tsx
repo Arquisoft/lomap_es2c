@@ -44,7 +44,6 @@ export default function LoggedView() {
 
 
     if (session.info.webId) {
-        console.log(session.info.webId)
         document.cookie = "userWebId=" + session.info.webId + "; path=/"
     }
 
