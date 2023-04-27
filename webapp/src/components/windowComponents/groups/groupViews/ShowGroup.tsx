@@ -16,9 +16,8 @@ import PlaceIcon from '@mui/icons-material/Place';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, useParams } from 'react-router-dom';
 import { render } from 'react-dom';
-import PodManager from '../../../../podManager/PodManager'
 import { Place } from '../../../../shared/shareddtypes'
-import { verMapaDe } from 'podManager/MapManager';
+import { eliminarGrupo, verMapaDe } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';
 import AddIcon from '@mui/icons-material/Add';
@@ -121,7 +120,7 @@ export const ShowGroup = (props: { refresh: any }) => {
             cancelButtonText: 'Volver'
         }).then((result) => {
             if (result.isConfirmed) {
-                new PodManager().deleteGroup(session, group).then(() => {
+                eliminarGrupo(group, session).then(() => {
                     navigate("/home/groups/main")
                     temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
                     props.refresh()
@@ -141,21 +140,21 @@ export const ShowGroup = (props: { refresh: any }) => {
     return (
         <>
             <BCBox>
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                <Breadcrumbs data-testid="breadcrumbShowgroup" separator={<NavigateNextIcon fontSize="small" />}>
                     <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
                         Mis grupos
                     </Link>
                     <Typography color="text.primary">{id}</Typography>
                 </Breadcrumbs>
                 <Tooltip title="Delete group" sx={{ ml: "0.6em" }}>
-                    <CloseIcon onClick={() => deleteGroup(group)} htmlColor="red" />
+                    <CloseIcon data-testid="deleteGroup" onClick={() => deleteGroup(group)} htmlColor="red" />
                 </Tooltip>
             </BCBox>
             <CSSTypography variant="body1" align="center"
                 sx={{ mt: "0.5em", mb: "0.5em" }}>
                 {id}
             </CSSTypography>
-            <AddItem onClick={() => addPlace()}>
+            <AddItem data-testid="añadirLugar" onClick={() => addPlace()}>
                 <ListItemIcon>
                     <AddIcon htmlColor='#81c784' />
                 </ListItemIcon>
@@ -230,9 +229,9 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
                                 <FilterAltIcon />
                                 <ListItemText primary="Filtros" />
                                 {open ?
-                                    <ExpandLess onClick={() => setOpen(false)} />
+                                    <ExpandLess data-testid="showgroupxl" onClick={() => setOpen(false)} />
                                     :
-                                    <ExpandMore onClick={() => setOpen(true)} />
+                                    <ExpandMore data-testid="showgroupxm" onClick={() => setOpen(true)} />
                                 }
                             </FilterBox>
                             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -240,22 +239,25 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
                                     <CategoriesFilter setFilter={setFilter} />
                                 </List>
                             </Collapse>
-
-                            <List component="div" disablePadding>
-                                {grp.places.filter((place) => filters.length === 0 ? true : filterPlaces(place)).map((place, j) => {
-                                    return (
-                                        <React.Fragment key={j}>
-                                            <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/home/groups/showplace/" + grp.name + "/" + place.nombre)} >
-                                                <ListItemIcon>
-                                                    <PlaceIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={place.nombre} />
-                                                {getScoreIcon(place)}
-                                            </ListItemButton>
-                                        </React.Fragment>
-                                    )
-                                })}
-                            </List>
+                            {grp.places.length > 0 ?
+                                <List component="div" disablePadding>
+                                    {grp.places.filter((place) => filters.length === 0 ? true : filterPlaces(place)).map((place, j) => {
+                                        return (
+                                            <React.Fragment key={j}>
+                                                <ListItemButton sx={{ pl: 4 }} onClick={() => navigate("/home/groups/showplace/" + grp.name + "/" + place.nombre)} >
+                                                    <ListItemIcon>
+                                                        <PlaceIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={place.nombre} />
+                                                    {getScoreIcon(place)}
+                                                </ListItemButton>
+                                            </React.Fragment>
+                                        )
+                                    })}
+                                </List>
+                                :
+                                <InfoBox><p><b>Este grupo esta vacío.</b></p><p>¡Venga, añade algo!</p></InfoBox>
+                            }
                         </ScrollBox>
                     </>
                     :

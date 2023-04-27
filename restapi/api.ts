@@ -136,9 +136,7 @@ api.post(
             const user = req.body.user;
             const b = await fac.FactoryLoMap.getUserManager().modificarContrasena(user, oldpsw, newpsw);
             return res.status(200).send(b);
-        } catch (err)
-        {
-            console.log(err)
+        } catch (err) {
             return res.status(404).send({ "error": err.message });
         }
     }

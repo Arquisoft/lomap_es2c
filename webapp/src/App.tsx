@@ -1,7 +1,7 @@
 import './App.css';
 import HomeView from './views/HomeView';
 import LoggedView from './views/LoggedView';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { AuthChecker } from 'auth/AuthChecker';
 import { NoFound } from 'views/NoFound';
 import { AuthPodChecker } from 'auth/AuthPodChecker';
@@ -21,6 +21,7 @@ import { EditProfile } from 'components/profileMenus/EditProfile';
 import { EditPassword } from 'components/profileMenus/EditPassword';
 
 function App(): JSX.Element {
+    const navigate = useNavigate();
     const [session, setSession] = useState<any>(null)
     if (readCookie("isPodLogged") === "true")
         handleIncomingRedirect({ restorePreviousSession: true }).then((s) => {

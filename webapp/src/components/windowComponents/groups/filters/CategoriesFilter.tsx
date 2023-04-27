@@ -30,6 +30,7 @@ export const CategoriesFilter = (props: { setFilter: any }) => {
             sx={{ maxHeight: 50 }}
             multiple
             id="tags-standard"
+            data-testid="categoriesFilter"
             className='categoriesAutocomplete'
             options={PlaceCategories.flatMap((option) => option.name)}
             onChange={updateFilters}
@@ -43,5 +44,6 @@ export const CategoriesFilter = (props: { setFilter: any }) => {
             )}
         />
       
+                
     )
 }

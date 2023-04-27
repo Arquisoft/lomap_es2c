@@ -66,11 +66,11 @@ export default function ShowPlace() {
     return (
         <>
             <div>
-                <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
+                <Breadcrumbs data-testid="breadcrumbShowplace" separator={<NavigateNextIcon fontSize="small" />}>
                     <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/main")}>
                         Mis grupos
                     </Link>
-                    <Link underline="hover" color="inherit" onClick={() => navigate("/home/groups/showgroup/" + id)}>
+                    <Link data-testid={id} underline="hover" color="inherit" onClick={() => navigate("/home/groups/showgroup/" + id)}>
                         {id}
                     </Link>
                     <Typography color="text.primary">{lat}</Typography>
