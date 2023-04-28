@@ -1,4 +1,3 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,23 +6,15 @@ import Button from '@mui/material/Button';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
 import uuid from 'react-uuid';
-import LogedMenu from '../profileMenus/LoggedMenu';
-import { NoLogedMenu } from '../profileMenus/NoLoggedMenu';
+import { LoggedMenu } from '../profileMenus/LoggedMenu';
+import { NoLoggedMenu } from '../profileMenus/NoLoggedMenu';
 import { useNavigate } from 'react-router-dom';
-import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { Divider } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { clearFriendsMarkers, clearMarkers } from 'utils/redux/action';
+import { getUserInSesion } from 'api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
-const ButtonGENERIC = styled(Button)({
-    padding: '1.5em 5em 1.5em',
-    color: 'white',
-    justifySelf: 'right',
-    font: '1em Calibri',
-    '&:hover': {
-        outline: 'none',
-        backgroundColor: '#1f4a21',
-    },
-});
 
 const VerticalDivider = styled(Divider)({
     padding: '0em 0.4em 0em'
@@ -71,12 +62,15 @@ export function Header(props: { logged: boolean }) {
 
     //#region HOOKS
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     //#endregion
 
     //#region METODOS DE CLASE
 
     const goHome = () => {
-        if (props.logged == true) {
+        if (props.logged === true && getUserInSesion() !== null) {
+            dispatch(clearMarkers());
+            dispatch(clearFriendsMarkers());
             navigate("/home");
         } else {
             navigate("/");
@@ -85,10 +79,10 @@ export function Header(props: { logged: boolean }) {
 
     const getMode = () => {
         if (props.logged) {
-            return (<LogedMenu />)
+            return (<LoggedMenu />)
         }
         else {
-            return (<NoLogedMenu />)
+            return (<NoLoggedMenu />)
         }
     }
 
@@ -103,8 +97,9 @@ export function Header(props: { logged: boolean }) {
                     <ButtonHOME
                         key={uuid()}
                         onClick={goHome}
+                        data-testid="goHomeButton"
                     >
-                        <img id="imgLogo" src="nobgLogo.png"></img>
+                        <img data-testid="imgLogo" id="imgLogo" src="nobgLogo.png" alt="Logo de la aplicación"></img>
                     </ButtonHOME>
                     <VerticalDivider orientation='vertical' flexItem />
                     <BoxNAV>

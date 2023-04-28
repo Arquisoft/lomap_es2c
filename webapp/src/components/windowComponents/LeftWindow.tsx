@@ -5,18 +5,13 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import { styled } from '@mui/material/styles';
 import { createTheme, Tabs, ThemeProvider } from '@mui/material';
-import { GroupsManagerPanel } from './groups/GroupsManagerPanel';
-import { FriendManagerPanel } from './friends/FriendManagerPanel';
-import { showError } from '../../utils/fieldsValidation';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { GroupsManagerPanel } from 'components/windowComponents/groups/GroupsManagerPanel';
+import { FriendManagerPanel } from 'components/windowComponents/friends/FriendManagerPanel';
+import { useNavigate, useParams } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
 import MapIcon from '@mui/icons-material/Map';
 import { useDispatch } from 'react-redux';
 import { addPlaceMarker } from 'utils/redux/action';
-import { getMyFriendRequests, getUserInSesion } from 'api/api';
-import { temporalInfoMessage } from 'utils/MessageGenerator';
-import { ErrorPage } from 'components/mainComponents/ErrorPage';
-import { Session } from '@inrupt/solid-client-authn-browser';
 
 const Window = styled(Box)({
     backgroundColor: 'white',
@@ -42,18 +37,12 @@ const theme = createTheme({
         },
     }
 });
-type MarkerData = {
-    position: [number, number];
-    name: string;
-};
 
-export function LeftWindow(props: { session: any }) {
+export function LeftWindow() {
 
     const { mainop } = useParams()
 
     const navigate = useNavigate()
-
-    const [value, setValue] = React.useState(mainop);
 
     const dispatch = useDispatch();
 
@@ -63,30 +52,29 @@ export function LeftWindow(props: { session: any }) {
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         navigate("/home/" + newValue + "/main")
-        setValue(newValue);
     };
 
     return (
-        <Window onClick={handleClick}>
+        <Window>
             <ThemeProvider theme={theme}>
                 <MyTabContext value={mainop} theme={theme}>
                     <MyTabs
                         variant="fullWidth"
-                        value={value}
+                        value={mainop}
                         onChange={handleChange}
                         textColor="primary"
                         indicatorColor="primary"
                         aria-label="secondary tabs example"
                     >
-                        <Tab value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
-                        <Tab value="friends" label="Amigos" icon={<GroupIcon />} iconPosition='start' />
+                        <Tab data-testid="groupsTab" value="groups" label="Mis mapas" icon={<MapIcon />} iconPosition='start' />
+                        <Tab data-testid="friendsTab" value="friends" label="Amigos" onClick={handleClick} icon={<GroupIcon />} iconPosition='start' />
                     </MyTabs>
                     <TabPanel value="groups">
-                        <GroupsManagerPanel session={props.session} />
+                        <GroupsManagerPanel />
 
                     </TabPanel>
                     <TabPanel value="friends">
-                        <FriendManagerPanel session={props.session} />
+                        <FriendManagerPanel />
                     </TabPanel>
                 </MyTabContext>
             </ThemeProvider>

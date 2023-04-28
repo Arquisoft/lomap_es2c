@@ -1,92 +1,88 @@
 import { Session } from "@inrupt/solid-client-authn-browser/dist/Session";
 import PodManager from "./PodManager";
 import { Group, Place, User } from "shared/shareddtypes";
-export { MapManager };
 
-const sessionStorage = require('sessionstorage-for-nodejs')
 
-class MapManager {
+const pod = new PodManager();
 
-    pod: PodManager = new PodManager();
+export async function verMapaDe(user: User, session: Session): Promise<Group[]> {
+    let grupos = await pod.getGroups(session)
+    return grupos
+}
 
-    async verMapaDe(user: User, session: Session): Promise<Group[]> {
-        let grupos = await this.pod.getGroups(session)
-        console.log("Puede")
-        return grupos
-    }
+export async function verMapaDeAmigo(user: User, session: Session): Promise<Group[]> {
+    let grupos = await pod.getFriendsGroups(session, user.webID)
+    return grupos
+}
 
-    async añadirLugarAGrupo(lugar: Place, grupo: Group, session: Session): Promise<Group> {
-        grupo.places.push(lugar)
+export async function añadirLugarAGrupo(lugar: Place, grupo: Group, session: Session): Promise<Group> {
+    grupo.places.push(lugar)
 
-        console.log(1)
+    await pod.updateGroup(session, grupo)
 
-        await this.pod.updateGroup(session, grupo)
+    return grupo;
+}
 
+
+export async function crearGrupo(name: string, session: Session): Promise<Group> {
+    const grupo: Group = {
+        name: name,
+        places: []
+    };
+    await pod.saveGroup(session, grupo).catch((e: any) => {
+        throw new Error("Primer grupo creado")
+    }).finally(() => {
         return grupo;
+    })
+    return grupo;
+}
+
+
+export async function eliminarGrupo(grupo: Group, session: Session): Promise<boolean> {
+    await pod.deleteGroup(session, grupo)
+    return true;
+}
+
+export async function añadirPermisosAmigo(webId: string, friendWebId: string, session: Session): Promise<void> {
+   return await pod.addReadPermissionsToFriend(webId, friendWebId, session);
+}
+
+export async function eliminarLugarDeGrupo(lugar: Place, grupo: Group, session: Session): Promise<Group> {
+    const lugarIndex = grupo.places.findIndex(p => p.nombre === lugar.nombre);
+    if (lugarIndex !== -1) {
+        grupo.places.splice(lugarIndex, 1);
     }
 
+    await pod.updateGroup(session, grupo)
 
-    async crearGrupo(name: string, session: Session): Promise<Group> {
-        const grupo: Group = {
-            name: name,
-            places: []
-        };
+    return grupo;
+}
 
-        console.log(session)
-        await this.pod.saveGroup(session, grupo)
-        return grupo;
-    }
+export async function aplicarFiltro(grupo: Group, filtro: string, session: Session): Promise<Place[]> {
 
-    // Incompleto
-    eliminarGrupo(grupo: Group, session: Session): boolean {
-        let user = JSON.parse(sessionStorage.getItem('userInSession') ?? '{}') as User;
+    let grupos = await pod.getGroups(session)
 
-        let eliminado = this.pod.deleteGroup(session, grupo)
+    let gr: Group = grupos.find(p => p.name === grupo.name)
 
-        // return eliminado;
-
-        return false;
-    }
+    return gr.places.filter(p => p.category === filtro)
+}
 
 
-    async eliminarLugarDeGrupo(lugar: Place, grupo: Group, session: Session): Promise<Group> {
-        const lugarIndex = grupo.places.findIndex(p => p.nombre === lugar.nombre);
-        if (lugarIndex !== -1) {
-            grupo.places.splice(lugarIndex, 1);
-        }
+export async function editarGrupo(grupo: Group, session: Session): Promise<Group> {
+    await pod.updateGroup(session, grupo);
 
-        await this.pod.updateGroup(session, grupo)
-
-        return grupo;
-    }
-
-    async aplicarFiltro(grupo: Group, filtro: string, session: Session): Promise<Place[]> {
-
-        let grupos = await this.pod.getGroups(session)
-
-        let gr: Group = grupos.find(p => p.name === grupo.name)
-
-        return gr.places.filter(p => p.category === filtro)
-    }
+    return grupo;
+}
 
 
-    async editarGrupo(grupo: Group, session: Session): Promise<Group> {
-        await this.pod.updateGroup(session, grupo);
+export function mostrarGrupoPod(grupo: Group, session: Session): Place[] {
+    return grupo.places
+}
 
-        return grupo;
-    }
+export async function añadirGrupo(grupo: Group, session: Session): Promise<Group[]> {
+    await pod.saveGroup(session, grupo);
 
+    let grupos = await pod.getGroups(session);
 
-    mostrarGrupo(grupo: Group, session: Session): Place[] {
-        return grupo.places
-    }
-
-    async añadirGrupo(grupo: Group, session: Session): Promise<Group[]> {
-        await this.pod.saveGroup(session, grupo);
-
-        let grupos = await this.pod.getGroups(session);
-
-        return grupos;
-    }
-
+    return grupos;
 }

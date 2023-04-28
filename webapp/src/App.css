@@ -2,7 +2,6 @@
     text-align: center;
 }
 
-
 @media (prefers-reduced-motion: no-preference) {
     .App-logo {
         animation: App-logo-spin infinite 20s linear;
@@ -64,7 +63,6 @@ body.swal2-shown>[aria-hidden="true"] {
     border-radius: 350px;
 }
 
-
 .leaflet-container {
     width: 70vw;
     height: auto;
@@ -72,6 +70,12 @@ body.swal2-shown>[aria-hidden="true"] {
 
 #homeA {
     color: black;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    padding: 0em;
+    text-decoration: underline;
 }
 
 #addPlaceDyn {
@@ -90,13 +94,15 @@ body.swal2-shown>[aria-hidden="true"] {
     font-size: 1.2em;
 }
 
-a:visited, a:hover {
+a:visited,
+a:hover {
     color: #1f4a21;
 }
 
 a {
-    color:white;
+    color: white;
 }
+
 .swal-text-success,
 .swal-text-info {
     font-size: 1em !important;
@@ -110,10 +116,13 @@ a {
     color: "black";
 }
 
+.swal-text-error {
+    color: "red";
+}
+
 .swal-text-success {
     color: #81c784 !important;
 }
-
 
 .swal-popup {
     display: flex !important;
@@ -122,7 +131,90 @@ a {
     align-content: center !important;
 }
 
-
 #review:focus {
-   border-color: #81c784 !important;
+    border-color: #81c784 !important;
+}
+
+.Leyenda {
+    border-radius: 0.5em;
+    background-color: white;
+    padding: 0em 0.5em 0.5em;
+    font-family: "Calibri", "Gill Sans", "Gill Sans MT", "Trebuchet MS",
+        sans-serif;
+    font-size: 1.1em;
+    color: #39393a;
+}
+
+.Leyenda>h3 {
+    text-align: center;
+    margin-bottom: 0.2em;
+}
+
+.markerName {
+    color: #81c784;
+    text-align: center;
+}
+
+.cleanMap {
+    border-radius: 0.5em;
+    background-color: white;
+    padding: 0.5em 0.5em 0.5em;
+    font-family: "Calibri", "Gill Sans", "Gill Sans MT", "Trebuchet MS",
+        sans-serif;
+    font-size: 1em;
+    color: #39393a;
+}
+
+.cleanMap>button {
+    background-color: white !important;
+    color: #39393a;
+    font-size: 1em;
+    outline: none;
+    border: none;
+}
+
+.cleanMap>button>img {
+    margin-right: 0.5em;
+}
+
+.cleanMap>button:hover {
+    cursor: pointer;
+}
+
+#uploadImage {
+    display: none;
+}
+
+#uploadImageDiv {
+    margin-top: 0.8em;
+    margin-bottom: 0.3em;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
+#uploadImageDiv>p {
+    color: #39393a;
+    font-size: 0.8em;
+    font-weight: lighter;
+}
+
+#profileImage,
+#profileImageLM, #profileImageFriend {
+    height: 180px;
+}
+
+
+#profileImagePodLM, #profileImagePodPT, #profileImagePodFriend {
+  height: 180px;
+  width: auto;
+  border-radius: 3%;
+}
+
+#biography-EP {
+    width: 99%;
+    height: 7vh;
+    resize: none;
+    background-color: transparent;
+    color: "red" !important;
 }

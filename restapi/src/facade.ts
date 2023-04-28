@@ -1,74 +1,51 @@
 
 import { UserSesionManager } from './controllers/SessionManager'
 import { UserManager, UserManagerImpl } from './controllers/UserManager'
-import { Place } from './entities/Place';
-import { FriendManager, FriendManagerImpl } from './controllers/FriendsManager'
+import { FriendManager, FriendManagerImpl } from './controllers/FriendManager'
 
 
 export interface SesionManager {
-    iniciarSesion: (usuario: User) => Promise<User>;
-    registrarse: (usuario: User) => Promise<User>;
+  iniciarSesion: (usuario: User) => Promise<User>;
+  registrarse: (usuario: User) => Promise<User>;
 }
 
 //TODOS LOS BOOLEAN QUE DEVUELVEN LOS MÉTODOS SON ÚNICAMENTE PARA NOTIFICAR EL RESULTADO DE LA OPERACION
 //ES INTERCAMBIABLE POR INT O STRING CON UN CODIGO DEFINIDO
 
-//#region FACADE
 
-export interface MapManager {
-    verMapaDe: (user: User) => Promise<Group[]>;
-    añadirLugarAGrupo: (lugar: Place, grupo: Group) => Group;
-    crearGrupo: (nombre: string) => Group;
-    eliminarGrupo: (grupo: Group) => boolean;
-    eliminarLugarDeGrupo: (lugar: Place, grupo: Group) => Group;
-    aplicarFiltro: (grupo: Group, filtro: string) => Place[];
-    editarGrupo: (grupo: Group) => Group;
-    mostrarGrupo: (grupo: Group) => Place[];
-}
 
-//#endregion
-
-export interface PODManager {
-    guardarCoord: (WebID: String, Coor: String) => null;
-    getCoordenadas: (WebID: String) => Place[];
-    guardarGrupo: (WebID: String, Group: Group) => null;
-    getGrupos: (WebID: String) => Group[];
-}
 
 //#region INTERFACES AUXILIARES
 
 export class FactoryLoMap {
+  static getFriendManager(): FriendManager {
+    return new FriendManagerImpl();
+  }
 
-    static getFriendManager(): FriendManager {
-        return new FriendManagerImpl();
-    };
+  static getSesionManager(): SesionManager {
+    return new UserSesionManager();
+  }
 
-    static getSesionManager(): SesionManager {
-        return new UserSesionManager();
-    }
+  static getUserManager(): UserManager {
+    return new UserManagerImpl();
+  }
 
-    static getUserManager(): UserManager {
-        return new UserManagerImpl();
-    }
 }
 //#endregion
 
 //#region CLASES DE EJEMPLO PARA FUNCIONAR
-class FriendRequest { }
+class FriendRequest {}
 // class Group { }
 // class Place { }
 //#endregion
 
 export interface User {
-    username: string
-    password: string
-    webID: string
-    description: string
-    img: string
+  username: string;
+  password: string;
+  webID: string;
+  description: string;
+  img: string;
 }
 
-export interface Group {
-    name: string
-    places: Place[]
-}
+
 
