@@ -1,5 +1,5 @@
 import { Box, Divider, Tooltip } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -35,7 +35,7 @@ const InfoBox = styled(Box)({
 
 
 export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any, refresh: any, stopLoading: any }) => {
-    
+
     const navigate = useNavigate()
 
     const dispatch = useDispatch();
