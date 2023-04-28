@@ -6,7 +6,7 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { Box, Tooltip, styled } from "@mui/material";
 
 export function temporalSuccessMessage(text: String) {
-    if (readCookie("notifications") != "mute")
+    if (readCookie("notifications") !== "mute")
         Swal.fire({
             position: 'top',
             title: text,
@@ -44,7 +44,7 @@ const NotiBox = styled(Box)({
 
 export const NotificationManager = () => {
 
-    const [muted, setMuted] = useState(readCookie("notifications") == "mute")
+    const [muted, setMuted] = useState(readCookie("notifications") === "mute")
 
     function activeNotifications() {
         document.cookie = "notifications=; path=/"
@@ -56,7 +56,7 @@ export const NotificationManager = () => {
         setMuted(true)
     }
     return (
-        <NotiBox>
+        <NotiBox data-testid="notificationManager" >
             {muted ?
                 < Tooltip title="Activar notificaciones" >
                     < NotificationsOffIcon onClick={activeNotifications} />
@@ -71,7 +71,7 @@ export const NotificationManager = () => {
 }
 
 export function temporalInfoMessage(text: String) {
-    if (readCookie("notifications") != "mute")
+    if (readCookie("notifications") !== "mute")
         Swal.fire({
             position: 'top',
             title: text,
@@ -82,6 +82,37 @@ export function temporalInfoMessage(text: String) {
             customClass: {
                 popup: 'swal-popup',
                 title: 'swal-text-info',
+            },
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            },
+            willOpen: function () {
+                const swalContainer = Swal.getPopup();
+                swalContainer.addEventListener('mouseenter', () => {
+                    Swal.stopTimer();
+                });
+                swalContainer.addEventListener('mouseleave', () => {
+                    Swal.resumeTimer();
+                });
+            }
+        })
+}
+
+export function temporalErrorMessage(text: String) {
+    if (readCookie("notifications") !== "mute")
+        Swal.fire({
+            position: 'top',
+            title: text,
+            showConfirmButton: false,
+            timer: 3000,
+            width: '98.7vw',
+            backdrop: false,
+            customClass: {
+                popup: 'swal-popup',
+                title: 'swal-text-error',
             },
             showClass: {
                 popup: 'animate__animated animate__fadeInDown'

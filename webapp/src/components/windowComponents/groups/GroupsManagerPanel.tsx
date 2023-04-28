@@ -1,4 +1,4 @@
-import { Box, Divider } from '@mui/material'
+import { Box, CircularProgress, Divider } from '@mui/material'
 import { useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -8,49 +8,57 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Group } from '../../../shared/shareddtypes';
 import AddIcon from '@mui/icons-material/Add';
-import AddPlaceForm from './AddPlaceForm';
-import AddGroupForm from './AddGroupForm';
+import AddPlaceForm from '../places/placeViews/AddPlaceForm';
+import { AddGroupForm } from './groupViews/AddGroupForm';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ErrorPage } from 'components/mainComponents/ErrorPage';
-import { Session } from '@inrupt/solid-client-authn-browser/dist/Session';
 import { Groups } from './GroupsComponent';
-import { MapManager } from 'podManager/MapManager';
-import ShowPlace from './ShowPlace';
+import { verMapaDe } from 'podManager/MapManager';
+import ShowPlace from '../places/placeViews/ShowPlace';
+import { ShowGroup } from './groupViews/ShowGroup';
+import { useSession } from '@inrupt/solid-ui-react';
+
+const BoxCircularProgress = styled(Box)({
+    paddingTop: '7em',
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    height: '30vh'
+})
 
 const ScrollBox = styled(Box)({
     maxHeight: '60vh',
     overflow: 'auto',
-    scrollbarColor: 'black white'
+    scrollbarColor: '#81c784 white'
 })
 
 const AddItem = styled(ListItemButton)({
     color: '#81c784',
 })
 
-const VerticalDivider = styled(Divider)({
-    padding: '0em 0.4em 0em'
-})
-
 const HorizontalDivider = styled(Divider)({
     width: '100%'
 })
 
-export const GroupsManagerPanel = (props: { session: any }) => {
+export const GroupsManagerPanel = () => {
+
+    const { session } = useSession();
+
+    const [loading, setLoading] = useState(true)
 
     const ref = useRef<HTMLDivElement>(null);
 
     const userGroups = async () => {
         let myGroups: Group[] = [];
-        await new MapManager().verMapaDe(null, props.session).then(function (groups) {
+        await verMapaDe(null, session).then(function (groups) {
             for (let i = 0; i < groups.length; i++) {
                 myGroups.push(groups[i]);
             }
         })
-
         return myGroups;
     }
 
-    const [groups, setGroups] = useState<Promise<Group[]>>(userGroups)
+    const [groups, setGroups] = useState<Promise<Group[]>>(userGroups())
 
     const { op } = useParams()
 
@@ -59,9 +67,9 @@ export const GroupsManagerPanel = (props: { session: any }) => {
 
     return (
         <>
-            {op == "main" ?
+            {op === "main" ?
                 <>
-                    <AddItem onClick={() => navigate("/home/groups/addgroup")}>
+                    <AddItem data-testid="addGroup" onClick={() => navigate("/home/groups/addgroup")}>
                         <ListItemIcon>
                             <AddIcon htmlColor='#81c784' />
                         </ListItemIcon>
@@ -78,27 +86,35 @@ export const GroupsManagerPanel = (props: { session: any }) => {
                                 </ListSubheader>
                             }
                         >
+                            {loading &&
+                                <BoxCircularProgress>
+                                    <CircularProgress size={100} color="primary" />
+                                </BoxCircularProgress>
+                            }
                             <Box ref={ref}>
-                                <Groups groups={groups} daddy={ref} session={props.session} refresh={() => setGroups(userGroups)} />
+                                <Groups groups={groups} daddy={ref} stopLoading={() => setLoading(false)} refresh={() => setGroups(userGroups())} />
                             </Box>
                         </List >
                     </ScrollBox>
                 </>
                 :
-                (op == "addgroup" ?
-                    <AddGroupForm session={props.session} />
+                (op === "addgroup" ?
+                    <AddGroupForm refresh={() => setGroups(userGroups())} />
                     :
-                    (op == "addplace" ?
-                        <AddPlaceForm session={props.session} />
+                    (op === "addplace" ?
+                        <AddPlaceForm refresh={() => setGroups(userGroups())} />
                         :
-                        (op == "showplace" ?
-                            <ShowPlace session={props.session} />
+                        (op === "showplace" ?
+                            <ShowPlace />
                             :
-                            <ErrorPage></ErrorPage>
+                            (op === "showgroup" ?
+                                <ShowGroup refresh={() => setGroups(userGroups())} />
+                                :
+                                <ErrorPage></ErrorPage>
+                            )
                         )
                     )
-                )
-            }
+                )}
         </ >
     )
 }

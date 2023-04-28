@@ -1,12 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from 'redux';
+import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
 
-// Importa tus reducers aquí
-import markersReducer from './markersSlice';
+import markersReducer from "./markersSlice";
+import userReducer from "./userSlice";
+import appReducer from "./appSlice";
 
 const rootReducer = combineReducers({
-  // Agrega tus reducers aquí
   markers: markersReducer,
+  user: userReducer,
+  app: appReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

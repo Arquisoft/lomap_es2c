@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
 import SForm from './SesionForm';
@@ -15,7 +14,6 @@ import { signup } from '../../api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
-import { handleErrors } from 'api/ErrorHandler';
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -85,34 +83,31 @@ export function Signup() {
     });
 
     const [confirmPass, setConfirmPass] = useState('')
-    const [pass, setPass] = useState('')
 
     //#endregion
 
     //#region METODOS DE CLASE
     const onSubmit: SubmitHandler<UserSchema> = data => trySignup(data);
-    console.log(errors);
 
     const trySignup = (user: UserSchema) => {
-        if (user.username && user.webID && user.password) {
-            let newUser: User = { username: user.username, webID: user.webID, password: user.password, img: "", description: "" };
-            if (fieldsValidation.checkPasswords(pass, confirmPass)) {
+        if (user.username && user.password) {
+            let newUser: User = { username: user.username, webID: "", password: user.password, img: "", description: "" };
+            if (fieldsValidation.checkPasswords(user.password, confirmPass)) {
                 signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
                 }).catch((e) => {
-                    fieldsValidation.showError("No se ha podido crear la cuenta", "Ha sucedido un error al crear la cuenta, vuelva a intentarlo más tarde.", Swal.close)
+                    fieldsValidation.showError("No se ha podido crear la cuenta", e.message, Swal.close)
                 })
             } else {
                 fieldsValidation.showError("Las contraseñas no coinciden", "Por favor, revíselas.", Swal.close)
             }
         }
-        //Cambiar del NoLoggedMenu a LoggedMenu
     }
 
     const successSignup = (user: User) => {
         Swal.fire({
             title: 'Cuenta creada',
-            text: "¡Cuenta " + user.username + " ha sido creada con éxito!",
+            text: "¡Cuenta " + user.username + " creada con éxito!",
             icon: 'success',
             showCancelButton: false,
             confirmButtonColor: '#81c784',
@@ -138,8 +133,10 @@ export function Signup() {
         <SForm>
 
             <CSSTypography variant="h4" align="center"
-                sx={{ mt: "0.5em" }}>
-                Crear cuenta
+                sx={{ mt: "0.5em" }}
+                data-testid="signupTitle"
+            >
+                Registrarse
             </CSSTypography>
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
@@ -153,33 +150,24 @@ export function Signup() {
                 />
 
                 <CSSTextField
-                    id="webidSU"
-                    label="WebID"
-                    placeholder="WebID"
-                    fullWidth
-                    {...register("webID")}
-                    helperText={errors.webID ? 'Debe introducir un WebID válido' : ''}
-                />
-
-                <CSSTextField
                     id="passwordSU"
                     label="Contraseña"
                     type="password"
                     autoComplete="current-password"
                     fullWidth
                     {...register("password")}
-                    onChange={(e: any) => setPass(e.target.value)}
+
                     helperText={errors.password ? errors.password.message : ''}
                 />
 
                 <CSSTextField
                     id="confirmPasswordSU"
+                    name="confirmPasswordSU"
                     label="Repite la contraseña"
                     type="password"
                     fullWidth
                     autoComplete="current-password"
                     onChange={(e: any) => setConfirmPass(e.target.value)}
-
                 />
 
                 <CSSButton
@@ -188,6 +176,7 @@ export function Signup() {
                     type="submit"
                     size="large"
                     fullWidth
+                    data-testid="signupButton"
                 >
                     Crear cuenta
                 </CSSButton>
@@ -200,6 +189,7 @@ export function Signup() {
                     onClick={showLogin}
                     align="left"
                     underline="always"
+                    data-testid="goLoginButton"
                 >
                     Inicia sesión
                 </Link>
