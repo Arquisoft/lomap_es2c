@@ -53,8 +53,8 @@ export default function ShowFriendPlace() {
         })
     }
 
-    const [groups, setGroups] = useState<Promise<Group[]>>(userGroups)
-    const [group, setGroup] = useState<Promise<Group>>(filterGroups(groups))
+    const groups = userGroups();
+    const group = filterGroups(groups)
     const [podPlace, setPodPlace] = useState<Place>(null);
 
     const placeDoesntExist = () => {

@@ -144,7 +144,9 @@ export default function AddPlaceForm(props: { refresh: any }) {
 
     useEffect(() => {
         findGroup();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     // ---- fin obtención del grupo
 
 

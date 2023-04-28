@@ -16,6 +16,7 @@
         "@inrupt/solid-client-authn-browser": "^1.14.0",
         "@inrupt/solid-ui-react": "^2.8.2",
         "@inrupt/vocab-common-rdf": "^1.0.5",
+        "@mui/core": "^5.0.0-alpha.54",
         "@mui/icons-material": "^5.11.11",
         "@mui/lab": "^5.0.0-alpha.123",
         "@mui/material": "^5.11.11",

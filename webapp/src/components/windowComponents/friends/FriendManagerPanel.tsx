@@ -22,6 +22,9 @@ import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { ShowFriendGroup } from '../groups/groupViews/ShowFriendGroup';
 import { useSession } from '@inrupt/solid-ui-react';
 import ShowFriendPlace from '../places/placeViews/ShowFriendPlace';
+import PodManager from 'podManager/PodManager';
+import React from 'react';
+import { getFriendProfilePhoto } from './getFriendProfilePhoto';
 
 const ScrollBox = styled(Box)({
     maxHeight: '50vh',
@@ -60,14 +63,11 @@ export const FriendManagerPanel = () => {
 
     const [loading, setLoading] = useState(true)
 
-    const [url, setUrl] = useState("../testUser.jfif");
-
     const ref = useRef<HTMLDivElement>(null);
 
     const { op } = useParams()
 
     const navigate = useNavigate()
-
 
     const userFriends = async () => {
 
@@ -121,20 +121,21 @@ export const FriendManagerPanel = () => {
     }
 
     const showAddFriendConfirm = async (user: User) => {
+        let imgUrl = await getFriendProfilePhoto(user.webID);
+        let imgHtml = ` <img id="profileImageFriend" src="defaultUser2.png" alt="Foto de perfil" >`;
+        if (imgUrl !== null) {
+            imgHtml = ` <img id="profileImagePodFriend" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
+        }
         let usr = user;
         Swal.fire({
             title: '¿Enviar solicitud?',
-            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+            html: imgHtml + `</br> <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                     <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="4" id="biography-gp" class="swal2-input" disabled placeholder="` + (user.description ? user.description : "Escribe una descripción") + `"></textarea>`,
             confirmButtonText: 'Enviar',
             confirmButtonColor: "#81c784",
             focusConfirm: false,
-            imageUrl: url,
-            imageWidth: 'auto',
-            imageHeight: 200,
-            imageAlt: 'Foto de perfil actual',
             preConfirm: () => {
                 sendFriendRequest(user).then(() => {
                     temporalSuccessMessage("La solicitud de amistad a <em><b>" + user.username + "</b></em> ha sido enviada correctamente.")

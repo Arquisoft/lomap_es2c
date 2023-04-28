@@ -85,13 +85,13 @@ export function EditProfile() {
 
     const schema = fieldsValidation.editProfileValidation;
     type EditSchema = yup.InferType<typeof schema>;
-    const { register, handleSubmit, formState: { errors } } = useForm<EditSchema>({
+    const { register, handleSubmit } = useForm<EditSchema>({
         resolver: yupResolver(schema)
     });
 
     const onSubmit: SubmitHandler<EditSchema> = data => tryToEdit(data);
 
-    const [user, setUser] = useState(getUserInSesion())
+    const user = getUserInSesion()
 
     const url = useSelector((state: RootState) => state.app.lastPath);
 

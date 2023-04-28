@@ -11,7 +11,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import ProfileTemplate from "./ProfileTemplate";
-import EditIcon from '@mui/icons-material/Edit';
 import { temporalSuccessMessage } from "utils/MessageGenerator";
 
 //#region DEFINICION DE COMPONENTES STYLED
@@ -88,7 +87,7 @@ export function EditPassword() {
 
     const [currentPassword, setCurrentPassword] = useState('')
 
-    const [user, setUser] = useState(getUserInSesion())
+    const user = getUserInSesion();
 
 
     const tryToEdit = (editions: EditSchema) => {

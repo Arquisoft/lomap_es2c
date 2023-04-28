@@ -83,7 +83,6 @@ export function Signup() {
     });
 
     const [confirmPass, setConfirmPass] = useState('')
-    const [pass, setPass] = useState('')
 
     //#endregion
 

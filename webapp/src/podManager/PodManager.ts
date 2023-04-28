@@ -1,6 +1,6 @@
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { createAclFromFallbackAcl, saveAclFor, getFile, getResourceAcl, getSolidDataset, getSolidDatasetWithAcl, hasAccessibleAcl, hasFallbackAcl, hasResourceAcl, overwriteFile, setAgentDefaultAccess, setAgentResourceAccess, Access, AclDataset, getThing, getIri } from "@inrupt/solid-client";
-import { Group, Place } from "shared/shareddtypes";
+import { Group } from "shared/shareddtypes";
 import { JsonLdDocument } from 'jsonld';
 import { v4 as uuidv4 } from 'uuid';
 

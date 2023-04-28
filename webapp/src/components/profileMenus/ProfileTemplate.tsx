@@ -3,8 +3,6 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Paper from '../userIdentification/Paper';
 import { styled } from '@mui/material/styles';
-import { useSession } from '@inrupt/solid-ui-react';
-import PodManager from '../../podManager/PodManager';
 import { useSelector } from 'react-redux';
 import { RootState } from 'utils/redux/store';
 import { Fab } from "@mui/material";

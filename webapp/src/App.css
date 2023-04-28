@@ -200,12 +200,12 @@ a {
 }
 
 #profileImage,
-#profileImageLM {
+#profileImageLM, #profileImageFriend {
     height: 180px;
 }
 
 
-#profileImagePodLM, #profileImagePodPT {
+#profileImagePodLM, #profileImagePodPT, #profileImagePodFriend {
   height: 180px;
   width: auto;
   border-radius: 3%;

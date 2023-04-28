@@ -1,5 +1,5 @@
 import { Box, Divider, Tooltip } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import { styled } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -15,6 +15,8 @@ import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { showError } from 'utils/fieldsValidation';
 import { useSession } from '@inrupt/solid-ui-react';
 import { añadirPermisosAmigo } from 'podManager/MapManager';
+import { getFriendProfilePhoto } from './getFriendProfilePhoto';
+
 
 
 const VerticalDivider = styled(Divider)({
@@ -29,9 +31,10 @@ const InfoBox = styled(Box)({
 export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendRequest[]>, daddy: any, refresh: any, refreshFriends: any, stopLoading: any }) => {
 
     const { session } = useSession();
-    const [url, setUrl] = useState("../testUser.jfif");
 
     const [open, setOpen] = React.useState("");
+
+    const [selectedUserWebID, setSelectedUserWebId] = React.useState('');
 
     const generateOpen = (elems: number) => {
         let str = ""
@@ -42,18 +45,22 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
     }
 
     const showFriendProfile = async (user: string) => {
+        
         await searchUserByUsername(user).then((usr) => {
+            let imgUrl =  getFriendProfilePhoto(usr.webID);
+           
+            let imgHtml = ` <img id="profileImageFriend" src="defaultUser2.png" alt="Foto de perfil" >`;
+             if (imgUrl !== null) {
+                imgHtml = ` <img id="profileImagePodFriend" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
+            }
+            
             Swal.fire({
                 title: 'Solicitud de amistad',
-                html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+                html: imgHtml + `</br> <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                         <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
                         <label for="biography-gp" class="swal2-label">Biografía: </label>
                         <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
                 focusConfirm: false,
-                imageUrl: url,
-                imageWidth: 'auto',
-                imageHeight: 200,
-                imageAlt: 'Foto de perfil actual',
             })
         }).catch((err: any) => {
             showError("Error mostrar el perfil de " + user + ".", err.message, Swal.close);
