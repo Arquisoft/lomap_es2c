@@ -13,7 +13,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { readCookie } from 'utils/CookieReader';
 import { useDispatch } from 'react-redux';
 import { setProfileImage } from 'utils/redux/action';
-import PodManager from 'podManager/PodManager';
+import { obtenerFoto } from 'podManager/MapManager';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -47,7 +47,7 @@ export default function LoggedView() {
 
 
     const profileImageUrl = async () => {
-        return await new PodManager().getPhoto(session.info.webId);
+        return await obtenerFoto(session.info.webId);
     }
 
     if (session.info.webId) {
@@ -57,7 +57,6 @@ export default function LoggedView() {
     React.useEffect(() => {
         if (welcome && readCookie("sameWebId") !== "true" && session.info.webId)
             checkWebId();
-
         const fetchImgUrl = async () => {
             const url = await profileImageUrl();
             dispatch(setProfileImage(url))
@@ -85,8 +84,6 @@ export default function LoggedView() {
     const checkWebId = () => {
         let user: User = getUserInSesion();
         setTimeout(() => {
-            console.log(user.webID)
-            console.log(readCookie("userWebId"))
             if (user.webID !== readCookie("userWebId")) {
                 Swal.fire({
                     title: "Actualizar webId",
@@ -104,17 +101,13 @@ export default function LoggedView() {
                         editUserDetails(updatedUser);
                         saludo();
                     } else {
-                        logout();
-                        navigate("/login")
+                        logout(); navigate("/login")
                     }
                 })
             } else {
-                saludo();
-                document.cookie = "sameWebId=true; path=/"
+                saludo(); document.cookie = "sameWebId=true; path=/"
             }
-
         }, 3000);
-
     }
 
     return (

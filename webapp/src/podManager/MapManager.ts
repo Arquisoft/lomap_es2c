@@ -12,6 +12,10 @@ export async function verMapaDe(user: User, session: Session): Promise<Group[]> 
     return grupos
 }
 
+export async function obtenerFoto(webId: any) {
+    return await pod.getPhoto(webId);
+}
+
 export async function verMapaDeAmigo(user: User, session: Session): Promise<Group[]> {
     let grupos = await pod.getFriendsGroups(session, user.webID)
     return grupos
@@ -47,7 +51,7 @@ export async function eliminarGrupo(grupo: Group, session: Session): Promise<boo
 }
 
 export async function añadirPermisosAmigo(webId: string, friendWebId: string, session: Session): Promise<void> {
-   return await pod.addReadPermissionsToFriend(webId, friendWebId, session);
+    return await pod.addReadPermissionsToFriend(webId, friendWebId, session);
 }
 
 export async function eliminarLugarDeGrupo(lugar: Place, grupo: Group, session: Session): Promise<Group> {
