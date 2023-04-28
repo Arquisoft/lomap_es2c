@@ -205,11 +205,10 @@ a {
 }
 
 
-#profileImagePodLM,
-#profileImagePodPT {
-    height: 180px;
-    width: auto;
-    border-radius: 3%;
+#profileImagePodLM, #profileImagePodPT {
+  height: 180px;
+  width: auto;
+  border-radius: 3%;
 }
 
 #biography-EP {

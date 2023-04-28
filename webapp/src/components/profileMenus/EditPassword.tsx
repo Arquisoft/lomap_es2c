@@ -11,13 +11,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import ProfileTemplate from "./ProfileTemplate";
-import { Fab } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { temporalSuccessMessage } from "utils/MessageGenerator";
-import { readCookie } from "utils/CookieReader";
 
 //#region DEFINICION DE COMPONENTES STYLED
+
+const StyledBox = styled(Box)({
+    marginTop: '1em',
+    marginLeft: '2em',
+});
 
 const CSSTypography = styled(Typography)({
     color: "white",
@@ -81,16 +83,6 @@ const CSSTextField = styled(TextField)({
     }
 });
 
-
-const LegendTypography = styled(Typography)({
-    color: 'white',
-    fontFamily: '"Calibri", "Roboto","Helvetica","Arial",sans-serif',
-    fontWeight: '400',
-    fontSize: '1em',
-    lineHeight: '1.4375em',
-    letterSpacing: '0.00938em',
-});
-
 //#endregion
 
 
@@ -114,27 +106,18 @@ export function EditPassword() {
     const [user, setUser] = useState(getUserInSesion())
 
 
-    const goBack = () => {
-        let url = readCookie("lastPath");
-        if (url === "/home/edit/psw")
-            url = "/";
-        navigate(url)
-    }
-
-
     const tryToEdit = (editions: EditSchema) => {
 
-
-        if (currentPassword !== undefined && currentPassword !== '' && currentPassword !== null) {
-            if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null) {
-                if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword)) {
-                    editPassword(currentPassword, editions.newPassword).then(() => {
-                        temporalSuccessMessage("Contraseña editada correctamente.");
-                        goBack();
-                    }).catch((e) => {
-                        fieldsValidation.showError("No se actualizó la contraseña", e as string, () => { });
-                    })
-
+        if (currentPassword !== undefined && currentPassword !== '' && currentPassword !== null){
+         if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null)
+            {
+            if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword))  {
+                editPassword(currentPassword, editions.newPassword).then(() => {
+                    temporalSuccessMessage("Contraseña editada correctamente.");
+                    navigate("/home/edit")
+                }).catch((e) => {
+                    fieldsValidation.showError("No se actualizó la contraseña", e as string, () => {});
+                })
                 } else {
                     fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", () => { });
                 }
@@ -151,26 +134,23 @@ export function EditPassword() {
     }
 
     return (
-        <Box sx={{ '& > :not(style)': { ml: '2em', mt: '2em' } }} component="form" onSubmit={handleSubmit(onSubmit)}>
-            <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" onClick={goBack}>
-                <KeyboardBackspaceIcon />
-            </Fab>
-            <ProfileTemplate>
-                <CSSTypography variant="h3" align="center"
-                    data-testid="usernameEditProfile"
-                >
-                    {user.username}
-                </CSSTypography>
-                <CSSTypography fontWeight='lighter' variant="h5" align="center"
-                    sx={{ mt: "0.5em" }}
-                    data-testid="editProfileTitle"
-                >
-                    Actualizar contraseña
-                </CSSTypography>
-
-
-
-                <CSSTextField sx={{ mt: "0.8em" }}
+        <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
+        <ProfileTemplate> 
+            <CSSTypography variant="h3" align="center"
+                data-testid="usernameEditProfile"
+            >
+                {user.username}
+            </CSSTypography>
+            <CSSTypography fontWeight= 'lighter' variant="h5" align="center"
+                sx={{ mt: "0.5em" }}
+                data-testid="editProfileTitle"
+            >
+               Actualizar contraseña
+            </CSSTypography>
+             
+        
+                
+                 <CSSTextField sx={{ mt: "0.8em" }}
                     id="oldPasswordEP"
                     label="Contraseña actual"
                     type="password"
@@ -211,6 +191,6 @@ export function EditPassword() {
                 </CSSButton>
 
             </ProfileTemplate>
-        </Box>
+        </StyledBox>
     )
 }

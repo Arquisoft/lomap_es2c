@@ -1,27 +1,28 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { styled } from '@mui/material/styles';
-import SForm from '../userIdentification/SesionForm';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Swal from 'sweetalert2';
-import { User } from '../../shared/shareddtypes';
-import { editPassword, editUserDetails, getUserInSesion } from 'api/api';
+import { editUserDetails, getUserInSesion } from 'api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
 import ProfileTemplate from "./ProfileTemplate";
-import { Fab } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { temporalSuccessMessage } from "utils/MessageGenerator";
-import { readCookie } from "utils/CookieReader";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'utils/redux/store';
+import { setLastPath } from 'utils/redux/action';
 
 //#region DEFINICION DE COMPONENTES STYLED
+
+const StyledBox = styled(Box)({
+    marginTop: '1em',
+    marginLeft: '2em',
+});
+
 
 const CSSTypography = styled(Typography)({
     color: "white",
@@ -62,29 +63,6 @@ const CSSButton = styled(Button)({
         boxShadow: '0 0 0 0.2rem #1f4a21',
     },
 });
-const CSSTextField = styled(TextField)({
-    marginBottom: '0.8em',
-    '& label.Mui-focused': {
-        color: '#1f4a21',
-    },
-    '& .MuiInput-underline:after': {
-        borderBottomColor: '#1f4a21',
-    },
-    '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-            borderColor: 'white',
-        },
-        '&:hover fieldset': {
-            borderColor: '#1f4a21',
-        },
-        '&.Mui-focused fieldset': {
-            borderColor: '#1f4a21',
-        },
-    }, '.MuiFormHelperText-root': {
-        color: 'white !important',
-    }
-});
-
 
 const LegendTypography = styled(Typography)({
     color: 'white',
@@ -95,12 +73,15 @@ const LegendTypography = styled(Typography)({
     letterSpacing: '0.00938em',
 });
 
+
 //#endregion
 
 
 export function EditProfile() {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     const schema = fieldsValidation.editProfileValidation;
     type EditSchema = yup.InferType<typeof schema>;
@@ -112,20 +93,21 @@ export function EditProfile() {
 
     const [user, setUser] = useState(getUserInSesion())
 
+    const url = useSelector((state: RootState) => state.app.lastPath);
 
     const showPassword = () => {
+        dispatch(setLastPath("/home/edit/psw"))
         navigate("/home/edit/psw")
     }
 
     const goBack = () => {
-        let url = readCookie("lastPath");
-        if (url === "/home/edit")
-            url = "/";
-        navigate(url)
+       
+        if (url === "/home/edit" || url === "/home/edit/psw")
+            navigate("/")
+        else
+            navigate(url)
     }
-
-
-
+    
     const tryToEdit = (editions: EditSchema) => {
 
         if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null) {
@@ -141,23 +123,21 @@ export function EditProfile() {
     }
 
     return (
-        <Box sx={{ '& > :not(style)': { ml: '2em', mt: '2em' } }} component="form" onSubmit={handleSubmit(onSubmit)}>
-            <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" onClick={goBack}>
-                <KeyboardBackspaceIcon />
-            </Fab>
-            <ProfileTemplate>
-                <CSSTypography variant="h3" align="center"
-                    data-testid="usernameEditProfile"
-                >
-                    {user.username}
-                </CSSTypography>
-                <CSSTypography fontWeight='lighter' variant="h5" align="center"
-                    sx={{ mt: "0.5em" }}
-                    data-testid="editProfileTitle"
-                >
-                    Edita tu perfil
-                </CSSTypography>
-                <Box>
+        <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
+        
+        <ProfileTemplate> 
+            <CSSTypography variant="h3" align="center"
+                data-testid="usernameEditProfile"
+            >
+                {user.username}
+            </CSSTypography>
+            <CSSTypography fontWeight= 'lighter' variant="h5" align="center"
+                sx={{ mt: "0.5em" }}
+                data-testid="editProfileTitle"
+            >
+               Edita tu perfil
+            </CSSTypography>
+             <Box>
                     <LegendTypography sx={{ mb: "0.3em" }}> Biografía: </LegendTypography>
 
                     <textarea
@@ -168,13 +148,12 @@ export function EditProfile() {
 
                 </Box>
 
-
-
-                <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
-                    Actualizar contraseña
-                </EditPasswordButton>
-
-                <CSSButton
+            
+            <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
+                Actualizar contraseña
+            </EditPasswordButton>
+        
+             <CSSButton
                     sx={{ mt: "1.5em", mb: "2em" }}
                     variant="contained"
                     type="submit"
@@ -186,6 +165,6 @@ export function EditProfile() {
                 </CSSButton>
 
             </ProfileTemplate>
-        </Box>
+        </StyledBox>
     )
 }

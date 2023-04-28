@@ -7,93 +7,11 @@ import { v4 as uuidv4 } from 'uuid';
 class PodManager {
 
 
-    // podUrl must be correct for the moment
-    async savePlace(session: Session, place: Place): Promise<void> {
-        try
-        {
-            if(session.info.webId) {
-            let url = session.info.webId.replace("card#me", "public") + "/places";
-            let places = await this.getPlaces(session);
-
-            places.push(place);
-
-            let JSONLDplace: JsonLdDocument = {
-                "@context": "https://schema.org",
-                "@type": "Places",
-                "places": places.map((place) => ({
-                    "@type": "Place",
-                    "name": place.nombre,
-                    "category": place.category,
-                    "geo": {
-                        "@type": "GeoCoordinates",
-                        "latitude": place.latitude,
-                        "longitude": place.longitude
-                    },
-                    "description": place.description,
-                    "comment": place.comments.map((comment) => ({
-                        "@type": "Comment",
-                        "author": comment.author,
-                        "comment": comment.comment,
-                        "date": comment.date
-                    })),
-                    "reviewScore": place.reviewScore,
-                    "date": place.date
-                }))
-            };
-
-            let blob = new Blob([JSON.stringify(JSONLDplace)], { type: "application/ld+json" });
-            let file = new File([blob], place.nombre + ".jsonld", { type: blob.type });
-
-            await overwriteFile(
-                url,
-                file,
-                { contentType: file.type, fetch: session.fetch }
-            );}
-        } catch (error) {
-        }
-    }
-
-    async getPlaces(session: Session): Promise<Place[]> {
-
-        try
-        {
-            if (session.info.webId) {
-            let url = session.info.webId.replace("card#me", "public") + "/places"
-            const file = await getFile(url, { fetch: session.fetch });
-            const text = await file.text();
-            const data = JSON.parse(text);
-
-            if (data["@type"] === "Places") {
-                const places = data.places.map((place: any) => {
-                    return {
-                        nombre: place.name,
-                        category: place.category,
-                        longitude: place.geo.longitude,
-                        latitude: place.geo.latitude,
-                        description: place.description,
-                        comments: place.comment.map((comment: any) => ({
-                            author: comment.author,
-                            comment: comment.comment,
-                            date: comment.date
-                        })),
-                        reviewScore: place.reviewScore,
-                        date: place.date
-                    };
-                });
-                return places;
-            } else {
-                return [];
-            }}
-        } catch (error) {
-            return [];
-        }
-    }
-
     async updateGroup(session: Session, group: Group): Promise<void> {
         try
         {
             if (session.info.webId)  {
-                let url = session?.info.webId.replace("profile/card#me", "lomap")
+                let url = session?.info.webId.replace("card#me", "public") + "/lomap"
 
                 let groups = await this.getGroups(session);
 
@@ -180,7 +98,7 @@ class PodManager {
            
             if (session.info.webId) {
                 
-                let url = session?.info.webId.replace("profile/card#me", "lomap")
+                let url = session?.info.webId.replace("card#me", "public") + "/lomap"
 
                 let groups = await this.getGroups(session);
 
@@ -258,7 +176,7 @@ class PodManager {
         {
             if(session.info.webId)
             {
-                let url = session?.info.webId.replace("profile/card#me", "lomap")
+                let url = session?.info.webId.replace("card#me", "public") + "/lomap"
                 let groups = await this.getGroups(session);
 
                 groups.push(group);
@@ -333,7 +251,8 @@ class PodManager {
         try
         {
             if (session.info.webId)
-            {    let url = session?.info.webId.replace("profile/card#me", "lomap")
+            {   
+                let url = session?.info.webId.replace("card#me", "public") + "/lomap"
                 const file = await getFile(url, { fetch: session.fetch });
                 const text = await file.text();
                 const data = JSON.parse(text);
@@ -375,6 +294,7 @@ class PodManager {
         }
     }
 
+
     async addReadPermissionsToFriend(webId: string, friendWebId: string, session: Session): Promise<void> {
         // Obtener el SolidDataset y su ACL asociada, si está disponible
         const myDatasetWithAcl = await getSolidDatasetWithAcl(webId, { fetch: session.fetch });
@@ -413,37 +333,38 @@ class PodManager {
         try
         {
             if (session.info.webId)
-             {    url = url.replace("profile/card#me", "lomap")
+            {  
+                url = url.replace("card#me", "public") + "/lomap"
 
-            const file = await getFile(url, { fetch: session.fetch });
-            const text = await file.text();
-            const data = JSON.parse(text);
+                const file = await getFile(url, { fetch: session.fetch });
+                const text = await file.text();
+                const data = JSON.parse(text);
 
-            if (data["@type"] === "Maps") {
-                const groups = data.maps.map((map: any) => {
-                    return {
-                        name: map.name,
-                        places: map.spatialCoverage.map((place: any) => ({
-                            nombre: place.name,
-                            category: place.additionalType,
-                            longitude: place.longitude,
-                            latitude: place.latitude,
-                            description: place.description,
-                            comments: place.review.map((review: any) => ({
-                                author: review.author.identifier,
-                                comment: review.rewievBody,
-                                date: review.datePublished
-                            })),
-                            images: place.image.map((image: any) => ({
-                                author: image.author.identifier,
-                                url: image.contentUrl
-                              })),
-                            reviewScore: place.reviewScore,
-                            date: place.date
-                        }))
-                    };
-                });
-                return groups;
+                if (data["@type"] === "Maps") {
+                    const groups = data.maps.map((map: any) => {
+                        return {
+                            name: map.name,
+                            places: map.spatialCoverage.map((place: any) => ({
+                                nombre: place.name,
+                                category: place.additionalType,
+                                longitude: place.longitude,
+                                latitude: place.latitude,
+                                description: place.description,
+                                comments: place.review.map((review: any) => ({
+                                    author: review.author.identifier,
+                                    comment: review.rewievBody,
+                                    date: review.datePublished
+                                })),
+                                images: place.image.map((image: any) => ({
+                                    author: image.author.identifier,
+                                    url: image.contentUrl
+                                })),
+                                reviewScore: place.reviewScore,
+                                date: place.date
+                            }))
+                        };
+                    });
+                    return groups;
             } else {
                 return [];
                 }
