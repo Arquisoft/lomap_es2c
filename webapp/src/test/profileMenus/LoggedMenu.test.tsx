@@ -111,7 +111,7 @@ test('click on getProfile', async () => {
     expect(profileInfo).toBeInTheDocument();
 
 });
-/*
+
 test('click on editProfile', async () => {
 
     (searchUserByUsername as any).mockReturnValueOnce(
@@ -125,7 +125,6 @@ test('click on editProfile', async () => {
             'isPodLogged=true; path=/; ',
     });
 
-    console.log(document.cookie)
     await act(async () => {
         render(
             <Provider store={store}>
@@ -142,10 +141,10 @@ test('click on editProfile', async () => {
     fireEvent.click(profileMenuButton);
     let showEditButton = screen.getByTestId("showEditButton");
     fireEvent.click(showEditButton);
-    let editNoPswInfo = await screen.findByTestId("editNoPswInfo");
+    let editNoPswInfo = await screen.findByText("Edita tu perfil");
     expect(editNoPswInfo).toBeInTheDocument();
 
-});*/
+});
 
 test('logout', async () => {
 
