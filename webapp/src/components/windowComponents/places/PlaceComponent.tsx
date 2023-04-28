@@ -53,10 +53,7 @@ const LegendTypography = styled(Typography)({
 
 export default function PlaceComponent(props: any) {
 
-    const navigate = useNavigate()
-
     let place = props.place;
-    let groupname = props.group;
 
     return (
         <>

@@ -35,9 +35,7 @@ const InfoBox = styled(Box)({
 
 
 export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any, refresh: any, stopLoading: any }) => {
-
-    const [url, setUrl] = useState("../testUser.jfif");
-
+    
     const navigate = useNavigate()
 
     const dispatch = useDispatch();

@@ -22,8 +22,6 @@ import { ErrorPage } from 'components/mainComponents/ErrorPage';
 import { ShowFriendGroup } from '../groups/groupViews/ShowFriendGroup';
 import { useSession } from '@inrupt/solid-ui-react';
 import ShowFriendPlace from '../places/placeViews/ShowFriendPlace';
-import PodManager from 'podManager/PodManager';
-import React from 'react';
 import { getFriendProfilePhoto } from './getFriendProfilePhoto';
 
 const ScrollBox = styled(Box)({

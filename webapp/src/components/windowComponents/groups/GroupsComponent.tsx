@@ -21,7 +21,7 @@ import { render } from 'react-dom';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import { useDispatch } from 'react-redux';
 import { addMarkers, clearFilterForMyMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
-import { Place, Comment, MarkerData } from '../../../shared/shareddtypes'
+import { Place, MarkerData } from '../../../shared/shareddtypes'
 import { eliminarGrupo, mostrarGrupoPod } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';

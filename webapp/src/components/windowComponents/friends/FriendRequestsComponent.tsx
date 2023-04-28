@@ -34,8 +34,6 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
 
     const [open, setOpen] = React.useState("");
 
-    const [selectedUserWebID, setSelectedUserWebId] = React.useState('');
-
     const generateOpen = (elems: number) => {
         let str = ""
         for (let i = 0; i < elems; i++) {

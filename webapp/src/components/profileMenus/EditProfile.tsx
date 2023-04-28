@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { editUserDetails, getUserInSesion } from 'api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
