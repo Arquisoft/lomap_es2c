@@ -29,29 +29,29 @@ export default function SesionForm(props: React.HTMLAttributes<HTMLDivElement>) 
     const url = useSelector((state: RootState) => state.app.lastPath);
 
     const goBack = () => {
-       
-        if (url === "/home/edit" ||
+        console.log(url)
+        if (url === "/home/edit" || url === null ||
             (url === "/home/edit/psw" && pathname === "/home/edit"))
             navigate("/")
         else if (url === "/home/edit/psw" && pathname === "/home/edit/psw")
             navigate("/home/edit")
         else
             navigate(url)
-     }
-    
-    
+    }
+
+
     return (
 
         //#region COMPONENTE
-        <Box sx={ { display: 'flex', } } >
-            <Fab style={ { backgroundColor: '#81c784', color: '#fff' } } aria-label="add" onClick={ goBack }>
+        <Box sx={{ display: 'flex', }} >
+            <Fab style={{ backgroundColor: '#81c784', color: '#fff' }} aria-label="add" data-testid="goBack" onClick={goBack}>
                 <KeyboardBackspaceIcon />
             </Fab>
             <Container maxWidth="sm">
                 <Box sx={{ mb: "1em" }}>
                     <Paper
                         background="light"
-                        sx={{ pt:'2em', pl:'2em', pr:'2em' }}
+                        sx={{ pt: '2em', pl: '2em', pr: '2em' }}
                     >
                         <LogoBox>
                             {imgUrl !== null ?

@@ -101,13 +101,13 @@ export function EditProfile() {
     }
 
     const goBack = () => {
-       
-        if (url === "/home/edit" || url === "/home/edit/psw")
+        console.log(url)
+        if (url === "/home/edit" || url === null || url === "/home/edit/psw")
             navigate("/")
         else
             navigate(url)
     }
-    
+
     const tryToEdit = (editions: EditSchema) => {
 
         if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null) {
@@ -124,20 +124,20 @@ export function EditProfile() {
 
     return (
         <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
-        
-        <ProfileTemplate> 
-            <CSSTypography variant="h3" align="center"
-                data-testid="usernameEditProfile"
-            >
-                {user.username}
-            </CSSTypography>
-            <CSSTypography fontWeight= 'lighter' variant="h5" align="center"
-                sx={{ mt: "0.5em" }}
-                data-testid="editProfileTitle"
-            >
-               Edita tu perfil
-            </CSSTypography>
-             <Box>
+
+            <ProfileTemplate>
+                <CSSTypography variant="h3" align="center"
+                    data-testid="usernameEditProfile"
+                >
+                    {user.username}
+                </CSSTypography>
+                <CSSTypography fontWeight='lighter' variant="h5" align="center"
+                    sx={{ mt: "0.5em" }}
+                    data-testid="editProfileTitle"
+                >
+                    Edita tu perfil
+                </CSSTypography>
+                <Box>
                     <LegendTypography sx={{ mb: "0.3em" }}> Biografía: </LegendTypography>
 
                     <textarea
@@ -148,12 +148,12 @@ export function EditProfile() {
 
                 </Box>
 
-            
-            <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
-                Actualizar contraseña
-            </EditPasswordButton>
-        
-             <CSSButton
+
+                <EditPasswordButton sx={{ mt: "0.8em" }} variant="outlined" startIcon={<EditPasswordIcon />} onClick={showPassword}>
+                    Actualizar contraseña
+                </EditPasswordButton>
+
+                <CSSButton
                     sx={{ mt: "1.5em", mb: "2em" }}
                     variant="contained"
                     type="submit"

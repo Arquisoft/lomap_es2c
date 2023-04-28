@@ -58,7 +58,6 @@ async function setSessionUser(response: Response): Promise<User> {
 }
 
 export async function editUserDetails(user: User): Promise<User> {
-    console.log(user)
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/usermanager/edit', {
         method: 'POST',

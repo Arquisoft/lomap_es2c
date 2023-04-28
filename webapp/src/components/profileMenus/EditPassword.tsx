@@ -26,21 +26,6 @@ const CSSTypography = styled(Typography)({
     fontFamily: 'Calibri',
 });
 
-const EditPasswordIcon = styled(EditIcon)({
-    color: "#1f4a21",
-})
-
-const EditPasswordButton = styled(Button)({
-    color: 'white',
-    borderColor: '#1f4a21',
-    textTransform: 'none',
-    '&:hover': {
-        color: '#1f4a21',
-        borderColor: '#1f4a21',
-        boxShadow: 'none',
-    },
-});
-
 const CSSButton = styled(Button)({
     backgroundColor: "white",
     color: "#81c784",
@@ -108,21 +93,18 @@ export function EditPassword() {
 
     const tryToEdit = (editions: EditSchema) => {
 
-        if (currentPassword !== undefined && currentPassword !== '' && currentPassword !== null){
-         if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null)
-            {
-            if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword))  {
-                editPassword(currentPassword, editions.newPassword).then(() => {
-                    temporalSuccessMessage("Contraseña editada correctamente.");
-                    navigate("/home/edit")
-                }).catch((e) => {
-                    fieldsValidation.showError("No se actualizó la contraseña", e as string, () => {});
-                })
+        if (currentPassword !== undefined && currentPassword !== '' && currentPassword !== null) {
+            if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null) {
+                if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword)) {
+                    editPassword(currentPassword, editions.newPassword).then(() => {
+                        temporalSuccessMessage("Contraseña editada correctamente. ¿Quién se sabía la antigua?");
+                        navigate("/home/edit")
+                    }).catch((e) => {
+                        fieldsValidation.showError("No se actualizó la contraseña", e as string, () => { });
+                    })
                 } else {
                     fieldsValidation.showError("No se ha podido actualizar la contraseña", "Las contraseñas no coinciden", () => { });
                 }
-
-
             }
             else {
                 fieldsValidation.showError("No se ha podido actualizar la contraseña", "Debe confirmar la nueva contraseña", () => { });
@@ -135,22 +117,22 @@ export function EditPassword() {
 
     return (
         <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
-        <ProfileTemplate> 
-            <CSSTypography variant="h3" align="center"
-                data-testid="usernameEditProfile"
-            >
-                {user.username}
-            </CSSTypography>
-            <CSSTypography fontWeight= 'lighter' variant="h5" align="center"
-                sx={{ mt: "0.5em" }}
-                data-testid="editProfileTitle"
-            >
-               Actualizar contraseña
-            </CSSTypography>
-             
-        
-                
-                 <CSSTextField sx={{ mt: "0.8em" }}
+            <ProfileTemplate>
+                <CSSTypography variant="h3" align="center"
+                    data-testid="usernameEditProfile"
+                >
+                    {user.username}
+                </CSSTypography>
+                <CSSTypography fontWeight='lighter' variant="h5" align="center"
+                    sx={{ mt: "0.5em" }}
+                    data-testid="editProfileTitle"
+                >
+                    Actualizar contraseña
+                </CSSTypography>
+
+
+
+                <CSSTextField sx={{ mt: "0.8em" }}
                     id="oldPasswordEP"
                     label="Contraseña actual"
                     type="password"
