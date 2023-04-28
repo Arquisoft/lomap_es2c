@@ -103,6 +103,59 @@ test('check friendshowgroup filters', async () => {
     });
 });
 
+test('check friend showplace', async () => {
+
+    (getMyFriends as any).mockReturnValue(
+        Promise.resolve(
+            friends
+        )
+    );
+
+    (getMyFriendRequests as any).mockReturnValue(
+        Promise.resolve(
+            friendRequests
+        )
+    );
+
+    (verMapaDeAmigo as any).mockReturnValue(
+        Promise.resolve(
+            groups
+        )
+    );
+
+    (searchUserByUsername as any).mockReturnValue(
+        Promise.resolve(
+            { username: 'testFriend2', webID: 'webidfriend', img: '', password: '', description: '' }
+        )
+    )
+
+    await act(async () => {
+        render(
+            <Provider store={store}>
+                <SessionProvider sessionId="">
+                    <MemoryRouter initialEntries={['/home/friends/main']} initialIndex={1}>
+                        <Routes>
+                            <Route path='/home/:mainop/:op/:id?/:lat?/:lng?' element={<MainPage />} />
+                        </Routes>
+                    </MemoryRouter>
+                </SessionProvider>
+            </Provider>
+        );
+    });
+    await act(async () => {
+        let linkElement = await screen.findByTestId("testFriendxm");
+        fireEvent.click(linkElement);
+        linkElement = await screen.findByText("Grupo1");
+        expect(linkElement).toBeInTheDocument();
+        linkElement = await screen.findByTestId("testFriendGrupo1");
+        fireEvent.click(linkElement)
+        linkElement = await screen.findByText("Bar de Pepe");
+        fireEvent.click(linkElement)
+        linkElement = await screen.findByLabelText("Longitud");
+        expect(linkElement).toBeInTheDocument();
+    });
+});
+
 const comments: Comment[] = [
     { author: "security", date: "10/04/2023", comment: "Review del bar de Pepe" }
 ]

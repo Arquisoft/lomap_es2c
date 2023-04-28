@@ -49,12 +49,10 @@ export default function PodLogin() {
     const navigate = useNavigate();
 
     const handleLogin = async () => {
-        document.cookie = "isPodLogged=true; path=/";
-        document.cookie = "sameWebId=false; path=/";
+        document.cookie = "isPodLogged=true; path=/"; document.cookie = "sameWebId=false; path=/";
     };
     const handleError = async () => {
-        logout();
-        navigate("/login");
+        logout(); navigate("/login");
     }
 
     return (
@@ -107,7 +105,9 @@ export default function PodLogin() {
 
                 <LoginButton
                     oidcIssuer={idp}
-                    redirectUrl={"http://localhost:3000/home/welcome"}
+                    redirectUrl={
+                        "http://localhost:3000/home/welcome"
+                    }
                     onError={handleError}
                 >
                     <CSSButton
