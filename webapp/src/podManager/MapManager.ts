@@ -47,7 +47,7 @@ export async function eliminarGrupo(grupo: Group, session: Session): Promise<boo
 }
 
 export async function añadirPermisosAmigo(webId: string, friendWebId: string, session: Session): Promise<void> {
-    return await pod.addReadPermissionsToFriend(webId, friendWebId, session);
+   return await pod.addReadPermissionsToFriend(webId, friendWebId, session);
 }
 
 export async function eliminarLugarDeGrupo(lugar: Place, grupo: Group, session: Session): Promise<Group> {
