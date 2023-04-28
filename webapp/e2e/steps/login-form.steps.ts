@@ -27,7 +27,7 @@ defineFeature(feature, test => {
     let password:string;
 
     given('A registered user', () => {
-      username = "newuser"
+      username = "teste2e"
       password = "12345A..."
     });
 
@@ -55,7 +55,7 @@ defineFeature(feature, test => {
     let password:string;
 
     given('An unregistered user', () => {
-      username = "newUser"
+      username = "notRegisteredUser"
       password = "12345A..."
     });
 

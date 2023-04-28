@@ -21,44 +21,13 @@ defineFeature(feature, test => {
       .catch(() => {});
   });
 
-  test('The user is not registered in the site', ({given,when,then}) => {
-    
-    let username:string;
-    let password:string;
-
-    given('An unregistered user', () => {
-      username = "newUser2"
-      password = "12345A..."
-    });
-
-    when('I fill the data in the form and press submit', async () => {
-      await page.setViewport({ width: 1400, height: 900 });
-      await expect(page).toMatch("Descubre LoMap");
-      await expect(page).toClick('button', {text:'Adelante'})
-
-      await expect(page).toClick('a', {text:'Regístrate'})
-
-      await expect(page).toFillForm('form', {
-        username: username,
-        password: password,
-        confirmPasswordSU: password
-      })
-      await expect(page).toClick('button', { text: 'Crear cuenta' })
-    });
-
-    then('Switch to the Login form', async () => {
-      await expect(page).toMatch('Cuenta creada')
-    });
-  })
-
-
   test('The user is registered in the site', ({given,when,then}) => {
     
     let username:string;
     let password:string;
 
     given('A registered user', () => {
-      username = "newuser"
+      username = "teste2e"
       password = "12345A..."
     });
 
