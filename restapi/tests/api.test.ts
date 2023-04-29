@@ -82,6 +82,7 @@ describe('/sesionmanager/signup ', () => {
         let user = new UserImpl("usertestsignup", "1234", "webIdPrueba", "descripcionprueba", "img")
         const response = await request(app).post('/sesionmanager/signup').send({ user: user });
         expect(response.status).toBe(200);
+
         let r = await UserSchema.deleteOne({ username: "usertestsignup" })
     });
 });

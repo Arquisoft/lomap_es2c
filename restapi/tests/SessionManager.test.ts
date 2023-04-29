@@ -4,6 +4,8 @@ import User from "../src/entities/UserSchema";
 import { SesionManager } from "../src/facade";
 import { UserSesionManager } from "../src/controllers/SessionManager";
 import mongoose from "mongoose";
+import request from "supertest";
+import UserSchema from "../src/entities/UserSchema";
 
 describe('SessionManager', () => {
     let userManager: UserManager;
@@ -61,6 +63,13 @@ describe('SessionManager', () => {
                 error = err;
             }
             expect(error.message).toBe("El nombre de usuario que intenta introducir no esta disponible.");
+        });
+        it('deberia registrarase correctamente', async () => {
+            let user=new UserImpl("usertestsignup","1234","webIdPrueba","descripcionprueba","img")
+            await sessionManager.registrarse(user)
+            let result=await userManager.listarDetalles(user)
+            expect(result.username).toBe(user.username);
+            await UserSchema.deleteOne({username:"usertestsignup"})
         });
     });
 });
