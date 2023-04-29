@@ -4,8 +4,6 @@ export default {
         "^.+\\.tsx?$": "ts-jest"
     },
     collectCoverage: true,
-    coverageReporters: ['lcov'],
-    coverageDirectory: 'coverage',
     collectCoverageFrom:["**/src/controllers/*.{ts,tsx}",
         "**/src/facade.ts",
         "!server.ts",
@@ -13,5 +11,7 @@ export default {
         "**/src/persistence/*.{ts,tsx}",
         "!**/src/persistence/DefaultMongo.ts",
         "**/src/entities/*.{ts,tsx}",
-    ]
+    ],
+    coverageReporters: ['lcov'],
+    coverageDirectory: '../coverage',
 }
