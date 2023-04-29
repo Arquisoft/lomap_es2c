@@ -83,7 +83,6 @@ export function Signup() {
     });
 
     const [confirmPass, setConfirmPass] = useState('')
-    const [pass, setPass] = useState('')
 
     //#endregion
 
@@ -163,6 +162,7 @@ export function Signup() {
 
                 <CSSTextField
                     id="confirmPasswordSU"
+                    name="confirmPasswordSU"
                     label="Repite la contraseña"
                     type="password"
                     fullWidth

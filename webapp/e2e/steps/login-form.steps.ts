@@ -1,7 +1,7 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import puppeteer from "puppeteer";
 
-const feature = loadFeature('./e2e/features/register-form.feature');
+const feature = loadFeature('./e2e/features/login-form.feature');
 
 let page: puppeteer.Page;
 let browser: puppeteer.Browser;
@@ -15,7 +15,7 @@ defineFeature(feature, test => {
     page = await browser.newPage();
 
     await page
-      .goto("http://localhost:3000", {
+      .goto("http://localhost:3000/", {
         waitUntil: "networkidle0",
       })
       .catch(() => {});
@@ -32,30 +32,53 @@ defineFeature(feature, test => {
     });
 
     when('I fill the data in the form and press submit', async () => {
+      await page.setViewport({ width: 1400, height: 900 });
+      await expect(page).toMatch("Descubre LoMap");
+      await expect(page).toClick('button', {text:'Adelante'})
 
+      await expect(page).toFillForm('form', {
+        username: username,
+        password: password,
+      })
+      await expect(page).toClick('button', { text: 'Iniciar sesión' })
+    });
+
+    then('You go to pods page', async () => {
+      await expect(page).toMatch('Inicia sesión con tu proveedor de pod')
+    });
+  })
+
+
+  test('The user is not registered in the site', ({given,when,then}) => {
+    
+    let username:string;
+    let password:string;
+
+    given('An unregistered user', () => {
+      username = "notRegisteredUser"
+      password = "12345A..."
+    });
+
+    when('I fill the data in the form and press submit', async () => {
       await page
-      .goto("http://localhost:3000", {
+      .goto("http://localhost:3000/", {
         waitUntil: "networkidle0",
       })
       .catch(() => {});
-
 
       await page.setViewport({ width: 1400, height: 900 });
       await expect(page).toMatch("Descubre LoMap");
       await expect(page).toClick('button', {text:'Adelante'})
 
-      await expect(page).toClick('a', {text:'Regístrate'})
-
       await expect(page).toFillForm('form', {
         username: username,
         password: password,
-        confirmPasswordSU: password
       })
-      await expect(page).toClick('button', { text: 'Crear cuenta' })
+      await expect(page).toClick('button', { text: 'Iniciar sesión' })
     });
 
-    then('A message appear', async () => {
-      await expect(page).toMatch('No se ha podido crear la cuenta')
+    then('An error message appear', async () => {
+      await expect(page).toMatch('Error al iniciar sesión')
     });
   })
 

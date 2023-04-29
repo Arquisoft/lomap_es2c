@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+require("dotenv").config();
 
 export async function OpenConnection(uri: string, mongoose: any) {
     await mongoose.connect(uri).catch((e: any) => {
@@ -13,13 +14,13 @@ export async function CloseConnection(mongoose: any) {
 }
 
 export async function getBD() {
-    const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority";
+    const uri = process.env.DATABASE_URL;
     const mongoose = require('mongoose');
     await mongoose.set('strictQuery', true).catch((e: any) => {
-        throw new Error("Fallo de Juan: " + e)
+        throw new Error("Fallo BD: " + e)
     });
     await mongoose.set('debug', true).catch((e: any) => {
-        throw new Error("Fallo de Juan: " + e)
+        throw new Error("Fallo BD: " + e)
     });
     return { uri, mongoose };
 }

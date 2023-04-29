@@ -1,5 +1,5 @@
 import { Box, Divider, Tooltip } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -19,8 +19,9 @@ import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { deleteFriendApi } from 'api/api';
 import { showError } from 'utils/fieldsValidation';
 import { useDispatch } from 'react-redux';
-import { addFriendsMarkers, addMarkers, clearFriendsMarkers, setFriendGroupMarker, setFriendUsername } from 'utils/redux/action';
+import { addFriendsMarkers, clearFriendsMarkers, setFriendGroupMarker, setFriendUsername } from 'utils/redux/action';
 import { mostrarGrupoPod } from 'podManager/MapManager';
+import { getFriendProfilePhoto } from './getFriendProfilePhoto';
 
 
 const VerticalDivider = styled(Divider)({
@@ -34,8 +35,6 @@ const InfoBox = styled(Box)({
 
 
 export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any, refresh: any, stopLoading: any }) => {
-
-    const [url, setUrl] = useState("../testUser.jfif");
 
     const navigate = useNavigate()
 
@@ -95,20 +94,21 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
     }
 
     const showFriendProfile = async (user: User) => {
+        let imgUrl = await getFriendProfilePhoto(user.webID);
+        let imgHtml = ` <img id="profileImageFriend" src="defaultUser2.png" alt="Foto de perfil" >`;
+        if (imgUrl !== null) {
+            imgHtml = ` <img id="profileImagePodFriend" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
+        }
         let usr = user;
         Swal.fire({
             title: 'Perfil de amigo',
-            html: ` <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+            html: imgHtml + `</br>  <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                     <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
             focusConfirm: false,
             confirmButtonText: '¡Vale!',
             confirmButtonColor: '#81c784',
-            imageUrl: url,
-            imageWidth: 'auto',
-            imageHeight: 200,
-            imageAlt: 'Foto de perfil actual',
         })
     }
 

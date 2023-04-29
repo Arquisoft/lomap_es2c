@@ -19,10 +19,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { render } from 'react-dom';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
-import PodManager from '../../../podManager/PodManager'
 import { useDispatch } from 'react-redux';
-import { addMarkers, clearFilterForMyMarkers, clearMarkers, setFilterForMyMarkers, setGroupMarker } from 'utils/redux/action';
-import { Place, Comment, MarkerData } from '../../../shared/shareddtypes'
+import { addMarkers, clearFilterForMyMarkers, clearMarkers, setGroupMarker } from 'utils/redux/action';
+import { Place, MarkerData } from '../../../shared/shareddtypes'
 import { eliminarGrupo, mostrarGrupoPod } from 'podManager/MapManager';
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import Swal from 'sweetalert2';
@@ -212,17 +211,4 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, refresh: a
     })
     return (<></>)
 }
-
-// Para probar sin pods
-
-
-const comments: Comment[] = [
-    { author: "security", date: "10/04/2023", comment: "Review del bar de Pepe" }
-]
-
-const places: Place[] = [
-    { nombre: "Bar de Pepe", category: "Bar", latitude: "50.862545", longitude: "4.32321", reviewScore: "3", comments: comments, description: "", date: "10/10/2023", images: [], },
-    { nombre: "Restaurante 1", category: "Restaurante", latitude: "50.962545", longitude: "4.42321", reviewScore: "4", comments: comments, description: "", date: "10/10/2023", images: [], },
-    { nombre: "Tienda 1", category: "Tienda", latitude: "50.782545", longitude: "4.37321", reviewScore: "5", comments: comments, description: "", date: "10/10/2023", images: [], },
-]
 

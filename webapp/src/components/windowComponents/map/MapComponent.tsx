@@ -233,7 +233,7 @@ export const MapComponent = () => {
     }, [markers]);
 
 
-    const CenterMapOnMarkerMemo = React.useMemo(() => React.memo(CenterMapOnMarker), [centerMarker]);
+    const CenterMapOnMarkerMemo = React.useMemo(() => React.memo(CenterMapOnMarker), []);
 
 
 

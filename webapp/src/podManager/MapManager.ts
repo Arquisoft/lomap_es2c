@@ -2,8 +2,6 @@ import { Session } from "@inrupt/solid-client-authn-browser/dist/Session";
 import PodManager from "./PodManager";
 import { Group, Place, User } from "shared/shareddtypes";
 
-const sessionStorage = require('sessionstorage-for-nodejs')
-
 
 const pod = new PodManager();
 
@@ -43,10 +41,9 @@ export async function crearGrupo(name: string, session: Session): Promise<Group>
     return grupo;
 }
 
-// Incompleto
+
 export async function eliminarGrupo(grupo: Group, session: Session): Promise<boolean> {
     await pod.deleteGroup(session, grupo)
-
     return true;
 }
 

@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useNavigate } from 'react-router-dom';
 import { IconContainer, StyledRating, customIcons } from './StyledRating';
 
 
@@ -53,10 +52,7 @@ const LegendTypography = styled(Typography)({
 
 export default function PlaceComponent(props: any) {
 
-    const navigate = useNavigate()
-
     let place = props.place;
-    let groupname = props.group;
 
     return (
         <>

@@ -53,10 +53,6 @@ const BoxCircularProgress = styled(Box)({
     height: '30vh'
 })
 
-const AddItem = styled(ListItemButton)({
-    color: '#81c784',
-})
-
 const BCBox = styled(Box)({
     display: 'flex',
     flexDirection: 'row',
@@ -81,7 +77,7 @@ export const ShowFriendGroup = () => {
 
     const [loading, setLoading] = useState(true)
 
-    const { lat, id, op } = useParams();
+    const { lat, id } = useParams();
 
     const userGroup = async (): Promise<Group> => {
         let group = null
@@ -98,7 +94,7 @@ export const ShowFriendGroup = () => {
         return group;
     }
 
-    const [group, setGroup] = useState<Promise<Group>>(userGroup())
+    const [group] = useState<Promise<Group>>(userGroup())
 
     const ref = useRef<HTMLDivElement>(null);
 

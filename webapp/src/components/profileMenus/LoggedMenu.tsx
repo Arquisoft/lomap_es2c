@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -53,7 +53,7 @@ export function LoggedMenu() {
     const { pathname } = location;
     const dispatch = useDispatch();
 
-    const [userInSession, setUser] = useState(getUserInSesion().username)
+    const userInSession = getUserInSesion().username
 
     const imgUrl = useSelector((state: RootState) => state.user.imgUrl);
 
@@ -140,10 +140,10 @@ export function LoggedMenu() {
                 <IconButton data-testid="profileMenuButton" onClick={openUserMenu} sx={{ padding: 0 }}>
                     {imgUrl !== null ?
                         <Avatar data-testid="userProfileImg" >
-                            <img id="profileImagePod" src={imgUrl} alt="User profile photo" crossOrigin="anonymous" />
+                            <img id="profileImagePod" src={imgUrl} alt="Foto de perfil del usuario" crossOrigin="anonymous" />
                         </Avatar>
                         :
-                        <Avatar data-testid="userProfileImg" alt="User profile photo" src="defaultUser.png" />
+                        <Avatar data-testid="userProfileImg" alt="Foto de perfil del usuario" src="defaultUser.png" />
                     }
                 </IconButton>
             </Tooltip>
