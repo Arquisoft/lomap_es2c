@@ -11,5 +11,6 @@ export default {
         "**/src/persistence/*.{ts,tsx}",
         "!**/src/persistence/DefaultMongo.ts",
         "**/src/entities/*.{ts,tsx}",
-    ]
+    ],
+    testResultsProcessor:"jest-sonar-reporter"
 }
