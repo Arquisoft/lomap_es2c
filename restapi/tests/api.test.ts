@@ -236,14 +236,14 @@ describe('/usermanager/editpsw', () => {
 
 describe('/friendmanager/friendrequests', () => {
     test('user que existe', async () => {
-        let user = new UserImpl("usertestn1", "", "webIdPrueba1", "descripcionprueba1")
-        const response = await request(app).post('/friendmanager/friendrequests').send({ user: user });
-        expect(response.status).toBe(200);
+        let user2 = new UserImpl("usertestn1", "", "webIdPrueba1", "descripcionprueba1")
+        const response2 = await request(app).post('/friendmanager/friendrequests').send({ user: user2 });
+        expect(response2.status.toString()).toBe("200");
     });
     test('user que no existe', async () => {
-        let user = new UserImpl("usernotexists", "", "webIdPrueba1", "descripcionprueba1")
-        const response = await request(app).post('/friendmanager/friendrequests').send({ user: user });
-        expect(response.status).toBe(404);
+        let user3 = new UserImpl("usernotexists", "", "webIdPrueba1", "descripcionprueba1")
+        const response2 = await request(app).post('/friendmanager/friendrequests').send({ user: user3 });
+        expect(response2.status.toString()).toBe("404");
     });
 });
 
