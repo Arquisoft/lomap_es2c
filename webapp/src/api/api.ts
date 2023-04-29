@@ -1,4 +1,5 @@
 import { readCookie } from 'utils/CookieReader';
+import { readCookie } from 'utils/CookieReader';
 import { FriendRequest, User } from '../shared/shareddtypes';
 
 export function getUserInSesion(): User {

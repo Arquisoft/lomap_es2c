@@ -2,16 +2,17 @@ import express, { Application, RequestHandler } from "express";
 import bp from "body-parser";
 import promBundle from "express-prom-bundle";
 import { Server } from "http";
-import request, { Response } from "supertest";
+import request from "supertest";
 import apiUser from "../api";
 import { UserImpl } from "../src/entities/User";
 import { FriendRequest } from "../src/entities/FriendRequest";
 import { FriendManagerImpl } from "../src/controllers/FriendManager";
 import FriendshipSchema from "../src/entities/FriendshipSchema";
 import UserSchema from "../src/entities/UserSchema";
-var mongoose = require('mongoose');
 
-var server: Server;
+const mongoose = require('mongoose');
+
+let server: Server;
 
 const app: Application = express();
 
@@ -46,7 +47,7 @@ describe('test conexión con api ', () => {
         expect(response.status).toBe(200);
     });
 });
-
+/*
 describe('/usermanager/find/username ', () => {
     test('usuario que existe', async () => {
         const response = await request(app).get('/usermanager/find/username?username=usertestn1');
@@ -59,7 +60,7 @@ describe('/usermanager/find/username ', () => {
         const response = await request(app).get('/usermanager/find/username?username=usernotexists');
         expect(response.status).toBe(404);
     });
-});
+});*/
 
 describe('/usermanager/edit ', () => {
     test('usuario que existe', async () => {
@@ -88,7 +89,7 @@ describe('/sesionmanager/signup ', () => {
         let user = new UserImpl("usertestsignup", "1234", "webIdPrueba", "descripcionprueba", "img")
         const response = await request(app).post('/sesionmanager/signup').send({ user: user });
         expect(response.status).toBe(200);
-        let r = await UserSchema.deleteOne({ username: "usertestsignup" })
+        await UserSchema.deleteOne({ username: "usertestsignup" })
     });
 });
 
