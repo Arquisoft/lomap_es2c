@@ -1,4 +1,3 @@
-import { UserImpl } from "../entities/User";
 import UserSchema from "../entities/UserSchema"
 import type { User } from "../facade";
 

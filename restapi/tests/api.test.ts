@@ -4,19 +4,25 @@ import promBundle from "express-prom-bundle";
 import { Server } from "http";
 import request, { Response } from "supertest";
 import apiUser from "../api";
-import mongoose from "mongoose";
 import { UserImpl } from "../src/entities/User";
 import { FriendRequest } from "../src/entities/FriendRequest";
 import { FriendManagerImpl } from "../src/controllers/FriendManager";
 import FriendshipSchema from "../src/entities/FriendshipSchema";
 import UserSchema from "../src/entities/UserSchema";
+var mongoose = require('mongoose');
 
 var server: Server;
 
 const app: Application = express();
 
 beforeAll(async () => {
-    require("../src/persistence/DataBase")
+    
+    await mongoose.connect('mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+    
     const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
     app.use(metricsMiddleware);
 

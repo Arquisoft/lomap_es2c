@@ -1,21 +1,24 @@
 import { UserManager, UserManagerImpl } from '../src/controllers/UserManager';
 import { UserImpl } from '../src/entities/User';
-import User from "../src/entities/UserSchema";
-import { SesionManager } from "../src/facade";
-import { UserSesionManager } from "../src/controllers/SessionManager";
 import { FriendManager, FriendManagerImpl } from "../src/controllers/FriendManager";
 import { FriendRequest } from "../src/entities/FriendRequest";
-import mongoose from "mongoose";
-import { ftruncate } from "fs";
-import { response } from "express";
+var mongoose = require('mongoose');
 
 describe('FriendsManager', () => {
     let userManager: UserManager;
     let friendManager: FriendManager;
 
+    beforeAll(async () => {
+        await mongoose.connect('mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority',
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+    }) 
+
     beforeEach(() => {
+        
         // Inicializar la instancia de UserManager y SessionManager antes de cada prueba
-        require("../src/persistence/DataBase")
         userManager = new UserManagerImpl();
         friendManager = new FriendManagerImpl();
     });
