@@ -5,6 +5,7 @@ import * as repo from "../persistence/Repository"
 import mongoose from "mongoose";
 const sessionStorage = require('sessionstorage-for-nodejs')
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 class UserSesionManager implements SesionManager {
 
@@ -17,7 +18,8 @@ class UserSesionManager implements SesionManager {
 
     async registrarse(usuario: User): Promise<User> {
         let usuarioEncontrado;
-        try {
+        try
+        {
             usuarioEncontrado = await repo.Repository.findOne(usuario)
         } catch (e: any) {
             throw new Error("Ha sucedido un error al crear la cuenta, vuelva a intentarlo más tarde.");
