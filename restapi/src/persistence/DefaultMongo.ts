@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 require("dotenv").config();
 
 export async function OpenConnection(uri: string, mongoose: any) {
-    await mongoose.connect(uri).catch((e: any) => {
+    await mongoose.connect(uri!).catch((e: any) => {
         throw new Error("Error al conectar a la BD: " + e)
     })
 }
@@ -27,7 +27,7 @@ export async function getBD() {
 
 export async function findOne(schema: any, filter: any, options: any) {
     const { uri, mongoose } = await getBD();
-    await OpenConnection(uri, mongoose);
+    await OpenConnection(uri!, mongoose);
     await schema.findOne(filter, options).catch((e: any) => {
         throw new Error("Fallo en el FindOne: " + e)
     })
