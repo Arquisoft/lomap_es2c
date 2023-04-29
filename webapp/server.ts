@@ -3,11 +3,9 @@ import express, { Application } from 'express';
 //setting the option module to commonjs
 
 var app: Application = express();
-const port: number = 3000;
+const port: number = 443 | 3000;
 
 app.use(express.static("build"));
-app.use(express.static('public'));
-app.use(express.static(__dirname + '/public'));
 
 app
   .listen(port, (): void => {
