@@ -2,7 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import * as fac from './src/facade';
 
 const api: Router = express.Router()
-
+/*
 api.get(
     "/usermanager/find/username",
     async (req: Request, res: Response): Promise<Response> => {
@@ -14,7 +14,7 @@ api.get(
             return res.status(404).send({ "error": err.message })
         }
     }
-);
+);*/
 
 api.post(
     "/usermanager/edit",
