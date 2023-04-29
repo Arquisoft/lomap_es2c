@@ -76,7 +76,6 @@ export async function editUserDetails(user: User): Promise<User> {
 }
 
 export async function getMyFriends(user: User): Promise<User[]> {
-    console.log("empieza")
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/friendmanager/friends', {
         method: 'POST',

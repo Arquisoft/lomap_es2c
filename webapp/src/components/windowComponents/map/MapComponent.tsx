@@ -21,7 +21,7 @@ function markerIcon(url: string): L.Icon {
 };
 
 const addMarkerIcon = new L.Icon({
-    iconUrl: '../markers/add-location.png',
+    iconUrl: 'add-location.png',
     iconSize: [47, 47]
 });
 
@@ -128,7 +128,7 @@ function CleanMap(props: { myGroup: string, friendGroup: string }): any {
 
         legend.onAdd = function () {
             let div = L.DomUtil.create('div', 'cleanMap');
-            div.innerHTML += '<button id="cleanMapButton"><img width="20px" src="../cleanMap.png" alt="Descripción de la imagen">Limpiar mapa</button>';
+            div.innerHTML += '<button id="cleanMapButton"><img width="20px" src="cleanMap.png" alt="Descripción de la imagen">Limpiar mapa</button>';
             return div;
         };
 
@@ -158,9 +158,9 @@ function Legend(): any {
         legend.onAdd = function () {
             let div = L.DomUtil.create('div', 'Leyenda');
             div.innerHTML += '<h3 id="titutloleyenda" style="color: #81c784">Leyenda</h4>';
-            div.innerHTML += '<img src="../markers/myMarker.png" width="20px">Tus lugares<br>';
-            div.innerHTML += '<img src="../markers/friendsMarker.png" width="20px">Lugares de tus amigos<br>';
-            div.innerHTML += '<img src="../markers/add-location.png" width="20px">Lugar que estás añadiendo<br>';
+            div.innerHTML += '<img src="myMarker.png" width="20px">Tus lugares<br>';
+            div.innerHTML += '<img src="friendsMarker.png" width="20px">Lugares de tus amigos<br>';
+            div.innerHTML += '<img src="add-location.png" width="20px">Lugar que estás añadiendo<br>';
             return div;
         };
 

@@ -260,6 +260,5 @@ After the actions process is finished, we can access the application using the I
 ## Miembros del equipo
 - Abel Busto Dopazo, UO284262
 - Adrián Fernández Álvarez, UO282154
-- Juan Hermosa Casaprima, UO276839
 - Guillermo Pulido Fernández, UO282716
 - Paula Suárez Prieto, UO269745
