@@ -1,4 +1,3 @@
-import { UserImpl } from "../entities/User";
 import type { User } from "../facade";
 import UserSchema from "../entities/UserSchema";
 import mongoose from "mongoose";

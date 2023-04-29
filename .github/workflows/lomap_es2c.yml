@@ -59,6 +59,8 @@ jobs:
     docker-push-restapi:
         name: Push restapi Docker Image to GitHub Packages
         runs-on: ubuntu-latest
+        env:
+            DATABASE_URL: ${{ secrets.DATABASE_URL }}
         needs: [e2e-tests]
         steps:
             - uses: actions/checkout@v3
@@ -70,6 +72,7 @@ jobs:
                   password: ${{ secrets.DOCKER_PUSH_TOKEN }}
                   registry: ghcr.io
                   workdir: restapi
+                  buildargs: DATABASE_URL
     deploy:
         name: Deploy over SSH
         runs-on: ubuntu-latest

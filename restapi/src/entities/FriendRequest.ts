@@ -1,4 +1,3 @@
-import { User } from "../facade";
 export { FriendRequest }
 class FriendRequest {
     sender: string;
