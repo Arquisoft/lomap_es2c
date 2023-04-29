@@ -1,14 +1,20 @@
 import { UserManager, UserManagerImpl } from '../src/controllers/UserManager';
 import { UserImpl } from '../src/entities/User';
-import User from "../src/entities/UserSchema";
-import mongoose from "mongoose";
+var mongoose = require('mongoose');
 
 describe('UserManager', () => {
     let userManager: UserManager;
 
+    beforeAll(async () => {
+        await mongoose.connect('mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority',
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+    })
+    
     beforeEach(() => {
         // Inicializar la instancia de UserManager antes de cada prueba
-        require("../src/persistence/DataBase")
         userManager = new UserManagerImpl();
     });
 

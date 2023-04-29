@@ -3,10 +3,9 @@ import cors from 'cors';
 import bp from 'body-parser';
 import promBundle from 'express-prom-bundle';
 import api from "./api";
-import * as repo from "./src/persistence/Repository";
-import {UserImpl} from "./src/entities/User";
 import dotenv from 'dotenv';
 dotenv.config();
+const mongoose = require('mongoose');
 
 
 const app: Application = express();
@@ -15,7 +14,13 @@ const port: number = 5000;
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
 
-require('./src/persistence/DataBase')
+mongoose.connect('mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }).then(() =>{
+  console.log('Database succesfully connected!');
+});
 
 app.use(cors());
 app.use(bp.json());
