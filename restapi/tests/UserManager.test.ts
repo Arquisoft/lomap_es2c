@@ -121,7 +121,6 @@ describe('UserManager', () => {
         });
 
         it('no deberia lanzar ningun error si cambia la contraseña satisfactoriamente (se cambia por la misma por ser un test)', async () => {
-            let error = new Error("Error por defecto")
             try {
                 await userManager.modificarContrasena(new UserImpl("usertestn4", "", "", ""), "usertestN4.", "usertestN4.")
             } catch (err) {
