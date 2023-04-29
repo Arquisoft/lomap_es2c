@@ -5,7 +5,7 @@ WORKDIR /app
 #Install the dependencies
 RUN npm install
 
-ARG DATABASE_URL="DATABASE_USER"
+ARG DATABASE_URL="DATABASE_URL"
 ENV DATABASE_URL=$DATABASE_URL
 
 CMD [ "npm", "start" ]

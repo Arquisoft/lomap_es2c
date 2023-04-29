@@ -5,6 +5,7 @@ import promBundle from 'express-prom-bundle';
 import api from "./api";
 import dotenv from 'dotenv';
 dotenv.config();
+const mongoose = require('mongoose');
 
 
 const app: Application = express();
@@ -13,7 +14,9 @@ const port: number = 5000;
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
 
-require('./src/persistence/DataBase')
+mongoose.connect(process.env.DATABASE_URL).then(() =>{
+  console.log('Database succesfully connected!');
+});
 
 app.use(cors());
 app.use(bp.json());
