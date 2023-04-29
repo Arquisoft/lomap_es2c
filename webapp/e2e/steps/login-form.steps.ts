@@ -2,6 +2,7 @@ import { defineFeature, loadFeature } from 'jest-cucumber';
 import puppeteer from "puppeteer";
 
 const feature = loadFeature('./e2e/features/login-form.feature');
+const apiEndPoint= process.env.REACT_APP_URI|| 'http://localhost:3000'
 
 let page: puppeteer.Page;
 let browser: puppeteer.Browser;
@@ -15,7 +16,7 @@ defineFeature(feature, test => {
     page = await browser.newPage();
 
     await page
-      .goto("http://localhost:3000/", {
+      .goto(apiEndPoint, {
         waitUntil: "networkidle0",
       })
       .catch(() => {});
@@ -61,7 +62,7 @@ defineFeature(feature, test => {
 
     when('I fill the data in the form and press submit', async () => {
       await page
-      .goto("http://localhost:3000/", {
+      .goto(apiEndPoint, {
         waitUntil: "networkidle0",
       })
       .catch(() => {});
