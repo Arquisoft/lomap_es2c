@@ -1,16 +1,14 @@
-import mongoose from 'mongoose'
+var mongoose = require('mongoose');
 require("dotenv").config();
 
 const uri = process.env.DATABASE_URL;
-mongoose.connect(uri!);
 
-const database = mongoose.connection;
-
-database.once('open', (error: Error) => {
+mongoose.connect(uri,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }).then(() =>{
   console.log('Database succesfully connected!');
+}).catch((error: any) => {
+   console.log('Error connecting to database:', error);
 });
-
-database.on('error', (error: Error) => {
-  console.log('Database connection error:', error);
-  process.exit();
-})
