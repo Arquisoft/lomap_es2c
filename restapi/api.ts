@@ -3,11 +3,6 @@ import * as fac from './src/facade';
 
 const api: Router = express.Router()
 
-interface User {
-    name: string;
-    email: string;
-}
-
 api.get(
     "/usermanager/find/username",
     async (req: Request, res: Response): Promise<Response> => {

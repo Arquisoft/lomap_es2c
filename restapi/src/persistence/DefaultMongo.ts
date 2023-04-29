@@ -15,6 +15,8 @@ export async function CloseConnection(mongoose: any) {
 
 export async function getBD() {
     const uri = process.env.DATABASE_URL;
+    console.log("getDB")
+    console.log(uri)
     const mongoose = require('mongoose');
     await mongoose.set('strictQuery', true).catch((e: any) => {
         throw new Error("Fallo BD: " + e)
