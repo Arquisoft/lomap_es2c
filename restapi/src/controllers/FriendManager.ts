@@ -2,8 +2,6 @@ import { User } from "../facade";
 import { FriendRequest } from "../entities/FriendRequest";
 import FriendshipSchema from "../entities/FriendshipSchema";
 import UserSchema from "../entities/UserSchema";
-import { UserImpl } from "../entities/User";
-import { Repository } from "../persistence/Repository";
 
 
 

@@ -1,9 +1,7 @@
 import mongoose from 'mongoose'
+require("dotenv").config();
 
-import User from '../entities/UserSchema'
-
-const uri = "mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority"
-
+const uri = process.env.DATABASE_URL;
 
 mongoose.connect(uri).then(() => {
     console.log("Database succesfully connected")
