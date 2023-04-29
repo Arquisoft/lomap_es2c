@@ -11,5 +11,12 @@ export default {
         "**/src/persistence/*.{ts,tsx}",
         "!**/src/persistence/DefaultMongo.ts",
         "**/src/entities/*.{ts,tsx}",
-    ]
+    ],
+    coverageReporters: [
+        "json",
+        "lcov",
+        "text",
+        "clover"
+    ],
+    coverageDirectory: "coverage"
 }
