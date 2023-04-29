@@ -4,6 +4,8 @@ export default {
         "^.+\\.tsx?$": "ts-jest"
     },
     collectCoverage: true,
+    coverageReporters: ['lcov'],
+    coverageDirectory: 'coverage',
     collectCoverageFrom:["**/src/controllers/*.{ts,tsx}",
         "**/src/facade.ts",
         "!server.ts",
