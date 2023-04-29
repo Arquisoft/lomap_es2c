@@ -113,8 +113,8 @@ describe('/sesionmanager/login ', () => {
 
     test('usuario que no existe', async () => {
 
-        let user = new UserImpl("usernotexists", "wrongpassword", "webIdPrueba1", "descripcionprueba1")
-        const response = await request(app).post('/sesionmanager/login').send({ user: user });
+        let userNotExist = new UserImpl("usernotexists", "wrongpassword", "webIdPrueba1", "descripcionprueba1")
+        const response = await request(app).post('/sesionmanager/login').send({ user: userNotExist });
         expect(response.status).toBe(404);
 
     });
