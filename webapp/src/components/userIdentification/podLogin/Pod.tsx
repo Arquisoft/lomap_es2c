@@ -44,6 +44,9 @@ export default function PodLogin() {
     const [provider, setProvider] = useState('');
     const [idp, setIdp] = useState("https://inrupt.net");
 
+    let redirectUrl = window.location.origin.concat("/home/welcome"); 
+    console.log(redirectUrl)
+
 
     const providers = GetProviders();
     const navigate = useNavigate();
@@ -120,7 +123,7 @@ export default function PodLogin() {
                 <LoginButton
                     oidcIssuer={idp}
                     redirectUrl={
-                        "http://localhost:3000/home/welcome"
+                        redirectUrl
                     }
                     onError={handleError}
                 >

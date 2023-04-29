@@ -6,6 +6,8 @@ var app: Application = express();
 const port: number = 3000;
 
 app.use(express.static("build"));
+app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 
 app
