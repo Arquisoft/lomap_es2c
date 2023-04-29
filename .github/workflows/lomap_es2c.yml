@@ -36,11 +36,11 @@ jobs:
               with:
                   node-version: 18´
             - name: Create env
-                run: |
-                    cd restapi
-                    touch .env
-                    echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-                    cat .env
+            run: |
+                cd restapi
+                touch .env
+                echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+                cat .env
             - run: npm --prefix webapp install
             - run: npm --prefix restapi install
             - run: npm --prefix webapp run build
