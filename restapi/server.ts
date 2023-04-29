@@ -14,7 +14,11 @@ const port: number = 5000;
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
 
-mongoose.connect(process.env.DATABASE_URL).then(() =>{
+mongoose.connect('mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }).then(() =>{
   console.log('Database succesfully connected!');
 });
 
