@@ -9,7 +9,6 @@ app.use(express.static("build"));
 app.use(express.static('public'));
 app.use(express.static(__dirname + '/public'));
 
-
 app
   .listen(port, (): void => {
     console.log("Webapp started on port " + port);
