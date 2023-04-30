@@ -3,21 +3,8 @@
     "version": "1.0.0",
     "scripts": {
         "start": "ts-node-dev ./server.ts",
-        "test": "cd tests && jest --coverage"
+        "test": "jest --runInBand --coverage"
     },
-
-    "jest": {
-        "collectCoverage": true,
-        "coverageReporters": [
-            "json",
-            "lcov",
-            "text",
-            "clover"
-        ],
-        "coverageDirectory": "coverage"
-    }
-
-    ,
     "keywords": [],
     "author": "",
     "license": "ISC",
