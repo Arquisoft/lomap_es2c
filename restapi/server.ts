@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 
 
 const app: Application = express();
-const port: number = Number.parseInt(`${process.env.PORT}`) || 5000;
+const port: number = 5000;
 
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
