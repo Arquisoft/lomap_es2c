@@ -10,7 +10,7 @@ services:
   webapp:
     build: ./webapp
     ports:
-      - "443:443"
+      - "3000:3000"
     depends_on: 
       - restapi
   prometheus:
