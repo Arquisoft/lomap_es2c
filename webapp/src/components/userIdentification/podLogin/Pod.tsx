@@ -88,8 +88,8 @@ export default function PodLogin() {
                             <img style={{ width: "50px", height: "auto" }}
                                 loading="lazy"
                                 width="60"
-                                src={option.name + ".png"}
-                                srcSet={option.name + ".png"}
+                                src={"/" + option.name + ".png"}
+                                srcSet={"/" + option.name + ".png"}
                                 alt={"Logo de " + option.name}
                             />
                             {option.name}
@@ -108,7 +108,7 @@ export default function PodLogin() {
                                         <InputAdornment position="start">
                                         <img
                                             style={{ width: "50px", height: "auto" }}
-                                            src={ params.inputProps.value + ".png"}
+                                            src={ "/" + params.inputProps.value + ".png"}
                                             alt={"Logo de " + params.inputProps.value}
                                         />
                                         </InputAdornment>
