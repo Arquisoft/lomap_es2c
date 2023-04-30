@@ -46,15 +46,15 @@ export default function StandardImageList() {
 
 const itemData = [
     {
-        img: '/fotosCarrusel/1.png',
+        img: '1.png',
         title: 'Crea tus propios mapas',
     },
     {
-        img: '/fotosCarrusel/2.png',
+        img: '2.png',
         title: 'Guarda tus lugares favoritos',
     },
     {
-        img: '/fotosCarrusel/4.png',
+        img: '4.png',
         title: 'Ve los mapas de tus amigos',
     }
 ];

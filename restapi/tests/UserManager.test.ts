@@ -100,13 +100,13 @@ describe('UserManager', () => {
     });
     describe('modificarContrasena', () => {
         it('debería lanzar un error si el usuario no existe', async () => {
-            let error = new Error("Error por defecto")
+            let error1 = new Error("Error por defecto")
             try {
                 await userManager.modificarContrasena(new UserImpl("usertestnotexists", "", "", ""), "", "")
             } catch (err) {
-                error = err;
+                error1 = err;
             }
-            expect(error.message).toBe("El usuario no existe.");
+            expect(error1.message).toBe("El usuario no existe.");
 
         });
         it('debería lanzar un error si la contraseña antigua no coincide', async () => {
@@ -121,7 +121,6 @@ describe('UserManager', () => {
         });
 
         it('no deberia lanzar ningun error si cambia la contraseña satisfactoriamente (se cambia por la misma por ser un test)', async () => {
-            let error = new Error("Error por defecto")
             try {
                 await userManager.modificarContrasena(new UserImpl("usertestn4", "", "", ""), "usertestN4.", "usertestN4.")
             } catch (err) {

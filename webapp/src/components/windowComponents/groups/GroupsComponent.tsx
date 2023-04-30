@@ -119,7 +119,7 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, refresh: a
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
                 name: place.nombre,
                 type: "mine",
-                iconUrl: "../markers/myMarker.png",
+                iconUrl: "myMarker.png",
                 category: place.category,
                 imageUrl: place.images[0]?.url
             })

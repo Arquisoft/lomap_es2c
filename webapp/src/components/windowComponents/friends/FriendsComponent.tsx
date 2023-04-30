@@ -128,7 +128,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                 position: [parseFloat(place.latitude), parseFloat(place.longitude)],
                 name: place.nombre,
                 type: "friend",
-                iconUrl: "../markers/friendsMarker.png",
+                iconUrl: "friendsMarker.png",
                 category: place.category,
                 imageUrl: place.images[0]?.url
             })
