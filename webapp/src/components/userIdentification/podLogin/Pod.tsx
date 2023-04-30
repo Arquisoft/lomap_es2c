@@ -108,7 +108,7 @@ export default function PodLogin() {
                                         <InputAdornment position="start">
                                         <img
                                             style={{ width: "50px", height: "auto" }}
-                                            src={"/" + params.inputProps.value + ".png"}
+                                            src={ "/" + params.inputProps.value + ".png"}
                                             alt={"Logo de " + params.inputProps.value}
                                         />
                                         </InputAdornment>

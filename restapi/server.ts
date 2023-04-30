@@ -30,7 +30,7 @@ app.use(bp.json());
 app.use("/api", api)
 
 app.use(cors({
-    origin: ['https://lomapes2c.eastus.cloudapp.azure.com/' , 'http://localhost:3000'],
+    origin: ['https://lomapes2c.eastus.cloudapp.azure.com/' , 'http://localhost:3000', 'https://20.169.248.119:3000'],
     credentials:true
 }));
 
