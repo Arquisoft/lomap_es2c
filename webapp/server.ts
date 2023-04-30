@@ -9,6 +9,7 @@ const publicPath = path.join(__dirname, '.', 'build');
 var app: Application = express();
 
 const HTTPS_PORT = 443;
+const HTTP_PORT = 3000;
 
 const options = {
   cert: fs.readFileSync('/etc/ssl/certs/lomapes2c.eastus.cloudapp.azure.com.crt'),
@@ -33,10 +34,19 @@ app.use((req, res, next) => {
   }
 });
 
-https.createServer(options, app).listen(HTTPS_PORT, () => {
-  console.log(`Webapp started on port ${HTTPS_PORT}`);
-}).on("error", (error: Error) => {
+
+if (process.env.NODE_ENV === "production") {
+  https.createServer(options, app).listen(HTTPS_PORT, () => {
+    console.log(`Webapp started on port ${HTTPS_PORT}`);
+  }).on("error", (error: Error) => {
+      console.error("Error occured: " + error.message);
+    });
+
+} else {
+  app.listen(HTTP_PORT, () => {
+    console.log(`Webapp started on port ${HTTP_PORT} (development)`);
+  }).on("error", (error: Error) => {
     console.error("Error occured: " + error.message);
   });
-
+}
   
