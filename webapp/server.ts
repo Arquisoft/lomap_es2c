@@ -1,10 +1,19 @@
 import express, { Application } from 'express'; 
+import https from 'https';
+import fs from 'fs';
+
 const path = require('path');
 
 const publicPath = path.join(__dirname, '.', 'build');
 
 var app: Application = express();
-const port: number =  3000;
+
+const HTTPS_PORT = 443;
+
+const options = {
+  cert: fs.readFileSync('/etc/ssl/certs/lomapes2c.eastus.cloudapp.azure.com.crt'),
+  key: fs.readFileSync('/etc/ssl/private/lomapes2c.eastus.cloudapp.azure.com.key'),
+};
 
 app.use(express.static("build"));
 
@@ -16,10 +25,18 @@ app.get('*', (req, res) => {
     };
 });
 
-app
-  .listen(port, (): void => {
-    console.log("Webapp started on port " + port);
-  })
-  .on("error", (error: Error) => {
+app.use((req, res, next) => {
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect(`https://${req.headers.host}${req.url}`);
+  }
+});
+
+https.createServer(options, app).listen(HTTPS_PORT, () => {
+  console.log(`Webapp started on port ${HTTPS_PORT}`);
+}).on("error", (error: Error) => {
     console.error("Error occured: " + error.message);
   });
+
+  
