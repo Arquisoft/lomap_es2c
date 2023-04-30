@@ -30,3 +30,5 @@ yarn-error.log*
 docs/build
 
 restapi/.env
+webapp/lomapes2c.eastus.cloudapp.azure.com.crt
+webapp/lomapes2c.eastus.cloudapp.azure.com.key
