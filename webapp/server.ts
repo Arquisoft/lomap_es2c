@@ -35,18 +35,18 @@ app.use((req, res, next) => {
 });
 
 
-if (process.env.NODE_ENV === "production") {
+/*if (process.env.NODE_ENV === "production") {
   https.createServer(options, app).listen(HTTPS_PORT, () => {
     console.log(`Webapp started on port ${HTTPS_PORT}`);
   }).on("error", (error: Error) => {
       console.error("Error occured: " + error.message);
     });
 
-} else {
+} else {*/
   app.listen(HTTP_PORT, () => {
     console.log(`Webapp started on port ${HTTP_PORT} (development)`);
   }).on("error", (error: Error) => {
     console.error("Error occured: " + error.message);
   });
-}
+//}
   
