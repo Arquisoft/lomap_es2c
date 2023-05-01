@@ -41,9 +41,8 @@ jobs:
               run: |
                 cd restapi
                 touch .env
+                echo SSL_CERT=${{ secrets.SSL_CERT }} >> .env
                 echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-                echo SSL_CERT=${{ secrets.SSL_CERT_E2E }}>> .env
-                echo SSL_PRIVKEY=${{ secrets.SSL_PRIVKEY_E2E }} >> .env
                 cat .env
             - run: npm --prefix webapp install
             - run: npm --prefix restapi install
@@ -69,7 +68,6 @@ jobs:
     docker-push-restapi:
         name: Push restapi Docker Image to GitHub Packages
         env:
-            DATABASE_USER: ${{ secrets.DATABASE_URL }}
             SSL_CERT: ${{ secrets.SSL_CERT }}
             SSL_PRIVKEY: ${{ secrets.SSL_PRIVKEY }}
         runs-on: ubuntu-latest
@@ -84,7 +82,7 @@ jobs:
                 password: ${{ secrets.DOCKER_PUSH_TOKEN }}
                 registry: ghcr.io
                 workdir: restapi
-                buildargs: DATABASE_URL,SSL_CERT,SSL_PRIVKEY
+                buildargs: SSL_CERT,SSL_PRIVKEY
     deploy:
         name: Deploy over SSH
         runs-on: ubuntu-latest
