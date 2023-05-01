@@ -38,14 +38,14 @@ const options = {
   key: fs.readFileSync(process.env.SSL_PRIVKEY),
   cert: fs.readFileSync(process.env.SSL_CERT)
 };
-
+/*
 app.use((req, res, next) => {
   if (req.secure) {
     next();
   } else {
     res.redirect(`https://${req.headers.host}${req.url}`);
   }
-});
+});*/
 
 https.createServer(options, app).listen(httpsPort, () => {
     console.log(`Restapi server started on port ${httpsPort}`);
