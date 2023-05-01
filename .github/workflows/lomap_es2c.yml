@@ -37,13 +37,6 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                 node-version: 18
-            - name: Create env
-              run: |
-                cd restapi
-                touch .env
-                echo "SSL_PRIVKEY=./privkey.pem" >> .env
-                echo "SSL_CERT=./fullchain.pem" >> .env
-                cat .env
             - run: npm --prefix webapp install
             - run: npm --prefix restapi install
             - run: npm --prefix webapp run build
