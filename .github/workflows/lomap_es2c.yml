@@ -41,8 +41,8 @@ jobs:
               run: |
                 cd restapi
                 touch .env
-                echo SSL_CERT=${{ secrets.SSL_CERT_E2E }} >> .env
-                echo SSL_PRIVKEY=${{ secrets.SSL_PRIVKEY_E2E }} >> .env
+                echo "SSL_PRIVKEY=./privkey.pem" >> .env
+                echo "SSL_CERT=./fullchain.pem" >> .env
                 cat .env
             - run: npm --prefix webapp install
             - run: npm --prefix restapi install
