@@ -6,7 +6,7 @@ import { Header } from '../components/mainComponents/Header';
 import { Footer } from '../components/mainComponents/Footer';
 import { useSession } from "@inrupt/solid-ui-react";
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
-import { editUserDetails, getUserInSesion, logout } from '../api/api';
+import { editUserDetails, getMyFriends, getUserInSesion, logout } from '../api/api';
 import { User } from 'shared/shareddtypes';
 import Swal from 'sweetalert2';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { readCookie } from 'utils/CookieReader';
 import { useDispatch } from 'react-redux';
 import { setProfileImage } from 'utils/redux/action';
 import { obtenerFoto } from 'podManager/MapManager';
+import { deleteFriendApi } from '../api/api';
 
 //#region DEFINICION DE COMPONENTES STYLED
 const MyContainer = styled(Container)({
@@ -87,7 +88,7 @@ export default function LoggedView() {
             if (user.webID !== readCookie("userWebId")) {
                 Swal.fire({
                     title: "Actualizar webId",
-                    text: "El webId con el que has iniciado sesión no coincide con el vinculado a su perfil, ¿desea actualizarlo?",
+                    text: "El webId con el que has iniciado sesión no coincide con el vinculado a su perfil, ¿desea actualizarlo?. De actualizarlo perderá todas sus amistades y grupos.",
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#81c784',
@@ -99,6 +100,7 @@ export default function LoggedView() {
                         let updatedUser: User = user;
                         updatedUser.webID = session.info.webId;
                         editUserDetails(updatedUser);
+                        eliminarAmigos(user);
                         saludo();
                     } else {
                         logout(); navigate("/login")
@@ -108,6 +110,14 @@ export default function LoggedView() {
                 saludo(); document.cookie = "sameWebId=true; path=/"
             }
         }, 3000);
+    }
+
+    const eliminarAmigos = (user: any) => {
+        getMyFriends(user).then(friends => {
+            for (let i = 0; i < friends.length; i++) {
+                deleteFriendApi(friends[i]);
+            }
+        })
     }
 
     return (

@@ -3,13 +3,14 @@ import cors from 'cors';
 import bp from 'body-parser';
 import promBundle from 'express-prom-bundle';
 import api from "./api";
-import dotenv from 'dotenv';
-dotenv.config();
 const mongoose = require('mongoose');
+const https = require('https');
+const fs = require('fs');
 
 
 const app: Application = express();
-const port: number = Number.parseInt(`${process.env.PORT}`) || 5000;
+const httpPort = 5000;
+const httpsPort = 5001;
 
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
@@ -29,15 +30,32 @@ app.use(bp.json());
 
 app.use("/api", api)
 
-app.use(cors({
-    origin: ['http://localhost:3000', 'http://20.169.248.119:3000'],
-    credentials:true
-}));
+app.use(cors());
 
-app.listen(port, (): void => {
-    console.log('Restapi listening on ' + port);
+const options = {
+  key: fs.readFileSync("./privkey.pem"),
+  cert: fs.readFileSync("./fullchain.pem")
+};
+
+app.use((req, res, next) => {
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect(`https://${req.headers.host}${req.url}`);
+  }
+});
+
+https.createServer(options, app).listen(httpsPort, () => {
+    console.log(`Restapi server started on port ${httpsPort}`);
+  }).on("error", (error: Error) => {
+      console.error("Error occured: " + error.message);
+    });
+
+app.listen(httpPort, (): void => {
+    console.log('Restapi listening on ' + httpPort);
 }).on("error", (error: Error) => {
     console.error('Error occured: ' + error.message);
 });
+
 
 export default app;

@@ -29,6 +29,8 @@ List of risks and/or technical debts, probably including suggested measures to m
 
 === Technical Debts
 
-Al comienzo del proyecto es difícil especificar alguna duda técnica. No conocemos de antemano cuál será el resultado y final y que herramientas o tecnologías vamos a utilizar finalmente. Guiados por la intención de desarrollar el proyecto con las utilidades ya mencionadas la única duda en este punto es la dependencia de nuestra aplicación con servicios externos a nosotros (APIs) y de imposible control por nuestra parte. 
+ * La principal duda técnica es la dependencia de Inrupt. Durante el desarrollo del trabajo hemos detectado mucha inestabilidad en sus servicios. En ocasiones tiene tiempos de respuesta muy altosmás, es una API en desarrollo por lo que no podemos asegurar que sea perfectamente fucnional o que vaya a cambiar significativamente en el futuro y nuestra aplicación deje de funcionar.
+ * La interoperabilidad nos genera muchas dudas debido a que ni si quiera se ha alcanzado un acuerdo firme. Se han tomado decisiones sin meditación a su respecto y puede generar problemas. Consideramos que el estandar de LoMap no ha tenido suficiente tiempo de desarrollo como para ser óptimo.
+ * Nos ha sido imposible hacer una comprobación exhaustiva de bugs o la inclusión de funcionalidad extra debido al poco tiempo existente para el desarrollo del proyecto en comparación con la problemática percibida en general al usar las tecnologías impuestas por el profesorado.
 
 

@@ -2,7 +2,7 @@ import { defineFeature, loadFeature } from 'jest-cucumber';
 import puppeteer from "puppeteer";
 
 const feature = loadFeature('./e2e/features/login-form.feature');
-const apiEndPoint= process.env.REACT_APP_URI|| 'http://localhost:3000'
+const apiEndPoint= 'http://localhost:3000'
 
 let page: puppeteer.Page;
 let browser: puppeteer.Browser;

@@ -46,7 +46,7 @@ export default function StandardImageList() {
 
 const itemData = [
     {
-        img: '/1.png',
+        img: '1.png',
         title: 'Crea tus propios mapas',
     },
     {
@@ -54,7 +54,7 @@ const itemData = [
         title: 'Guarda tus lugares favoritos',
     },
     {
-        img: '/4.png',
+        img: '../4.png',
         title: 'Ve los mapas de tus amigos',
     }
 ];
