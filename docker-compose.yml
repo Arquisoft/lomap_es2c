@@ -6,7 +6,7 @@ services:
   restapi:
     build: ./restapi
     ports:
-      - "5000:5000"
+      - "5001:5001"
   webapp:
     build: ./webapp
     ports:

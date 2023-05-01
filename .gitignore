@@ -30,5 +30,5 @@ yarn-error.log*
 docs/build
 
 restapi/.env
-restapi/privkey.pem
 restapi/fullchain.pem
+restapi/privkey.pem
