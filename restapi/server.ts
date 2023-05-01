@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 
 
 const app: Application = express();
-const port: number = 5000;
+const port: number = Number.parseInt(`${process.env.PORT}`) || 5000;
 
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
@@ -30,7 +30,7 @@ app.use(bp.json());
 app.use("/api", api)
 
 app.use(cors({
-    origin: ['https://lomapes2c.eastus.cloudapp.azure.com/' , 'http://localhost:3000', 'https://20.169.248.119:3000'],
+    origin: ['http://localhost:3000', 'http://20.169.248.119:3000'],
     credentials:true
 }));
 

@@ -33,7 +33,9 @@ export async function signup(user: User): Promise<User> {
 }
 
 export async function login(user: User): Promise<User> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    const apiEndPoint = 'http://20.169.248.119:5000/api' || process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    
+    console.log(apiEndPoint)
     let response = await fetch(apiEndPoint + '/sesionmanager/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
