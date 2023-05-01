@@ -2,7 +2,7 @@
     "name": "restapi",
     "version": "1.0.0",
     "scripts": {
-        "start": "dotenv --dotenv=./.env node -r dotenv/config ts-node-dev ./server.ts",
+        "start": "ts-node-dev ./server.ts",
         "test": "jest --runInBand --coverage"
     },
     "keywords": [],

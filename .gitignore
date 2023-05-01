@@ -32,4 +32,4 @@ docs/build
 restapi/.env
 restapi/fullchain.pem
 restapi/privkey.pem
-webapp/.env
+
