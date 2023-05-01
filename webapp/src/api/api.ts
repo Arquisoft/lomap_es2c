@@ -15,7 +15,7 @@ export function logout() {
 }
 
 export async function signup(user: User): Promise<User> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    const apiEndPoint =  process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/sesionmanager/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -34,6 +34,7 @@ export async function signup(user: User): Promise<User> {
 
 export async function login(user: User): Promise<User> {
     const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+
     let response = await fetch(apiEndPoint + '/sesionmanager/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -58,7 +59,7 @@ async function setSessionUser(response: Response): Promise<User> {
 }
 
 export async function editUserDetails(user: User): Promise<User> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
+    const apiEndPoint =  process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     let response = await fetch(apiEndPoint + '/usermanager/edit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -111,7 +112,7 @@ export async function sendFriendRequest(user: User): Promise<String> {
 }
 
 export async function searchUserByUsername(username: string): Promise<User> {
-    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api';
+    const apiEndPoint = process.env.REACT_APP_API_URI || 'http://localhost:5000/api'
     try {
         let response = await fetch(`${apiEndPoint}/usermanager/searchUserByUsername?username=${username}`, { method: 'GET' })
             .then(async (res) => {

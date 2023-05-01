@@ -6,11 +6,11 @@ services:
   restapi:
     build: ./restapi
     ports:
-      - "5000:5000"
+      - "5001:5001"
   webapp:
     build: ./webapp
     ports:
-      - "443:443"
+      - "3000:3000"
     depends_on: 
       - restapi
   prometheus:

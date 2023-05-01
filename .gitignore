@@ -33,3 +33,4 @@ restapi/.env
 
 restapi/privkey.pem
 restapi/fullchain.pem
+
