@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "scripts": {
         "start": "ts-node-dev ./server.ts",
-        "test": "jest --runInBand --coverage"
+        "test": "jest --runInBand --coverage",
+        "pretest:e2e": "dotenv --dotenv=./.env export SSL_PRIVKEY=$SSL_PRIVKEY && export SSL_CERT=$SSL_CERT"
     },
     "keywords": [],
     "author": "",
