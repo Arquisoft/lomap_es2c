@@ -77,8 +77,8 @@ export function AddGroupForm(props: { refresh: any }) {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<GroupSchema> = (data: any) => {
-        crearGrupo(data.groupName, session).then((grupo: Group) => {
+    const onSubmit: SubmitHandler<GroupSchema> = async(data: any) => {
+        await crearGrupo(data.groupName, session).then((grupo: Group) => {
             navigate("/home/groups/main")
             props.refresh()
             temporalSuccessMessage("Grupo <em><b>" + grupo.name + "</b></em> creado correctamente. ¡A añadir lugares se ha dicho!");

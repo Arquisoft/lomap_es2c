@@ -107,11 +107,11 @@ export function EditProfile() {
             navigate(url)
     }
 
-    const tryToEdit = (editions: EditSchema) => {
+    const tryToEdit = async(editions: EditSchema) => {
 
         if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null) {
             let editedUser = { username: user.username, webID: user.webID, password: user.password, description: editions.biography, img: user.img }
-            editUserDetails(editedUser).then(() => {
+            await editUserDetails(editedUser).then(() => {
                 temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
                 goBack();
             }).catch((e) => {
