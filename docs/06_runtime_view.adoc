@@ -152,7 +152,7 @@ User -> LoMapWebapp: Sing up as a new user filling the form
 LoMapWebapp-> LoMapRestApi: Add user credentials
 LoMapRestApi -> LoMapRestApi: Checking credentials
 LoMapRestApi -> DataBase: Save user
-DataBase--> LoMapRestApi : user saved correctly
+DataBase--> LoMapRestApi : User saved correctly
 
 
 LoMapWebapp<-- LoMapRestApi : Confirm credentials addition
@@ -205,7 +205,7 @@ Un usuario quiere cambiar su perfil:
 [plantuml,"Sequence diagram",png]
 ----
 header Runtime View
-title WebID change
+title Profile edit
 Actor User
 Participant LoMapWebApp
 Participant LoMapRestApi
