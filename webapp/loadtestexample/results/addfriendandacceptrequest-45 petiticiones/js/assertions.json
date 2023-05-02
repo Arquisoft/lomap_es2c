@@ -1,0 +1,10 @@
+{
+  "simulation": "AddFriendAndAcceptRequest",
+  "simulationId": "addfriendandacceptrequest-20230502133711941",
+  "start": 1683034632459,
+  "description": "",
+  "scenarios": ["AddFriendAndAcceptRequest"],
+  "assertions": [
+
+  ]
+}
