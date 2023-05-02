@@ -64,11 +64,17 @@ E.g. UML deployment diagram describing channels to neighboring systems,
 together with a mapping table showing the relationships between channels and input/output.
 ****
 
+image:03_Technical_Context.png["Technical Context Diagram"]
+
 Usaremos las siguientes tecnologías:
 [options="header",cols="1,2"]
 |===
 |Tecnología|Descripción
 |TypeScript|Lenguaje utilizado para realizar la aplicación.
 |React|Biblioteca utilizada para crear interfaces de usuario en una sola página.
-|SOLID|Arquitectura para almacenar la información privada de los usuarios de manera descentralizada.
+|MongoDB Atlas|Base de datos utilizada para almacenar información relativa a la aplicación.
+|Docker|Sistema utilizado para almacenar la aplicación en contenedores para su posterior despliegue.
+|Microsoft Azure|Plataforma utilizada para desplegar la aplicación.
 |===
+
+Las librerías utilizadas se describen en el Anexo https://arquisoft.github.io/lomap_es2c/#_used_libraries[13.2. Used Libraries]
