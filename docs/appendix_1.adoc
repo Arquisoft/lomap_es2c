@@ -68,9 +68,10 @@ A table with columns <Library> and <Definition>.
 | react-router-dom | Librería usada para definir las rutas de navegación de la aplicación
 | react-hook-form | Simplifica la creación de formularios al hacer que la validación de los campos de estos sea sencilla.
 | sweetalert2 | Librería utilizada para mostrar ventanas emergentes, facilitando al usuario la comprensión de las acciones realizadas.
-| leaflet | Librería que adapta el uso de OpenStreetMap facilitando su uso y de licencia gratuita.
+| leaflet | Librería que adapta el uso de OpenStreetMap facilitando su implementación y de licencia gratuita.
 | yup | Validador de campos para los formularios que permite añadir mensajes de error personalidados.
 | @inrupt/solid-ui-react | Librería Inrupt utilizada para manejar los PODs.
+| redux | Librería que facilita el manejo de estado de la aplicación.
 |===
 
 
