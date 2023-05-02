@@ -44,7 +44,7 @@ export default function PodLogin() {
     const [provider, setProvider] = useState('');
     const [idp, setIdp] = useState("https://inrupt.net");
 
-    let redirectToUrl = window.location.origin.concat("/home/welcome"); 
+    let redirectToUrl = window.location.origin.concat("/home/welcome");
 
 
     const providers = GetProviders();
@@ -71,18 +71,16 @@ export default function PodLogin() {
                     getOptionLabel={(option) => option.name}
                     fullWidth
                     data-testid="providersCb"
-                    onChange={ (event, newValue) => {
-                        if(newValue !== null)
-                        {
+                    onChange={(event, newValue) => {
+                        if (newValue !== null) {
                             setProvider(newValue.name);
                             setIdp(newValue.url);
-                        } else
-                        {
+                        } else {
                             setProvider("");
                             setIdp("");
                         }
-                    } }
-                    isOptionEqualToValue={ (option, value) => option.name === value.name }
+                    }}
+                    isOptionEqualToValue={(option, value) => option.name === value.name}
                     renderOption={(props, option) => (
                         <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                             <img style={{ width: "50px", height: "auto" }}
@@ -100,20 +98,20 @@ export default function PodLogin() {
                             {...params}
                             label="Proveedor"
                             variant='outlined'
-                            sx={ { backgroundColor: "white", borderRadius:"5%"}}
-                            InputProps={ {
-                            ...params.InputProps,
-                              startAdornment: (
+                            sx={{ backgroundColor: "white", borderRadius: "5%" }}
+                            InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
                                     (provider.length > 0) ? (
                                         <InputAdornment position="start">
-                                        <img
-                                            style={{ width: "50px", height: "auto" }}
-                                            src={ "/" + params.inputProps.value + ".png"}
-                                            alt={"Logo de " + params.inputProps.value}
-                                        />
+                                            <img
+                                                style={{ width: "50px", height: "auto" }}
+                                                src={"/" + params.inputProps.value + ".png"}
+                                                alt={"Logo de " + params.inputProps.value}
+                                            />
                                         </InputAdornment>
                                     ) : null)
-                            } }
+                            }}
                         />
 
                     )}
@@ -124,7 +122,7 @@ export default function PodLogin() {
                     redirectUrl={
                         redirectToUrl
                     }
-                    onError={handleError}
+                    onError={() => handleError()}
                 >
                     <CSSButton
                         sx={{ mt: "1.5em", mb: "2em" }}
@@ -132,7 +130,7 @@ export default function PodLogin() {
                         type="submit"
                         size="large"
                         fullWidth
-                        onClick={handleLogin}
+                        onClick={() => handleLogin()}
                     >
                         Iniciar sesión
                     </CSSButton>
