@@ -71,6 +71,8 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, refresh: a
             } else {
                 Swal.close();
             }
+        }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
     }
 
@@ -208,6 +210,8 @@ export const Groups = (props: { groups: Promise<Group[]>, daddy: any, refresh: a
                 }
             </>, props.daddy.current)
         props.stopLoading()
+    }).catch((e) => {
+        showError("Error inesperado", e.message, Swal.close)
     })
     return (<></>)
 }

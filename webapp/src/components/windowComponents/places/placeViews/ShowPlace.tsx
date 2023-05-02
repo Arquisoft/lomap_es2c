@@ -12,6 +12,8 @@ import { useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import PlaceComponent from '../PlaceComponent';
 import { useSession } from '@inrupt/solid-ui-react';
+import { showError } from 'utils/fieldsValidation';
+import Swal from 'sweetalert2';
 
 
 const BoxCircularProgress = styled(Box)({
@@ -47,6 +49,8 @@ export default function ShowPlace() {
         group.then((g) => {
             setPodPlace(mostrarGrupoPod(g, session).find((p) => p.nombre === lat));
             setLoading(false);
+        }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
     }
 
@@ -57,7 +61,9 @@ export default function ShowPlace() {
 
 
     const placeDoesntExist = () => {
-        checkPlace(group)
+        checkPlace(group).then(() => { }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
+        })
         return podPlace === undefined || podPlace === null;
     }
 

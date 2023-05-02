@@ -31,6 +31,7 @@ import PlaceCategories from '../../places/PlaceCategories';
 import { useDispatch } from 'react-redux';
 import { clearFilterForMyMarkers, setFilterForMyMarkers } from 'utils/redux/action';
 import { useSession } from '@inrupt/solid-ui-react';
+import { showError } from 'utils/fieldsValidation';
 
 const ScrollBox = styled(Box)({
     maxHeight: '40vh',
@@ -124,16 +125,22 @@ export const ShowGroup = (props: { refresh: any }) => {
                     navigate("/home/groups/main")
                     temporalSuccessMessage("El grupo <em><b>" + group.name + "</b></em> se ha eliminado correctamente. ¿Malos recuerdos?");
                     props.refresh()
-                });
+                }).catch((e) => {
+                    showError("Error inesperado", e.message, Swal.close)
+                })
             } else {
                 Swal.close();
             }
+        }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
     }
 
     const deleteGroup = (group: Promise<Group>) => {
         group.then((grp) => {
             showQuestion(grp);
+        }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
     }
 
@@ -201,13 +208,12 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
 
     function filterPlaces(place: Place) {
         const placeCategory = PlaceCategories.find((pc) => pc.categories.includes(place.category));
-        
+
         let checkPlace;
 
         if (placeCategory === undefined || place.category === null)
             checkPlace = filters.includes("Otro");
-        else
-        {
+        else {
             checkPlace = filters.includes(placeCategory?.name);
         }
 
@@ -267,6 +273,8 @@ const GroupDetails = (props: { session: any, daddy: any, group: Promise<Group>, 
                 }
             </>, props.daddy.current)
         props.stopLoading()
+    }).catch((e) => {
+        showError("Error inesperado", e.message, Swal.close)
     })
     return (<></>)
 }

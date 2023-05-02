@@ -110,9 +110,9 @@ export const FriendManagerPanel = () => {
     const onSubmit: SubmitHandler<User> = data => searchUser(data);
 
     const searchUser = (user: User) => {
-        searchUserByUsername(user.username).then((res) => {
+        searchUserByUsername(user.username).then(async (res) => {
             if (res !== null && res.username !== null)
-                showAddFriendConfirm(res)
+                await showAddFriendConfirm(res)
         }).catch((err: any) => {
             showError("Error al buscar el usuario " + user.username + ".", err.message, Swal.close);
         });
@@ -141,6 +141,8 @@ export const FriendManagerPanel = () => {
                     showError("Error al enviar la solicitud de amistad.", err.message, Swal.close);
                 });
             }
+        }).then(() => { }).catch((e) => {
+            showError("Error inesperado.", e.message, Swal.close);
         })
     }
 

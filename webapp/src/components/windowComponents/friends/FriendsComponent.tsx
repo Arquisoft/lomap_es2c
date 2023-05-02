@@ -90,6 +90,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
             } else {
                 Swal.close();
             }
+        }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
     }
 
@@ -109,6 +111,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
             focusConfirm: false,
             confirmButtonText: '¡Vale!',
             confirmButtonColor: '#81c784',
+        }).then(() => { }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
     }
 
@@ -152,7 +156,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <Tooltip title="See friend profile">
-                                                    <PersonIcon data-testid={friend.user.username} onClick={() => showFriendProfile(friend.user)} />
+                                                    <PersonIcon data-testid={friend.user.username} onClick={async () => await showFriendProfile(friend.user)} />
                                                 </Tooltip>
                                             </ListItemIcon>
                                             <ListItemText primary={friend.user.username} />
@@ -198,6 +202,8 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                 </>, props.daddy.current)
             props.stopLoading()
         } catch (e: any) { }
+    }).catch((e) => {
+        showError("Error inesperado", e.message, Swal.close)
     })
     return (<></>)
 }

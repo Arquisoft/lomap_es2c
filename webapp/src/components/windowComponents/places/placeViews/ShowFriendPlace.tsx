@@ -13,6 +13,8 @@ import PlaceComponent from '../PlaceComponent';
 import { mostrarGrupoPod, verMapaDeAmigo } from '../../../../podManager/MapManager';
 import { searchUserByUsername } from 'api/api';
 import { useSession } from '@inrupt/solid-ui-react';
+import { showError } from 'utils/fieldsValidation';
+import Swal from 'sweetalert2';
 
 
 const BoxCircularProgress = styled(Box)({
@@ -50,6 +52,8 @@ export default function ShowFriendPlace() {
         group.then((g) => {
             setPodPlace(mostrarGrupoPod(g, session).find((p) => p.nombre === lng));
             setLoading(false);
+        }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
     }
 
@@ -58,7 +62,9 @@ export default function ShowFriendPlace() {
     const [podPlace, setPodPlace] = useState<Place>(null);
 
     const placeDoesntExist = () => {
-        checkPlace(group)
+        checkPlace(group).then(() => { }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
+        })
         return podPlace === undefined || podPlace === null;
     }
 

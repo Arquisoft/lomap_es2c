@@ -14,6 +14,7 @@ import { signup } from '../../api/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import * as fieldsValidation from '../../utils/fieldsValidation';
+import { showError } from "../../utils/fieldsValidation";
 
 //#region DEFINICION DE COMPONENTES STYLED
 
@@ -116,6 +117,8 @@ export function Signup() {
             if (result.isConfirmed) {
                 showLogin()
             }
+        }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
     }
 
