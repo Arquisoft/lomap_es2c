@@ -110,7 +110,7 @@ export const FriendManagerPanel = () => {
     const onSubmit: SubmitHandler<User> = data => searchUser(data);
 
     const searchUser = async (user: User) => {
-        await searchUserByUsername(user.username).then((res) => {
+        await searchUserByUsername(user.username).then(async (res) => {
             if (res !== null && res.username !== null)
                 await showAddFriendConfirm(res)
         }).catch((err: any) => {
