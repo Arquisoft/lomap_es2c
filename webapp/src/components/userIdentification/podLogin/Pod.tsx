@@ -84,15 +84,26 @@ export default function PodLogin() {
                     } }
                     isOptionEqualToValue={ (option, value) => option.name === value.name }
                     renderOption={(props, option) => (
-                        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                            <img style={{ width: "50px", height: "auto" }}
-                                loading="lazy"
-                                width="60"
-                                src={"/" + option.name + ".png"}
-                                srcSet={"/" + option.name + ".png"}
-                                alt={"Logo de " + option.name}
-                            />
-                            {option.name}
+                        <Box component="li" sx={ { '& > img': { mr: 2, flexShrink: 0 } } } { ...props }>
+                            { option.name.toLowerCase() === "inrupt" &&
+                                <img style={ { width: "50px", height: "auto" } }
+                                    loading="lazy"
+                                    width="60"
+                                    src="inrupt.png"
+                                    srcSet="inrupt.png"
+                                    alt="Inrupt logo"
+                                />
+                            }
+                            { option.name.toLowerCase() === "solidcommunity" &&
+                                <img style={ { width: "50px", height: "auto" } }
+                                    loading="lazy"
+                                    width="60"
+                                    src="solidcommunity.png"
+                                    srcSet="solidcommunity.png"
+                                    alt="SolidCommunity logo"
+                                />
+                            }
+                            { option.name }
                         </Box>
                     )}
                     renderInput={(params) => (
@@ -106,11 +117,24 @@ export default function PodLogin() {
                               startAdornment: (
                                     (provider.length > 0) ? (
                                         <InputAdornment position="start">
-                                        <img
-                                            style={{ width: "50px", height: "auto" }}
-                                            src={ "/" + params.inputProps.value + ".png"}
-                                            alt={"Logo de " + params.inputProps.value}
-                                        />
+                                        { params.inputProps.value.toString().toLowerCase() === "inrupt" &&
+                                            <img style={ { width: "50px", height: "auto" } }
+                                                loading="lazy"
+                                                width="60"
+                                                src="inrupt.png"
+                                                srcSet="inrupt.png"
+                                                alt="Inrupt logo"
+                                            />
+                                        }
+                                        { params.inputProps.value.toString() === "solidcommunity" &&
+                                            <img style={ { width: "50px", height: "auto" } }
+                                                loading="lazy"
+                                                width="60"
+                                                src="solidcommunity.png"
+                                                srcSet="solidcommunity.png"
+                                                alt="SolidCommunity logo"
+                                            />
+                                        }
                                         </InputAdornment>
                                     ) : null)
                             } }
