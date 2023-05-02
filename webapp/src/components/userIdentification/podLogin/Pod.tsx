@@ -50,10 +50,10 @@ export default function PodLogin() {
     const providers = GetProviders();
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
+    const handleLogin = () => {
         document.cookie = "isPodLogged=true; path=/"; document.cookie = "sameWebId=false; path=/";
     };
-    const handleError = async () => {
+    const handleError = () => {
         logout(); navigate("/login");
     }
 
