@@ -200,15 +200,18 @@ a {
 }
 
 #profileImage,
-#profileImageLM, #profileImageFriend {
+#profileImageLM,
+#profileImageFriend {
     height: 180px;
 }
 
 
-#profileImagePodLM, #profileImagePodPT, #profileImagePodFriend {
-  height: 180px;
-  width: auto;
-  border-radius: 3%;
+#profileImagePodLM,
+#profileImagePodPT,
+#profileImagePodFriend {
+    height: 180px;
+    width: auto;
+    border-radius: 3%;
 }
 
 #biography-EP {

@@ -10,9 +10,6 @@ class UserSesionManager implements SesionManager {
 
     rondasDeEncriptacion = 10
 
-    constructor() {
-    }
-
     async registrarse(usuario: User): Promise<User> {
         let usuarioEncontrado;
         try {
