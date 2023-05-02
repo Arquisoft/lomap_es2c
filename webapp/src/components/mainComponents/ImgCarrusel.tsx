@@ -3,6 +3,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 import { IconButton, ImageListItemBar } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Swal from 'sweetalert2';
+import { showError } from 'utils/fieldsValidation';
 
 export default function StandardImageList() {
 
@@ -12,6 +13,8 @@ export default function StandardImageList() {
                 '<img data-testid="carruselImg" alt="' + title + '"src="' + img + '"></img',
             width: '90vw',
             confirmButtonColor: '#81c784'
+        }).then(() => { }).catch((e) => {
+            showError("Error al mostrar fotografías", "Error inesperado mostrando la fotografía, vuelva a probar.", Swal.close)
         })
     }
 

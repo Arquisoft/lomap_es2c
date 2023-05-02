@@ -44,16 +44,16 @@ export default function PodLogin() {
     const [provider, setProvider] = useState('');
     const [idp, setIdp] = useState("https://inrupt.net");
 
-    let redirectToUrl = window.location.origin.concat("/home/welcome"); 
+    let redirectToUrl = window.location.origin.concat("/home/welcome");
 
 
     const providers = GetProviders();
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
+    const handleLogin = () => {
         document.cookie = "isPodLogged=true; path=/"; document.cookie = "sameWebId=false; path=/";
     };
-    const handleError = async () => {
+    const handleError = () => {
         logout(); navigate("/login");
     }
 
@@ -71,22 +71,20 @@ export default function PodLogin() {
                     getOptionLabel={(option) => option.name}
                     fullWidth
                     data-testid="providersCb"
-                    onChange={ (event, newValue) => {
-                        if(newValue !== null)
-                        {
+                    onChange={(event, newValue) => {
+                        if (newValue !== null) {
                             setProvider(newValue.name);
                             setIdp(newValue.url);
-                        } else
-                        {
+                        } else {
                             setProvider("");
                             setIdp("");
                         }
-                    } }
-                    isOptionEqualToValue={ (option, value) => option.name === value.name }
+                    }}
+                    isOptionEqualToValue={(option, value) => option.name === value.name}
                     renderOption={(props, option) => (
-                        <Box component="li" sx={ { '& > img': { mr: 2, flexShrink: 0 } } } { ...props }>
-                            { option.name.toLowerCase() === "inrupt" &&
-                                <img style={ { width: "50px", height: "auto" } }
+                        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                            {option.name.toLowerCase() === "inrupt" &&
+                                <img style={{ width: "50px", height: "auto" }}
                                     loading="lazy"
                                     width="60"
                                     src="inrupt.png"
@@ -94,8 +92,8 @@ export default function PodLogin() {
                                     alt="Inrupt logo"
                                 />
                             }
-                            { option.name.toLowerCase() === "solidcommunity" &&
-                                <img style={ { width: "50px", height: "auto" } }
+                            {option.name.toLowerCase() === "solidcommunity" &&
+                                <img style={{ width: "50px", height: "auto" }}
                                     loading="lazy"
                                     width="60"
                                     src="solidcommunity.png"
@@ -103,7 +101,7 @@ export default function PodLogin() {
                                     alt="SolidCommunity logo"
                                 />
                             }
-                            { option.name }
+                            {option.name}
                         </Box>
                     )}
                     renderInput={(params) => (
@@ -111,33 +109,33 @@ export default function PodLogin() {
                             {...params}
                             label="Proveedor"
                             variant='outlined'
-                            sx={ { backgroundColor: "white", borderRadius:"5%"}}
-                            InputProps={ {
-                            ...params.InputProps,
-                              startAdornment: (
+                            sx={{ backgroundColor: "white", borderRadius: "5%" }}
+                            InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
                                     (provider.length > 0) ? (
                                         <InputAdornment position="start">
-                                        { params.inputProps.value.toString().toLowerCase() === "inrupt" &&
-                                            <img style={ { width: "50px", height: "auto" } }
-                                                loading="lazy"
-                                                width="60"
-                                                src="inrupt.png"
-                                                srcSet="inrupt.png"
-                                                alt="Inrupt logo"
-                                            />
-                                        }
-                                        { params.inputProps.value.toString() === "solidcommunity" &&
-                                            <img style={ { width: "50px", height: "auto" } }
-                                                loading="lazy"
-                                                width="60"
-                                                src="solidcommunity.png"
-                                                srcSet="solidcommunity.png"
-                                                alt="SolidCommunity logo"
-                                            />
-                                        }
+                                            {params.inputProps.value.toString().toLowerCase() === "inrupt" &&
+                                                <img style={{ width: "50px", height: "auto" }}
+                                                    loading="lazy"
+                                                    width="60"
+                                                    src="inrupt.png"
+                                                    srcSet="inrupt.png"
+                                                    alt="Inrupt logo"
+                                                />
+                                            }
+                                            {params.inputProps.value.toString() === "solidcommunity" &&
+                                                <img style={{ width: "50px", height: "auto" }}
+                                                    loading="lazy"
+                                                    width="60"
+                                                    src="solidcommunity.png"
+                                                    srcSet="solidcommunity.png"
+                                                    alt="SolidCommunity logo"
+                                                />
+                                            }
                                         </InputAdornment>
                                     ) : null)
-                            } }
+                            }}
                         />
 
                     )}
@@ -148,7 +146,7 @@ export default function PodLogin() {
                     redirectUrl={
                         redirectToUrl
                     }
-                    onError={handleError}
+                    onError={() => handleError()}
                 >
                     <CSSButton
                         sx={{ mt: "1.5em", mb: "2em" }}
@@ -156,7 +154,7 @@ export default function PodLogin() {
                         type="submit"
                         size="large"
                         fullWidth
-                        onClick={handleLogin}
+                        onClick={() => handleLogin()}
                     >
                         Iniciar sesión
                     </CSSButton>
