@@ -28,8 +28,3 @@ yarn-error.log*
 
 #documentation build does not go into master
 docs/build
-
-restapi/.env
-restapi/fullchain.pem
-restapi/privkey.pem
-

@@ -3,8 +3,6 @@ import cors from 'cors';
 import bp from 'body-parser';
 import promBundle from 'express-prom-bundle';
 import api from "./api";
-import dotenv from 'dotenv';
-dotenv.config();
 const mongoose = require('mongoose');
 const https = require('https');
 const fs = require('fs');
@@ -35,17 +33,17 @@ app.use("/api", api)
 app.use(cors());
 
 const options = {
-  key: fs.readFileSync(process.env.SSL_PRIVKEY),
-  cert: fs.readFileSync(process.env.SSL_CERT)
+  key: fs.readFileSync("./privkey.pem"),
+  cert: fs.readFileSync("./fullchain.pem")
 };
-/*
+
 app.use((req, res, next) => {
   if (req.secure) {
     next();
   } else {
     res.redirect(`https://${req.headers.host}${req.url}`);
   }
-});*/
+});
 
 https.createServer(options, app).listen(httpsPort, () => {
     console.log(`Restapi server started on port ${httpsPort}`);
