@@ -474,6 +474,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#section-runtime-view">6. Runtime View</a>
 <ul class="sectlevel2">
 <li><a href="#_first_level_of_detail">6.1. First level of detail</a></li>
+<li><a href="#_second_level_of_detail">6.2. Second level of detail</a></li>
 </ul>
 </li>
 <li><a href="#section-deployment-view">7. Deployment View</a>
@@ -487,7 +488,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_seguridad">8.2. Seguridad</a></li>
 <li><a href="#_usabilidad">8.3. Usabilidad</a></li>
 <li><a href="#_escalabilidad_y_mantenimiento">8.4. Escalabilidad y mantenimiento</a></li>
-<li><a href="#_internacionalización">8.5. Internacionalización</a></li>
 </ul>
 </li>
 <li><a href="#section-design-decisions">9. Design Decisions</a></li>
@@ -508,6 +508,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_interface_prototypes">13.1. Interface prototypes</a></li>
 <li><a href="#_used_libraries">13.2. Used libraries</a></li>
+<li><a href="#_interoperability">13.3. Interoperability</a></li>
 </ul>
 </li>
 </ul>
@@ -965,6 +966,9 @@ together with a mapping table showing the relationships between channels and inp
 </div>
 </div>
 <div class="paragraph">
+<p><span class="image"><img src="./images/03_Technical_Context.png" alt="Technical Context Diagram"></span></p>
+</div>
+<div class="paragraph">
 <p>Usaremos las siguientes tecnologías:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -988,11 +992,22 @@ together with a mapping table showing the relationships between channels and inp
 <td class="tableblock halign-left valign-top"><p class="tableblock">Biblioteca utilizada para crear interfaces de usuario en una sola página.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SOLID</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Arquitectura para almacenar la información privada de los usuarios de manera descentralizada.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MongoDB Atlas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Base de datos utilizada para almacenar información relativa a la aplicación.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Docker</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sistema utilizado para almacenar la aplicación en contenedores para su posterior despliegue.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Azure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plataforma utilizada para desplegar la aplicación.</p></td>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>Las librerías utilizadas se describen en el Anexo <a href="https://arquisoft.github.io/lomap_es2c/#_used_libraries">13.2. Used Libraries</a></p>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1310,7 +1325,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Register%20sequence%20diagram.png" alt="Register sequence diagram" width="567" height="487">
+<img src="./images/Register%20sequence%20diagram.png" alt="Register sequence diagram" width="488" height="365">
 </div>
 </div>
 </div>
@@ -1321,7 +1336,7 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/Log%20in%20-%20log%20out%20sequence%20diagram.png" alt="Log in   log out sequence diagram" width="584" height="498">
+<img src="./images/Log%20in%20-%20log%20out%20sequence%20diagram.png" alt="Log in   log out sequence diagram" width="594" height="650">
 </div>
 </div>
 </div>
@@ -1338,6 +1353,53 @@ You will mainly capture scenarios in your documentation to communicate your arch
 </div>
 <div class="sect3">
 <h4 id="_place_adding">6.1.4. Place adding</h4>
+<div class="paragraph">
+<p>Proceso de añadir un lugar al mapa:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/Add%20favorite%20place%20sequence%20diagram.png" alt="Add favorite place sequence diagram" width="390" height="510">
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_second_level_of_detail">6.2. Second level of detail</h3>
+<div class="sect3">
+<h4 id="_user_sign_up_2">6.2.1. User Sign Up</h4>
+<div class="paragraph">
+<p>Proceso de crear un nuevo usuario</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/Register%20sequence%20diagram.png" alt="Register sequence diagram" width="630" height="469">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_login_and_logout_2">6.2.2. Login and Logout</h4>
+<div class="paragraph">
+<p>Proceso de crear un nuevo usuario</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/Register%20sequence%20diagram.png" alt="Register sequence diagram" width="688" height="741">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_edit_profile">6.2.3. Edit profile</h4>
+<div class="paragraph">
+<p>Un usuario quiere cambiar su perfil:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/Sequence%20diagram.png" alt="Sequence diagram" width="602" height="614">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_place_adding_2">6.2.4. Place adding</h4>
 <div class="paragraph">
 <p>Proceso de añadir un lugar al mapa:</p>
 </div>
@@ -1592,12 +1654,6 @@ on this list.</p>
 <div class="paragraph">
 <p>Con el fin de que nuestra aplicación sea fácilmente <em>escalable</em> y <em>mantenible</em> se seguirán unos estándares de código. Se busca crear un código limpio, documentado y que siga unos patrones para facilitar su comprensión, el arreglo de bugs y añadir nuevas funcionalidades en un futuro.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_internacionalización">8.5. Internacionalización</h3>
-<div class="paragraph">
-<p>La aplicación ha sido encargada por el ayuntamiento de Bruselas pero con vista a que además de los ciudadanos la utilicen turistas y en un futuro se use en otras ciudades, por ello la aplicación se desarrollará en inglés.</p>
-</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1703,6 +1759,24 @@ here in this central section or whether you better document it locally
 <td class="tableblock halign-left valign-top"><p class="tableblock">Esta biblioteca permite centralizar el estado de la aplicación y compartirlo entre los componentes que se suscriban a él de manera sencilla.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Puede agregar complejidad a la aplicación web.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-08-redux">DA-08</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Azure</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El proveedor de servidores en la nube Azure cuenta con las características necesarias para nuestra aplicación y ya estamos acostumbrados a su uso.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La cuenta gratuita tiene un saldo limitado y a largo plazo es insostenible.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-12-entorno-de-despliegue">DA-12</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Cloudinary</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Es un sistema sencillo de usar y, para el nivel de almacenamiento que requerimos, es gratuito.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Si no se realizan bien las peticiones puede ocasionar errores cross-site.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-10-procesamiento-de-im%C3%A1genes-en-la-nube">DA-10</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Axios</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cliente HTTP muy sencillo de utilizar.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Al nivel de nuestra aplicación no presenta desventajas.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-11-cliente-http-para-realizar-peticiones-desde-la-webapp">DA-11</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1835,9 +1909,9 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 <td class="tableblock halign-left valign-top"><p class="tableblock">La aplicación esta recién creada. La funcionalidad solicitada actual no tiene porque ser la final. Debemos desarrollar un software escalable y preparado para añadir más requisitos.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Personas con situaciones especiales (daltónicos, ciegos, etc&#8230;&#8203;) quieren usar la aplicación</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Accesibilidad</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Debemos de seguir los estándares internacionales de accesibilidad para crear una aplicación que cualquier persona pueda usar. Accesibilidad orientada a las funcionalidades extra (permitir lectura con navegadores de voz, manejo con teclado, etc)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un pico de carga en los servidores de la aplicación</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eficiencia</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Es nuestra responsabilidad que nuestra aplicación sea eficiente y no haga los tiempos de espera ofrecidos por Inrupt aún mayores para cuidar la experiencia del usuario.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Personas mayores o malas para la informática quieren usar la aplicación</p></td>
@@ -1913,8 +1987,18 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </div>
 <div class="sect2">
 <h3 id="_technical_debts">11.2. Technical Debts</h3>
-<div class="paragraph">
-<p>Al comienzo del proyecto es difícil especificar alguna duda técnica. No conocemos de antemano cuál será el resultado y final y que herramientas o tecnologías vamos a utilizar finalmente. Guiados por la intención de desarrollar el proyecto con las utilidades ya mencionadas la única duda en este punto es la dependencia de nuestra aplicación con servicios externos a nosotros (APIs) y de imposible control por nuestra parte.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>La principal deuda técnica es la dependencia de Inrupt. Durante el desarrollo del trabajo hemos detectado mucha inestabilidad en sus servicios. En ocasiones tiene tiempos de respuesta muy altos. Además, es una API en desarrollo por lo que no podemos asegurar que sea perfectamente fucnional o que vaya a cambiar significativamente en el futuro y nuestra aplicación deje de funcionar.</p>
+</li>
+<li>
+<p>La interoperabilidad no ha llegado a un acuerdo firme. Se han tomado decisiones sin meditar y puede generar problemas. Consideramos que el estandar de LoMap no ha tenido suficiente tiempo de desarrollo como para ser óptimo.</p>
+</li>
+<li>
+<p>Nos ha sido imposible hacer una comprobación exhaustiva de bugs o la inclusión de funcionalidad extra debido al poco tiempo existente para el desarrollo del proyecto en comparación con la problemática percibida en general al usar las tecnologías impuestas por el profesorado.</p>
+</li>
+</ul>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -2113,7 +2197,19 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">sweetalert2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Librería utilizada para mostrar ventanas emergentes, facilitando al usuario la comprensión de las acciones realizadas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería utilizada para mostrar ventanas emergentes, facilitando al usuario la comprensión de las acciones realizadas.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">leaflet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería que adapta el uso de OpenStreetMap facilitando su uso y de licencia gratuita.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Validador de campos para los formularios que permite añadir mensajes de error personalidados.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">@inrupt/solid-ui-react</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería Inrupt utilizada para manejar los PODs.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2134,8 +2230,38 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 <td class="tableblock halign-left valign-top"><p class="tableblock">mongoose</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Librería que facilita la integración de una base de datos MongoDB y Node.js</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bcryptjs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería de encriptado de contraseñas para dotar de seguridad a la APP.</p></td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="_interoperability">13.3. Interoperability</h3>
+<div class="sidebarblock arc42help">
+<div class="content">
+<div class="paragraph">
+<div class="title">Contents</div>
+<p>Some info about the application interoperability</p>
+</div>
+<div class="paragraph">
+<div class="title">Motivation</div>
+<p>Explain the decisions taken about the LoMap especification</p>
+</div>
+<div class="paragraph">
+<div class="title">Form</div>
+<p>Short explication about the decisions taken</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>En la aplicación LoMap y con ámbito reducido a la asignatura de Arquitectura del Software de la Universidad de Oviedo se ha tratado
+de desarrollar una especificación para el almacenamiento de datos. Al día de la release final la especificación no ha llegado a un punto
+estable con un acuerdo generalizado. Ante la incertidumbre sobre la realidad detrás de la interoperabilidad planteada y por cuestiones de
+tiempo se ha decidido adoptar la estructura de datos pero no su ubicación. Solucionar bugs y hacer un despliegue correcto han sido tareas más
+prioritarias que nos han impedido investigar los fallos producidos por Inrupt al tratar de adoptar la especificación en su totalidad.</p>
+</div>
 <div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><strong>About arc42</strong></p>
