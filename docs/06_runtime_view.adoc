@@ -40,14 +40,9 @@ header Runtime View
 title User Registration
 Actor User
 Participant LoMap
-Participant POD as "User's POD"
 Database DataBase as "DataBase" 
 
 User -> LoMap: Sing up as a new user filling the form
-User <-- LoMap: Ask user for his WebID
-User -> LoMap: Provide his WebID
-LoMap -> POD: Verify WebID
-LoMap <-- POD: Gives LoMap permissions
 
 LoMap -> DataBase: Add user credentials
 LoMap <-- DataBase: Confirm credentials addition
@@ -68,12 +63,21 @@ Database DataBase as "DataBase"
 User -> LoMap: Log in with his credentials
 LoMap -> DataBase: Check user credentials
 LoMap <-- DataBase: Confirm credentials
+
+
+User <-- LoMap: Ask user for his WebID
+User -> LoMap: Provide his WebID
+LoMap -> POD: Verify WebID
+LoMap <-- POD: Gives LoMap permissions
+
+
 LoMap -> POD: Check POD availability
 POD --> LoMap: Confirm POD availability
 
 ...User interacts with the apllication......
 
 User -> LoMap: Log out from apllication
+LoMap --> User: Show exit dialog and closes user session
 LoMap --> User: Show exit dialog and closes user session
 ----
 
@@ -125,6 +129,128 @@ LoMap -> DataBase: Add new user data
 LoMap <-- DataBase: Confirm data addition
 
 LoMap --> User: Show confirm dialog
+
+...User log out as shown......
+
+----
+=== Second level of detail
+
+==== User Sign Up
+Proceso de crear un nuevo usuario
+[plantuml,"Register sequence diagram",png]
+----
+@startuml
+header Runtime View
+title User Registration
+Actor User
+Participant LoMapWebapp
+Participant LoMapRestApi
+Database DataBase as "DataBase" 
+
+User -> LoMapWebapp: Sing up as a new user filling the form
+
+LoMapWebapp-> LoMapRestApi: Add user credentials
+LoMapRestApi -> LoMapRestApi: Checking credentials
+LoMapRestApi -> DataBase: Save user
+DataBase--> LoMapRestApi : User saved correctly
+
+
+LoMapWebapp<-- LoMapRestApi : Confirm credentials addition
+User <-- LoMapWebapp: Show confirm dialog to User
+@enduml
+----
+
+==== Login and Logout
+Proceso de crear un nuevo usuario
+[plantuml,"Register sequence diagram",png]
+----
+@startuml
+header Runtime View
+title Log in - Log out
+Actor User
+Participant LoMapWebApp
+Participant LoMapRestApi
+Participant POD as "User's POD"
+Database DataBase as "DataBase" 
+
+User -> LoMapWebApp: Log in with his credentials
+LoMapWebApp-> LoMapRestApi: Check user credentials
+LoMapRestApi-> DataBase: Check user credentials
+LoMapRestApi<-- DataBase: Confirm credentials
+LoMapWebApp<-- LoMapRestApi: Confirm credentials
+
+
+User <-- LoMapWebApp: Ask user for his WebID
+User -> LoMapWebApp: Provide his WebID
+LoMapWebApp-> POD: Verify WebID
+LoMapWebApp<-- POD: Gives LoMapWebApppermissions
+
+
+LoMapWebApp-> POD: Check POD availability
+POD --> LoMapWebApp: Confirm POD availability
+
+
+LoMapWebApp-->LoMapRestApi:Save WebId
+LoMapRestApi-->DataBase:Save WebId
+
+...User interacts with the apllication......
+
+User -> LoMapWebApp: Log out from apllication
+LoMapWebApp--> User: Show exit dialog and closes user session
+@enduml
+----
+==== Edit profile
+Un usuario quiere cambiar su perfil:
+
+[plantuml,"Sequence diagram",png]
+----
+header Runtime View
+title Profile edit
+Actor User
+Participant LoMapWebApp
+Participant LoMapRestApi
+Database DataBase as "DataBase" 
+
+...User log in as shown......
+
+User -> LoMapWebApp: Asks for profile editing
+User <-- LoMapWebApp: Show edit menu to User
+User -> LoMapWebApp: Provide the new information
+
+LoMapWebApp-> LoMapRestApi: Verify information and update
+LoMapRestApi-> LoMapRestApi: Verify information
+LoMapRestApi-> DataBase: Update user credentials
+LoMapRestApi<-- DataBase: Confirm credentials
+
+
+LoMapWebApp<-- LoMapRestApi: Confirm
+
+
+LoMapWebApp--> User: Show confirm dialog
+
+...User log out as shown......
+----
+
+==== Place adding
+Proceso de añadir un lugar al mapa:
+[plantuml,"Add favorite place sequence diagram",png]
+----
+header Runtime View
+title Add favorite place
+Actor User
+Participant LoMapWebApp
+Database DataBase as "User's POD" 
+
+...User log in as shown......
+
+User -> LoMapWebApp: Wanna add a place
+User <-- LoMapWebApp: Show favorite places form
+User -> LoMapWebApp: Provide the info
+
+LoMapWebApp-> DataBase: Add new user data
+LoMapWebApp<-- DataBase: Confirm data addition
+
+LoMapWebApp--> User: Show confirm dialog
 
 ...User log out as shown......
 

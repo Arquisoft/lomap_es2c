@@ -67,7 +67,10 @@ A table with columns <Library> and <Definition>.
 | Mui | Facilita la creación de componentes altamente personalizables
 | react-router-dom | Librería usada para definir las rutas de navegación de la aplicación
 | react-hook-form | Simplifica la creación de formularios al hacer que la validación de los campos de estos sea sencilla.
-| sweetalert2 | Librería utilizada para mostrar ventanas emergentes, facilitando al usuario la comprensión de las acciones realizadas
+| sweetalert2 | Librería utilizada para mostrar ventanas emergentes, facilitando al usuario la comprensión de las acciones realizadas.
+| leaflet | Librería que adapta el uso de OpenStreetMap facilitando su uso y de licencia gratuita.
+| yup | Validador de campos para los formularios que permite añadir mensajes de error personalidados.
+| @inrupt/solid-ui-react | Librería Inrupt utilizada para manejar los PODs.
 |===
 
 
@@ -76,4 +79,28 @@ A table with columns <Library> and <Definition>.
 |===
 |Librería|Explicación
 | mongoose | Librería que facilita la integración de una base de datos MongoDB y Node.js
+| bcryptjs | Librería de encriptado de contraseñas para dotar de seguridad a la APP.
 |===
+
+=== Interoperability
+
+[role="arc42help"]
+****
+.Contents
+Some info about the application interoperability
+
+
+.Motivation
+Explain the decisions taken about the LoMap especification
+
+
+.Form
+Short explication about the decisions taken
+
+****
+
+En la aplicación LoMap y con ámbito reducido a la asignatura de Arquitectura del Software de la Universidad de Oviedo se ha tratado
+de desarrollar una especificación para el almacenamiento de datos. Al día de la release final la especificación no ha llegado a un punto
+estable con un acuerdo generalizado. Ante la incertidumbre sobre la realidad detrás de la interoperabilidad planteada y por cuestiones de
+tiempo se ha decidido adoptar la estructura de datos pero no su ubicación. Solucionar bugs y hacer un despliegue correcto han sido tareas más
+prioritarias que nos han impedido investigar los fallos producidos por Inrupt al tratar de adoptar la especificación en su totalidad.

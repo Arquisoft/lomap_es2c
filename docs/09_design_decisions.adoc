@@ -69,4 +69,9 @@ En la siguiente tabla, ordenadas por prioridad, se encuentran las decisiones arq
 | Puede agregar complejidad a la aplicación web.
 | https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-08-redux[DA-08]
 
+| *Azure*
+| El proveedor de servidores en la nube Azure cuenta con las características necesarias para nuestra aplicación y ya estamos acostumbrados a su uso.
+| La cuenta gratuita tiene un saldo limitado y a largo plazo es insostenible.
+| https://github.com/Arquisoft/lomap_es2c/wiki/00.-Decisiones-arquitect%C3%B3nicas#da-08-redux[DA-08]
+
 |===

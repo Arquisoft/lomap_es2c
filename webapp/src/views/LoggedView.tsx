@@ -64,7 +64,8 @@ export default function LoggedView() {
         };
         if (session.info?.webId !== undefined)
             fetchImgUrl();
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [session.info.webId]);
 
 
     const getSaludo = () => {

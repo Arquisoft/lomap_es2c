@@ -68,6 +68,3 @@ Para la interfaz de usuario usaremos React junto con TypeScript. React facilita 
 
 === Escalabilidad y mantenimiento
 Con el fin de que nuestra aplicación sea fácilmente _escalable_ y _mantenible_ se seguirán unos estándares de código. Se busca crear un código limpio, documentado y que siga unos patrones para facilitar su comprensión, el arreglo de bugs y añadir nuevas funcionalidades en un futuro.
-
-=== Internacionalización
-La aplicación ha sido encargada por el ayuntamiento de Bruselas pero con vista a que además de los ciudadanos la utilicen turistas y en un futuro se use en otras ciudades, por ello la aplicación se desarrollará en inglés.
