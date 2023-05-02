@@ -13,7 +13,7 @@ export default function StandardImageList() {
                 '<img data-testid="carruselImg" alt="' + title + '"src="' + img + '"></img',
             width: '90vw',
             confirmButtonColor: '#81c784'
-        }).catch((e) => {
+        }).then(() => { }).catch((e) => {
             showError("Error al mostrar fotografías", "Error inesperado mostrando la fotografía, vuelva a probar.", Swal.close)
         })
     }
