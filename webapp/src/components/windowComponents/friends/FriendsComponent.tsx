@@ -95,23 +95,26 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
         })
     }
 
-    const showFriendProfile = async (user: User) => {
-        let imgUrl = await getFriendProfilePhoto(user.webID);
-        let imgHtml = ` <img id="profileImageFriend" src="defaultUser2.png" alt="Foto de perfil" >`;
-        if (imgUrl !== null) {
-            imgHtml = ` <img id="profileImagePodFriend" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
-        }
-        let usr = user;
-        Swal.fire({
-            title: 'Perfil de amigo',
-            html: imgHtml + `</br>  <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
+    const showFriendProfile = (user: User) => {
+        let imgUrl = getFriendProfilePhoto(user.webID).then(() => {
+            let imgHtml = ` <img id="profileImageFriend" src="defaultUser2.png" alt="Foto de perfil" >`;
+            if (imgUrl !== null) {
+                imgHtml = ` <img id="profileImagePodFriend" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
+            }
+            let usr = user;
+            Swal.fire({
+                title: 'Perfil de amigo',
+                html: imgHtml + `</br>  <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
                     <input type="text" id="name-gp" class="swal2-input" disabled placeholder=` + usr.username + `>
                     <label for="biography-gp" class="swal2-label">Biografía: </label>
                     <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
-            focusConfirm: false,
-            confirmButtonText: '¡Vale!',
-            confirmButtonColor: '#81c784',
-        }).then(() => { }).catch((e) => {
+                focusConfirm: false,
+                confirmButtonText: '¡Vale!',
+                confirmButtonColor: '#81c784',
+            }).then(() => { }).catch((e) => {
+                showError("Error inesperado", e.message, Swal.close)
+            })
+        }).catch((e) => {
             showError("Error inesperado", e.message, Swal.close)
         })
     }
@@ -156,9 +159,7 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <Tooltip title="See friend profile">
-                                                    <PersonIcon data-testid={friend.user.username} onClick={() => showFriendProfile(friend.user).then(() => { }).catch((e) => {
-                                                        showError("Error inesperado", e.message, Swal.close)
-                                                    })} />
+                                                    <PersonIcon data-testid={friend.user.username} onClick={() => showFriendProfile(friend.user)} />
                                                 </Tooltip>
                                             </ListItemIcon>
                                             <ListItemText primary={friend.user.username} />

@@ -42,9 +42,8 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
         return str;
     }
 
-    const showFriendProfile = async (user: string) => {
-
-        await searchUserByUsername(user).then((usr) => {
+    const showFriendProfile = (user: string) => {
+        searchUserByUsername(user).then((usr) => {
             let imgUrl = getFriendProfilePhoto(usr.webID);
 
             let imgHtml = ` <img id="profileImageFriend" src="defaultUser2.png" alt="Foto de perfil" >`;
@@ -108,9 +107,7 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <Tooltip title="See friend profile">
-                                                    <PersonIcon data-testid={request.sender} onClick={() => showFriendProfile(request.sender).then(() => { }).catch((e) => {
-                                                        showError("Error inesperado", e.message, Swal.close)
-                                                    })} />
+                                                    <PersonIcon data-testid={request.sender} onClick={() => showFriendProfile(request.sender)} />
                                                 </Tooltip>
                                             </ListItemIcon>
                                             <ListItemText primary={request.sender} />
