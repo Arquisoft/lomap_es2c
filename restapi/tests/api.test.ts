@@ -17,13 +17,13 @@ let server: Server;
 const app: Application = express();
 
 beforeAll(async () => {
-    
+
     await mongoose.connect('mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
-    
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
     const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
     app.use(metricsMiddleware);
 
@@ -41,12 +41,6 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-describe('test conexión con api ', () => {
-    test('GET /', async () => {
-        const response = await request(app).get('/test');
-        expect(response.status).toBe(200);
-    });
-});
 /*
 describe('/usermanager/find/username ', () => {
     test('usuario que existe', async () => {

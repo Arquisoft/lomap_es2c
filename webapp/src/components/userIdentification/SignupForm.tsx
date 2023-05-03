@@ -88,7 +88,7 @@ export function Signup() {
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<UserSchema> = data => trySignup(data);
+    const onSubmit = handleSubmit(data => trySignup(data));
 
     const trySignup = (user: UserSchema) => {
         if (user.username && user.password) {
@@ -142,7 +142,7 @@ export function Signup() {
                 Registrarse
             </CSSTypography>
 
-            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
+            <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: "1em" }}>
                 <CSSTextField
                     id="usernameSU"
                     label="Nombre de usuario"
