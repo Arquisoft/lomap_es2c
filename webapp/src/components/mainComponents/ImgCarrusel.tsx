@@ -1,12 +1,7 @@
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import { IconButton, ImageListItemBar } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import Swal from 'sweetalert2';
-import { showError } from 'utils/fieldsValidation';
+import { Box } from '@mui/material';
 
 export default function StandardImageList() {
-
+/*
     const showImg = (img: string, title: string) => {
         Swal.fire({
             html:
@@ -16,9 +11,9 @@ export default function StandardImageList() {
         }).then(() => { }).catch((e) => {
             showError("Error al mostrar fotografías", "Error inesperado mostrando la fotografía, vuelva a probar.", Swal.close)
         })
-    }
+    }*/
 
-    return (
+    return (/*
         <ImageList cols={1} data-testid="imgCarruselComp">
             <ImageListItem key="1.png">
                 <img
@@ -104,6 +99,21 @@ export default function StandardImageList() {
                     }
                 />
             </ImageListItem>
-        </ImageList>
+        </ImageList>*/
+        <Box data-testid="imgCarruselComp">
+            <img    className="imgCarrusel"
+                    src="1.png"
+                    alt="Crea tus propios mapas"
+            />
+            <img    className="imgCarrusel"
+                    src="2.png"
+                    alt="Guarda tus lugares favoritos" 
+             />
+             <img   className="imgCarrusel"
+                    src="3.png"
+                    alt="Ve los mapas de tus amigos"
+            />
+            
+        </Box>
     );
 }

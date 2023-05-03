@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { styled } from '@mui/material/styles';
 import SForm from './SesionForm';
 import TextField from '@mui/material/TextField';

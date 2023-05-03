@@ -263,7 +263,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
 
     }
 
-    const onSubmit = (data: any) => {
+    const onSubmit = handleSubmit((data: any) => {
         if (selectedImage !== null) {
 
             const fd = new FormData();
@@ -277,7 +277,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
         } else { addPlaceToGroup(data, ""); }
 
 
-    };
+    })
 
     const handleCategoryChange = (event: SelectChangeEvent) => {
         setCategory(event.target.value as string);
@@ -318,7 +318,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
                     <Typography color="text.primary">Nuevo lugar</Typography>
                 </Breadcrumbs>
             </div>
-            <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+            <Box component="form" onSubmit={onSubmit}>
                 <CSSTypography variant="body1" align="center"
                     sx={{ mt: "0.5em", mb: "0.5em" }}>
                     Añadir lugar

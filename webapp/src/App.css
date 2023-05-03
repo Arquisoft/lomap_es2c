@@ -221,3 +221,8 @@ a {
     background-color: transparent;
     color: "red" !important;
 }
+
+.imgCarrusel {
+    width: 50vh;
+    height: auto;
+}
