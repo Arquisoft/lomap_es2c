@@ -21,7 +21,10 @@ api.post(
     async (req: Request, res: Response): Promise<Response> => {
         let user = req.body.user;
         try {
-            let u: any = await fac.FactoryLoMap.getUserManager().modificarPerfil(user);
+            let u: any
+            await fac.FactoryLoMap.getUserManager().modificarPerfil(user).then((user) => {
+                u = user;
+            });
             return res.status(200).send(u);
         } catch (err) {
             return res.status(404).send({ "error": err.message })

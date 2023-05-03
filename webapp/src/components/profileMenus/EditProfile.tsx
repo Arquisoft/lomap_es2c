@@ -107,16 +107,14 @@ export function EditProfile() {
             navigate(url)
     }
 
-    const tryToEdit = async(editions: EditSchema) => {
-
+    const tryToEdit = (editions: EditSchema) => {
         if (editions.biography !== undefined && editions.biography !== '' && editions.biography !== null) {
             let editedUser = { username: user.username, webID: user.webID, password: user.password, description: editions.biography, img: user.img }
-            await editUserDetails(editedUser).then(() => {
+            editUserDetails(editedUser).then(() => {
                 temporalSuccessMessage("Tú perfil se ha editado correctamente. La nueva biografía te sienta mejor.");
                 goBack();
             }).catch((e) => {
                 fieldsValidation.showError("No se ha podido actualizar el perfil.", e as string, () => { });
-                return false;
             })
         }
     }

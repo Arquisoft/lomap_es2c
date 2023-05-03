@@ -59,13 +59,13 @@ export function LoggedMenu() {
 
     //#region METODOS DE CLASE
 
-    const getProfile = async () => {
+    const getProfile = () => {
         closeUserMenu();
         let imgHtml = ` <img id="profileImageLM" src="defaultUser2.png" alt="Foto de perfil" >`;
         if (imgUrl !== null) {
             imgHtml = ` <img id="profileImagePodLM" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
         }
-        await searchUserByUsername(userInSession).then((user) => {
+        searchUserByUsername(userInSession).then((user) => {
             Swal.fire({
                 html: imgHtml + `</br>
                         <h2> ` + user.username + ` </h2> 
@@ -76,14 +76,16 @@ export function LoggedMenu() {
                 confirmButtonText: 'Editar perfil',
                 confirmButtonColor: '#81c784',
                 focusConfirm: false,
-            }).then(async (result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
-                    await showEdit();
+                    showEdit();
                     closeUserMenu();
                 }
+            }).catch((e) => {
+                showError("Error inesperado", e.message, Swal.close)
             })
         }
-        ).then(() => { }).catch((err: any) => {
+        ).catch((err: any) => {
             showError("Error al mostrar tú perfil", err.toString(), Swal.close);
         });
     }
@@ -162,7 +164,7 @@ export function LoggedMenu() {
                 open={Boolean(anchorElUser)}
                 onClose={closeUserMenu}
             >
-                <MenuItem data-testid="getProfileButton" key={uuid()} onClick={async () => await getProfile()}>
+                <MenuItem data-testid="getProfileButton" key={uuid()} onClick={() => getProfile()}>
                     <PersonIcon /> Profile
                 </MenuItem>
                 <MenuItem data-testid="showEditButton" key={uuid()} onClick={showEdit}>
