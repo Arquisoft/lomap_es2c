@@ -17,13 +17,13 @@ let server: Server;
 const app: Application = express();
 
 beforeAll(async () => {
-    
+
     await mongoose.connect('mongodb+srv://admin:admin@prueba.bwoulkv.mongodb.net/?retryWrites=true&w=majority',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
-    
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
     const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
     app.use(metricsMiddleware);
 

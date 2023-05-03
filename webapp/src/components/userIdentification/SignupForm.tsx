@@ -88,13 +88,13 @@ export function Signup() {
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<UserSchema> = data => trySignup(data);
+    const onSubmit = handleSubmit(data => trySignup(data));
 
-    const trySignup = async(user: UserSchema) => {
+    const trySignup = (user: UserSchema) => {
         if (user.username && user.password) {
             let newUser: User = { username: user.username, webID: "", password: user.password, img: "", description: "" };
             if (fieldsValidation.checkPasswords(user.password, confirmPass)) {
-                await signup(newUser).then(function (userResponse: User) {
+                signup(newUser).then(function (userResponse: User) {
                     successSignup(userResponse)
                 }).catch((e) => {
                     fieldsValidation.showError("No se ha podido crear la cuenta", e.message, Swal.close)
@@ -142,7 +142,7 @@ export function Signup() {
                 Registrarse
             </CSSTypography>
 
-            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
+            <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: "1em" }}>
                 <CSSTextField
                     id="usernameSU"
                     label="Nombre de usuario"
@@ -151,7 +151,6 @@ export function Signup() {
                     {...register("username")}
                     helperText={errors.username ? errors.username.message : ''}
                 />
-
                 <CSSTextField
                     id="passwordSU"
                     label="Contraseña"

@@ -90,12 +90,12 @@ export function EditPassword() {
     const user = getUserInSesion();
 
 
-    const tryToEdit = async(editions: EditSchema) => {
+    const tryToEdit = (editions: EditSchema) => {
 
         if (currentPassword !== undefined && currentPassword !== '' && currentPassword !== null) {
             if (confirmPass !== undefined && confirmPass !== '' && confirmPass !== null) {
                 if (fieldsValidation.checkPasswords(confirmPass, editions.newPassword)) {
-                    await editPassword(currentPassword, editions.newPassword).then(() => {
+                    editPassword(currentPassword, editions.newPassword).then(() => {
                         temporalSuccessMessage("Contraseña editada correctamente. ¿Quién se sabía la antigua?");
                         navigate("/home/edit")
                     }).catch((e) => {

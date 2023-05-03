@@ -72,8 +72,8 @@ export function Login() {
     //#region METODOS DE CLASE
     const onSubmit: SubmitHandler<User> = data => tryLogin(data);
 
-    const tryLogin = async(user: User) => {
-        await login(user).then(function (userApi: User) {
+    const tryLogin = (user: User) => {
+        login(user).then(function (userApi: User) {
             if (userApi !== null) {
                 document.cookie = "notifications=; path=/"
                 navigate("/podlogin");
@@ -85,7 +85,6 @@ export function Login() {
 
 
     const showSignup = () => {
-        //Cambiar del Login a Singup component
         navigate("/signup");
         return
     }
