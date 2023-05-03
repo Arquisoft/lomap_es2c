@@ -41,6 +41,12 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
+describe('test conexión con api ', () => {
+    test('GET /', async () => {
+        const response = await request(app).get('/test');
+        expect(response.status).toBe(200);
+    });
+});
 /*
 describe('/usermanager/find/username ', () => {
     test('usuario que existe', async () => {

@@ -163,6 +163,12 @@ api.post(
         }
     }
 );
+api.get(
+    "/test",
+    (req: Request, res: Response): Response => {
+        return res.sendStatus(200);
+    }
+);
 
 
 export default api;
