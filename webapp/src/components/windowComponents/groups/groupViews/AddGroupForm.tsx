@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -77,15 +77,15 @@ export function AddGroupForm(props: { refresh: any }) {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<GroupSchema> = async(data: any) => {
-        await crearGrupo(data.groupName, session).then((grupo: Group) => {
+    const onSubmit = handleSubmit((data: any) => {
+        crearGrupo(data.groupName, session).then((grupo: Group) => {
             navigate("/home/groups/main")
             props.refresh()
             temporalSuccessMessage("Grupo <em><b>" + grupo.name + "</b></em> creado correctamente. ¡A añadir lugares se ha dicho!");
         }).catch((e: any) => {
             temporalSuccessMessage("Se ha creado todo correctamente en el POD. ¡A añadir grupos se ha dicho!");
         })
-    }
+    })
 
     const navigate = useNavigate()
 
@@ -98,7 +98,7 @@ export function AddGroupForm(props: { refresh: any }) {
                 <Typography color="black">Nuevo grupo</Typography>
             </Breadcrumbs>
         </div>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+        <Box component="form" onSubmit={onSubmit}>
             <CSSTypography variant="body1" align="center"
                 sx={{ mt: "1.5em", mb: "1em" }}>
                 Nuevo grupo de lugares

@@ -14,7 +14,7 @@ import { FriendsComponent } from './FriendsComponent';
 import { FriendRequestsComponent } from './FriendRequestsComponent'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import GroupIcon from '@mui/icons-material/Group';
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { temporalSuccessMessage } from 'utils/MessageGenerator';
 import { showError } from 'utils/fieldsValidation';
 import { verMapaDeAmigo } from 'podManager/MapManager';
@@ -107,7 +107,7 @@ export const FriendManagerPanel = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<User>();
 
 
-    const onSubmit: SubmitHandler<User> = data => searchUser(data);
+    const onSubmit = handleSubmit(data => searchUser(data));
 
     const searchUser = async (user: User) => {
         await searchUserByUsername(user.username).then(async (res) => {
@@ -166,7 +166,7 @@ export const FriendManagerPanel = () => {
                         <HorizontalDivider light color="#81c784" />
                         {op === "main" ?
                             <>
-                                <AddFriendBox data-testid="addFriendForm" component="form" onSubmit={handleSubmit(onSubmit)}>
+                                <AddFriendBox data-testid="addFriendForm" component="form" onSubmit={onSubmit}>
                                     <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
                                     <TextField
                                         label="Añadir un amigo"

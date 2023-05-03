@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -80,7 +80,7 @@ export function EditPassword() {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<EditSchema> = data => tryToEdit(data);
+    const onSubmit = handleSubmit(data => tryToEdit(data));
 
 
     const [confirmPass, setConfirmPass] = useState('')
@@ -115,7 +115,7 @@ export function EditPassword() {
     }
 
     return (
-        <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
+        <StyledBox component="form" onSubmit={onSubmit}>
             <ProfileTemplate>
                 <CSSTypography variant="h3" align="center"
                     data-testid="usernameEditProfile"

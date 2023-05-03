@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -88,7 +88,7 @@ export function EditProfile() {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit: SubmitHandler<EditSchema> = data => tryToEdit(data);
+    const onSubmit = handleSubmit(data => tryToEdit(data));
 
     const user = getUserInSesion()
 
@@ -120,7 +120,7 @@ export function EditProfile() {
     }
 
     return (
-        <StyledBox component="form" onSubmit={handleSubmit(onSubmit)}>
+        <StyledBox component="form" onSubmit={onSubmit}>
 
             <ProfileTemplate>
                 <CSSTypography variant="h3" align="center"

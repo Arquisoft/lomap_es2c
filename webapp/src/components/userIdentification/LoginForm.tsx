@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { styled } from '@mui/material/styles';
 import SForm from './SesionForm';
 import TextField from '@mui/material/TextField';
@@ -70,7 +70,7 @@ export function Login() {
     //#endregion
 
     //#region METODOS DE CLASE
-    const onSubmit: SubmitHandler<User> = data => tryLogin(data);
+    const onSubmit = handleSubmit(data => tryLogin(data));
 
     const tryLogin = (user: User) => {
         login(user).then(function (userApi: User) {
@@ -102,7 +102,7 @@ export function Login() {
                 Inicia sesión
             </CSSTypography>
 
-            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
+            <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: "1em" }}>
                 <CSSTextField
                     sx={{ mb: "0.5em" }}
                     id="outlined-required"
