@@ -156,7 +156,9 @@ export const FriendsComponent = (props: { friends: Promise<Friend[]>, daddy: any
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <Tooltip title="See friend profile">
-                                                    <PersonIcon data-testid={friend.user.username} onClick={async () => await showFriendProfile(friend.user)} />
+                                                    <PersonIcon data-testid={friend.user.username} onClick={() => showFriendProfile(friend.user).then(() => { }).catch((e) => {
+                                                        showError("Error inesperado", e.message, Swal.close)
+                                                    })} />
                                                 </Tooltip>
                                             </ListItemIcon>
                                             <ListItemText primary={friend.user.username} />

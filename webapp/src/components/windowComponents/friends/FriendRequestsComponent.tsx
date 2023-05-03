@@ -108,7 +108,9 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
                                         <ListItemButton>
                                             <ListItemIcon>
                                                 <Tooltip title="See friend profile">
-                                                    <PersonIcon data-testid={request.sender} onClick={async () => await showFriendProfile(request.sender)} />
+                                                    <PersonIcon data-testid={request.sender} onClick={() => showFriendProfile(request.sender).then(() => { }).catch((e) => {
+                                                        showError("Error inesperado", e.message, Swal.close)
+                                                    })} />
                                                 </Tooltip>
                                             </ListItemIcon>
                                             <ListItemText primary={request.sender} />
