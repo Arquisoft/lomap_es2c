@@ -42,16 +42,15 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
         return str;
     }
 
-    const showFriendProfile = async (user: string) => {
-        
-        await searchUserByUsername(user).then((usr) => {
-            let imgUrl =  getFriendProfilePhoto(usr.webID);
-           
+    const showFriendProfile = (user: string) => {
+        searchUserByUsername(user).then((usr) => {
+            let imgUrl = getFriendProfilePhoto(usr.webID);
+
             let imgHtml = ` <img id="profileImageFriend" src="defaultUser2.png" alt="Foto de perfil" >`;
-             if (imgUrl !== null) {
+            if (imgUrl !== null) {
                 imgHtml = ` <img id="profileImagePodFriend" src= ` + imgUrl + ` alt="Foto de perfil" crossOrigin="anonymous" />`
             }
-            
+
             Swal.fire({
                 title: 'Solicitud de amistad',
                 html: imgHtml + `</br> <label for="name-gp" class="swal2-label">Nombre de usuario: </label>
@@ -59,6 +58,8 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
                         <label for="biography-gp" class="swal2-label">Biografía: </label>
                         <textarea rows="5" id="biography-gp" class="swal2-input" disabled placeholder="` + (usr.description ? usr.description : "Escribe una descripción") + `"></textarea>`,
                 focusConfirm: false,
+            }).then(() => { }).catch((e) => {
+                showError("Error inesperado", e.message, Swal.close)
             })
         }).catch((err: any) => {
             showError("Error mostrar el perfil de " + user + ".", err.message, Swal.close);
@@ -85,6 +86,8 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
                 }).catch((err: any) => {
                     showError("Error procesar los permisos de Inrupt", err.message, Swal.close);
                 });
+            }).catch((e) => {
+                showError("Error inesperado", e.message, Swal.close)
             })
         }).catch((err: any) => {
             showError("Error al aceptar la solicitud de " + request.sender + ".", err.message, Swal.close);
@@ -127,6 +130,8 @@ export const FriendRequestsComponent = (props: { friendRequests: Promise<FriendR
                 </>, props.daddy.current)
             props.stopLoading()
         } catch (e: any) { }
+    }).catch((e) => {
+        showError("Error inesperado", e.message, Swal.close)
     })
     return (<></>)
 }

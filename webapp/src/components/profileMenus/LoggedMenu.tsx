@@ -76,21 +76,21 @@ export function LoggedMenu() {
                 confirmButtonText: 'Editar perfil',
                 confirmButtonColor: '#81c784',
                 focusConfirm: false,
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
-                    showEdit();
+                    await showEdit();
                     closeUserMenu();
                 }
             })
         }
-        ).catch((err: any) => {
+        ).then(() => { }).catch((err: any) => {
             showError("Error al mostrar tú perfil", err.toString(), Swal.close);
         });
     }
 
 
 
-    async function showEdit() {
+    function showEdit() {
         closeUserMenu();
         dispatch(setLastPath(pathname))
         navigate("/home/edit");
@@ -162,7 +162,7 @@ export function LoggedMenu() {
                 open={Boolean(anchorElUser)}
                 onClose={closeUserMenu}
             >
-                <MenuItem data-testid="getProfileButton" key={uuid()} onClick={getProfile}>
+                <MenuItem data-testid="getProfileButton" key={uuid()} onClick={async () => await getProfile()}>
                     <PersonIcon /> Profile
                 </MenuItem>
                 <MenuItem data-testid="showEditButton" key={uuid()} onClick={showEdit}>

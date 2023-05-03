@@ -30,6 +30,8 @@ import { IconContainer, StyledRating, customIcons } from '../StyledRating';
 import { IconButton } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 import Axios from 'axios';
+import { showError } from '../../../../utils/fieldsValidation';
+import Swal from 'sweetalert2';
 
 const CSSTypography = styled(Typography)({
     color: '#81c784',
@@ -143,7 +145,9 @@ export default function AddPlaceForm(props: { refresh: any }) {
     };
 
     useEffect(() => {
-        findGroup();
+        findGroup().then(() => { }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -253,6 +257,8 @@ export default function AddPlaceForm(props: { refresh: any }) {
             actualizarMarcadores();
             navigate("/home/groups/showgroup/" + group.name)
             props.refresh()
+        }).catch((e) => {
+            showError("Error inesperado", e.message, Swal.close)
         })
 
     }
@@ -265,7 +271,9 @@ export default function AddPlaceForm(props: { refresh: any }) {
             Axios.post("https://api.cloudinary.com/v1_1/lomapes2c/image/upload", fd).then((res) => {
                 let urlImg = res.data.secure_url;
                 addPlaceToGroup(data, urlImg);
-            });
+            }).catch((e) => {
+                showError("Error inesperado", e.message, Swal.close)
+            })
         } else { addPlaceToGroup(data, ""); }
 
 
@@ -333,7 +341,7 @@ export default function AddPlaceForm(props: { refresh: any }) {
                         id="grouped-select"
                         label="Categoría"
                         onChange={handleCategoryChange}
-                        MenuProps={ MenuProps }
+                        MenuProps={MenuProps}
                         required
                     >
                         {PlaceCategories.map(({ name, categories }) => (

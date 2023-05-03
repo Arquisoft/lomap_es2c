@@ -27,6 +27,8 @@ import { useSession } from '@inrupt/solid-ui-react';
 import { useDispatch } from 'react-redux';
 import { clearFilterForFriendMarkers, setFilterForFriendMarkers } from 'utils/redux/action';
 import PlaceCategories from '../../places/PlaceCategories';
+import { showError } from 'utils/fieldsValidation';
+import Swal from 'sweetalert2';
 
 
 const ScrollBox = styled(Box)({
@@ -209,6 +211,8 @@ const GroupDetails = (props: { friend: any, session: any, daddy: any, group: Pro
                 }
             </>, props.daddy.current)
         props.stopLoading()
+    }).catch((e) => {
+        showError("Error inesperado", e.message, Swal.close)
     })
     return (<></>)
 }
