@@ -102,15 +102,15 @@ export default function StandardImageList() {
         </ImageList>*/
         <Box data-testid="imgCarruselComp">
             <img    className="imgCarrusel"
-                    src="1.png"
+                    src="img1.png"
                     alt="Crea tus propios mapas"
             />
             <img    className="imgCarrusel"
-                    src="2.png"
+                    src="img2.png"
                     alt="Guarda tus lugares favoritos" 
              />
              <img   className="imgCarrusel"
-                    src="3.png"
+                    src="img3.png"
                     alt="Ve los mapas de tus amigos"
             />
             
