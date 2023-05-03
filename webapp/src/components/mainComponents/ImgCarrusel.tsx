@@ -1,9 +1,7 @@
 import { Box } from '@mui/material';
-import Swal from 'sweetalert2';
-import { showError } from 'utils/fieldsValidation';
 
 export default function StandardImageList() {
-
+/*
     const showImg = (img: string, title: string) => {
         Swal.fire({
             html:
@@ -13,7 +11,7 @@ export default function StandardImageList() {
         }).then(() => { }).catch((e) => {
             showError("Error al mostrar fotografías", "Error inesperado mostrando la fotografía, vuelva a probar.", Swal.close)
         })
-    }
+    }*/
 
     return (/*
         <ImageList cols={1} data-testid="imgCarruselComp">
