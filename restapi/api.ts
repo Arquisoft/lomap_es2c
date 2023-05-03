@@ -1,21 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import * as fac from './src/facade';
-import { left } from '@cloudinary/url-gen/qualifiers/textAlignment';
 
 const api: Router = express.Router()
-/*
-api.get(
-    "/usermanager/find/username",
-    async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const username = req.query.username.toString();
-            const user = await fac.FactoryLoMap.getUserManager().buscarUsuario(username);
-            return res.status(200).send(user);
-        } catch (err) {
-            return res.status(404).send({ "error": err.message })
-        }
-    }
-);*/
 
 api.post(
     "/usermanager/edit",
