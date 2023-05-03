@@ -142,7 +142,7 @@ export function Signup() {
                 Registrarse
             </CSSTypography>
 
-            <Box component="form" onSubmit={() => handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
+            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: "1em" }}>
                 <CSSTextField
                     id="usernameSU"
                     label="Nombre de usuario"
