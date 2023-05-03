@@ -9,7 +9,7 @@ test('renders img carrusel', () => {
     let linkElement = screen.getByTestId("imgCarruselComp");
     expect(linkElement).toBeInTheDocument();
 });
-
+/*
 test('renders click on img view button', () => {
     render(
         <ImgCarrusel />
@@ -20,4 +20,4 @@ test('renders click on img view button', () => {
     fireEvent.click(button);
     linkElement = screen.getByTestId("carruselImg");
     expect(linkElement).toBeInTheDocument();
-});
+});*/

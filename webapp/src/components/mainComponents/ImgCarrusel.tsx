@@ -1,6 +1,6 @@
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import { IconButton, ImageListItemBar } from '@mui/material';
+import { Box, IconButton, ImageListItemBar } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Swal from 'sweetalert2';
 import { showError } from 'utils/fieldsValidation';
@@ -18,7 +18,7 @@ export default function StandardImageList() {
         })
     }
 
-    return (
+    return (/*
         <ImageList cols={1} data-testid="imgCarruselComp">
             <ImageListItem key="1.png">
                 <img
@@ -104,6 +104,21 @@ export default function StandardImageList() {
                     }
                 />
             </ImageListItem>
-        </ImageList>
+        </ImageList>*/
+        <Box data-testid="imgCarruselComp">
+            <img    className="imgCarrusel"
+                    src="1.png"
+                    alt="Crea tus propios mapas"
+            />
+            <img    className="imgCarrusel"
+                    src="2.png"
+                    alt="Guarda tus lugares favoritos" 
+             />
+             <img   className="imgCarrusel"
+                    src="3.png"
+                    alt="Ve los mapas de tus amigos"
+            />
+            
+        </Box>
     );
 }
